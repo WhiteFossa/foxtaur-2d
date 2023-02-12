@@ -6,14 +6,70 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Foxtaur2D.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
-        Title="Foxtaur2D">
+        Title="Foxtaur 2D"
+        xmlns:controls="clr-namespace:Foxtaur2D.Controls">
 
+    <Window.Styles>
+        <StyleInclude Source="/Styles/Common.axaml" />
+    </Window.Styles>
+    
     <Design.DataContext>
         <!-- This only sets the DataContext for the previewer in an IDE,
              to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-    <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+    <!-- Main grid -->
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" MinWidth="300" />
+        </Grid.ColumnDefinitions>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        
+        <!-- Map renderer -->
+        <Border
+            Grid.Column="0"
+            Grid.Row="0"
+            Grid.ColumnSpan="2"
+            Classes="VisibleBorders">
+            
+            <controls:MapControl />
+            
+        </Border>
+        
+        <!-- Console -->
+        <TextBox
+            Grid.Column="0"
+            Grid.Row="2"
+            Grid.ColumnSpan="2"
+            AcceptsReturn="True"
+            IsReadOnly="True"
+            MaxHeight="300" />
+        
+        <!-- Splitter between left and right parts of window -->
+        <GridSplitter
+            Grid.Column="1"
+            Grid.Row="0"
+            Grid.RowSpan="3"
+            ResizeDirection="Columns" />
+        
+        <!-- Side controls -->
+        <Border
+            Classes="VisibleBorders"
+            Grid.Column="2"
+            Grid.Row="0"
+            Grid.RowSpan="3"
+            Width="300">
+            
+            <!-- Put side controls here -->
+        </Border>
+    </Grid>
 
 </Window>
