@@ -61,6 +61,7 @@ public partial class MapControl : UserControl
         _backingArray = null; // It will remain null till the first resize
 
         _layers.Add(new ImageLayer("Resources/HYP_50M_SR_W.tif"));
+      //  _layers.Add(new ImageLayer("Resources/Gorica.tif"));
         
         // Listening for properties changes to process resize
         PropertyChanged += OnPropertyChangedListener;
@@ -115,13 +116,13 @@ public partial class MapControl : UserControl
                     for (var x = 0; x < _viewportWidth; x++)
                     {
                         backingIndex = (y * _viewportWidth + x) * 4;
-                        layerIndex = (y * layer.Width + x) * 4;
+                        layerIndex = (y* layer.Width + x) * 4;
 
                         opacity = layerPixels[layerIndex + 3] / (double)0xFF;
 
-                        _backingArray[backingIndex] = MultiplyBrightness(layerPixels[layerIndex], opacity);
-                        _backingArray[backingIndex + 1] = MultiplyBrightness(layerPixels[layerIndex + 1], opacity);
-                        _backingArray[backingIndex + 2] = MultiplyBrightness(layerPixels[layerIndex + 2], opacity);
+                        _backingArray[backingIndex] = MixBrightness(layerPixels[layerIndex], _backingArray[backingIndex], opacity);
+                        _backingArray[backingIndex + 1] = MixBrightness(layerPixels[layerIndex + 1], _backingArray[backingIndex + 1], opacity);
+                        _backingArray[backingIndex + 2] = MixBrightness(layerPixels[layerIndex + 2], _backingArray[backingIndex + 2], opacity);
                         _backingArray[backingIndex + 3] = 0xFF;
                     }
                 }
@@ -138,9 +139,9 @@ public partial class MapControl : UserControl
         base.Render(context);
     }
 
-    private byte MultiplyBrightness(byte brightness, double multiplier)
+    private byte MixBrightness(byte topBrightness, byte bottomBrightness, double multiplier)
     {
-        int newBrightness = (int)Math.Floor(brightness * multiplier + 0.5);
+        int newBrightness = (int)Math.Floor(topBrightness * multiplier + bottomBrightness * (1 - multiplier) + 0.5);
         if (newBrightness > 0xFF)
         {
             newBrightness = 0xFF;
