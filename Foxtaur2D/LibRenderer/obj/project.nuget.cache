@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "ASuUil2kYLl9UQtGsOMv9MRt6CI4NE3r8ScjaRAV2G052IYY/uvU6dwhw7JpzBoiGWamWY4RUEWKQ8YnxyfBNw==",
+  "success": true,
+  "projectFilePath": "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibRenderer/LibRenderer.csproj",
+  "expectedPackageFiles": [
+    "/home/fossa/.nuget/packages/magick.net-q8-anycpu/12.3.0/magick.net-q8-anycpu.12.3.0.nupkg.sha512",
+    "/home/fossa/.nuget/packages/magick.net.core/12.3.0/magick.net.core.12.3.0.nupkg.sha512"
+  ],
+  "logs": []
+}

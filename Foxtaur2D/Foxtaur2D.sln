@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Foxtaur2D", "Foxtaur2D\Foxtaur2D.csproj", "{D17737D7-10FF-46AE-A370-F8273DCE110A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibRenderer", "LibRenderer\LibRenderer.csproj", "{DE9165D1-9DA9-47E6-8686-16EC6408B84E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{D17737D7-10FF-46AE-A370-F8273DCE110A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D17737D7-10FF-46AE-A370-F8273DCE110A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D17737D7-10FF-46AE-A370-F8273DCE110A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE9165D1-9DA9-47E6-8686-16EC6408B84E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE9165D1-9DA9-47E6-8686-16EC6408B84E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE9165D1-9DA9-47E6-8686-16EC6408B84E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE9165D1-9DA9-47E6-8686-16EC6408B84E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

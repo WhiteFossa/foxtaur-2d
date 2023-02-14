@@ -1,0 +1,12 @@
+/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibRenderer/bin/Debug/net7.0/LibRenderer.deps.json
+/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibRenderer/bin/Debug/net7.0/LibRenderer.dll
+/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibRenderer/bin/Debug/net7.0/LibRenderer.pdb
+/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibRenderer/obj/Debug/net7.0/LibRenderer.csproj.AssemblyReference.cache
+/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibRenderer/obj/Debug/net7.0/LibRenderer.GeneratedMSBuildEditorConfig.editorconfig
+/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibRenderer/obj/Debug/net7.0/LibRenderer.AssemblyInfoInputs.cache
+/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibRenderer/obj/Debug/net7.0/LibRenderer.AssemblyInfo.cs
+/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibRenderer/obj/Debug/net7.0/LibRenderer.csproj.CoreCompileInputs.cache
+/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibRenderer/obj/Debug/net7.0/LibRenderer.dll
+/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibRenderer/obj/Debug/net7.0/refint/LibRenderer.dll
+/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibRenderer/obj/Debug/net7.0/LibRenderer.pdb
+/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibRenderer/obj/Debug/net7.0/ref/LibRenderer.dll
