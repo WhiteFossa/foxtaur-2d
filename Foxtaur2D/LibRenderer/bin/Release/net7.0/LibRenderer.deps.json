@@ -8,6 +8,7 @@
     ".NETCoreApp,Version=v7.0": {
       "LibRenderer/1.0.0": {
         "dependencies": {
+          "LibGeo": "1.0.0",
           "Magick.NET-Q8-AnyCPU": "12.3.0"
         },
         "runtime": {
@@ -74,6 +75,11 @@
             "fileVersion": "12.3.0.0"
           }
         }
+      },
+      "LibGeo/1.0.0": {
+        "runtime": {
+          "LibGeo.dll": {}
+        }
       }
     }
   },
@@ -96,6 +102,11 @@
       "sha512": "sha512-bO9v+y3TyVTkeYxPFqqx00pujZo05AdWvTm/wCDk9zKs1krNIUZWF8Jd49tBTIoijaWaTcf4MyiwsQypkHz+Jg==",
       "path": "magick.net.core/12.3.0",
       "hashPath": "magick.net.core.12.3.0.nupkg.sha512"
+    },
+    "LibGeo/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
     }
   }
 }

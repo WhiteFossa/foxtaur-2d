@@ -1,0 +1,12 @@
+/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibGeo/bin/Release/net7.0/LibGeo.deps.json
+/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibGeo/bin/Release/net7.0/LibGeo.dll
+/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibGeo/bin/Release/net7.0/LibGeo.pdb
+/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibGeo/obj/Release/net7.0/LibGeo.csproj.AssemblyReference.cache
+/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibGeo/obj/Release/net7.0/LibGeo.GeneratedMSBuildEditorConfig.editorconfig
+/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibGeo/obj/Release/net7.0/LibGeo.AssemblyInfoInputs.cache
+/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibGeo/obj/Release/net7.0/LibGeo.AssemblyInfo.cs
+/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibGeo/obj/Release/net7.0/LibGeo.csproj.CoreCompileInputs.cache
+/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibGeo/obj/Release/net7.0/LibGeo.dll
+/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibGeo/obj/Release/net7.0/refint/LibGeo.dll
+/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibGeo/obj/Release/net7.0/LibGeo.pdb
+/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibGeo/obj/Release/net7.0/ref/LibGeo.dll

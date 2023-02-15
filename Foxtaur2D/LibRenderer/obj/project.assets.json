@@ -67,6 +67,16 @@
             "related": ".xml"
           }
         }
+      },
+      "LibGeo/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v7.0",
+        "compile": {
+          "bin/placeholder/LibGeo.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/LibGeo.dll": {}
+        }
       }
     }
   },
@@ -118,10 +128,16 @@
         "magick.net.core.12.3.0.nupkg.sha512",
         "magick.net.core.nuspec"
       ]
+    },
+    "LibGeo/1.0.0": {
+      "type": "project",
+      "path": "../LibGeo/LibGeo.csproj",
+      "msbuildProject": "../LibGeo/LibGeo.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net7.0": [
+      "LibGeo >= 1.0.0",
       "Magick.NET-Q8-AnyCPU >= 12.3.0"
     ]
   },
@@ -149,7 +165,11 @@
       "frameworks": {
         "net7.0": {
           "targetAlias": "net7.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibGeo/LibGeo.csproj": {
+              "projectPath": "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibGeo/LibGeo.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

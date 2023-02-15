@@ -11,4 +11,8 @@
       <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="12.3.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\LibGeo\LibGeo.csproj" />
+    </ItemGroup>
+
 </Project>

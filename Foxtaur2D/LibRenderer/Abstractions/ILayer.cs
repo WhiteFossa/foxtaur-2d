@@ -1,3 +1,5 @@
+using LibGeo.Abstractions;
+
 namespace LibRenderer.Abstractions;
 
 /// <summary>
@@ -14,6 +16,11 @@ public interface ILayer
     /// Layer height
     /// </summary>
     int Height { get; }
+
+    /// <summary>
+    /// Layer's geo provider
+    /// </summary>
+    IGeoProvider GeoProvider { get; }
 
     /// <summary>
     /// Return pixels array (RGBA format)

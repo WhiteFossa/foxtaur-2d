@@ -10,7 +10,11 @@ using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using DynamicData.Kernel;
 using ImageMagick;
+using LibGeo.Abstractions;
+using LibGeo.Implementations;
+using LibGeo.Models;
 using LibRenderer.Abstractions;
+using LibRenderer.Constants;
 using LibRenderer.Implementations;
 
 namespace Foxtaur2D.Controls;
@@ -48,6 +52,11 @@ public partial class MapControl : UserControl
     /// </summary>
     private List<ILayer> _layers = new List<ILayer>();
     
+    /// <summary>
+    /// Backing image geoprovider
+    /// </summary>
+    private IGeoProvider _backingImageGeoProvider;
+    
     #endregion
     
     #region Debug
@@ -60,7 +69,7 @@ public partial class MapControl : UserControl
 
         _backingArray = null; // It will remain null till the first resize
 
-        _layers.Add(new ImageLayer("Resources/HYP_50M_SR_W.tif"));
+        _layers.Add(new FlatImageLayer("Resources/HYP_50M_SR_W.tif"));
       //  _layers.Add(new ImageLayer("Resources/Gorica.tif"));
         
         // Listening for properties changes to process resize
@@ -96,6 +105,9 @@ public partial class MapControl : UserControl
         
         // Recreating backing array
         _backingArray = new byte[_viewportWidth * _viewportHeight * 4];
+        
+        // Re-setup backing image geoprovider
+        _backingImageGeoProvider = new FlatGeoProvider(_viewportWidth, _viewportHeight);
     }
     
     /// <summary>
@@ -110,13 +122,22 @@ public partial class MapControl : UserControl
                 int backingIndex;
                 int layerIndex;
                 double opacity;
-                
+                double backingLat;
+                double backingLon;
+                double layerX;
+                double layerY;
+
                 for (var y = 0; y < _viewportHeight; y++)
                 {
                     for (var x = 0; x < _viewportWidth; x++)
                     {
+                        backingLat = _backingImageGeoProvider.YToLat(y);
+                        backingLon = _backingImageGeoProvider.XToLon(x);
                         backingIndex = (y * _viewportWidth + x) * 4;
-                        layerIndex = (y* layer.Width + x) * 4;
+
+                        layerX = layer.GeoProvider.LonToX(backingLon);
+                        layerY = layer.GeoProvider.LatToY(backingLat);
+                        layerIndex = ((int)layerY * layer.Width + (int)layerX) * 4;
 
                         opacity = layerPixels[layerIndex + 3] / (double)0xFF;
 
@@ -130,9 +151,9 @@ public partial class MapControl : UserControl
         }
         
         // Rendering backing image
-        fixed (void* pixels = _backingArray)
+        fixed (byte* pixels = _backingArray)
         {
-            var bitmapToDraw = new Bitmap(PixelFormat.Rgba8888, (nint)pixels, new PixelSize(_viewportWidth, _viewportHeight), new Vector(300, 300), _viewportWidth * 4);
+            var bitmapToDraw = new Bitmap(PixelFormat.Rgba8888, (nint)pixels, new PixelSize(_viewportWidth, _viewportHeight), new Vector(RendererConstants.DefaultDPI / _scaling, RendererConstants.DefaultDPI / _scaling), _viewportWidth * 4);
             context.DrawImage(bitmapToDraw, new Rect(0, 0, _viewportWidth, _viewportHeight));
         }
 
