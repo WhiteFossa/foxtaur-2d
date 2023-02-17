@@ -107,7 +107,10 @@ public partial class MapControl : UserControl
         _backingArray = new byte[_viewportWidth * _viewportHeight * 4];
         
         // Re-setup backing image geoprovider
-        _backingImageGeoProvider = new FlatGeoProvider(_viewportWidth, _viewportHeight);
+        _backingImageGeoProvider = new DisplayGeoProvider();
+        (_backingImageGeoProvider as DisplayGeoProvider).BaseLat = Math.PI / 2.0;
+        (_backingImageGeoProvider as DisplayGeoProvider).BaseLon = -1 * Math.PI;
+        (_backingImageGeoProvider as DisplayGeoProvider).Resolution = 0.0005;
     }
     
     /// <summary>
