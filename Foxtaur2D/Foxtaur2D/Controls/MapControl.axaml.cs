@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Threading.Tasks;
 using System.Timers;
 using Avalonia;
 using Avalonia.Controls;
@@ -136,36 +137,28 @@ public partial class MapControl : UserControl
     {
         foreach (var layer in _layers)
         {
-            fixed (byte* layerPixels = layer.GetPixelsArray())
+            var layerPixels = layer.GetPixelsArray();
+            
+            for (var y = 0; y < _viewportHeight; y++)
             {
-                int backingIndex;
-                int layerIndex;
-                double opacity;
-                double backingLat;
-                double backingLon;
-                double layerX;
-                double layerY;
-
-                for (var y = 0; y < _viewportHeight; y++)
+                Parallel.For(0, _viewportWidth,
+                x =>
                 {
-                    for (var x = 0; x < _viewportWidth; x++)
-                    {
-                        backingLat = _backingImageGeoProvider.YToLat(y);
-                        backingLon = _backingImageGeoProvider.XToLon(x);
-                        backingIndex = (y * _viewportWidth + x) * 4;
+                    var backingLat = _backingImageGeoProvider.YToLat(y);
+                    var backingLon = _backingImageGeoProvider.XToLon(x);
+                    var backingIndex = (y * _viewportWidth + x) * 4;
 
-                        layerX = layer.GeoProvider.LonToX(backingLon);
-                        layerY = layer.GeoProvider.LatToY(backingLat);
-                        layerIndex = ((int)layerY * layer.Width + (int)layerX) * 4;
+                    var layerX = layer.GeoProvider.LonToX(backingLon);
+                    var layerY = layer.GeoProvider.LatToY(backingLat);
+                    var layerIndex = ((int)layerY * layer.Width + (int)layerX) * 4;
 
-                        opacity = layerPixels[layerIndex + 3] / (double)0xFF;
+                    var opacity = layerPixels[layerIndex + 3] / (double)0xFF;
 
-                        _backingArray[backingIndex] = MixBrightness(layerPixels[layerIndex], _backingArray[backingIndex], opacity);
-                        _backingArray[backingIndex + 1] = MixBrightness(layerPixels[layerIndex + 1], _backingArray[backingIndex + 1], opacity);
-                        _backingArray[backingIndex + 2] = MixBrightness(layerPixels[layerIndex + 2], _backingArray[backingIndex + 2], opacity);
-                        _backingArray[backingIndex + 3] = 0xFF;
-                    }
-                }
+                    _backingArray[backingIndex] = MixBrightness(layerPixels[layerIndex], _backingArray[backingIndex], opacity);
+                    _backingArray[backingIndex + 1] = MixBrightness(layerPixels[layerIndex + 1], _backingArray[backingIndex + 1], opacity);
+                    _backingArray[backingIndex + 2] = MixBrightness(layerPixels[layerIndex + 2], _backingArray[backingIndex + 2], opacity);
+                    _backingArray[backingIndex + 3] = 0xFF;
+                });
             }
         }
         
