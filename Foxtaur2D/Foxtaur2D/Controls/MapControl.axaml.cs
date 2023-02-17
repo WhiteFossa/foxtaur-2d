@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Timers;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
@@ -60,7 +62,7 @@ public partial class MapControl : UserControl
     #endregion
     
     #region Debug
-
+    
     #endregion
     
     public MapControl()
@@ -74,6 +76,20 @@ public partial class MapControl : UserControl
         
         // Listening for properties changes to process resize
         PropertyChanged += OnPropertyChangedListener;
+        
+        // Setting-up input events
+        PointerMoved += OnMouseMoved;
+    }
+
+    private void OnMouseMoved(object? sender, PointerEventArgs e)
+    {
+        var x = e.GetCurrentPoint(this).Position.X * _scaling;
+        var y = e.GetCurrentPoint(this).Position.Y * _scaling;
+
+        (_backingImageGeoProvider as DisplayGeoProvider).BaseLat = Math.PI / 2.0 - (_viewportHeight - y) / 1000.0;
+        (_backingImageGeoProvider as DisplayGeoProvider).BaseLon = -1 * Math.PI + (_viewportWidth - x) / 1000.0;
+        
+        InvalidateVisual();
     }
 
     private void InitializeComponent()
