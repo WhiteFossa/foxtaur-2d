@@ -11,6 +11,7 @@ namespace LibRenderer.Implementations;
 public class FlatImageLayer : ILayer
 {
     private MagickImage _image;
+    private byte[] _pixels;
     
     public int Width { get; private set; }
     public int Height { get; private set; }
@@ -26,9 +27,19 @@ public class FlatImageLayer : ILayer
 
         GeoProvider = new FlatGeoProvider(Width, Height);
     }
-    
+
+    public void RegeneratePixelsArray()
+    {
+        _pixels = _image.GetPixels().ToByteArray(PixelMapping.RGBA);
+    }
+
     public byte[] GetPixelsArray()
     {
-        return _image.GetPixels().ToByteArray(PixelMapping.RGBA);
+        if (_pixels == null)
+        {
+            RegeneratePixelsArray();
+        }
+        
+        return _pixels;
     }
 }

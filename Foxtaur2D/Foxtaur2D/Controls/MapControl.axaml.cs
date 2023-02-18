@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
 using Avalonia;
@@ -19,6 +20,7 @@ using LibGeo.Models;
 using LibRenderer.Abstractions;
 using LibRenderer.Constants;
 using LibRenderer.Implementations;
+using NLog;
 
 namespace Foxtaur2D.Controls;
 
@@ -62,8 +64,13 @@ public partial class MapControl : UserControl
     
     #endregion
     
-    #region Debug
+    /// <summary>
+    /// Logger
+    /// </summary>
+    private Logger _logger = LogManager.GetCurrentClassLogger();
     
+    #region Debug
+
     #endregion
     
     public MapControl()
@@ -73,7 +80,7 @@ public partial class MapControl : UserControl
         _backingArray = null; // It will remain null till the first resize
 
         _layers.Add(new FlatImageLayer("Resources/HYP_50M_SR_W.tif"));
-      //  _layers.Add(new ImageLayer("Resources/Gorica.tif"));
+        //  _layers.Add(new ImageLayer("Resources/Gorica.tif"));
         
         // Listening for properties changes to process resize
         PropertyChanged += OnPropertyChangedListener;
@@ -138,7 +145,6 @@ public partial class MapControl : UserControl
         foreach (var layer in _layers)
         {
             var layerPixels = layer.GetPixelsArray();
-            
             for (var y = 0; y < _viewportHeight; y++)
             {
                 Parallel.For(0, _viewportWidth,

@@ -23,6 +23,11 @@ public interface ILayer
     IGeoProvider GeoProvider { get; }
 
     /// <summary>
+    /// Force pixels array regeneration
+    /// </summary>
+    void RegeneratePixelsArray();
+    
+    /// <summary>
     /// Return pixels array (RGBA format)
     /// </summary>
     byte[] GetPixelsArray();
