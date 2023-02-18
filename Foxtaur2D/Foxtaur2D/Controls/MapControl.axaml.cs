@@ -64,6 +64,15 @@ public partial class MapControl : UserControl
     
     #endregion
     
+    #region Mouse
+
+    private bool _isDisplayMoving;
+    
+    private double _oldMouseX;
+    private double _oldMouseY;
+    
+    #endregion
+    
     /// <summary>
     /// Logger
     /// </summary>
@@ -86,18 +95,44 @@ public partial class MapControl : UserControl
         PropertyChanged += OnPropertyChangedListener;
         
         // Setting-up input events
+        PointerPressed += OnMousePressed;
+        PointerReleased += OnMouseReleased;
         PointerMoved += OnMouseMoved;
+    }
+    
+    private void OnMousePressed(object? sender, PointerPressedEventArgs e)
+    {
+        _oldMouseX = e.GetCurrentPoint(this).Position.X * _scaling;
+        _oldMouseY = e.GetCurrentPoint(this).Position.Y * _scaling;
+
+        if (e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
+        {
+            _isDisplayMoving = true;
+        }
     }
 
     private void OnMouseMoved(object? sender, PointerEventArgs e)
     {
-        var x = e.GetCurrentPoint(this).Position.X * _scaling;
-        var y = e.GetCurrentPoint(this).Position.Y * _scaling;
+        var newMouseX = e.GetCurrentPoint(this).Position.X * _scaling;
+        var newMouseY = e.GetCurrentPoint(this).Position.Y * _scaling;
 
-        (_backingImageGeoProvider as DisplayGeoProvider).BaseLat = Math.PI / 2.0 - (_viewportHeight - y) / 1000.0;
-        (_backingImageGeoProvider as DisplayGeoProvider).BaseLon = -1 * Math.PI + (_viewportWidth - x) / 1000.0;
-        
-        InvalidateVisual();
+        if (_isDisplayMoving)
+        {
+            (_backingImageGeoProvider as DisplayGeoProvider).MoveDisplay(_oldMouseX, _oldMouseY, newMouseX, newMouseY);
+
+            InvalidateVisual();
+        }
+
+        _oldMouseX = newMouseX;
+        _oldMouseY = newMouseY;
+    }
+    
+    private void OnMouseReleased(object? sender, PointerReleasedEventArgs e)
+    {
+        if (!e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
+        {
+            _isDisplayMoving = false;
+        }
     }
 
     private void InitializeComponent()
@@ -134,6 +169,8 @@ public partial class MapControl : UserControl
         _backingImageGeoProvider = new DisplayGeoProvider();
         (_backingImageGeoProvider as DisplayGeoProvider).BaseLat = Math.PI / 2.0;
         (_backingImageGeoProvider as DisplayGeoProvider).BaseLon = -1 * Math.PI;
+        (_backingImageGeoProvider as DisplayGeoProvider).ScreenWidth = _viewportWidth;
+        (_backingImageGeoProvider as DisplayGeoProvider).ScreenHeight = _viewportHeight;
         (_backingImageGeoProvider as DisplayGeoProvider).Resolution = 0.0005;
     }
     

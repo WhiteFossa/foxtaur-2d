@@ -11,7 +11,11 @@ public class DisplayGeoProvider : IGeoProvider
     private double _baseLat;
     private double _baseLon;
     private double _resolution;
-    
+
+    public double ScreenWidth { get; set; }
+
+    public double ScreenHeight { get; set; }
+
     /// <summary>
     /// Latitude for Y = 0
     /// </summary>
@@ -24,6 +28,16 @@ public class DisplayGeoProvider : IGeoProvider
         set
         {
             _baseLat = value;
+
+            if (_baseLat > Math.PI / 2.0)
+            {
+                _baseLat = Math.PI / 2.0;
+            }
+
+            if (_baseLat - Resolution * ScreenHeight < -1.0 * Math.PI / 2.0)
+            {
+                _baseLat = -1.0 * Math.PI / 2.0 + Resolution * ScreenHeight;
+            }
         }
     }
 
@@ -39,6 +53,16 @@ public class DisplayGeoProvider : IGeoProvider
         set
         {
             _baseLon = value;
+
+            if (_baseLon < -1 * Math.PI)
+            {
+                _baseLon = -1 * Math.PI;
+            }
+
+            if (_baseLon + Resolution * ScreenWidth > Math.PI)
+            {
+                _baseLon = Math.PI - Resolution * ScreenWidth;
+            }
         }
     }
 
@@ -85,5 +109,14 @@ public class DisplayGeoProvider : IGeoProvider
     public GeoPoint PlanarToGeo(PlanarPoint planar)
     {
         return new GeoPoint(YToLat(planar.Y), XToLon(planar.X));
+    }
+
+    /// <summary>
+    /// Move display on mouse move. Old coordinates are where mouse was pressed, new coordinates are current mouse coordinates
+    /// </summary>
+    public void MoveDisplay(double oldX, double oldY, double newX, double newY)
+    {
+        BaseLat -= Resolution * (oldY - newY);
+        BaseLon += Resolution * (oldX - newX);
     }
 }
