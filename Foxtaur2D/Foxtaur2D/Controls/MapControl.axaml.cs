@@ -20,6 +20,7 @@ using LibGeo.Models;
 using LibRenderer.Abstractions;
 using LibRenderer.Constants;
 using LibRenderer.Implementations;
+using LibRenderer.Implementations.UI;
 using NLog;
 
 namespace Foxtaur2D.Controls;
@@ -61,6 +62,11 @@ public partial class MapControl : UserControl
     /// Backing image geoprovider
     /// </summary>
     private IGeoProvider _backingImageGeoProvider;
+
+    /// <summary>
+    /// Bottom UI panel
+    /// </summary>
+    private ILayer _uiBottomLayer;
     
     #endregion
     
@@ -172,6 +178,9 @@ public partial class MapControl : UserControl
         (_backingImageGeoProvider as DisplayGeoProvider).ScreenWidth = _viewportWidth;
         (_backingImageGeoProvider as DisplayGeoProvider).ScreenHeight = _viewportHeight;
         (_backingImageGeoProvider as DisplayGeoProvider).Resolution = 0.0005;
+        
+        // Recreating UI
+        _uiBottomLayer = new UiBottomLayer(_viewportWidth);
     }
     
     /// <summary>
@@ -205,6 +214,26 @@ public partial class MapControl : UserControl
             }
         }
         
+        // Special layer - bottom UI
+        var bottomUiPanelYShift = _viewportHeight - _uiBottomLayer.Height;
+        var bottomUiPanelPixels = _uiBottomLayer.GetPixelsArray();
+        for (var y = 0; y < _uiBottomLayer.Height; y++)
+        {
+            Parallel.For(0, _viewportWidth,
+            x =>
+            {
+                var layerIndex = (y * _viewportWidth + x) * 4;
+                var backingIndex = ((y + bottomUiPanelYShift) * _viewportWidth + x) * 4;
+                
+                var opacity = bottomUiPanelPixels[layerIndex + 3] / (double)0xFF;
+                
+                _backingArray[backingIndex] = MixBrightness(bottomUiPanelPixels[layerIndex], _backingArray[backingIndex], opacity);
+                _backingArray[backingIndex + 1] = MixBrightness(bottomUiPanelPixels[layerIndex + 1], _backingArray[backingIndex + 1], opacity);
+                _backingArray[backingIndex + 2] = MixBrightness(bottomUiPanelPixels[layerIndex + 2], _backingArray[backingIndex + 2], opacity);
+                _backingArray[backingIndex + 3] = 0xFF;
+            });
+        }
+
         // Rendering backing image
         fixed (byte* pixels = _backingArray)
         {
