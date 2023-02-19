@@ -18,10 +18,12 @@ using LibGeo.Abstractions;
 using LibGeo.Implementations;
 using LibGeo.Models;
 using LibRenderer.Abstractions;
+using LibRenderer.Abstractions.Drawers;
 using LibRenderer.Constants;
 using LibRenderer.Implementations;
 using LibRenderer.Implementations.UI;
 using NLog;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Foxtaur2D.Controls;
 
@@ -180,7 +182,7 @@ public partial class MapControl : UserControl
         (_backingImageGeoProvider as DisplayGeoProvider).Resolution = 0.0005;
         
         // Recreating UI
-        _uiBottomLayer = new UiBottomLayer(_viewportWidth);
+        _uiBottomLayer = new UiBottomLayer(Program.Di.GetService<ITextDrawer>(), _viewportWidth);
     }
     
     /// <summary>
