@@ -41,4 +41,14 @@ public static class RendererConstants
     /// Shift text in the bottom panel to the right to this amount of pixels
     /// </summary>
     public const int BottomUiPanelXShift = 10;
+
+    /// <summary>
+    /// Zoom in resolution multiplier
+    /// </summary>
+    public const double ZoomInStep = 1.1;
+
+    /// <summary>
+    /// Zoom out resolution multiplier
+    /// </summary>
+    public const double ZoomOutStep = 0.9;
 }

@@ -78,6 +78,16 @@ public class DisplayGeoProvider : IGeoProvider
         set
         {
             _resolution = value;
+            
+            var maxResolutionLat = (BaseLat + Math.PI / 2.0) / ScreenHeight;
+            var maxResolutionLon = (Math.PI - BaseLon) / ScreenWidth;
+
+            var maxResolution = Math.Min(maxResolutionLat, maxResolutionLon);
+
+            if (_resolution > maxResolution)
+            {
+                _resolution = maxResolution;
+            }
         }
     }
 

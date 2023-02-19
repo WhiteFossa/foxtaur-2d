@@ -106,8 +106,9 @@ public partial class MapControl : UserControl
         PointerPressed += OnMousePressed;
         PointerReleased += OnMouseReleased;
         PointerMoved += OnMouseMoved;
+        PointerWheelChanged += OnWheel;
     }
-    
+
     private void OnMousePressed(object? sender, PointerPressedEventArgs e)
     {
         _oldMouseX = e.GetCurrentPoint(this).Position.X * _scaling;
@@ -146,6 +147,22 @@ public partial class MapControl : UserControl
             _isDisplayMoving = false;
         }
     }
+    
+    private void OnWheel(object? sender, PointerWheelEventArgs e)
+    {
+        var steps = Math.Abs(e.Delta.Y);
+
+        if (e.Delta.Y > 0)
+        {
+            (_backingImageGeoProvider as DisplayGeoProvider).Resolution *= RendererConstants.ZoomInStep;
+        }
+        else
+        {
+            (_backingImageGeoProvider as DisplayGeoProvider).Resolution *= RendererConstants.ZoomOutStep;
+        }
+        
+        InvalidateVisual();
+    }
 
     private void InitializeComponent()
     {
@@ -183,8 +200,8 @@ public partial class MapControl : UserControl
         (_backingImageGeoProvider as DisplayGeoProvider).BaseLon = -1 * Math.PI;
         (_backingImageGeoProvider as DisplayGeoProvider).ScreenWidth = _viewportWidth;
         (_backingImageGeoProvider as DisplayGeoProvider).ScreenHeight = _viewportHeight;
-        (_backingImageGeoProvider as DisplayGeoProvider).Resolution = 0.0005;
-        
+        (_backingImageGeoProvider as DisplayGeoProvider).Resolution = 1; // Very big number, will be limited automatically
+
         // Recreating UI
         _uiBottomLayer = new UiBottomLayer(Program.Di.GetService<ITextDrawer>(), _viewportWidth);
     }
