@@ -127,12 +127,16 @@ public partial class MapControl : UserControl
         if (_isDisplayMoving)
         {
             (_backingImageGeoProvider as DisplayGeoProvider).MoveDisplay(_oldMouseX, _oldMouseY, newMouseX, newMouseY);
-
-            InvalidateVisual();
         }
+
+        (_uiBottomLayer as UiBottomLayer).Data.MouseLat = _backingImageGeoProvider.YToLat(newMouseY);
+        (_uiBottomLayer as UiBottomLayer).Data.MouseLon = _backingImageGeoProvider.XToLon(newMouseX);
+        _uiBottomLayer.RegeneratePixelsArray();
 
         _oldMouseX = newMouseX;
         _oldMouseY = newMouseY;
+        
+        InvalidateVisual();
     }
     
     private void OnMouseReleased(object? sender, PointerReleasedEventArgs e)

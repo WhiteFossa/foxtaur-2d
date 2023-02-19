@@ -36,4 +36,9 @@ public static class RendererConstants
     /// UI font size
     /// </summary>
     public const int UiFontSize = 34;
+
+    /// <summary>
+    /// Shift text in the bottom panel to the right to this amount of pixels
+    /// </summary>
+    public const int BottomUiPanelXShift = 10;
 }
