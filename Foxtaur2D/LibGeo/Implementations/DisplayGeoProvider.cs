@@ -10,11 +10,9 @@ public class DisplayGeoProvider : IGeoProvider
 {
     private double _baseLat;
     private double _baseLon;
-    private double _resolution;
 
-    public double ScreenWidth { get; set; }
-
-    public double ScreenHeight { get; set; }
+    private double _screenWidth;
+    private double _screenHeight;
 
     /// <summary>
     /// Latitude for Y = 0
@@ -34,9 +32,9 @@ public class DisplayGeoProvider : IGeoProvider
                 _baseLat = Math.PI / 2.0;
             }
 
-            if (_baseLat - Resolution * ScreenHeight < -1.0 * Math.PI / 2.0)
+            if (_baseLat - Resolution * _screenHeight < -1.0 * Math.PI / 2.0)
             {
-                _baseLat = -1.0 * Math.PI / 2.0 + Resolution * ScreenHeight;
+                _baseLat = -1.0 * Math.PI / 2.0 + Resolution * _screenHeight;
             }
         }
     }
@@ -59,9 +57,9 @@ public class DisplayGeoProvider : IGeoProvider
                 _baseLon = -1 * Math.PI;
             }
 
-            if (_baseLon + Resolution * ScreenWidth > Math.PI)
+            if (_baseLon + Resolution * _screenWidth > Math.PI)
             {
-                _baseLon = Math.PI - Resolution * ScreenWidth;
+                _baseLon = Math.PI - Resolution * _screenWidth;
             }
         }
     }
@@ -69,36 +67,26 @@ public class DisplayGeoProvider : IGeoProvider
     /// <summary>
     /// Radians per pixel
     /// </summary>
-    public double Resolution
+    public double Resolution { get; private set; } = 0.0005;
+
+    public DisplayGeoProvider(double screenWidth, double screenHeight)
     {
-        get
-        {
-            return _resolution;
-        }
-        set
-        {
-            _resolution = value;
-            
-            var maxResolutionLat = (BaseLat + Math.PI / 2.0) / ScreenHeight;
-            var maxResolutionLon = (Math.PI - BaseLon) / ScreenWidth;
+        BaseLat = Math.PI / 2.0;
+        BaseLon = -1 * Math.PI;
+        _screenWidth = screenWidth;
+        _screenHeight = screenHeight;
 
-            var maxResolution = Math.Min(maxResolutionLat, maxResolutionLon);
-
-            if (_resolution > maxResolution)
-            {
-                _resolution = maxResolution;
-            }
-        }
+        Resolution = CalculateMaxResolution();
     }
-
+    
     public double LonToX(double lon)
     {
-        return (lon - _baseLon) / _resolution;
+        return (lon - _baseLon) / Resolution;
     }
 
     public double LatToY(double lat)
     {
-        return (_baseLat - lat) / _resolution;
+        return (_baseLat - lat) / Resolution;
     }
 
     public PlanarPoint GeoToPlanar(GeoPoint geo)
@@ -108,12 +96,12 @@ public class DisplayGeoProvider : IGeoProvider
 
     public double YToLat(double y)
     {
-        return _baseLat - _resolution * y;
+        return _baseLat - Resolution * y;
     }
 
     public double XToLon(double x)
     {
-        return _baseLon + _resolution * x;
+        return _baseLon + Resolution * x;
     }
 
     public GeoPoint PlanarToGeo(PlanarPoint planar)
@@ -128,5 +116,34 @@ public class DisplayGeoProvider : IGeoProvider
     {
         BaseLat -= Resolution * (oldY - newY);
         BaseLon += Resolution * (oldX - newX);
+    }
+
+    /// <summary>
+    /// Zoom display to a new resolution (mouse is in x, y position)
+    /// </summary>
+    public void Zoom(double newResolution, double x, double y)
+    {
+        var oldResolution = Resolution;
+
+        Resolution = newResolution;
+        
+        // Limiting resolution
+        var maxResolution = CalculateMaxResolution();
+        
+        if (Resolution > maxResolution)
+        {
+            Resolution = maxResolution;
+        }
+        
+        // Correcting base coordinates
+        BaseLat -= y * (oldResolution - Resolution);
+        BaseLon += x * (oldResolution - Resolution);
+    }
+
+    private double CalculateMaxResolution()
+    {
+        var maxResolutionLat = (BaseLat + Math.PI / 2.0) / _screenHeight;
+        var maxResolutionLon = (Math.PI - BaseLon) / _screenWidth;
+        return Math.Min(maxResolutionLat, maxResolutionLon);
     }
 }

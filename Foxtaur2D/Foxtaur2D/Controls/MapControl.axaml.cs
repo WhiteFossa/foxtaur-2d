@@ -152,14 +152,17 @@ public partial class MapControl : UserControl
     {
         var steps = Math.Abs(e.Delta.Y);
 
+        double zoomFactor;
         if (e.Delta.Y > 0)
         {
-            (_backingImageGeoProvider as DisplayGeoProvider).Resolution *= RendererConstants.ZoomInStep;
+            zoomFactor = RendererConstants.ZoomInStep;
         }
         else
         {
-            (_backingImageGeoProvider as DisplayGeoProvider).Resolution *= RendererConstants.ZoomOutStep;
+            zoomFactor = RendererConstants.ZoomOutStep;
         }
+        
+        (_backingImageGeoProvider as DisplayGeoProvider).Zoom((_backingImageGeoProvider as DisplayGeoProvider).Resolution * zoomFactor, _oldMouseX, _oldMouseY);
         
         InvalidateVisual();
     }
@@ -195,12 +198,7 @@ public partial class MapControl : UserControl
         _backingArray = new byte[_viewportWidth * _viewportHeight * 4];
         
         // Re-setup backing image geoprovider
-        _backingImageGeoProvider = new DisplayGeoProvider();
-        (_backingImageGeoProvider as DisplayGeoProvider).BaseLat = Math.PI / 2.0;
-        (_backingImageGeoProvider as DisplayGeoProvider).BaseLon = -1 * Math.PI;
-        (_backingImageGeoProvider as DisplayGeoProvider).ScreenWidth = _viewportWidth;
-        (_backingImageGeoProvider as DisplayGeoProvider).ScreenHeight = _viewportHeight;
-        (_backingImageGeoProvider as DisplayGeoProvider).Resolution = 1; // Very big number, will be limited automatically
+        _backingImageGeoProvider = new DisplayGeoProvider(_viewportWidth, _viewportHeight);
 
         // Recreating UI
         _uiBottomLayer = new UiBottomLayer(Program.Di.GetService<ITextDrawer>(), _viewportWidth);
