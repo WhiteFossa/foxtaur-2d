@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibRenderer", "LibRenderer\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibGeo", "LibGeo\LibGeo.csproj", "{6C463BC4-8E6B-46A1-B491-649D0C6FA72F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibResources", "LibResources\LibResources.csproj", "{33A3E5AA-F427-40E6-86B7-E912767ACE62}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{6C463BC4-8E6B-46A1-B491-649D0C6FA72F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6C463BC4-8E6B-46A1-B491-649D0C6FA72F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6C463BC4-8E6B-46A1-B491-649D0C6FA72F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33A3E5AA-F427-40E6-86B7-E912767ACE62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33A3E5AA-F427-40E6-86B7-E912767ACE62}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33A3E5AA-F427-40E6-86B7-E912767ACE62}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33A3E5AA-F427-40E6-86B7-E912767ACE62}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

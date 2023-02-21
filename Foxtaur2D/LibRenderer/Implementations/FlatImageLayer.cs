@@ -42,4 +42,9 @@ public class FlatImageLayer : ILayer
         
         return _pixels;
     }
+
+    public bool IsPixelExist(double lat, double lon)
+    {
+        return true;
+    }
 }

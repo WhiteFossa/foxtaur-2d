@@ -65,4 +65,9 @@ public class UiBottomLayer : ILayer
         
         return _pixels;
     }
+
+    public bool IsPixelExist(double lat, double lon)
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -68,6 +68,669 @@
           }
         }
       },
+      "MaxRev.Gdal.Core/3.6.1.100": {
+        "type": "package",
+        "compile": {
+          "lib/net7.0/MaxRev.Gdal.Core.dll": {}
+        },
+        "runtime": {
+          "lib/net7.0/MaxRev.Gdal.Core.dll": {}
+        }
+      },
+      "MaxRev.Gdal.LinuxRuntime.Minimal/3.6.1.100": {
+        "type": "package",
+        "compile": {
+          "lib/net7.0/MaxRev.Gdal.LinuxRuntime.Minimal.dll": {}
+        },
+        "runtime": {
+          "lib/net7.0/MaxRev.Gdal.LinuxRuntime.Minimal.dll": {}
+        },
+        "runtimeTargets": {
+          "runtimes/linux-x64/native/libaec.so.0": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libbrotlicommon.so.1": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libbrotlidec.so.1": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libc.so.6": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libcfitsio.so.3": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libcom_err.so.2": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libcrypto.so.3": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libcurl-gnutls.so.4": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libcurl.so": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libdf.so.0": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libdl.so.2": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libexpat.so.1": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libffi.so.7": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libfreexl.so.1": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libgcc_s.so.1": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libgcrypt.so.20": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libgdal.so.32": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libgdal_wrap.so": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libgdalconst_wrap.so": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libgeos.so.3.11.1": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libgeos_c.so.1": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libgif.so": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libgmp.so.10": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libgnutls.so.30": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libgpg-error.so.0": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libgssapi_krb5.so.2": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libhdf5.so.200": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libhdf5_serial.so.103": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libhdf5_serial_hl.so.100": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libhogweed.so.6": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libidn2.so.0": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libjpeg.so.62": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libk5crypto.so.3": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libkeyutils.so.1": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libkmlbase.so.1": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libkmldom.so.1": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libkmlengine.so.1": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libkrb5.so.3": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libkrb5support.so.0": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/liblber-2.4.so.2": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libldap_r-2.4.so.2": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/liblz4.so": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/liblzma.so.5": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libm.so.6": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libmfhdf.so.0": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libminizip.so.1": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libmysqlclient.so.21": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libnetcdf.so.18": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libnettle.so.8": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libnghttp2.so.14": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libodbc.so.2": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libodbcinst.so.2": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libogr_wrap.so": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libopenjp2.so.7": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libosr_wrap.so": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libp11-kit.so.0": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libpcre.so": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libpng16.so.16": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libpq.so.5": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libproj.so.19": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libpsl.so.5": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libpthread.so.0": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libresolv.so.2": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/librtmp.so.1": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libsasl2.so.2": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libsqlite3.so": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libssh2.so.1": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libssl.so.3": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libstdc++.so.6": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libsz.so.2": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libtasn1.so.6": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libtiff.so.5": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libunistring.so.2": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/liburiparser.so.1": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libwebp.so.7": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libxerces-c-3.2.so": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libxml2.so.2.9.14": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libz.so.1": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/maxrev.gdal.core.libshared/proj.db": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          }
+        }
+      },
+      "MaxRev.Gdal.WindowsRuntime.Minimal/3.6.1.110": {
+        "type": "package",
+        "compile": {
+          "lib/net7.0/MaxRev.Gdal.WindowsRuntime.Minimal.dll": {}
+        },
+        "runtime": {
+          "lib/net7.0/MaxRev.Gdal.WindowsRuntime.Minimal.dll": {}
+        },
+        "runtimeTargets": {
+          "runtimes/win-x64/native/FileGDBAPI.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/NCSEcw.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/adrg.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/apr_dbd_odbc-1.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/apr_ldap-1.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/cairo.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/cfitsio.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/concrt140.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/freexl.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/fribidi-0.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/fts5.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/gdal.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/gdal305.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/gdal_wrap.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/gdalconst_wrap.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/geos.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/geos_c.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/hdf.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/hdf5.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/hdf5_cpp.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/hdf5_hl.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/hdf5_hl_cpp.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/iconv-2.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/jpeg62.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/libapr-1.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/libaprutil-1.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/libcrypto-1_1-x64.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/libcurl.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/libexpat.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/libfcgi.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/libhttpd.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/libkea.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/liblzma.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/libmysql.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/libpng16.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/libpq.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/librttopo.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/libssl-1_1-x64.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/libxml2.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/mapcache.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/mapserver.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/maxrev.gdal.core.libshared/proj.db": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/mfhdf.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/mod_mapcache.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/msplugin_mssql2008.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/msplugin_oracle.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/msvcp140.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/msvcp140_1.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/msvcp140_2.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/msvcp140_atomic_wait.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/msvcp140_codecvt_ids.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/netcdf.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/ogdi.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/ogr_wrap.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/openjp2.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/osr_wrap.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/pcre.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/pcrecpp.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/pcreposix.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/proj_4_9.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/proj_7_2.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/remote.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/rpf.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/skeleton.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/spatialite.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/sqlite3.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/szip.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/tiff.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/tiffxx.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/turbojpeg.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/vccorlib140.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/vcruntime140.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/vcruntime140_1.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/vrf.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/xdr.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/xerces-c_3_2.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/zlib.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/zlib1.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/zstd.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          }
+        }
+      },
       "LibGeo/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v7.0",
@@ -76,6 +739,22 @@
         },
         "runtime": {
           "bin/placeholder/LibGeo.dll": {}
+        }
+      },
+      "LibResources/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v7.0",
+        "dependencies": {
+          "LibGeo": "1.0.0",
+          "MaxRev.Gdal.Core": "3.6.1.100",
+          "MaxRev.Gdal.LinuxRuntime.Minimal": "3.6.1.100",
+          "MaxRev.Gdal.WindowsRuntime.Minimal": "3.6.1.110"
+        },
+        "compile": {
+          "bin/placeholder/LibResources.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/LibResources.dll": {}
         }
       }
     }
@@ -129,15 +808,227 @@
         "magick.net.core.nuspec"
       ]
     },
+    "MaxRev.Gdal.Core/3.6.1.100": {
+      "sha512": "F0gXAyCSAr7FTpIedhKO5S522QKi0y4bRd5xg0Uf9VzRHvsJyrH/+VbzRzFY72Ge41qzn66Ixobt+HOU9a7KeA==",
+      "type": "package",
+      "path": "maxrev.gdal.core/3.6.1.100",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net6.0/MaxRev.Gdal.Core.dll",
+        "lib/net7.0/MaxRev.Gdal.Core.dll",
+        "lib/netcoreapp3.1/MaxRev.Gdal.Core.dll",
+        "lib/netstandard2.0/MaxRev.Gdal.Core.dll",
+        "lib/netstandard2.1/MaxRev.Gdal.Core.dll",
+        "maxrev.gdal.core.3.6.1.100.nupkg.sha512",
+        "maxrev.gdal.core.nuspec"
+      ]
+    },
+    "MaxRev.Gdal.LinuxRuntime.Minimal/3.6.1.100": {
+      "sha512": "X/z+0Nq/z7C48DMKSmiMtX0TycZ2F5CGRXq6/AtZEL8Wnhu/dvVGyAYe1mhHBPPFPsuoaULjeMUpWzbdfekkLg==",
+      "type": "package",
+      "path": "maxrev.gdal.linuxruntime.minimal/3.6.1.100",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net6.0/MaxRev.Gdal.LinuxRuntime.Minimal.dll",
+        "lib/net7.0/MaxRev.Gdal.LinuxRuntime.Minimal.dll",
+        "lib/netcoreapp3.1/MaxRev.Gdal.LinuxRuntime.Minimal.dll",
+        "lib/netstandard2.0/MaxRev.Gdal.LinuxRuntime.Minimal.dll",
+        "lib/netstandard2.1/MaxRev.Gdal.LinuxRuntime.Minimal.dll",
+        "maxrev.gdal.linuxruntime.minimal.3.6.1.100.nupkg.sha512",
+        "maxrev.gdal.linuxruntime.minimal.nuspec",
+        "runtimes/linux-x64/native/libaec.so.0",
+        "runtimes/linux-x64/native/libbrotlicommon.so.1",
+        "runtimes/linux-x64/native/libbrotlidec.so.1",
+        "runtimes/linux-x64/native/libc.so.6",
+        "runtimes/linux-x64/native/libcfitsio.so.3",
+        "runtimes/linux-x64/native/libcom_err.so.2",
+        "runtimes/linux-x64/native/libcrypto.so.3",
+        "runtimes/linux-x64/native/libcurl-gnutls.so.4",
+        "runtimes/linux-x64/native/libcurl.so",
+        "runtimes/linux-x64/native/libdf.so.0",
+        "runtimes/linux-x64/native/libdl.so.2",
+        "runtimes/linux-x64/native/libexpat.so.1",
+        "runtimes/linux-x64/native/libffi.so.7",
+        "runtimes/linux-x64/native/libfreexl.so.1",
+        "runtimes/linux-x64/native/libgcc_s.so.1",
+        "runtimes/linux-x64/native/libgcrypt.so.20",
+        "runtimes/linux-x64/native/libgdal.so.32",
+        "runtimes/linux-x64/native/libgdal_wrap.so",
+        "runtimes/linux-x64/native/libgdalconst_wrap.so",
+        "runtimes/linux-x64/native/libgeos.so.3.11.1",
+        "runtimes/linux-x64/native/libgeos_c.so.1",
+        "runtimes/linux-x64/native/libgif.so",
+        "runtimes/linux-x64/native/libgmp.so.10",
+        "runtimes/linux-x64/native/libgnutls.so.30",
+        "runtimes/linux-x64/native/libgpg-error.so.0",
+        "runtimes/linux-x64/native/libgssapi_krb5.so.2",
+        "runtimes/linux-x64/native/libhdf5.so.200",
+        "runtimes/linux-x64/native/libhdf5_serial.so.103",
+        "runtimes/linux-x64/native/libhdf5_serial_hl.so.100",
+        "runtimes/linux-x64/native/libhogweed.so.6",
+        "runtimes/linux-x64/native/libidn2.so.0",
+        "runtimes/linux-x64/native/libjpeg.so.62",
+        "runtimes/linux-x64/native/libk5crypto.so.3",
+        "runtimes/linux-x64/native/libkeyutils.so.1",
+        "runtimes/linux-x64/native/libkmlbase.so.1",
+        "runtimes/linux-x64/native/libkmldom.so.1",
+        "runtimes/linux-x64/native/libkmlengine.so.1",
+        "runtimes/linux-x64/native/libkrb5.so.3",
+        "runtimes/linux-x64/native/libkrb5support.so.0",
+        "runtimes/linux-x64/native/liblber-2.4.so.2",
+        "runtimes/linux-x64/native/libldap_r-2.4.so.2",
+        "runtimes/linux-x64/native/liblz4.so",
+        "runtimes/linux-x64/native/liblzma.so.5",
+        "runtimes/linux-x64/native/libm.so.6",
+        "runtimes/linux-x64/native/libmfhdf.so.0",
+        "runtimes/linux-x64/native/libminizip.so.1",
+        "runtimes/linux-x64/native/libmysqlclient.so.21",
+        "runtimes/linux-x64/native/libnetcdf.so.18",
+        "runtimes/linux-x64/native/libnettle.so.8",
+        "runtimes/linux-x64/native/libnghttp2.so.14",
+        "runtimes/linux-x64/native/libodbc.so.2",
+        "runtimes/linux-x64/native/libodbcinst.so.2",
+        "runtimes/linux-x64/native/libogr_wrap.so",
+        "runtimes/linux-x64/native/libopenjp2.so.7",
+        "runtimes/linux-x64/native/libosr_wrap.so",
+        "runtimes/linux-x64/native/libp11-kit.so.0",
+        "runtimes/linux-x64/native/libpcre.so",
+        "runtimes/linux-x64/native/libpng16.so.16",
+        "runtimes/linux-x64/native/libpq.so.5",
+        "runtimes/linux-x64/native/libproj.so.19",
+        "runtimes/linux-x64/native/libpsl.so.5",
+        "runtimes/linux-x64/native/libpthread.so.0",
+        "runtimes/linux-x64/native/libresolv.so.2",
+        "runtimes/linux-x64/native/librtmp.so.1",
+        "runtimes/linux-x64/native/libsasl2.so.2",
+        "runtimes/linux-x64/native/libsqlite3.so",
+        "runtimes/linux-x64/native/libssh2.so.1",
+        "runtimes/linux-x64/native/libssl.so.3",
+        "runtimes/linux-x64/native/libstdc++.so.6",
+        "runtimes/linux-x64/native/libsz.so.2",
+        "runtimes/linux-x64/native/libtasn1.so.6",
+        "runtimes/linux-x64/native/libtiff.so.5",
+        "runtimes/linux-x64/native/libunistring.so.2",
+        "runtimes/linux-x64/native/liburiparser.so.1",
+        "runtimes/linux-x64/native/libwebp.so.7",
+        "runtimes/linux-x64/native/libxerces-c-3.2.so",
+        "runtimes/linux-x64/native/libxml2.so.2.9.14",
+        "runtimes/linux-x64/native/libz.so.1",
+        "runtimes/linux-x64/native/maxrev.gdal.core.libshared/proj.db"
+      ]
+    },
+    "MaxRev.Gdal.WindowsRuntime.Minimal/3.6.1.110": {
+      "sha512": "/woRWQaptl1pJe601hEarfK3rmGZjBqcxFQU9qSeaSXGbCsQ0efwP7tVCR8rnUi9jQ0wAKwpB8WTLjQKQl6NaA==",
+      "type": "package",
+      "path": "maxrev.gdal.windowsruntime.minimal/3.6.1.110",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net6.0/MaxRev.Gdal.WindowsRuntime.Minimal.dll",
+        "lib/net7.0/MaxRev.Gdal.WindowsRuntime.Minimal.dll",
+        "lib/netcoreapp3.1/MaxRev.Gdal.WindowsRuntime.Minimal.dll",
+        "lib/netstandard2.0/MaxRev.Gdal.WindowsRuntime.Minimal.dll",
+        "lib/netstandard2.1/MaxRev.Gdal.WindowsRuntime.Minimal.dll",
+        "maxrev.gdal.windowsruntime.minimal.3.6.1.110.nupkg.sha512",
+        "maxrev.gdal.windowsruntime.minimal.nuspec",
+        "runtimes/win-x64/native/FileGDBAPI.dll",
+        "runtimes/win-x64/native/NCSEcw.dll",
+        "runtimes/win-x64/native/adrg.dll",
+        "runtimes/win-x64/native/apr_dbd_odbc-1.dll",
+        "runtimes/win-x64/native/apr_ldap-1.dll",
+        "runtimes/win-x64/native/cairo.dll",
+        "runtimes/win-x64/native/cfitsio.dll",
+        "runtimes/win-x64/native/concrt140.dll",
+        "runtimes/win-x64/native/freexl.dll",
+        "runtimes/win-x64/native/fribidi-0.dll",
+        "runtimes/win-x64/native/fts5.dll",
+        "runtimes/win-x64/native/gdal.dll",
+        "runtimes/win-x64/native/gdal305.dll",
+        "runtimes/win-x64/native/gdal_wrap.dll",
+        "runtimes/win-x64/native/gdalconst_wrap.dll",
+        "runtimes/win-x64/native/geos.dll",
+        "runtimes/win-x64/native/geos_c.dll",
+        "runtimes/win-x64/native/hdf.dll",
+        "runtimes/win-x64/native/hdf5.dll",
+        "runtimes/win-x64/native/hdf5_cpp.dll",
+        "runtimes/win-x64/native/hdf5_hl.dll",
+        "runtimes/win-x64/native/hdf5_hl_cpp.dll",
+        "runtimes/win-x64/native/iconv-2.dll",
+        "runtimes/win-x64/native/jpeg62.dll",
+        "runtimes/win-x64/native/libapr-1.dll",
+        "runtimes/win-x64/native/libaprutil-1.dll",
+        "runtimes/win-x64/native/libcrypto-1_1-x64.dll",
+        "runtimes/win-x64/native/libcurl.dll",
+        "runtimes/win-x64/native/libexpat.dll",
+        "runtimes/win-x64/native/libfcgi.dll",
+        "runtimes/win-x64/native/libhttpd.dll",
+        "runtimes/win-x64/native/libkea.dll",
+        "runtimes/win-x64/native/liblzma.dll",
+        "runtimes/win-x64/native/libmysql.dll",
+        "runtimes/win-x64/native/libpng16.dll",
+        "runtimes/win-x64/native/libpq.dll",
+        "runtimes/win-x64/native/librttopo.dll",
+        "runtimes/win-x64/native/libssl-1_1-x64.dll",
+        "runtimes/win-x64/native/libxml2.dll",
+        "runtimes/win-x64/native/mapcache.dll",
+        "runtimes/win-x64/native/mapserver.dll",
+        "runtimes/win-x64/native/maxrev.gdal.core.libshared/proj.db",
+        "runtimes/win-x64/native/mfhdf.dll",
+        "runtimes/win-x64/native/mod_mapcache.dll",
+        "runtimes/win-x64/native/msplugin_mssql2008.dll",
+        "runtimes/win-x64/native/msplugin_oracle.dll",
+        "runtimes/win-x64/native/msvcp140.dll",
+        "runtimes/win-x64/native/msvcp140_1.dll",
+        "runtimes/win-x64/native/msvcp140_2.dll",
+        "runtimes/win-x64/native/msvcp140_atomic_wait.dll",
+        "runtimes/win-x64/native/msvcp140_codecvt_ids.dll",
+        "runtimes/win-x64/native/netcdf.dll",
+        "runtimes/win-x64/native/ogdi.dll",
+        "runtimes/win-x64/native/ogr_wrap.dll",
+        "runtimes/win-x64/native/openjp2.dll",
+        "runtimes/win-x64/native/osr_wrap.dll",
+        "runtimes/win-x64/native/pcre.dll",
+        "runtimes/win-x64/native/pcrecpp.dll",
+        "runtimes/win-x64/native/pcreposix.dll",
+        "runtimes/win-x64/native/proj_4_9.dll",
+        "runtimes/win-x64/native/proj_7_2.dll",
+        "runtimes/win-x64/native/remote.dll",
+        "runtimes/win-x64/native/rpf.dll",
+        "runtimes/win-x64/native/skeleton.dll",
+        "runtimes/win-x64/native/spatialite.dll",
+        "runtimes/win-x64/native/sqlite3.dll",
+        "runtimes/win-x64/native/szip.dll",
+        "runtimes/win-x64/native/tiff.dll",
+        "runtimes/win-x64/native/tiffxx.dll",
+        "runtimes/win-x64/native/turbojpeg.dll",
+        "runtimes/win-x64/native/vccorlib140.dll",
+        "runtimes/win-x64/native/vcruntime140.dll",
+        "runtimes/win-x64/native/vcruntime140_1.dll",
+        "runtimes/win-x64/native/vrf.dll",
+        "runtimes/win-x64/native/xdr.dll",
+        "runtimes/win-x64/native/xerces-c_3_2.dll",
+        "runtimes/win-x64/native/zlib.dll",
+        "runtimes/win-x64/native/zlib1.dll",
+        "runtimes/win-x64/native/zstd.dll"
+      ]
+    },
     "LibGeo/1.0.0": {
       "type": "project",
       "path": "../LibGeo/LibGeo.csproj",
       "msbuildProject": "../LibGeo/LibGeo.csproj"
+    },
+    "LibResources/1.0.0": {
+      "type": "project",
+      "path": "../LibResources/LibResources.csproj",
+      "msbuildProject": "../LibResources/LibResources.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net7.0": [
       "LibGeo >= 1.0.0",
+      "LibResources >= 1.0.0",
       "Magick.NET-Q8-AnyCPU >= 12.3.0"
     ]
   },
@@ -168,6 +1059,9 @@
           "projectReferences": {
             "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibGeo/LibGeo.csproj": {
               "projectPath": "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibGeo/LibGeo.csproj"
+            },
+            "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibResources/LibResources.csproj": {
+              "projectPath": "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibResources/LibResources.csproj"
             }
           }
         }

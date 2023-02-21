@@ -31,4 +31,9 @@ public interface ILayer
     /// Return pixels array (RGBA format)
     /// </summary>
     byte[] GetPixelsArray();
+
+    /// <summary>
+    /// Is pixel with given coordinates exist in layer
+    /// </summary>
+    bool IsPixelExist(double lat, double lon);
 }

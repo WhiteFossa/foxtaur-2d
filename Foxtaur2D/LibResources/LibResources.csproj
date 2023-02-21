@@ -8,12 +8,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="12.3.0" />
+      <PackageReference Include="MaxRev.Gdal.Core" Version="3.6.1.100" />
+      <PackageReference Include="MaxRev.Gdal.LinuxRuntime.Minimal" Version="3.6.1.100" />
+      <PackageReference Include="MaxRev.Gdal.WindowsRuntime.Minimal" Version="3.6.1.110" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\LibGeo\LibGeo.csproj" />
-      <ProjectReference Include="..\LibResources\LibResources.csproj" />
     </ItemGroup>
 
 </Project>

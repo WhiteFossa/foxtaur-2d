@@ -13,3 +13,5 @@
 /mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibRenderer/bin/Debug/net7.0/LibGeo.dll
 /mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibRenderer/bin/Debug/net7.0/LibGeo.pdb
 /mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibRenderer/obj/Debug/net7.0/LibRenderer.csproj.CopyComplete
+/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibRenderer/bin/Debug/net7.0/LibResources.dll
+/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibRenderer/bin/Debug/net7.0/LibResources.pdb

@@ -97,7 +97,7 @@ public partial class MapControl : UserControl
         _backingArray = null; // It will remain null till the first resize
 
         _layers.Add(new FlatImageLayer("Resources/HYP_50M_SR_W.tif"));
-        //  _layers.Add(new ImageLayer("Resources/Gorica.tif"));
+        _layers.Add(new GeoTiffLayer("Resources/Gorica.tif"));
         
         // Listening for properties changes to process resize
         PropertyChanged += OnPropertyChangedListener;
@@ -209,6 +209,8 @@ public partial class MapControl : UserControl
     /// </summary>
     public override unsafe void Render(DrawingContext context)
     {
+        base.Render(context);
+        
         foreach (var layer in _layers)
         {
             var layerPixels = layer.GetPixelsArray();
@@ -261,8 +263,6 @@ public partial class MapControl : UserControl
             var bitmapToDraw = new Bitmap(PixelFormat.Rgba8888, (nint)pixels, new PixelSize(_viewportWidth, _viewportHeight), new Vector(RendererConstants.DefaultDPI / _scaling, RendererConstants.DefaultDPI / _scaling), _viewportWidth * 4);
             context.DrawImage(bitmapToDraw, new Rect(0, 0, _viewportWidth, _viewportHeight));
         }
-
-        base.Render(context);
     }
 
     private byte MixBrightness(byte topBrightness, byte bottomBrightness, double multiplier)
