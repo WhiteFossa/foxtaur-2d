@@ -60,6 +60,11 @@ public partial class MapControl : UserControl
     /// UI drawer
     /// </summary>
     private UiDrawer _uiDrawer = new UiDrawer();
+
+    /// <summary>
+    /// Processed image, ready to be displayed
+    /// </summary>
+    private Bitmap _displayBitmap;
     
     #endregion
     
@@ -119,6 +124,8 @@ public partial class MapControl : UserControl
         if (_isDisplayMoving)
         {
             (_backingImageGeoProvider as DisplayGeoProvider).MoveDisplay(_oldMouseX, _oldMouseY, newMouseX, newMouseY);
+            
+            _displayBitmap = null;
         }
 
         _uiDrawer.Data.MouseLat = _backingImageGeoProvider.YToLat(newMouseY);
@@ -153,6 +160,8 @@ public partial class MapControl : UserControl
         }
         
         (_backingImageGeoProvider as DisplayGeoProvider).Zoom((_backingImageGeoProvider as DisplayGeoProvider).Resolution * zoomFactor, _oldMouseX, _oldMouseY);
+        
+        _displayBitmap = null;
         
         InvalidateVisual();
     }
@@ -189,6 +198,8 @@ public partial class MapControl : UserControl
         
         // Re-setup backing image geoprovider
         _backingImageGeoProvider = new DisplayGeoProvider(_viewportWidth, _viewportHeight);
+
+        _displayBitmap = null;
     }
     
     /// <summary>
@@ -198,45 +209,55 @@ public partial class MapControl : UserControl
     {
         base.Render(context);
         
+        // Regenerating background image if needed
+        if (_displayBitmap == null)
+        {
+            GenerateDisplayBitmap();
+        }
+        
+        context.DrawImage(_displayBitmap, new Rect(0, 0, _viewportWidth, _viewportHeight));
+
+        // UI
+        _uiDrawer.Draw(context, _viewportWidth, _viewportHeight, _scaling);
+    }
+
+    private unsafe void GenerateDisplayBitmap()
+    {
         foreach (var layer in _layers)
         {
             var layerPixels = layer.GetPixelsArray();
             for (var y = 0; y < _viewportHeight; y++)
             {
                 Parallel.For(0, _viewportWidth,
-                x =>
-                {
-                    var backingLat = _backingImageGeoProvider.YToLat(y);
-                    var backingLon = _backingImageGeoProvider.XToLon(x);
-                    var backingIndex = (y * _viewportWidth + x) * 4;
-
-                    var isPixelExist = layer.GetPixelCoordinates(backingLat, backingLon, out var layerX, out var layerY);
-                    if (isPixelExist)
+                    x =>
                     {
-                        GetPixelWithInterpolation(layerPixels, layer.Width, layer.Height, (int)layerX, (int)layerY, out var lp0, out var lp1, out var lp2, out var lp3);
-                        
-                        var opacity = lp3 / (double)0xFF;
+                        var backingLat = _backingImageGeoProvider.YToLat(y);
+                        var backingLon = _backingImageGeoProvider.XToLon(x);
+                        var backingIndex = (y * _viewportWidth + x) * 4;
 
-                        _backingArray[backingIndex] = MixBrightness(lp0, _backingArray[backingIndex], opacity);
-                        _backingArray[backingIndex + 1] = MixBrightness(lp1, _backingArray[backingIndex + 1], opacity);
-                        _backingArray[backingIndex + 2] = MixBrightness(lp2, _backingArray[backingIndex + 2], opacity);
-                        _backingArray[backingIndex + 3] = 0xFF;
-                    }
-                });
+                        var isPixelExist = layer.GetPixelCoordinates(backingLat, backingLon, out var layerX, out var layerY);
+                        if (isPixelExist)
+                        {
+                            GetPixelWithInterpolation(layerPixels, layer.Width, layer.Height, (int)layerX, (int)layerY, out var lp0, out var lp1, out var lp2, out var lp3);
+                        
+                            var opacity = lp3 / (double)0xFF;
+
+                            _backingArray[backingIndex] = MixBrightness(lp0, _backingArray[backingIndex], opacity);
+                            _backingArray[backingIndex + 1] = MixBrightness(lp1, _backingArray[backingIndex + 1], opacity);
+                            _backingArray[backingIndex + 2] = MixBrightness(lp2, _backingArray[backingIndex + 2], opacity);
+                            _backingArray[backingIndex + 3] = 0xFF;
+                        }
+                    });
             }
         }
 
         // Rendering backing image
         fixed (byte* pixels = _backingArray)
         {
-            var bitmapToDraw = new Bitmap(PixelFormat.Rgba8888, (nint)pixels, new PixelSize(_viewportWidth, _viewportHeight), new Vector(RendererConstants.DefaultDPI / _scaling, RendererConstants.DefaultDPI / _scaling), _viewportWidth * 4);
-            context.DrawImage(bitmapToDraw, new Rect(0, 0, _viewportWidth, _viewportHeight));
+            _displayBitmap = new Bitmap(PixelFormat.Rgba8888, (nint)pixels, new PixelSize(_viewportWidth, _viewportHeight), new Vector(RendererConstants.DefaultDPI / _scaling, RendererConstants.DefaultDPI / _scaling), _viewportWidth * 4);
         }
-        
-        // UI
-        _uiDrawer.Draw(context, _viewportWidth, _viewportHeight, _scaling);
     }
-
+    
     public void GetPixelWithInterpolation(byte[] pixels, int width, int height, double x, double y, out byte r0, out byte r1, out byte r2, out byte r3)
     {
         var x1 = (int)x;
