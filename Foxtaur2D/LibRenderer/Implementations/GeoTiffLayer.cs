@@ -65,18 +65,15 @@ public class GeoTiffLayer : ILayer
 
     public bool GetPixelCoordinates(double lat, double lon, out double x, out double y)
     {
-        var coordinates = _geoTiffReader.GetPixelCoordsByGeoCoords(lat, lon);
-
-        x = coordinates.Item1;
-        y = coordinates.Item2;
+        _geoTiffReader.GetPixelCoordsByGeoCoords(lat, lon, out x, out y);
         
-        if (coordinates.Item1 < 0
+        if (x < 0
             ||
-            coordinates.Item1 >= Width
+            x >= Width
             ||
-            coordinates.Item2 < 0
+            y < 0
             ||
-            coordinates.Item2 >= Height)
+            y >= Height)
         {
             return false;
         }

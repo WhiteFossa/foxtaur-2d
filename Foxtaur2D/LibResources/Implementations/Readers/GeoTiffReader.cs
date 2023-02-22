@@ -266,25 +266,12 @@ public class GeoTiffReader : IGeoTiffReader
         return _totalRastersSize;
     }
 
-    public Tuple<double, double> GetPixelCoordsByGeoCoords(double lat, double lon)
+    public void GetPixelCoordsByGeoCoords(double lat, double lon, out double x, out double y)
     {
         var latDegrees = lat.ToDegrees();
         var lonDegrees = lon.ToDegrees();
 
-        var y = (latDegrees - _geoCoefficients[3] + _geoK3 - _geoK1 * lonDegrees) / _geoK2;
-        var x = lonDegrees / _geoCoefficients[1] - _geoK4 - _geoK5 * y;
-
-        return new Tuple<double, double>(x, y);
-    }
-
-    public double? GetPixelByGeoCoords(int band, double lat, double lon)
-    {
-        var planarCoords = GetPixelCoordsByGeoCoords(lat, lon);
-        if (planarCoords == null)
-        {
-            return null;
-        }
-
-        return GetPixelWithInterpolation(band, planarCoords.Item1, planarCoords.Item2);
+        y = (latDegrees - _geoCoefficients[3] + _geoK3 - _geoK1 * lonDegrees) / _geoK2;
+        x = lonDegrees / _geoCoefficients[1] - _geoK4 - _geoK5 * y;
     }
 }

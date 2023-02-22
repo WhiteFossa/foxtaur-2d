@@ -44,11 +44,5 @@ public interface IGeoTiffReader
     /// <summary>
     /// Get pixel coordinates by geo coordnates. Pixel coordinates may be wrong is geo coordinates points outside image
     /// </summary>
-    Tuple<double, double> GetPixelCoordsByGeoCoords(double lat, double lon);
-    
-    /// <summary>
-    /// Get pixel by geocoordinates
-    /// If geocoordinates are outside image will return null
-    /// </summary>
-    double? GetPixelByGeoCoords(int band, double lat, double lon);
+    void GetPixelCoordsByGeoCoords(double lat, double lon, out double x, out double y);
 }
