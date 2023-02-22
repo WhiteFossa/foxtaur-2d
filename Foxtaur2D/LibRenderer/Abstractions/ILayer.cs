@@ -1,5 +1,3 @@
-using LibGeo.Abstractions;
-
 namespace LibRenderer.Abstractions;
 
 /// <summary>

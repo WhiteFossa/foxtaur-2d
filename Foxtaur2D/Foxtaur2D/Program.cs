@@ -1,8 +1,6 @@
-﻿using Avalonia;
+﻿using System;
+using Avalonia;
 using Avalonia.ReactiveUI;
-using System;
-using LibRenderer.Abstractions.Drawers;
-using LibRenderer.Implementations.Drawers;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Foxtaur2D;
@@ -39,9 +37,7 @@ public class Program
     public static IServiceCollection ConfigureServices()
     {
         IServiceCollection services = new ServiceCollection();
-        
-        services.AddSingleton<ITextDrawer, TextDrawer>();
-        
+
         return services;
     }
 }

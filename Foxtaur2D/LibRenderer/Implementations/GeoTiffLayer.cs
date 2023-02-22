@@ -1,6 +1,4 @@
 using ImageMagick;
-using LibGeo.Abstractions;
-using LibGeo.Implementations;
 using LibRenderer.Abstractions;
 using LibResources.Abstractions.Readers;
 using LibResources.Implementations.Readers;

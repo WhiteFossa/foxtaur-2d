@@ -1,5 +1,4 @@
 using Avalonia.Media;
-using ImageMagick;
 
 namespace LibRenderer.Constants;
 

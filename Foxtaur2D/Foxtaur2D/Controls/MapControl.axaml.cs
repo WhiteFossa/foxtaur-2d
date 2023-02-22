@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Timers;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -9,19 +8,13 @@ using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
-using DynamicData.Kernel;
-using ImageMagick;
 using LibGeo.Abstractions;
 using LibGeo.Implementations;
-using LibGeo.Models;
 using LibRenderer.Abstractions;
-using LibRenderer.Abstractions.Drawers;
 using LibRenderer.Constants;
 using LibRenderer.Implementations;
 using LibRenderer.Implementations.UI;
 using NLog;
-using Microsoft.Extensions.DependencyInjection;
-using TextAlignment = Avalonia.Media.TextAlignment;
 
 namespace Foxtaur2D.Controls;
 
