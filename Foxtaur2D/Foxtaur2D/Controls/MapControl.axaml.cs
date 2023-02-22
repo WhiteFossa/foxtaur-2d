@@ -223,7 +223,7 @@ public partial class MapControl : UserControl
                     var isPixelExist = layer.GetPixelCoordinates(backingLat, backingLon, out var layerX, out var layerY);
                     if (isPixelExist)
                     {
-                        GetPixel(layerPixels, layer.Width, (int)layerX, (int)layerY, out var lp0, out var lp1, out var lp2, out var lp3);
+                        GetPixelWithInterpolation(layerPixels, layer.Width, layer.Height, (int)layerX, (int)layerY, out var lp0, out var lp1, out var lp2, out var lp3);
                         
                         var opacity = lp3 / (double)0xFF;
 
@@ -264,6 +264,50 @@ public partial class MapControl : UserControl
         }
     }
 
+    public void GetPixelWithInterpolation(byte[] pixels, int width, int height, double x, double y, out byte r0, out byte r1, out byte r2, out byte r3)
+    {
+        var x1 = (int)x;
+        var y1 = (int)y;
+
+        if (x1 == width - 1 || y1 == height - 1)
+        {
+            // Edge pixel
+            GetPixel(pixels, width, x1, y1, out r0, out r1, out r2, out r3);
+            return;
+        }
+        
+        var x2 = x1 + 1;
+        var y2 = y1 + 1;
+
+        GetPixel(pixels, width, x1, y1, out var p10, out var p11, out var p12, out var p13);
+        GetPixel(pixels, width, x2, y1, out var p20, out var p21, out var p22, out var p23);
+        GetPixel(pixels, width, x2, y2, out var p30, out var p31, out var p32, out var p33);
+        GetPixel(pixels, width, x1, y2, out var p40, out var p41, out var p42, out var p43);
+
+        // y2 - y1 is always 1
+        var k1 = y - y1;
+        var k2 = y2 - y;
+
+        var q10 = k1 * p40 + k2 * p10;
+        var q11 = k1 * p41 + k2 * p11;
+        var q12 = k1 * p42 + k2 * p12;
+        var q13 = k1 * p43 + k2 * p13;
+        
+        var q20 = k1 * p30 + k2 * p20;
+        var q21 = k1 * p31 + k2 * p21;
+        var q22 = k1 * p32 + k2 * p22;
+        var q23 = k1 * p33 + k2 * p23;
+        
+        // x2 - x1 is always 1
+        var k3 = x - x1;
+        var k4 = x2 - x;
+
+        r0 = (byte)Math.Floor(q10 * k4 + q20 * k3 + 0.5);
+        r1 = (byte)Math.Floor(q11 * k4 + q21 * k3 + 0.5);
+        r2 = (byte)Math.Floor(q12 * k4 + q22 * k3 + 0.5);
+        r3 = (byte)Math.Floor(q13 * k4 + q23 * k3 + 0.5);
+    }
+    
     /// <summary>
     /// To avoid heap allocation
     /// </summary>
