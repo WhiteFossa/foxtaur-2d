@@ -1,8 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
 using Avalonia;
@@ -226,13 +223,13 @@ public partial class MapControl : UserControl
                     var isPixelExist = layer.GetPixelCoordinates(backingLat, backingLon, out var layerX, out var layerY);
                     if (isPixelExist)
                     {
-                        var layerIndex = ((int)layerY * layer.Width + (int)layerX) * 4;
+                        GetPixel(layerPixels, layer.Width, (int)layerX, (int)layerY, out var lp0, out var lp1, out var lp2, out var lp3);
+                        
+                        var opacity = lp3 / (double)0xFF;
 
-                        var opacity = layerPixels[layerIndex + 3] / (double)0xFF;
-
-                        _backingArray[backingIndex] = MixBrightness(layerPixels[layerIndex], _backingArray[backingIndex], opacity);
-                        _backingArray[backingIndex + 1] = MixBrightness(layerPixels[layerIndex + 1], _backingArray[backingIndex + 1], opacity);
-                        _backingArray[backingIndex + 2] = MixBrightness(layerPixels[layerIndex + 2], _backingArray[backingIndex + 2], opacity);
+                        _backingArray[backingIndex] = MixBrightness(lp0, _backingArray[backingIndex], opacity);
+                        _backingArray[backingIndex + 1] = MixBrightness(lp1, _backingArray[backingIndex + 1], opacity);
+                        _backingArray[backingIndex + 2] = MixBrightness(lp2, _backingArray[backingIndex + 2], opacity);
                         _backingArray[backingIndex + 3] = 0xFF;
                     }
                 });
@@ -265,6 +262,19 @@ public partial class MapControl : UserControl
             var bitmapToDraw = new Bitmap(PixelFormat.Rgba8888, (nint)pixels, new PixelSize(_viewportWidth, _viewportHeight), new Vector(RendererConstants.DefaultDPI / _scaling, RendererConstants.DefaultDPI / _scaling), _viewportWidth * 4);
             context.DrawImage(bitmapToDraw, new Rect(0, 0, _viewportWidth, _viewportHeight));
         }
+    }
+
+    /// <summary>
+    /// To avoid heap allocation
+    /// </summary>
+    private void GetPixel(byte[] pixels, int width, int x, int y, out byte r0, out byte r1, out byte r2, out byte r3)
+    {
+        var index = (y * width + x) * 4;
+        
+        r0 = pixels[index + 0];
+        r1 = pixels[index + 1];
+        r2 = pixels[index + 2];
+        r3 = pixels[index + 3];
     }
 
     private byte MixBrightness(byte topBrightness, byte bottomBrightness, double multiplier)
