@@ -1,3 +1,4 @@
+using Avalonia.Media;
 using ImageMagick;
 
 namespace LibRenderer.Constants;
@@ -20,12 +21,12 @@ public static class RendererConstants
     /// <summary>
     /// UI panels background color
     /// </summary>
-    public static readonly MagickColor UiPanelsBackgroundColor = new MagickColor(30, 30, 60, 200);
+    public static readonly Color UiPanelsBackgroundColor = new Color(200, 30, 30, 60);
     
     /// <summary>
     /// UI text color
     /// </summary>
-    public static readonly MagickColor UiTextColor = new MagickColor(255, 255, 255, 255);
+    public static readonly Color UiTextColor = new Color(255, 255, 255, 255);
     
     /// <summary>
     /// UI font path. !! USE RASTER FONTS ONLY !!
@@ -35,7 +36,7 @@ public static class RendererConstants
     /// <summary>
     /// UI font size
     /// </summary>
-    public const int UiFontSize = 34;
+    public const int UiFontSize = 20;
 
     /// <summary>
     /// Shift text in the bottom panel to the right to this amount of pixels

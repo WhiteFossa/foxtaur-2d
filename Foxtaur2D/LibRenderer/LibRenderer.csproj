@@ -8,12 +8,19 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="Avalonia" Version="0.10.18" />
       <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="12.3.0" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\LibGeo\LibGeo.csproj" />
       <ProjectReference Include="..\LibResources\LibResources.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="Avalonia.Visuals">
+        <HintPath>..\..\..\..\..\..\..\..\home\fossa\.nuget\packages\avalonia\0.10.18\lib\netcoreapp2.0\Avalonia.Visuals.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
 </Project>

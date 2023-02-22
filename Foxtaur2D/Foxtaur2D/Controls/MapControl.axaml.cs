@@ -21,6 +21,7 @@ using LibRenderer.Implementations;
 using LibRenderer.Implementations.UI;
 using NLog;
 using Microsoft.Extensions.DependencyInjection;
+using TextAlignment = Avalonia.Media.TextAlignment;
 
 namespace Foxtaur2D.Controls;
 
@@ -63,9 +64,9 @@ public partial class MapControl : UserControl
     private IGeoProvider _backingImageGeoProvider;
 
     /// <summary>
-    /// Bottom UI panel
+    /// UI drawer
     /// </summary>
-    private ILayer _uiBottomLayer;
+    private UiDrawer _uiDrawer = new UiDrawer();
     
     #endregion
     
@@ -127,9 +128,8 @@ public partial class MapControl : UserControl
             (_backingImageGeoProvider as DisplayGeoProvider).MoveDisplay(_oldMouseX, _oldMouseY, newMouseX, newMouseY);
         }
 
-        (_uiBottomLayer as UiBottomLayer).Data.MouseLat = _backingImageGeoProvider.YToLat(newMouseY);
-        (_uiBottomLayer as UiBottomLayer).Data.MouseLon = _backingImageGeoProvider.XToLon(newMouseX);
-        _uiBottomLayer.RegeneratePixelsArray();
+        _uiDrawer.Data.MouseLat = _backingImageGeoProvider.YToLat(newMouseY);
+        _uiDrawer.Data.MouseLon = _backingImageGeoProvider.XToLon(newMouseX);
 
         _oldMouseX = newMouseX;
         _oldMouseY = newMouseY;
@@ -196,9 +196,6 @@ public partial class MapControl : UserControl
         
         // Re-setup backing image geoprovider
         _backingImageGeoProvider = new DisplayGeoProvider(_viewportWidth, _viewportHeight);
-
-        // Recreating UI
-        _uiBottomLayer = new UiBottomLayer(Program.Di.GetService<ITextDrawer>(), _viewportWidth);
     }
     
     /// <summary>
@@ -235,26 +232,6 @@ public partial class MapControl : UserControl
                 });
             }
         }
-        
-        // Special layer - bottom UI
-        var bottomUiPanelYShift = _viewportHeight - _uiBottomLayer.Height;
-        var bottomUiPanelPixels = _uiBottomLayer.GetPixelsArray();
-        for (var y = 0; y < _uiBottomLayer.Height; y++)
-        {
-            Parallel.For(0, _viewportWidth,
-            x =>
-            {
-                var layerIndex = (y * _viewportWidth + x) * 4;
-                var backingIndex = ((y + bottomUiPanelYShift) * _viewportWidth + x) * 4;
-                
-                var opacity = bottomUiPanelPixels[layerIndex + 3] / (double)0xFF;
-                
-                _backingArray[backingIndex] = MixBrightness(bottomUiPanelPixels[layerIndex], _backingArray[backingIndex], opacity);
-                _backingArray[backingIndex + 1] = MixBrightness(bottomUiPanelPixels[layerIndex + 1], _backingArray[backingIndex + 1], opacity);
-                _backingArray[backingIndex + 2] = MixBrightness(bottomUiPanelPixels[layerIndex + 2], _backingArray[backingIndex + 2], opacity);
-                _backingArray[backingIndex + 3] = 0xFF;
-            });
-        }
 
         // Rendering backing image
         fixed (byte* pixels = _backingArray)
@@ -262,6 +239,9 @@ public partial class MapControl : UserControl
             var bitmapToDraw = new Bitmap(PixelFormat.Rgba8888, (nint)pixels, new PixelSize(_viewportWidth, _viewportHeight), new Vector(RendererConstants.DefaultDPI / _scaling, RendererConstants.DefaultDPI / _scaling), _viewportWidth * 4);
             context.DrawImage(bitmapToDraw, new Rect(0, 0, _viewportWidth, _viewportHeight));
         }
+        
+        // UI
+        _uiDrawer.Draw(context, _viewportWidth, _viewportHeight, _scaling);
     }
 
     public void GetPixelWithInterpolation(byte[] pixels, int width, int height, double x, double y, out byte r0, out byte r1, out byte r2, out byte r3)

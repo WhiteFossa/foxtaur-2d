@@ -98,6 +98,10 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "dependencies": {
+            "Avalonia": {
+              "target": "Package",
+              "version": "[0.10.18, )"
+            },
             "Magick.NET-Q8-AnyCPU": {
               "target": "Package",
               "version": "[12.3.0, )"
