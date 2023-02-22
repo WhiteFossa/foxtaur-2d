@@ -16,7 +16,6 @@ public class GeoTiffLayer : ILayer
     
     public int Width { get; }
     public int Height { get; }
-    public IGeoProvider GeoProvider { get; }
 
     public GeoTiffLayer(string path)
     {
@@ -47,8 +46,6 @@ public class GeoTiffLayer : ILayer
         readSettings.Format = MagickFormat.Rgba;
                 
         _image = new MagickImage(pixels, readSettings);
-        
-        GeoProvider = new FlatGeoProvider(Width, Height); // TODO: Replace with real geo provider
     }
     
     public void RegeneratePixelsArray()
@@ -66,8 +63,24 @@ public class GeoTiffLayer : ILayer
         return _pixels;
     }
 
-    public bool IsPixelExist(double lat, double lon)
+    public bool GetPixelCoordinates(double lat, double lon, out double x, out double y)
     {
+        var coordinates = _geoTiffReader.GetPixelCoordsByGeoCoords(lat, lon);
+
+        x = coordinates.Item1;
+        y = coordinates.Item2;
+        
+        if (coordinates.Item1 < 0
+            ||
+            coordinates.Item1 >= Width
+            ||
+            coordinates.Item2 < 0
+            ||
+            coordinates.Item2 >= Height)
+        {
+            return false;
+        }
+
         return true;
     }
 }

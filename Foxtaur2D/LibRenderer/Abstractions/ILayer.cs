@@ -18,11 +18,6 @@ public interface ILayer
     int Height { get; }
 
     /// <summary>
-    /// Layer's geo provider
-    /// </summary>
-    IGeoProvider GeoProvider { get; }
-
-    /// <summary>
     /// Force pixels array regeneration
     /// </summary>
     void RegeneratePixelsArray();
@@ -33,7 +28,8 @@ public interface ILayer
     byte[] GetPixelsArray();
 
     /// <summary>
-    /// Is pixel with given coordinates exist in layer
+    /// Get pixel coordinates
     /// </summary>
-    bool IsPixelExist(double lat, double lon);
+    /// <returns>True if given coordinates exist within layer</returns>
+    bool GetPixelCoordinates(double lat, double lon, out double x, out double y);
 }

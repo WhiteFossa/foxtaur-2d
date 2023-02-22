@@ -12,12 +12,11 @@ public class FlatImageLayer : ILayer
 {
     private MagickImage _image;
     private byte[] _pixels;
+    private IGeoProvider _geoProvider;
     
     public int Width { get; private set; }
     public int Height { get; private set; }
     
-    public IGeoProvider GeoProvider { get; private set; }
-
     public FlatImageLayer(string path)
     {
         _image = new MagickImage(path);
@@ -25,7 +24,7 @@ public class FlatImageLayer : ILayer
         Width = _image.Width;
         Height = _image.Height;
 
-        GeoProvider = new FlatGeoProvider(Width, Height);
+        _geoProvider = new FlatGeoProvider(Width, Height);
     }
 
     public void RegeneratePixelsArray()
@@ -43,8 +42,11 @@ public class FlatImageLayer : ILayer
         return _pixels;
     }
 
-    public bool IsPixelExist(double lat, double lon)
+    public bool GetPixelCoordinates(double lat, double lon, out double x, out double y)
     {
+        x = _geoProvider.LonToX(lon);
+        y = _geoProvider.LatToY(lat);
+
         return true;
     }
 }

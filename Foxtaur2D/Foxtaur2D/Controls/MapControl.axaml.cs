@@ -223,16 +223,18 @@ public partial class MapControl : UserControl
                     var backingLon = _backingImageGeoProvider.XToLon(x);
                     var backingIndex = (y * _viewportWidth + x) * 4;
 
-                    var layerX = layer.GeoProvider.LonToX(backingLon);
-                    var layerY = layer.GeoProvider.LatToY(backingLat);
-                    var layerIndex = ((int)layerY * layer.Width + (int)layerX) * 4;
+                    var isPixelExist = layer.GetPixelCoordinates(backingLat, backingLon, out var layerX, out var layerY);
+                    if (isPixelExist)
+                    {
+                        var layerIndex = ((int)layerY * layer.Width + (int)layerX) * 4;
 
-                    var opacity = layerPixels[layerIndex + 3] / (double)0xFF;
+                        var opacity = layerPixels[layerIndex + 3] / (double)0xFF;
 
-                    _backingArray[backingIndex] = MixBrightness(layerPixels[layerIndex], _backingArray[backingIndex], opacity);
-                    _backingArray[backingIndex + 1] = MixBrightness(layerPixels[layerIndex + 1], _backingArray[backingIndex + 1], opacity);
-                    _backingArray[backingIndex + 2] = MixBrightness(layerPixels[layerIndex + 2], _backingArray[backingIndex + 2], opacity);
-                    _backingArray[backingIndex + 3] = 0xFF;
+                        _backingArray[backingIndex] = MixBrightness(layerPixels[layerIndex], _backingArray[backingIndex], opacity);
+                        _backingArray[backingIndex + 1] = MixBrightness(layerPixels[layerIndex + 1], _backingArray[backingIndex + 1], opacity);
+                        _backingArray[backingIndex + 2] = MixBrightness(layerPixels[layerIndex + 2], _backingArray[backingIndex + 2], opacity);
+                        _backingArray[backingIndex + 3] = 0xFF;
+                    }
                 });
             }
         }

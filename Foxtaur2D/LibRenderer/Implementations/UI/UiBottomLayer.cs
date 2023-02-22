@@ -27,11 +27,6 @@ public class UiBottomLayer : ILayer
     /// </summary>
     public UiData Data { get; set; } = new UiData();
 
-    /// <summary>
-    /// We have no geo provider for UI
-    /// </summary>
-    public IGeoProvider GeoProvider => throw new NotImplementedException();
-    
     public UiBottomLayer(ITextDrawer textDrawer, int width)
     {
         _textDrawer = textDrawer;
@@ -66,7 +61,7 @@ public class UiBottomLayer : ILayer
         return _pixels;
     }
 
-    public bool IsPixelExist(double lat, double lon)
+    public bool GetPixelCoordinates(double lat, double lon, out double x, out double y)
     {
         throw new NotImplementedException();
     }
