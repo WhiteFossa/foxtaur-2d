@@ -1,6 +1,8 @@
 ﻿using System;
 using Avalonia;
 using Avalonia.ReactiveUI;
+using LibWebClient.Services.Abstract;
+using LibWebClient.Services.Implementations;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Foxtaur2D;
@@ -38,6 +40,9 @@ public class Program
     {
         IServiceCollection services = new ServiceCollection();
 
+        services.AddSingleton<IWebClientRaw, WebClientRawStub>();
+        services.AddSingleton<IWebClient, WebClient>();
+        
         return services;
     }
 }

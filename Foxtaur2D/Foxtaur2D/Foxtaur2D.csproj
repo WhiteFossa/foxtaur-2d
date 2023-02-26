@@ -38,5 +38,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\LibRenderer\LibRenderer.csproj" />
+      <ProjectReference Include="..\LibWebClient\LibWebClient.csproj" />
     </ItemGroup>
 </Project>

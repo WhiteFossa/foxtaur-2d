@@ -69,6 +69,29 @@
             Width="300">
             
             <!-- Put side controls here -->
+            
+            <!-- Distances -->
+            <StackPanel>
+                <Label>Distance:</Label>
+                    
+                <ComboBox
+                    x:Name="Distances"
+                    HorizontalAlignment="Stretch"
+                    SelectedIndex="{ Binding SelectedDistanceIndex }">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <Label Content="{ Binding }" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                    
+                <!-- Distance focus button -->
+                <Button
+                    Content="Focus"
+                    Command="{ Binding FocusOnDistanceCommand }"/>
+
+            </StackPanel>
+            
         </Border>
     </Grid>
 
