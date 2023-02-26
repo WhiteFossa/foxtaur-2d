@@ -16,6 +16,11 @@ public interface IGeoTiffReader
     void Open(Stream stream);
 
     /// <summary>
+    /// Call this after opening to load the real raster data
+    /// </summary>
+    void LoadRasterData();
+
+    /// <summary>
     /// Get pixel by planar coordinates. Result is normalized to [0; 1]
     /// </summary>
     double GetPixel(int band, int x, int y);

@@ -6,6 +6,7 @@
         <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <LangVersion>11</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
@@ -16,6 +17,9 @@
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
         <None Update="Resources\Gorica.tif">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Fonts\NimbusSans-Regular.otf">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>
@@ -30,7 +34,7 @@
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
         <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="0.10.18" />
         <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.18" />
-        <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="12.3.0" />
+        <PackageReference Include="Magick.NET-Q8-x64" Version="12.3.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="7.0.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />

@@ -102,7 +102,7 @@
               "target": "Package",
               "version": "[0.10.18, )"
             },
-            "Magick.NET-Q8-AnyCPU": {
+            "Magick.NET-Q8-x64": {
               "target": "Package",
               "version": "[12.3.0, )"
             }

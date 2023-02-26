@@ -1,5 +1,8 @@
 using ImageMagick;
+using LibGeo.Models;
 using LibRenderer.Abstractions;
+using LibRenderer.Abstractions.Drawers;
+using LibRenderer.Constants;
 using LibResources.Abstractions.Readers;
 using LibResources.Implementations.Readers;
 
@@ -7,21 +10,49 @@ namespace LibRenderer.Implementations;
 
 public class GeoTiffLayer : ILayer
 {
-    private IGeoTiffReader _geoTiffReader; 
+    private readonly IGeoTiffReader _geoTiffReader;
+    private readonly ITextDrawer _textDrawer;
     
     private MagickImage _image;
     private byte[] _pixels;
     
     public int Width { get; }
     public int Height { get; }
-
-    public GeoTiffLayer(string path)
+    
+    public GeoTiffLayer(string path, ITextDrawer textDrawer)
     {
+        _textDrawer = textDrawer;
+        
         _geoTiffReader = new GeoTiffReader();
         _geoTiffReader.Open(path);
 
         Width = _geoTiffReader.GetWidth();
         Height = _geoTiffReader.GetHeight();
+
+        // "Image is not loaded yet..." message
+        _image = new MagickImage(RendererConstants.ImageIsLoadingBgColor, Width, Height);
+        
+        var message = "Image is not loaded yet...";
+        var messageTextSize = _textDrawer.GetTextBounds(_image, RendererConstants.ImageIsLoadingFontSize, message);
+
+        var messageShiftX = (Width - messageTextSize.TextWidth) / 2.0;
+        var messageShiftY = (Height - messageTextSize.TextHeight) / 2.0;
+        
+        _textDrawer.DrawText(_image,
+            RendererConstants.ImageIsLoadingFontSize,
+            RendererConstants.ImageIsLoadingFgColor,
+            new PlanarPoint(messageShiftX, messageShiftY),
+            message);
+    }
+
+    /// <summary>
+    /// Load actual image
+    /// </summary>
+    public void Load()
+    {
+        _image.Dispose();
+        
+        _geoTiffReader.LoadRasterData();
         
         var pixels = new byte[Width * Height * 4];
         for (var y = 0; y < Height; y++)
@@ -44,6 +75,8 @@ public class GeoTiffLayer : ILayer
         readSettings.Format = MagickFormat.Rgba;
                 
         _image = new MagickImage(pixels, readSettings);
+        
+        RegeneratePixelsArray();
     }
     
     public void RegeneratePixelsArray()

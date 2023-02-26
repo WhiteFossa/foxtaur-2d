@@ -117,19 +117,6 @@ public class GeoTiffReader : IGeoTiffReader
 
             _totalRastersSize = _rasterSize * _dataset.RasterCount;
             
-            _rasters = new byte[_dataset.RasterCount][];
-            for (var band = 1; band <= _dataset.RasterCount; band++)
-            {
-                var bandIndex = band - 1; // Bands are counted from 1
-                _rasters[bandIndex] = new byte[_rasterSize];
-            }
-
-            // Loading the rasters from all bands
-            for (var band = 1; band <= _dataset.RasterCount; band++)
-            {
-                LoadBand(band);
-            }
-
             // Loading geolocation
             _dataset.GetGeoTransform(_geoCoefficients);
 
@@ -161,6 +148,22 @@ public class GeoTiffReader : IGeoTiffReader
             Open(virtualFilename);
             
             Gdal.Unlink(virtualFilename);
+        }
+    }
+
+    public void LoadRasterData()
+    {
+        _rasters = new byte[_dataset.RasterCount][];
+        for (var band = 1; band <= _dataset.RasterCount; band++)
+        {
+            var bandIndex = band - 1; // Bands are counted from 1
+            _rasters[bandIndex] = new byte[_rasterSize];
+        }
+
+        // Loading the rasters from all bands
+        for (var band = 1; band <= _dataset.RasterCount; band++)
+        {
+            LoadBand(band);
         }
     }
 

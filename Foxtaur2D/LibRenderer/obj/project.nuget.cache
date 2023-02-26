@@ -1,13 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "5GFI/5sSxCgPJNAVKbG4hj3fDPs8gmGvmVc4tQZs21QryuOHVIN5NaRvN0kitsChFzHLlgyk2w45ZUUpuSgjxg==",
+  "dgSpecHash": "lOvCIwglHMfpYh8nWg+KsGFJa6n+nTpDyXerMGZ4Bg+fyZVVaPSsysQlzXsX71zcQyUxDKBtiKmg/OCkzns5Ew==",
   "success": true,
   "projectFilePath": "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibRenderer/LibRenderer.csproj",
   "expectedPackageFiles": [
     "/home/fossa/.nuget/packages/avalonia/0.10.18/avalonia.0.10.18.nupkg.sha512",
     "/home/fossa/.nuget/packages/avalonia.remote.protocol/0.10.18/avalonia.remote.protocol.0.10.18.nupkg.sha512",
     "/home/fossa/.nuget/packages/jetbrains.annotations/10.3.0/jetbrains.annotations.10.3.0.nupkg.sha512",
-    "/home/fossa/.nuget/packages/magick.net-q8-anycpu/12.3.0/magick.net-q8-anycpu.12.3.0.nupkg.sha512",
+    "/home/fossa/.nuget/packages/magick.net-q8-x64/12.3.0/magick.net-q8-x64.12.3.0.nupkg.sha512",
     "/home/fossa/.nuget/packages/magick.net.core/12.3.0/magick.net.core.12.3.0.nupkg.sha512",
     "/home/fossa/.nuget/packages/maxrev.gdal.core/3.6.1.100/maxrev.gdal.core.3.6.1.100.nupkg.sha512",
     "/home/fossa/.nuget/packages/maxrev.gdal.linuxruntime.minimal/3.6.1.100/maxrev.gdal.linuxruntime.minimal.3.6.1.100.nupkg.sha512",

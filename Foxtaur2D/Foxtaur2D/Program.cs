@@ -5,6 +5,8 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.ReactiveUI;
 using Foxtaur2D.Logging;
+using LibRenderer.Abstractions.Drawers;
+using LibRenderer.Implementations.Drawers;
 using LibWebClient.Services.Abstract;
 using LibWebClient.Services.Implementations;
 using Microsoft.Extensions.Configuration;
@@ -64,6 +66,7 @@ public class Program
 
         services.AddSingleton<IWebClientRaw, WebClientRawStub>();
         services.AddSingleton<IWebClient, WebClient>();
+        services.AddSingleton<ITextDrawer, TextDrawer>();
         
         return services;
     }

@@ -1,4 +1,5 @@
 using Avalonia.Media;
+using ImageMagick;
 
 namespace LibRenderer.Constants;
 
@@ -30,7 +31,7 @@ public static class RendererConstants
     /// <summary>
     /// UI font path. !! USE RASTER FONTS ONLY !!
     /// </summary>
-    public const string UiFontPath = @"Resources/Fonts/helvR-100dpi-34.otb";
+    public const string UiFontPath = @"Resources/Fonts/NimbusSans-Regular.otf";
     
     /// <summary>
     /// UI font size
@@ -51,4 +52,19 @@ public static class RendererConstants
     /// Zoom out resolution multiplier
     /// </summary>
     public const double ZoomOutStep = 0.9;
+
+    /// <summary>
+    /// Color for "Image is loading" background
+    /// </summary>
+    public static readonly MagickColor ImageIsLoadingBgColor = new MagickColor(128, 128, 255, 128);
+
+    /// <summary>
+    /// Font size for "Image is loading" message
+    /// </summary>
+    public const int ImageIsLoadingFontSize = 34;
+    
+    /// <summary>
+    /// Color for "Image is loading" message
+    /// </summary>
+    public static readonly MagickColor ImageIsLoadingFgColor = new MagickColor(255, 255, 255, 255);
 }

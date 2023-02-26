@@ -8,14 +8,17 @@ using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
+using DynamicData;
 using LibGeo.Abstractions;
 using LibGeo.Implementations;
 using LibRenderer.Abstractions;
+using LibRenderer.Abstractions.Drawers;
 using LibRenderer.Constants;
 using LibRenderer.Implementations;
 using LibRenderer.Implementations.UI;
 using LibWebClient.Models;
 using NLog;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Foxtaur2D.Controls;
 
@@ -89,18 +92,30 @@ public partial class MapControl : UserControl
     /// </summary>
     private Logger _logger = LogManager.GetCurrentClassLogger();
     
+    #region DI
+
+    private readonly ITextDrawer _textDrawer;
+    
+    #endregion
+    
     #region Debug
+
+    private GeoTiffLayer _mapLayer;
 
     #endregion
     
     public MapControl()
     {
+        _textDrawer = Program.Di.GetService<ITextDrawer>();
+        
         InitializeComponent();
 
         _backingArray = null; // It will remain null till the first resize
 
         _layers.Add(new FlatImageLayer("Resources/HYP_50M_SR_W.tif"));
-        _layers.Add(new GeoTiffLayer("Resources/Gorica.tif"));
+            
+        _mapLayer = new GeoTiffLayer("Resources/Gorica.tif", _textDrawer);
+        _layers.Add(_mapLayer);
         
         // Listening for properties changes to process resize
         PropertyChanged += OnPropertyChangedListener;
@@ -343,6 +358,11 @@ public partial class MapControl : UserControl
     public void SetActiveDistance(Distance distance)
     {
         _activeDistance = distance ?? throw new ArgumentNullException(nameof(distance));
+        
+        _mapLayer.Load();
+        _displayBitmap = null;
+        
+        InvalidateVisual();
     }
 
     /// <summary>
