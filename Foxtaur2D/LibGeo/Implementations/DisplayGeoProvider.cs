@@ -140,6 +140,15 @@ public class DisplayGeoProvider : IGeoProvider
         BaseLon += x * (oldResolution - Resolution);
     }
 
+    /// <summary>
+    /// Center display at given geocoordinates
+    /// </summary>
+    public void CenterDisplay(double centerLat, double centerLon)
+    {
+        BaseLat = centerLat + Resolution * _screenHeight / 2.0;
+        BaseLon = centerLon - Resolution * _screenWidth / 2.0;
+    }
+    
     private double CalculateMaxResolution()
     {
         var maxResolutionLat = (BaseLat + Math.PI / 2.0) / _screenHeight;

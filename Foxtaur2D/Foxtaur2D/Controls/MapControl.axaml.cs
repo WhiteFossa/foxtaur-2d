@@ -342,7 +342,7 @@ public partial class MapControl : UserControl
     /// </summary>
     public void SetActiveDistance(Distance distance)
     {
-        // TODO: Implement me
+        _activeDistance = distance ?? throw new ArgumentNullException(nameof(distance));
     }
 
     /// <summary>
@@ -350,6 +350,17 @@ public partial class MapControl : UserControl
     /// </summary>
     public void FocusOnDistance()
     {
-        // TODO: Implement me
+        if (_activeDistance == null)
+        {
+            return;
+        }
+
+        var latCenter = (_activeDistance.Map.NorthLat + _activeDistance.Map.SouthLat) / 2.0;
+        var lonCenter = (_activeDistance.Map.EastLon + _activeDistance.Map.WestLon) / 2.0;
+        
+        (_backingImageGeoProvider as DisplayGeoProvider).CenterDisplay(latCenter, lonCenter);
+        _displayBitmap = null;
+        
+        InvalidateVisual();
     }
 }
