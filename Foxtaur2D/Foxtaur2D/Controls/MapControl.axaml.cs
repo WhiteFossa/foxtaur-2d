@@ -11,10 +11,11 @@ using Avalonia.Platform;
 using DynamicData;
 using LibGeo.Abstractions;
 using LibGeo.Implementations;
-using LibRenderer.Abstractions;
 using LibRenderer.Abstractions.Drawers;
+using LibRenderer.Abstractions.Layers;
 using LibRenderer.Constants;
 using LibRenderer.Implementations;
+using LibRenderer.Implementations.Layers;
 using LibRenderer.Implementations.UI;
 using LibWebClient.Models;
 using NLog;
@@ -69,7 +70,7 @@ public partial class MapControl : UserControl
     /// Processed image, ready to be displayed
     /// </summary>
     private Bitmap _displayBitmap;
-    
+
     #endregion
     
     #region Mouse
@@ -100,7 +101,7 @@ public partial class MapControl : UserControl
     
     #region Debug
 
-    private GeoTiffLayer _mapLayer;
+    private GeoTiffLayer _mapRasterLayer;
 
     #endregion
     
@@ -114,8 +115,8 @@ public partial class MapControl : UserControl
 
         _layers.Add(new FlatImageLayer("Resources/HYP_50M_SR_W.tif"));
             
-        _mapLayer = new GeoTiffLayer("Resources/Gorica.tif", _textDrawer);
-        _layers.Add(_mapLayer);
+        _mapRasterLayer = new GeoTiffLayer("Resources/Gorica.tif", _textDrawer);
+        _layers.Add(_mapRasterLayer);
         
         // Listening for properties changes to process resize
         PropertyChanged += OnPropertyChangedListener;
@@ -227,7 +228,7 @@ public partial class MapControl : UserControl
     /// <summary>
     /// Render the control
     /// </summary>
-    public override unsafe void Render(DrawingContext context)
+    public override void Render(DrawingContext context)
     {
         base.Render(context);
         
@@ -239,29 +240,40 @@ public partial class MapControl : UserControl
         
         context.DrawImage(_displayBitmap, new Rect(0, 0, _viewportWidth, _viewportHeight));
 
+        // Vector layers
+        DrawVectorLayers(context);
+        
         // UI
         _uiDrawer.Draw(context, _viewportWidth, _viewportHeight, _scaling);
     }
 
+    /// <summary>
+    /// Draw raster layers (to a bitmap)
+    /// </summary>
     private unsafe void GenerateDisplayBitmap()
     {
         foreach (var layer in _layers)
         {
-            var layerPixels = layer.GetPixelsArray();
-            for (var y = 0; y < _viewportHeight; y++)
+            if (layer is IRasterLayer)
             {
-                Parallel.For(0, _viewportWidth,
+                // Raster layer
+                var rasterLayer = layer as IRasterLayer;
+                
+                var layerPixels = rasterLayer.GetPixelsArray();
+                for (var y = 0; y < _viewportHeight; y++)
+                {
+                    Parallel.For(0, _viewportWidth,
                     x =>
                     {
                         var backingLat = _backingImageGeoProvider.YToLat(y);
                         var backingLon = _backingImageGeoProvider.XToLon(x);
                         var backingIndex = (y * _viewportWidth + x) * 4;
 
-                        var isPixelExist = layer.GetPixelCoordinates(backingLat, backingLon, out var layerX, out var layerY);
+                        var isPixelExist = rasterLayer.GetPixelCoordinates(backingLat, backingLon, out var layerX, out var layerY);
                         if (isPixelExist)
                         {
-                            GetPixelWithInterpolation(layerPixels, layer.Width, layer.Height, (int)layerX, (int)layerY, out var lp0, out var lp1, out var lp2, out var lp3);
-                        
+                            GetPixelWithInterpolation(layerPixels, rasterLayer.Width, rasterLayer.Height, (int)layerX, (int)layerY, out var lp0, out var lp1, out var lp2, out var lp3);
+                    
                             var opacity = lp3 / (double)0xFF;
 
                             _backingArray[backingIndex] = MixBrightness(lp0, _backingArray[backingIndex], opacity);
@@ -270,6 +282,7 @@ public partial class MapControl : UserControl
                             _backingArray[backingIndex + 3] = 0xFF;
                         }
                     });
+                }
             }
         }
 
@@ -277,6 +290,22 @@ public partial class MapControl : UserControl
         fixed (byte* pixels = _backingArray)
         {
             _displayBitmap = new Bitmap(PixelFormat.Rgba8888, (nint)pixels, new PixelSize(_viewportWidth, _viewportHeight), new Vector(RendererConstants.DefaultDPI / _scaling, RendererConstants.DefaultDPI / _scaling), _viewportWidth * 4);
+        }
+    }
+
+    /// <summary>
+    /// Draw vector layers
+    /// </summary>
+    private void DrawVectorLayers(DrawingContext context)
+    {
+        foreach (var layer in _layers)
+        {
+            if (layer is IVectorLayer)
+            {
+                var vectorLayer = layer as IVectorLayer;
+                
+                vectorLayer.Draw(context, _viewportWidth, _viewportHeight, _scaling, _backingImageGeoProvider);
+            }
         }
     }
     
@@ -359,7 +388,7 @@ public partial class MapControl : UserControl
     {
         _activeDistance = distance ?? throw new ArgumentNullException(nameof(distance));
         
-        _mapLayer.Load();
+        _mapRasterLayer.Load();
         _displayBitmap = null;
         
         InvalidateVisual();

@@ -1,14 +1,14 @@
 using ImageMagick;
 using LibGeo.Models;
-using LibRenderer.Abstractions;
 using LibRenderer.Abstractions.Drawers;
+using LibRenderer.Abstractions.Layers;
 using LibRenderer.Constants;
 using LibResources.Abstractions.Readers;
 using LibResources.Implementations.Readers;
 
-namespace LibRenderer.Implementations;
+namespace LibRenderer.Implementations.Layers;
 
-public class GeoTiffLayer : ILayer
+public class GeoTiffLayer : IRasterLayer
 {
     private readonly IGeoTiffReader _geoTiffReader;
     private readonly ITextDrawer _textDrawer;

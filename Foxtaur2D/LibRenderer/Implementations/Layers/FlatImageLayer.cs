@@ -1,14 +1,14 @@
 using ImageMagick;
 using LibGeo.Abstractions;
 using LibGeo.Implementations;
-using LibRenderer.Abstractions;
+using LibRenderer.Abstractions.Layers;
 
-namespace LibRenderer.Implementations;
+namespace LibRenderer.Implementations.Layers;
 
 /// <summary>
 /// Layer, containing an image
 /// </summary>
-public class FlatImageLayer : ILayer
+public class FlatImageLayer : IRasterLayer
 {
     private MagickImage _image;
     private byte[] _pixels;

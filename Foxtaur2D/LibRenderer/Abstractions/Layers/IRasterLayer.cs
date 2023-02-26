@@ -1,9 +1,9 @@
-namespace LibRenderer.Abstractions;
+namespace LibRenderer.Abstractions.Layers;
 
 /// <summary>
 /// Abstract layer, which can be rendered
 /// </summary>
-public interface ILayer
+public interface IRasterLayer : ILayer
 {
     /// <summary>
     /// Layer width
