@@ -52,7 +52,9 @@
             Grid.ColumnSpan="2"
             AcceptsReturn="True"
             IsReadOnly="True"
-            MaxHeight="300" />
+            MaxHeight="300"
+            Text="{Binding ConsoleText}"
+            CaretIndex="{Binding ConsoleCaretIndex}" />
         
         <!-- Splitter between left and right parts of window -->
         <GridSplitter

@@ -1,9 +1,17 @@
 ﻿using System;
+using System.IO;
 using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.ReactiveUI;
+using Foxtaur2D.Logging;
 using LibWebClient.Services.Abstract;
 using LibWebClient.Services.Implementations;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using NLog;
+using NLog.Config;
+using NLog.Extensions.Logging;
 
 namespace Foxtaur2D;
 
@@ -23,6 +31,20 @@ public class Program
         // Preparing DI
         Di = ConfigureServices()
             .BuildServiceProvider();
+        
+        var builder = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json", true, true);
+
+        var configuration = builder.Build();
+        
+        // Setting-up NLog
+        ConfigurationItemFactory
+            .Default
+            .Targets
+            .RegisterDefinition("ControlLogging", typeof(ControlLoggingTarget));
+        
+        LogManager.Configuration = new NLogLoggingConfiguration(configuration.GetSection("NLog"));
         
         BuildAvaloniaApp()
             .StartWithClassicDesktopLifetime(args);
@@ -44,5 +66,16 @@ public class Program
         services.AddSingleton<IWebClient, WebClient>();
         
         return services;
+    }
+    
+    // Get main window
+    public static Window GetMainWindow()
+    {
+        if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopLifetime)
+        {
+            return desktopLifetime.MainWindow;
+        }
+
+        return null;
     }
 }

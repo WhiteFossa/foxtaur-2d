@@ -77,7 +77,13 @@ public partial class MapControl : UserControl
     private double _oldMouseY;
     
     #endregion
+
+    #region Distances
     
+    private Distance _activeDistance;
+    
+    #endregion
+
     /// <summary>
     /// Logger
     /// </summary>
