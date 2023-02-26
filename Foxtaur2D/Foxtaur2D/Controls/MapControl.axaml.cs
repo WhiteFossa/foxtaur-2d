@@ -14,6 +14,7 @@ using LibRenderer.Abstractions;
 using LibRenderer.Constants;
 using LibRenderer.Implementations;
 using LibRenderer.Implementations.UI;
+using LibWebClient.Models;
 using NLog;
 
 namespace Foxtaur2D.Controls;
@@ -328,5 +329,21 @@ public partial class MapControl : UserControl
         }
 
         return (byte)newBrightness;
+    }
+    
+    /// <summary>
+    /// Set active distance
+    /// </summary>
+    public void SetActiveDistance(Distance distance)
+    {
+        // TODO: Implement me
+    }
+
+    /// <summary>
+    /// Focus on current active distance
+    /// </summary>
+    public void FocusOnDistance()
+    {
+        // TODO: Implement me
     }
 }

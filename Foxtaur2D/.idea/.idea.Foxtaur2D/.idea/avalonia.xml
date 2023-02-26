@@ -3,6 +3,7 @@
   <component name="AvaloniaProject">
     <option name="projectPerEditor">
       <map>
+        <entry key="Foxtaur2D/App.axaml" value="Foxtaur2D/Foxtaur2D.csproj" />
         <entry key="Foxtaur2D/Controls/MapControl.axaml" value="Foxtaur2D/Foxtaur2D.csproj" />
         <entry key="Foxtaur2D/Styles/Common.axaml" value="Foxtaur2D/Foxtaur2D.csproj" />
         <entry key="Foxtaur2D/Views/MainWindow.axaml" value="Foxtaur2D/Foxtaur2D.csproj" />

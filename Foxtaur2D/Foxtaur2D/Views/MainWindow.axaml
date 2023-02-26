@@ -40,7 +40,8 @@
             Grid.ColumnSpan="2"
             Classes="VisibleBorders">
             
-            <controls:MapControl />
+            <controls:MapControl
+                Name="MapRenderer" />
             
         </Border>
         
