@@ -7,7 +7,7 @@ public class CompressedStreamResource : DownloadableResourceBase
     private Logger _logger = LogManager.GetCurrentClassLogger();
 
     private bool _isLoading;
-    private Mutex _downloadLock = new Mutex();
+    private readonly Mutex _downloadLock = new Mutex();
 
     /// <summary>
     /// Decompressed stream - take data from here

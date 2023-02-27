@@ -10,6 +10,11 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace LibRenderer.Implementations.Layers;
 
+/// <summary>
+/// Delegate for distance loaded event
+/// </summary>
+public delegate void OnDistanceLoaded();
+
 public class DistanceLayer : IVectorLayer, IRasterLayer
 {
     private readonly ITextDrawer _textDrawer;
@@ -20,17 +25,26 @@ public class DistanceLayer : IVectorLayer, IRasterLayer
     
     private CompressedStreamResource _mapImage;
     private GeoTiffLayer _mapLayer;
-    
-    public DistanceLayer(Distance distanceModel, ITextDrawer textDrawer)
+
+    private Mutex _isReadyLock = new Mutex();
+
+    private OnDistanceLoaded _onDistanceLoadedEvent;
+
+    /// <summary>
+    /// OnDistanceLoadedEvent is called on separate thread!
+    /// </summary>
+    public DistanceLayer(Distance distanceModel, OnDistanceLoaded onDistanceLoadedEvent, ITextDrawer textDrawer)
     {
         _textDrawer = textDrawer ?? throw new ArgumentNullException(nameof(textDrawer));
-        
         _distance = distanceModel ?? throw new ArgumentNullException(nameof(distanceModel));
+        _onDistanceLoadedEvent = onDistanceLoadedEvent ?? throw new ArgumentNullException(nameof(onDistanceLoadedEvent));
 
         // Starting to download a map
         _isMapLoaded = false;
         _mapImage = new CompressedStreamResource(_distance.Map.Url, false);
-        _mapImage.Download(OnMapImageLoaded);
+        
+        var downloadThread = new Thread(() => _mapImage.Download(OnMapImageLoaded));
+        downloadThread.Start();
     }
     
     public void Draw(DrawingContext context, int width, int height, double scalingFactor, IGeoProvider displayGeoProvider)
@@ -65,66 +79,51 @@ public class DistanceLayer : IVectorLayer, IRasterLayer
         _mapLayer.Load();
         
         // Map is ready
-        _isMapLoaded = true;
+        _isReadyLock.WaitOne();
+        
+        try
+        {
+            _isMapLoaded = true;
+        }
+        finally
+        {
+            _isReadyLock.ReleaseMutex();
+        }
+
+        _onDistanceLoadedEvent();
     }
 
-    public int Width
-    {
-        get
-        {
-            if (!_isMapLoaded)
-            {
-                return -1;
-            }
-            else
-            {
-                return _mapLayer.Width;
-            }
-        }
-    }
+    public int Width => _mapLayer.Width;
 
-    public int Height
-    {
-        get
-        {
-            if (!_isMapLoaded)
-            {
-                return -1;
-            }
-            else
-            {
-                return _mapLayer.Height;
-            }
-        }
-    }
-    
+    public int Height => _mapLayer.Height;
+
     public void RegeneratePixelsArray()
     {
-        if (_isMapLoaded)
-        {
-            _mapLayer.RegeneratePixelsArray();
-        }
+        _mapLayer.RegeneratePixelsArray();
     }
 
     public byte[] GetPixelsArray()
     {
-        if (!_isMapLoaded)
-        {
-            return null;
-        }
-
         return _mapLayer.GetPixelsArray();
     }
 
     public bool GetPixelCoordinates(double lat, double lon, out double x, out double y)
     {
-        if (!_isMapLoaded)
-        {
-            x = -1;
-            y = -1;
-            return false;
-        }
-
         return _mapLayer.GetPixelCoordinates(lat, lon, out x, out y);
+    }
+
+    public bool IsReady()
+    {
+        _isReadyLock.WaitOne();
+
+        try
+        {
+            return _isMapLoaded;
+        }
+        finally
+        {
+            _isReadyLock.ReleaseMutex();
+        }
+        
     }
 }

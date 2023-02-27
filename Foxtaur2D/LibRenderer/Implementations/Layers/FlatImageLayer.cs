@@ -49,4 +49,9 @@ public class FlatImageLayer : IRasterLayer
 
         return true;
     }
+
+    public bool IsReady()
+    {
+        return true;
+    }
 }

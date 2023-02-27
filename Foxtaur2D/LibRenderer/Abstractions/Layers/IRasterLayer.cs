@@ -30,4 +30,9 @@ public interface IRasterLayer : ILayer
     /// </summary>
     /// <returns>True if given coordinates exist within layer</returns>
     bool GetPixelCoordinates(double lat, double lon, out double x, out double y);
+
+    /// <summary>
+    /// If false, then layer is not ready and renderer MUST NOT call any other methods / read properties
+    /// </summary>
+    bool IsReady();
 }

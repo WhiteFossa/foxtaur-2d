@@ -8,6 +8,7 @@ using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
+using Avalonia.Threading;
 using DynamicData;
 using LibGeo.Abstractions;
 using LibGeo.Implementations;
@@ -258,15 +259,14 @@ public partial class MapControl : UserControl
             {
                 // Raster layer
                 var rasterLayer = layer as IRasterLayer;
-                
-                var layerPixels = rasterLayer.GetPixelsArray();
 
-                if (layerPixels == null)
+                if (!rasterLayer.IsReady())
                 {
-                    // Layer is not ready yet
+                    // Is not ready yet
                     continue;
                 }
                 
+                var layerPixels = rasterLayer.GetPixelsArray();
                 for (var y = 0; y < _viewportHeight; y++)
                 {
                     Parallel.For(0, _viewportWidth,
@@ -398,8 +398,10 @@ public partial class MapControl : UserControl
         // Removing existing distance layer
         _layers.Remove(_distanceLayer);
         
-        _distanceLayer = new DistanceLayer(distance, _textDrawer);
+        _distanceLayer = new DistanceLayer(distance, OnDistanceLoadedHandler, _textDrawer);
         _layers.Add(_distanceLayer);
+        
+        _displayBitmap = null;
         
         InvalidateVisual();
     }
@@ -421,5 +423,19 @@ public partial class MapControl : UserControl
         _displayBitmap = null;
         
         InvalidateVisual();
+    }
+
+    /// <summary>
+    /// Called when distance loaded
+    /// </summary>
+    private void OnDistanceLoadedHandler()
+    {
+        Dispatcher.UIThread.InvokeAsync(() =>
+        {
+            // Distance have raster component, so invalidate raster image and redraw
+            _displayBitmap = null;
+            
+            InvalidateVisual();
+        });
     }
 }

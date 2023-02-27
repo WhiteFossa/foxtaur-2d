@@ -126,4 +126,9 @@ public class GeoTiffLayer : IRasterLayer
 
         return true;
     }
+
+    public bool IsReady()
+    {
+        return true;
+    }
 }
