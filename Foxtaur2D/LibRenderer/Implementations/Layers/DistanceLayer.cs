@@ -27,5 +27,17 @@ public class DistanceLayer : IVectorLayer
         context.DrawRectangle(new SolidColorBrush(new Color(0, 255, 255, 255)), // Always transparent, no need for a constant
             new Pen(new SolidColorBrush(RendererConstants.DistanceBorderColor), RendererConstants.DistanceBorderThickness),
             new Rect(new Point(leftX, topY), new Point(rightX, bottomY)));
+        
+        // Distance name
+        var formattedDistanceName = new FormattedText(_distance.Name,
+            Typeface.Default,
+            RendererConstants.DistanceNameFontSize,
+            TextAlignment.Left,
+            TextWrapping.NoWrap,
+            new Size(double.MaxValue, double.MaxValue));
+        
+        context.DrawText(new SolidColorBrush(RendererConstants.DistanceNameColor),
+            new Point(leftX, topY - formattedDistanceName.Bounds.Height),
+            formattedDistanceName);
     }
 }

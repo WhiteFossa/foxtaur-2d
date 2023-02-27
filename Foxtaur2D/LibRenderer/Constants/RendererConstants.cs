@@ -80,5 +80,15 @@ public static class RendererConstants
     /// </summary>
     public const double DistanceBorderThickness = 2.0;
 
+    /// <summary>
+    /// Distance name font size
+    /// </summary>
+    public const double DistanceNameFontSize = 32;
+    
+    /// <summary>
+    /// Distance name color
+    /// </summary>
+    public static readonly Color DistanceNameColor = new Color(255, 0, 0, 255);
+
     #endregion
 }
