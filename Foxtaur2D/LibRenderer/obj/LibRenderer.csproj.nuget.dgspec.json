@@ -179,6 +179,10 @@
             "MaxRev.Gdal.WindowsRuntime.Minimal": {
               "target": "Package",
               "version": "[3.6.1.110, )"
+            },
+            "ZstdNet": {
+              "target": "Package",
+              "version": "[1.4.5, )"
             }
           },
           "imports": [

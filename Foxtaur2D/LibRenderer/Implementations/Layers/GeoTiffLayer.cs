@@ -16,9 +16,9 @@ public class GeoTiffLayer : IRasterLayer
     private MagickImage _image;
     private byte[] _pixels;
     
-    public int Width { get; }
-    public int Height { get; }
-    
+    public int Width { get; private set; }
+    public int Height { get; private set; }
+
     public GeoTiffLayer(string path, ITextDrawer textDrawer)
     {
         _textDrawer = textDrawer;
@@ -26,6 +26,21 @@ public class GeoTiffLayer : IRasterLayer
         _geoTiffReader = new GeoTiffReader();
         _geoTiffReader.Open(path);
 
+        InitLayer();
+    }
+
+    public GeoTiffLayer(Stream imageData, ITextDrawer textDrawer)
+    {
+        _textDrawer = textDrawer;
+        
+        _geoTiffReader = new GeoTiffReader();
+        _geoTiffReader.Open(imageData);
+        
+        InitLayer();
+    }
+
+    private void InitLayer()
+    {
         Width = _geoTiffReader.GetWidth();
         Height = _geoTiffReader.GetHeight();
 
@@ -44,7 +59,7 @@ public class GeoTiffLayer : IRasterLayer
             new PlanarPoint(messageShiftX, messageShiftY),
             message);
     }
-
+    
     /// <summary>
     /// Load actual image
     /// </summary>

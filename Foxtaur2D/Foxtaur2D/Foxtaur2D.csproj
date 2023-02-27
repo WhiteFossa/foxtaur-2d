@@ -16,9 +16,6 @@
         <None Update="Resources\HYP_50M_SR_W.tif">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="Resources\Gorica.tif">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
         <None Update="Resources\Fonts\NimbusSans-Regular.otf">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>

@@ -23,6 +23,9 @@
       <Reference Include="Avalonia.Visuals">
         <HintPath>..\..\..\..\..\..\..\..\home\fossa\.nuget\packages\avalonia\0.10.18\lib\netcoreapp2.0\Avalonia.Visuals.dll</HintPath>
       </Reference>
+      <Reference Include="Microsoft.Extensions.DependencyInjection">
+        <HintPath>..\..\..\..\..\..\..\..\home\fossa\.nuget\packages\microsoft.extensions.dependencyinjection\7.0.0\lib\net7.0\Microsoft.Extensions.DependencyInjection.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
 </Project>

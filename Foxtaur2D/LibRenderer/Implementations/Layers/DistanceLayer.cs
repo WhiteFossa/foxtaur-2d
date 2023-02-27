@@ -1,19 +1,36 @@
 using Avalonia;
 using Avalonia.Media;
 using LibGeo.Abstractions;
+using LibRenderer.Abstractions.Drawers;
 using LibRenderer.Abstractions.Layers;
 using LibRenderer.Constants;
+using LibResources.Implementations.Resources;
 using LibWebClient.Models;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace LibRenderer.Implementations.Layers;
 
-public class DistanceLayer : IVectorLayer
+public class DistanceLayer : IVectorLayer, IRasterLayer
 {
-    private readonly Distance _distance;
+    private readonly ITextDrawer _textDrawer;
     
-    public DistanceLayer(Distance distanceModel)
+    private readonly Distance _distance;
+
+    private bool _isMapLoaded;
+    
+    private CompressedStreamResource _mapImage;
+    private GeoTiffLayer _mapLayer;
+    
+    public DistanceLayer(Distance distanceModel, ITextDrawer textDrawer)
     {
+        _textDrawer = textDrawer ?? throw new ArgumentNullException(nameof(textDrawer));
+        
         _distance = distanceModel ?? throw new ArgumentNullException(nameof(distanceModel));
+
+        // Starting to download a map
+        _isMapLoaded = false;
+        _mapImage = new CompressedStreamResource(_distance.Map.Url, false);
+        _mapImage.Download(OnMapImageLoaded);
     }
     
     public void Draw(DrawingContext context, int width, int height, double scalingFactor, IGeoProvider displayGeoProvider)
@@ -39,5 +56,75 @@ public class DistanceLayer : IVectorLayer
         context.DrawText(new SolidColorBrush(RendererConstants.DistanceNameColor),
             new Point(leftX, topY - formattedDistanceName.Bounds.Height),
             formattedDistanceName);
+    }
+    
+    private void OnMapImageLoaded(DownloadableResourceBase resource)
+    {
+        var imageResource = resource as CompressedStreamResource;
+        _mapLayer = new GeoTiffLayer(imageResource.DecompressedStream, _textDrawer);
+        _mapLayer.Load();
+        
+        // Map is ready
+        _isMapLoaded = true;
+    }
+
+    public int Width
+    {
+        get
+        {
+            if (!_isMapLoaded)
+            {
+                return -1;
+            }
+            else
+            {
+                return _mapLayer.Width;
+            }
+        }
+    }
+
+    public int Height
+    {
+        get
+        {
+            if (!_isMapLoaded)
+            {
+                return -1;
+            }
+            else
+            {
+                return _mapLayer.Height;
+            }
+        }
+    }
+    
+    public void RegeneratePixelsArray()
+    {
+        if (_isMapLoaded)
+        {
+            _mapLayer.RegeneratePixelsArray();
+        }
+    }
+
+    public byte[] GetPixelsArray()
+    {
+        if (!_isMapLoaded)
+        {
+            return null;
+        }
+
+        return _mapLayer.GetPixelsArray();
+    }
+
+    public bool GetPixelCoordinates(double lat, double lon, out double x, out double y)
+    {
+        if (!_isMapLoaded)
+        {
+            x = -1;
+            y = -1;
+            return false;
+        }
+
+        return _mapLayer.GetPixelCoordinates(lat, lon, out x, out y);
     }
 }

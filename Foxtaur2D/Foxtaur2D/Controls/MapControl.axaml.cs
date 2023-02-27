@@ -106,8 +106,6 @@ public partial class MapControl : UserControl
     
     #region Debug
 
-    private GeoTiffLayer _mapRasterLayer;
-
     #endregion
     
     public MapControl()
@@ -119,10 +117,6 @@ public partial class MapControl : UserControl
         _backingArray = null; // It will remain null till the first resize
 
         _layers.Add(new FlatImageLayer("Resources/HYP_50M_SR_W.tif"));
-            
-        _mapRasterLayer = new GeoTiffLayer("Resources/Gorica.tif", _textDrawer);
-        _mapRasterLayer.Load();
-        _layers.Add(_mapRasterLayer);
 
         // Listening for properties changes to process resize
         PropertyChanged += OnPropertyChangedListener;
@@ -266,6 +260,13 @@ public partial class MapControl : UserControl
                 var rasterLayer = layer as IRasterLayer;
                 
                 var layerPixels = rasterLayer.GetPixelsArray();
+
+                if (layerPixels == null)
+                {
+                    // Layer is not ready yet
+                    continue;
+                }
+                
                 for (var y = 0; y < _viewportHeight; y++)
                 {
                     Parallel.For(0, _viewportWidth,
@@ -397,7 +398,7 @@ public partial class MapControl : UserControl
         // Removing existing distance layer
         _layers.Remove(_distanceLayer);
         
-        _distanceLayer = new DistanceLayer(distance);
+        _distanceLayer = new DistanceLayer(distance, _textDrawer);
         _layers.Add(_distanceLayer);
         
         InvalidateVisual();

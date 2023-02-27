@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "moj26+SNXVtwWaWEllzKzmr4zj4nHyI90Dt9/onjYa84SqCtuhLivPHISThbUgh89/vlTOY5KMZUhuSDIxSS/w==",
+  "dgSpecHash": "Ovm0nypNfu12+LVE28cmHdfH1h4V7lT7d8+iQqBHtLOnZQ9/omYnFP/jeAQPZZ9w2PygqzZpTIrVqwYjoD6Ouw==",
   "success": true,
   "projectFilePath": "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibRenderer/LibRenderer.csproj",
   "expectedPackageFiles": [
@@ -19,7 +19,8 @@
     "/home/fossa/.nuget/packages/system.reactive/5.0.0/system.reactive.5.0.0.nupkg.sha512",
     "/home/fossa/.nuget/packages/system.runtime/4.1.0/system.runtime.4.1.0.nupkg.sha512",
     "/home/fossa/.nuget/packages/system.runtime.compilerservices.unsafe/4.6.0/system.runtime.compilerservices.unsafe.4.6.0.nupkg.sha512",
-    "/home/fossa/.nuget/packages/system.valuetuple/4.5.0/system.valuetuple.4.5.0.nupkg.sha512"
+    "/home/fossa/.nuget/packages/system.valuetuple/4.5.0/system.valuetuple.4.5.0.nupkg.sha512",
+    "/home/fossa/.nuget/packages/zstdnet/1.4.5/zstdnet.1.4.5.nupkg.sha512"
   ],
   "logs": []
 }

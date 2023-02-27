@@ -958,6 +958,18 @@
           "lib/netcoreapp2.0/_._": {}
         }
       },
+      "ZstdNet/1.4.5": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.1/ZstdNet.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.1/ZstdNet.dll": {}
+        },
+        "build": {
+          "build/_._": {}
+        }
+      },
       "LibGeo/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v7.0",
@@ -975,7 +987,8 @@
           "LibGeo": "1.0.0",
           "MaxRev.Gdal.Core": "3.6.1.100",
           "MaxRev.Gdal.LinuxRuntime.Minimal": "3.6.1.100",
-          "MaxRev.Gdal.WindowsRuntime.Minimal": "3.6.1.110"
+          "MaxRev.Gdal.WindowsRuntime.Minimal": "3.6.1.110",
+          "ZstdNet": "1.4.5"
         },
         "compile": {
           "bin/placeholder/LibResources.dll": {}
@@ -1743,6 +1756,25 @@
         "system.valuetuple.nuspec",
         "useSharedDesignerContext.txt",
         "version.txt"
+      ]
+    },
+    "ZstdNet/1.4.5": {
+      "sha512": "fi9aP1QY3ZenIMUW1pxdSjku6lYAUjScrwfXSXT1qyKtTdLxOIzeBMe+w/hQm0vMsvQnjcFInByMrIT7AlXUHA==",
+      "type": "package",
+      "path": "zstdnet/1.4.5",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "build/LICENSE",
+        "build/ZstdNet.targets",
+        "build/x64/libzstd.dll",
+        "build/x86/libzstd.dll",
+        "lib/LICENSE",
+        "lib/net45/ZstdNet.dll",
+        "lib/netstandard2.0/ZstdNet.dll",
+        "lib/netstandard2.1/ZstdNet.dll",
+        "zstdnet.1.4.5.nupkg.sha512",
+        "zstdnet.nuspec"
       ]
     },
     "LibGeo/1.0.0": {
