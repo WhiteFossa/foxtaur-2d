@@ -84,6 +84,9 @@
               },
               "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibResources/LibResources.csproj": {
                 "projectPath": "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibResources/LibResources.csproj"
+              },
+              "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibWebClient/LibWebClient.csproj": {
+                "projectPath": "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibWebClient/LibWebClient.csproj"
               }
             }
           }
@@ -178,6 +181,63 @@
               "version": "[3.6.1.110, )"
             }
           },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/lib64/dotnet/sdk/7.0.102/RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibWebClient/LibWebClient.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibWebClient/LibWebClient.csproj",
+        "projectName": "LibWebClient",
+        "projectPath": "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibWebClient/LibWebClient.csproj",
+        "packagesPath": "/home/fossa/.nuget/packages/",
+        "outputPath": "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibWebClient/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/fossa/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net7.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net7.0": {
+            "targetAlias": "net7.0",
+            "projectReferences": {
+              "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibGeo/LibGeo.csproj": {
+                "projectPath": "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibGeo/LibGeo.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net7.0": {
+          "targetAlias": "net7.0",
           "imports": [
             "net461",
             "net462",

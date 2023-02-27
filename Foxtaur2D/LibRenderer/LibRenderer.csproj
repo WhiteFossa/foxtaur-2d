@@ -16,6 +16,7 @@
     <ItemGroup>
       <ProjectReference Include="..\LibGeo\LibGeo.csproj" />
       <ProjectReference Include="..\LibResources\LibResources.csproj" />
+      <ProjectReference Include="..\LibWebClient\LibWebClient.csproj" />
     </ItemGroup>
 
     <ItemGroup>

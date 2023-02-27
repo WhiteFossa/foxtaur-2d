@@ -983,6 +983,19 @@
         "runtime": {
           "bin/placeholder/LibResources.dll": {}
         }
+      },
+      "LibWebClient/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v7.0",
+        "dependencies": {
+          "LibGeo": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/LibWebClient.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/LibWebClient.dll": {}
+        }
       }
     }
   },
@@ -1741,6 +1754,11 @@
       "type": "project",
       "path": "../LibResources/LibResources.csproj",
       "msbuildProject": "../LibResources/LibResources.csproj"
+    },
+    "LibWebClient/1.0.0": {
+      "type": "project",
+      "path": "../LibWebClient/LibWebClient.csproj",
+      "msbuildProject": "../LibWebClient/LibWebClient.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -1748,6 +1766,7 @@
       "Avalonia >= 0.10.18",
       "LibGeo >= 1.0.0",
       "LibResources >= 1.0.0",
+      "LibWebClient >= 1.0.0",
       "Magick.NET-Q8-x64 >= 12.3.0"
     ]
   },
@@ -1781,6 +1800,9 @@
             },
             "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibResources/LibResources.csproj": {
               "projectPath": "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibResources/LibResources.csproj"
+            },
+            "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibWebClient/LibWebClient.csproj": {
+              "projectPath": "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibWebClient/LibWebClient.csproj"
             }
           }
         }

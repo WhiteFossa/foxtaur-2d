@@ -85,6 +85,11 @@ public partial class MapControl : UserControl
     #region Distances
     
     private Distance _activeDistance;
+
+    /// <summary>
+    /// Distance layer
+    /// </summary>
+    private DistanceLayer _distanceLayer;
     
     #endregion
 
@@ -116,8 +121,9 @@ public partial class MapControl : UserControl
         _layers.Add(new FlatImageLayer("Resources/HYP_50M_SR_W.tif"));
             
         _mapRasterLayer = new GeoTiffLayer("Resources/Gorica.tif", _textDrawer);
+        _mapRasterLayer.Load();
         _layers.Add(_mapRasterLayer);
-        
+
         // Listening for properties changes to process resize
         PropertyChanged += OnPropertyChangedListener;
         
@@ -388,8 +394,11 @@ public partial class MapControl : UserControl
     {
         _activeDistance = distance ?? throw new ArgumentNullException(nameof(distance));
         
-        _mapRasterLayer.Load();
-        _displayBitmap = null;
+        // Removing existing distance layer
+        _layers.Remove(_distanceLayer);
+        
+        _distanceLayer = new DistanceLayer(distance);
+        _layers.Add(_distanceLayer);
         
         InvalidateVisual();
     }

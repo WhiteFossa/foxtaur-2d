@@ -67,4 +67,18 @@ public static class RendererConstants
     /// Color for "Image is loading" message
     /// </summary>
     public static readonly MagickColor ImageIsLoadingFgColor = new MagickColor(255, 255, 255, 255);
+    
+    #region Distances
+    
+    /// <summary>
+    /// Distance border color
+    /// </summary>
+    public static readonly Color DistanceBorderColor = new Color(255, 0, 0, 255);
+
+    /// <summary>
+    /// Distance border thickness
+    /// </summary>
+    public const double DistanceBorderThickness = 2.0;
+
+    #endregion
 }
