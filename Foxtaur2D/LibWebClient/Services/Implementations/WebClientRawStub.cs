@@ -104,7 +104,27 @@ public class WebClientRawStub : IWebClientRaw
             
             case "9D448CD1-ADED-43C5-9513-53386548BFCB":
                 // Gorica - Emerlina
-                return new LocationDto(new Guid("9D448CD1-ADED-43C5-9513-53386548BFCB"), "Foxtaurs village", LocationType.Fox, 42.4484845.ToRadians(), 19.2744524.ToRadians(), new Guid("FC7BB34B-F9F0-4E7A-98D1-7699CC1B4423"));
+                return new LocationDto(new Guid("9D448CD1-ADED-43C5-9513-53386548BFCB"), "Fox location", LocationType.Fox, 42.4535335.ToRadians(), 19.2658151.ToRadians(), new Guid("FC7BB34B-F9F0-4E7A-98D1-7699CC1B4423"));
+            
+            case "AB533EAA-1E35-4252-AC22-DD8674C8452F":
+                // Gorica - Fler
+                return new LocationDto(new Guid("AB533EAA-1E35-4252-AC22-DD8674C8452F"), "Fox location", LocationType.Fox, 42.4507050.ToRadians(), 19.2702974.ToRadians(), new Guid("830EFB6A-0064-48AC-8BF8-70502C3A619D"));
+
+            case "69A2AD21-FB01-497F-852E-B7EFC754226B":
+                // Gorica - Lima
+                return new LocationDto(new Guid("69A2AD21-FB01-497F-852E-B7EFC754226B"), "Fox location", LocationType.Fox, 42.4528891.ToRadians(), 19.2789995.ToRadians(), new Guid("B262C3A7-7D79-41C7-BE02-CAA3BB3B957B"));
+            
+            case "2C0AAF06-747F-4DB4-A544-D042299F81DD":
+                // Gorica - Rita
+                return new LocationDto(new Guid("2C0AAF06-747F-4DB4-A544-D042299F81DD"), "Fox location", LocationType.Fox, 42.4484981.ToRadians(), 19.2744431.ToRadians(), new Guid("0E25C2A8-3BF3-485C-BB24-81F65BBF3EF6"));
+            
+            case "4A4B9605-91DA-4DB7-84CC-B1BC932949FB":
+                // Gorica - Krita
+                return new LocationDto(new Guid("4A4B9605-91DA-4DB7-84CC-B1BC932949FB"), "Fox location", LocationType.Fox, 42.4445633.ToRadians(), 19.2692424.ToRadians(), new Guid("F46CFCA4-937D-45A4-8302-2D2DA8E9F1AA"));
+            
+            case "94FFACBF-9BFC-48AA-B449-DE360DCDC6B9":
+                // Gorica - Malena
+                return new LocationDto(new Guid("94FFACBF-9BFC-48AA-B449-DE360DCDC6B9"), "Fox location", LocationType.Fox, 42.4493934.ToRadians(), 19.2672465.ToRadians(), new Guid("545A8D1C-301F-49B9-AEA6-5CFD4C8B5D9B"));
             
             case "3EF50875-524C-4B3C-9EEA-4E339023B777":
                 // Gorica - Finish corridor entrance
@@ -180,7 +200,15 @@ public class WebClientRawStub : IWebClientRaw
                     new Guid("D2ADFE4A-38D2-472F-A79C-6D3A6A257B6C"),
                     new Guid("3EF50875-524C-4B3C-9EEA-4E339023B777"),
                     new Guid("003062D4-1347-48DA-9193-F90652B09A7E"),
-                    new List<Guid> { new Guid("9D448CD1-ADED-43C5-9513-53386548BFCB") },
+                    new List<Guid>
+                    {
+                        new Guid("9D448CD1-ADED-43C5-9513-53386548BFCB"),
+                        new Guid("AB533EAA-1E35-4252-AC22-DD8674C8452F"),
+                        new Guid("69A2AD21-FB01-497F-852E-B7EFC754226B"),
+                        new Guid("2C0AAF06-747F-4DB4-A544-D042299F81DD"),
+                        new Guid("4A4B9605-91DA-4DB7-84CC-B1BC932949FB"),
+                        new Guid("94FFACBF-9BFC-48AA-B449-DE360DCDC6B9")
+                    },
                     new List<Guid> { new Guid("E7B81F14-5B4E-446A-9892-36B60AF6511E") }
                 );
                 break;
@@ -222,7 +250,15 @@ public class WebClientRawStub : IWebClientRaw
                 new Guid("D2ADFE4A-38D2-472F-A79C-6D3A6A257B6C"),
                 new Guid("3EF50875-524C-4B3C-9EEA-4E339023B777"),
                 new Guid("003062D4-1347-48DA-9193-F90652B09A7E"),
-                new List<Guid> { new Guid("9D448CD1-ADED-43C5-9513-53386548BFCB") },
+                new List<Guid>
+                {
+                    new Guid("9D448CD1-ADED-43C5-9513-53386548BFCB"),
+                    new Guid("AB533EAA-1E35-4252-AC22-DD8674C8452F"),
+                    new Guid("69A2AD21-FB01-497F-852E-B7EFC754226B"),
+                    new Guid("2C0AAF06-747F-4DB4-A544-D042299F81DD"),
+                    new Guid("4A4B9605-91DA-4DB7-84CC-B1BC932949FB"),
+                    new Guid("94FFACBF-9BFC-48AA-B449-DE360DCDC6B9")
+                },
                 new List<Guid> { new Guid("E7B81F14-5B4E-446A-9892-36B60AF6511E") }
             )
         };
