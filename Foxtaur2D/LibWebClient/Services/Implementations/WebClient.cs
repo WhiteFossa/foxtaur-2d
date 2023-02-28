@@ -37,6 +37,7 @@ public class WebClient : IWebClient
                     maps.FirstOrDefault(m => m.Id == d.MapId),
                     d.IsActive,
                     new Location(Guid.NewGuid(), "Invalid start location", LocationType.Start, 0, 0, null),
+                    new Location(Guid.NewGuid(), "Invalid finish corridor entrance location", LocationType.FinishCorridorEntrance, 0, 0, null),
                     new Location(Guid.NewGuid(), "Invalid finish location", LocationType.Start, 0, 0, null),
                     new List<Fox>(),
                     new List<Hunter>()
@@ -62,13 +63,19 @@ public class WebClient : IWebClient
         var startDto = await _client.GetLocationByIdAsync(distanceDto.StartLocationId);
         if (startDto == null)
         {
-            throw new InvalidCastException($"Start location (ID={ distanceDto.StartLocationId }) is not found!");
+            throw new InvalidOperationException($"Start location (ID={ distanceDto.StartLocationId }) is not found!");
+        }
+        
+        var finishCorridorEntranceDto = await _client.GetLocationByIdAsync(distanceDto.FinishCorridorEntranceLocationId);
+        if (finishCorridorEntranceDto == null)
+        {
+            throw new InvalidOperationException($"Finish corridor entrance location (ID={ distanceDto.FinishCorridorEntranceLocationId }) is not found!");
         }
         
         var finishDto = await _client.GetLocationByIdAsync(distanceDto.FinishLocationId);
         if (finishDto == null)
         {
-            throw new InvalidCastException($"Finish location (ID={ distanceDto.FinishLocationId }) is not found!");
+            throw new InvalidOperationException($"Finish location (ID={ distanceDto.FinishLocationId }) is not found!");
         }
 
         // Foxes locations
@@ -120,6 +127,7 @@ public class WebClient : IWebClient
             new Map(mapDto.Id, mapDto.Name, mapDto.NorthLat, mapDto.SouthLat, mapDto.EastLon, mapDto.WestLon, mapDto.Url),
             distanceDto.IsActive,
             new Location(startDto.Id, startDto.Name, startDto.Type, startDto.Lat, startDto.Lon, null),
+            new Location(finishCorridorEntranceDto.Id, finishCorridorEntranceDto.Name, finishCorridorEntranceDto.Type, finishCorridorEntranceDto.Lat, finishCorridorEntranceDto.Lon, null),
             new Location(finishDto.Id, finishDto.Name, finishDto.Type, finishDto.Lat, finishDto.Lon, null),
             foxesDtos.Select(f => new Fox(f.Id, f.Name, f.Frequency, f.Code)).ToList(),
             huntersDtos.Select(h =>

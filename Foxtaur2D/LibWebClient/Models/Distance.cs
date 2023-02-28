@@ -31,6 +31,11 @@ public class Distance
     public Location StartLocation { get; }
 
     /// <summary>
+    /// Finish corridor entrance location
+    /// </summary>
+    public Location FinishCorridorEntranceLocation { get; }
+
+    /// <summary>
     /// Finish location
     /// </summary>
     public Location FinishLocation { get; }
@@ -51,6 +56,7 @@ public class Distance
         Map map,
         bool isActive,
         Location startLocation,
+        Location finishCorridorEntranceLocation,
         Location finishLocation,
         IReadOnlyCollection<Fox> foxes,
         IReadOnlyCollection<Hunter> hunters)
@@ -65,6 +71,7 @@ public class Distance
         Map = map ?? throw new ArgumentNullException(nameof(map));
         IsActive = isActive;
         StartLocation = startLocation ?? throw new ArgumentNullException(nameof(startLocation));
+        FinishCorridorEntranceLocation = finishCorridorEntranceLocation ?? throw new ArgumentNullException(nameof(finishCorridorEntranceLocation));
         FinishLocation = finishLocation ?? throw new ArgumentNullException(nameof(finishLocation));
         Foxes = foxes ?? throw new ArgumentNullException(nameof(foxes));
         Hunters = hunters ?? throw new ArgumentNullException(nameof(hunters));

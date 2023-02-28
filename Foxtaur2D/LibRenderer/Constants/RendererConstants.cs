@@ -114,6 +114,30 @@ public static class RendererConstants
     
     #endregion
     
+    #region Finish corridor entrance
+    
+    /// <summary>
+    /// Finish corridor entrance element color
+    /// </summary>
+    public static readonly Color FinishCorridorEntranceColor = new Color(255, 255, 0, 0);
+    
+    /// <summary>
+    /// Finish corridor entrance pen thickness
+    /// </summary>
+    public const double FinishCorridorEntrancePenThickness = 3.0;
+    
+    /// <summary>
+    /// Finish corridor entrance radius
+    /// </summary>
+    public const double FinishCorridorEntranceRadius = 25.0;
+    
+    /// <summary>
+    /// Finish corridor entrance name font size
+    /// </summary>
+    public const double FinishCorridorEntranceNameFontSize = 32;
+    
+    #endregion
+
     #region Finish
 
     /// <summary>

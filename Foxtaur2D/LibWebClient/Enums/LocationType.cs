@@ -11,6 +11,11 @@ public enum LocationType
     Start = 0,
     
     /// <summary>
+    /// Finish corridor entrance
+    /// </summary>
+    FinishCorridorEntrance = 3,
+    
+    /// <summary>
     /// Distance finish
     /// </summary>
     Finish = 1,

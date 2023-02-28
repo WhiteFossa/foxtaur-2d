@@ -75,6 +75,9 @@ public class DistanceLayer : IVectorLayer, IRasterLayer
         // Start
         DrawStart(_distance.StartLocation, context, width, height, scalingFactor, displayGeoProvider);
         
+        // Finish corridor entrance
+        DrawFinishCorridorEntrance(_distance.FinishCorridorEntranceLocation, context, width, height, scalingFactor, displayGeoProvider);
+        
         // Finish
         DrawFinish(_distance.FinishLocation, context, width, height, scalingFactor, displayGeoProvider);
     }
@@ -113,6 +116,34 @@ public class DistanceLayer : IVectorLayer, IRasterLayer
             new Point(startX - formattedName.Bounds.Width / 2.0, startY - RendererConstants.StartR - formattedName.Bounds.Height),
             formattedName);
     }
+    
+    /// <summary>
+    /// Draw finish corridor entrance location
+    /// </summary>
+    private void DrawFinishCorridorEntrance(Location finishCorridorEntranceLocation, DrawingContext context, int width, int height, double scalingFactor, IGeoProvider displayGeoProvider)
+    {
+        var corridorX = displayGeoProvider.LonToX(finishCorridorEntranceLocation.Lon) / scalingFactor;
+        var corridorY = displayGeoProvider.LatToY(finishCorridorEntranceLocation.Lat) / scalingFactor;
+        
+        // Circle
+        context.DrawEllipse(new SolidColorBrush(Colors.Transparent),
+            new Pen(new SolidColorBrush(RendererConstants.FinishCorridorEntranceColor), RendererConstants.FinishCorridorEntrancePenThickness),
+            new Point(corridorX, corridorY),
+            RendererConstants.FinishCorridorEntranceRadius,
+            RendererConstants.FinishCorridorEntranceRadius);
+
+        // Name
+        var formattedName = new FormattedText(finishCorridorEntranceLocation.Name,
+            Typeface.Default,
+            RendererConstants.FinishCorridorEntranceNameFontSize,
+            TextAlignment.Left,
+            TextWrapping.NoWrap,
+            new Size(double.MaxValue, double.MaxValue));
+        
+        context.DrawText(new SolidColorBrush(RendererConstants.FinishCorridorEntranceColor),
+            new Point(corridorX - formattedName.Bounds.Width / 2.0, corridorY - RendererConstants.FinishCorridorEntranceRadius - formattedName.Bounds.Height),
+            formattedName);
+    }
 
     /// <summary>
     /// Draw finish location
@@ -148,7 +179,7 @@ public class DistanceLayer : IVectorLayer, IRasterLayer
             new Point(finishX - formattedName.Bounds.Width / 2.0, finishY - RendererConstants.FinishOuterRadius - formattedName.Bounds.Height),
             formattedName);
     }
-    
+
     private void OnMapImageLoaded(DownloadableResourceBase resource)
     {
         var imageResource = resource as CompressedStreamResource;

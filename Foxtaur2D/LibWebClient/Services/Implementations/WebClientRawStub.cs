@@ -55,6 +55,10 @@ public class WebClientRawStub : IWebClientRaw
                 // Davydovo - Fox
                 return new LocationDto(new Guid("FEAA7806-7FFC-4CD8-A584-6B41B17A0E77"), "Foxtaurs village", LocationType.Fox, 54.7684903.ToRadians(), 39.8525598.ToRadians(), new Guid("FC7BB34B-F9F0-4E7A-98D1-7699CC1B4423"));
 
+            case "E89CD9BE-B5FB-4D35-A321-C3C575AEDE63":
+                // Davydovo - Finish corridor entrance
+                return new LocationDto(new Guid("E89CD9BE-B5FB-4D35-A321-C3C575AEDE63"), "Finish corridor entrance", LocationType.FinishCorridorEntrance, 54.7919942.ToRadians(), 39.8667012.ToRadians(), null);
+            
             case "53ECF004-F388-4623-AABC-486BE60B6AC8":
                 // Davydovo - Finish
                 return new LocationDto(new Guid("53ECF004-F388-4623-AABC-486BE60B6AC8"), "Finish", LocationType.Finish, 54.79184839.ToRadians(), 39.86736020.ToRadians(), null);
@@ -66,6 +70,10 @@ public class WebClientRawStub : IWebClientRaw
             case "9D448CD1-ADED-43C5-9513-53386548BFCB":
                 // Gorica - Fox
                 return new LocationDto(new Guid("9D448CD1-ADED-43C5-9513-53386548BFCB"), "Foxtaurs village", LocationType.Fox, 42.4484845.ToRadians(), 19.2744524.ToRadians(), new Guid("FC7BB34B-F9F0-4E7A-98D1-7699CC1B4423"));
+            
+            case "3EF50875-524C-4B3C-9EEA-4E339023B777":
+                // Gorica - Finish corridor entrance
+                return new LocationDto(new Guid("3EF50875-524C-4B3C-9EEA-4E339023B777"), "Finish corridor entrance", LocationType.FinishCorridorEntrance, 42.4494860.ToRadians(), 19.2669100.ToRadians(), null);
             
             case "003062D4-1347-48DA-9193-F90652B09A7E":
                 // Gorica - Finish
@@ -114,6 +122,7 @@ public class WebClientRawStub : IWebClientRaw
                     new Guid("2754AEB3-9E20-4017-8858-D4E5982D3802"),
                     true,
                     new Guid("6550C9C5-6945-40F1-BDC6-17898C116A32"),
+                    new Guid("E89CD9BE-B5FB-4D35-A321-C3C575AEDE63"),
                     new Guid("53ECF004-F388-4623-AABC-486BE60B6AC8"),
                     new List<Guid> { new Guid("FEAA7806-7FFC-4CD8-A584-6B41B17A0E77") },
                     new List<Guid> { new Guid("E7B81F14-5B4E-446A-9892-36B60AF6511E") }
@@ -126,6 +135,7 @@ public class WebClientRawStub : IWebClientRaw
                     new Guid("2947B1E8-E54F-4C47-80E3-1A1E8AC045F7"),
                     true,
                     new Guid("D2ADFE4A-38D2-472F-A79C-6D3A6A257B6C"),
+                    new Guid("3EF50875-524C-4B3C-9EEA-4E339023B777"),
                     new Guid("003062D4-1347-48DA-9193-F90652B09A7E"),
                     new List<Guid> { new Guid("9D448CD1-ADED-43C5-9513-53386548BFCB") },
                     new List<Guid> { new Guid("E7B81F14-5B4E-446A-9892-36B60AF6511E") }
@@ -147,6 +157,7 @@ public class WebClientRawStub : IWebClientRaw
                 new Guid("2754AEB3-9E20-4017-8858-D4E5982D3802"),
                 true,
                 new Guid("6550C9C5-6945-40F1-BDC6-17898C116A32"),
+                new Guid("E89CD9BE-B5FB-4D35-A321-C3C575AEDE63"),
                 new Guid("53ECF004-F388-4623-AABC-486BE60B6AC8"),
                 new List<Guid> { new Guid("FEAA7806-7FFC-4CD8-A584-6B41B17A0E77") },
                 new List<Guid> { new Guid("E7B81F14-5B4E-446A-9892-36B60AF6511E") }
@@ -158,6 +169,7 @@ public class WebClientRawStub : IWebClientRaw
                 new Guid("2947B1E8-E54F-4C47-80E3-1A1E8AC045F7"),
                 true,
                 new Guid("D2ADFE4A-38D2-472F-A79C-6D3A6A257B6C"),
+                new Guid("3EF50875-524C-4B3C-9EEA-4E339023B777"),
                 new Guid("003062D4-1347-48DA-9193-F90652B09A7E"),
                 new List<Guid> { new Guid("9D448CD1-ADED-43C5-9513-53386548BFCB") },
                 new List<Guid> { new Guid("E7B81F14-5B4E-446A-9892-36B60AF6511E") }

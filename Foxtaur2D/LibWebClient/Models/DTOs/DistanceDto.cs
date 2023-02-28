@@ -31,6 +31,11 @@ public class DistanceDto
     public Guid StartLocationId { get; }
 
     /// <summary>
+    /// Finish corridor entrance location ID
+    /// </summary>
+    public Guid FinishCorridorEntranceLocationId { get; }
+
+    /// <summary>
     /// Finish location ID
     /// </summary>
     public Guid FinishLocationId { get; }
@@ -51,6 +56,7 @@ public class DistanceDto
         Guid mapId,
         bool isActive,
         Guid startLocationId,
+        Guid finishCorridorEntranceLocationId,
         Guid finishLocationId,
         IReadOnlyCollection<Guid> foxesLocationsIds,
         IReadOnlyCollection<Guid> huntersIds)
@@ -68,6 +74,7 @@ public class DistanceDto
         MapId = mapId;
         IsActive = isActive;
         StartLocationId = startLocationId;
+        FinishCorridorEntranceLocationId = finishCorridorEntranceLocationId;
         FinishLocationId = finishLocationId;
     }
 }
