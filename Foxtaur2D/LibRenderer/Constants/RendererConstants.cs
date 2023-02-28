@@ -129,7 +129,7 @@ public static class RendererConstants
     /// <summary>
     /// Fox radius
     /// </summary>
-    public const double FoxRadius = 25.0;
+    public const double FoxRadius = 20.0;
     
     /// <summary>
     /// Fox name font size
