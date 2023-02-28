@@ -52,7 +52,7 @@
             Grid.ColumnSpan="2"
             AcceptsReturn="True"
             IsReadOnly="True"
-            MaxHeight="300"
+            Height="200"
             Text="{Binding ConsoleText}"
             CaretIndex="{Binding ConsoleCaretIndex}" />
         
