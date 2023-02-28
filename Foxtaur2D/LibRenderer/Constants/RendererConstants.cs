@@ -90,6 +90,30 @@ public static class RendererConstants
     /// </summary>
     public static readonly Color DistanceNameColor = new Color(255, 0, 0, 255);
 
+    #region Start
+    
+    /// <summary>
+    /// Start element color
+    /// </summary>
+    public static readonly Color StartColor = new Color(255, 255, 0, 0);
+
+    /// <summary>
+    /// Radius of outer circle, inside what start triangle is drawn
+    /// </summary>
+    public const double StartR = 25.0;
+    
+    /// <summary>
+    /// Start pen thickness
+    /// </summary>
+    public const double StartPenThickness = 3.0;
+    
+    /// <summary>
+    /// Start name font size
+    /// </summary>
+    public const double StartNameFontSize = 32;
+    
+    #endregion
+    
     #region Finish
 
     /// <summary>

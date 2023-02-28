@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Media;
 using LibGeo.Abstractions;
+using LibGeo.Implementations.Helpers;
 using LibRenderer.Abstractions.Drawers;
 using LibRenderer.Abstractions.Layers;
 using LibRenderer.Constants;
@@ -71,8 +72,46 @@ public class DistanceLayer : IVectorLayer, IRasterLayer
             new Point(leftX, topY - formattedDistanceName.Bounds.Height),
             formattedDistanceName);
         
+        // Start
+        DrawStart(_distance.StartLocation, context, width, height, scalingFactor, displayGeoProvider);
+        
         // Finish
         DrawFinish(_distance.FinishLocation, context, width, height, scalingFactor, displayGeoProvider);
+    }
+
+    /// <summary>
+    /// Draw start location
+    /// </summary>
+    private void DrawStart(Location startLocation, DrawingContext context, int width, int height, double scalingFactor, IGeoProvider displayGeoProvider)
+    {
+        var startX = displayGeoProvider.LonToX(startLocation.Lon) / scalingFactor;
+        var startY = displayGeoProvider.LatToY(startLocation.Lat) / scalingFactor;
+        
+        // Points
+        var pointA = new Point(startX, startY - RendererConstants.StartR);
+
+        var tmp1 = RendererConstants.StartR * Math.Sin(60.0.ToRadians());
+        var tmp2 = startY + RendererConstants.StartR / 3.0;
+
+        var pointB = new Point(startX + tmp1, tmp2);
+        var pointC = new Point(startX - tmp1, tmp2);
+
+        var pen = new Pen(new SolidColorBrush(RendererConstants.StartColor), RendererConstants.StartPenThickness);
+        context.DrawLine(pen, pointA, pointB);
+        context.DrawLine(pen, pointB, pointC);
+        context.DrawLine(pen, pointC, pointA);
+        
+        // Name
+        var formattedName = new FormattedText(startLocation.Name,
+            Typeface.Default,
+            RendererConstants.StartNameFontSize,
+            TextAlignment.Left,
+            TextWrapping.NoWrap,
+            new Size(double.MaxValue, double.MaxValue));
+        
+        context.DrawText(new SolidColorBrush(RendererConstants.StartColor),
+            new Point(startX - formattedName.Bounds.Width / 2.0, startY - RendererConstants.StartR - formattedName.Bounds.Height),
+            formattedName);
     }
 
     /// <summary>
