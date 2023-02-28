@@ -90,5 +90,34 @@ public static class RendererConstants
     /// </summary>
     public static readonly Color DistanceNameColor = new Color(255, 0, 0, 255);
 
+    #region Finish
+
+    /// <summary>
+    /// Finish element color
+    /// </summary>
+    public static readonly Color FinishColor = new Color(255, 255, 0, 0);
+
+    /// <summary>
+    /// Finish pen thickness
+    /// </summary>
+    public const double FinishPenThickness = 3.0;
+    
+    /// <summary>
+    /// Finish outer radius
+    /// </summary>
+    public const double FinishOuterRadius = 25.0;
+    
+    /// <summary>
+    /// Finish inner radius
+    /// </summary>
+    public const double FinishInnerRadius = 15.0;
+    
+    /// <summary>
+    /// Finish name font size
+    /// </summary>
+    public const double FinishNameFontSize = 32;
+
+    #endregion
+
     #endregion
 }

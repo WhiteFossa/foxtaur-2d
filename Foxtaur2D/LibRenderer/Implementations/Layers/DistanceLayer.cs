@@ -55,7 +55,7 @@ public class DistanceLayer : IVectorLayer, IRasterLayer
         var leftX = displayGeoProvider.LonToX(_distance.Map.WestLon) / scalingFactor;
         var rightX = displayGeoProvider.LonToX(_distance.Map.EastLon) / scalingFactor;
         
-        context.DrawRectangle(new SolidColorBrush(new Color(0, 255, 255, 255)), // Always transparent, no need for a constant
+        context.DrawRectangle(new SolidColorBrush(Colors.Transparent), // Always transparent, no need for a constant
             new Pen(new SolidColorBrush(RendererConstants.DistanceBorderColor), RendererConstants.DistanceBorderThickness),
             new Rect(new Point(leftX, topY), new Point(rightX, bottomY)));
         
@@ -70,6 +70,44 @@ public class DistanceLayer : IVectorLayer, IRasterLayer
         context.DrawText(new SolidColorBrush(RendererConstants.DistanceNameColor),
             new Point(leftX, topY - formattedDistanceName.Bounds.Height),
             formattedDistanceName);
+        
+        // Finish
+        DrawFinish(_distance.FinishLocation, context, width, height, scalingFactor, displayGeoProvider);
+    }
+
+    /// <summary>
+    /// Draw finish location
+    /// </summary>
+    private void DrawFinish(Location finishLocation, DrawingContext context, int width, int height, double scalingFactor, IGeoProvider displayGeoProvider)
+    {
+        var finishX = displayGeoProvider.LonToX(finishLocation.Lon) / scalingFactor;
+        var finishY = displayGeoProvider.LatToY(finishLocation.Lat) / scalingFactor;
+        
+        // Outer circle
+        context.DrawEllipse(new SolidColorBrush(Colors.Transparent),
+            new Pen(new SolidColorBrush(RendererConstants.FinishColor), RendererConstants.FinishPenThickness),
+            new Point(finishX, finishY),
+            RendererConstants.FinishOuterRadius,
+            RendererConstants.FinishOuterRadius);
+        
+        // Inner circle
+        context.DrawEllipse(new SolidColorBrush(Colors.Transparent),
+            new Pen(new SolidColorBrush(RendererConstants.FinishColor), RendererConstants.FinishPenThickness),
+            new Point(finishX, finishY),
+            RendererConstants.FinishInnerRadius,
+            RendererConstants.FinishInnerRadius);
+        
+        // Name
+        var formattedName = new FormattedText(finishLocation.Name,
+            Typeface.Default,
+            RendererConstants.FinishNameFontSize,
+            TextAlignment.Left,
+            TextWrapping.NoWrap,
+            new Size(double.MaxValue, double.MaxValue));
+        
+        context.DrawText(new SolidColorBrush(RendererConstants.FinishColor),
+            new Point(finishX - formattedName.Bounds.Width / 2.0, finishY - RendererConstants.FinishOuterRadius - formattedName.Bounds.Height),
+            formattedName);
     }
     
     private void OnMapImageLoaded(DownloadableResourceBase resource)
