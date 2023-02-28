@@ -39,7 +39,7 @@ public class WebClient : IWebClient
                     new Location(Guid.NewGuid(), "Invalid start location", LocationType.Start, 0, 0, null),
                     new Location(Guid.NewGuid(), "Invalid finish corridor entrance location", LocationType.FinishCorridorEntrance, 0, 0, null),
                     new Location(Guid.NewGuid(), "Invalid finish location", LocationType.Start, 0, 0, null),
-                    new List<Fox>(),
+                    new List<Location>(),
                     new List<Hunter>()
                 );
             })
@@ -129,7 +129,12 @@ public class WebClient : IWebClient
             new Location(startDto.Id, startDto.Name, startDto.Type, startDto.Lat, startDto.Lon, null),
             new Location(finishCorridorEntranceDto.Id, finishCorridorEntranceDto.Name, finishCorridorEntranceDto.Type, finishCorridorEntranceDto.Lat, finishCorridorEntranceDto.Lon, null),
             new Location(finishDto.Id, finishDto.Name, finishDto.Type, finishDto.Lat, finishDto.Lon, null),
-            foxesDtos.Select(f => new Fox(f.Id, f.Name, f.Frequency, f.Code)).ToList(),
+            foxesLocationsDtos.Select(fl =>
+            {
+                var foxDto = foxesDtos.Single(f => f.Id == fl.FoxId);
+
+                return new Location(fl.Id, fl.Name, LocationType.Fox, fl.Lat, fl.Lon, new Fox(foxDto.Id, foxDto.Name, foxDto.Frequency, foxDto.Code));
+            }).ToList(),
             huntersDtos.Select(h =>
             {
                 var teamDto = teamsDtos

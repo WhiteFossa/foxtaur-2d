@@ -114,6 +114,35 @@ public static class RendererConstants
     
     #endregion
     
+    #region Foxes
+    
+    /// <summary>
+    /// Fox element color
+    /// </summary>
+    public static readonly Color FoxColor = new Color(255, 255, 0, 0);
+    
+    /// <summary>
+    /// Fox pen thickness
+    /// </summary>
+    public const double FoxPenThickness = 3.0;
+    
+    /// <summary>
+    /// Fox radius
+    /// </summary>
+    public const double FoxRadius = 25.0;
+    
+    /// <summary>
+    /// Fox name font size
+    /// </summary>
+    public const double FoxNameFontSize = 32;
+    
+    /// <summary>
+    /// Fox description font size
+    /// </summary>
+    public const double FoxDescriptionFontSize = 20;
+    
+    #endregion
+    
     #region Finish corridor entrance
     
     /// <summary>
@@ -165,6 +194,20 @@ public static class RendererConstants
     /// </summary>
     public const double FinishNameFontSize = 32;
 
+    #endregion
+
+    #region Linker lines
+
+    /// <summary>
+    /// Linker lines color
+    /// </summary>
+    public static readonly Color LinkerLinesColor = new Color(255, 255, 0, 0);
+
+    /// <summary>
+    /// Linker line thickness
+    /// </summary>
+    public const double LinkerLinesThickness = 3.0;
+    
     #endregion
 
     #endregion

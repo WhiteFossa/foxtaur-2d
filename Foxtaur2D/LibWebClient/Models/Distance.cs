@@ -43,7 +43,7 @@ public class Distance
     /// <summary>
     /// Foxes on distance
     /// </summary>
-    public IReadOnlyCollection<Fox> Foxes { get; }
+    public IReadOnlyCollection<Location> Foxes { get; }
 
     /// <summary>
     /// Hunters on distance
@@ -58,7 +58,7 @@ public class Distance
         Location startLocation,
         Location finishCorridorEntranceLocation,
         Location finishLocation,
-        IReadOnlyCollection<Fox> foxes,
+        IReadOnlyCollection<Location> foxes,
         IReadOnlyCollection<Hunter> hunters)
     {
         if (string.IsNullOrWhiteSpace(name))

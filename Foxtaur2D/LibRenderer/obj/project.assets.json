@@ -970,6 +970,16 @@
           "build/_._": {}
         }
       },
+      "LibAuxiliary/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v7.0",
+        "compile": {
+          "bin/placeholder/LibAuxiliary.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/LibAuxiliary.dll": {}
+        }
+      },
       "LibGeo/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v7.0",
@@ -1777,6 +1787,11 @@
         "zstdnet.nuspec"
       ]
     },
+    "LibAuxiliary/1.0.0": {
+      "type": "project",
+      "path": "../LibAuxiliary/LibAuxiliary.csproj",
+      "msbuildProject": "../LibAuxiliary/LibAuxiliary.csproj"
+    },
     "LibGeo/1.0.0": {
       "type": "project",
       "path": "../LibGeo/LibGeo.csproj",
@@ -1796,6 +1811,7 @@
   "projectFileDependencyGroups": {
     "net7.0": [
       "Avalonia >= 0.10.18",
+      "LibAuxiliary >= 1.0.0",
       "LibGeo >= 1.0.0",
       "LibResources >= 1.0.0",
       "LibWebClient >= 1.0.0",
@@ -1827,6 +1843,9 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
+            "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibAuxiliary/LibAuxiliary.csproj": {
+              "projectPath": "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibAuxiliary/LibAuxiliary.csproj"
+            },
             "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibGeo/LibGeo.csproj": {
               "projectPath": "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibGeo/LibGeo.csproj"
             },

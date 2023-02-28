@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Media;
+using LibAuxiliary.Helpers;
 using LibGeo.Abstractions;
 using LibGeo.Implementations.Helpers;
 using LibRenderer.Abstractions.Drawers;
@@ -73,19 +74,28 @@ public class DistanceLayer : IVectorLayer, IRasterLayer
             formattedDistanceName);
         
         // Start
-        DrawStart(_distance.StartLocation, context, width, height, scalingFactor, displayGeoProvider);
+        DrawStart(_distance.StartLocation, context, scalingFactor, displayGeoProvider);
+        
+        // Foxes
+        foreach (var fox in _distance.Foxes)
+        {
+            DrawFox(fox, context, scalingFactor, displayGeoProvider);
+        }
         
         // Finish corridor entrance
-        DrawFinishCorridorEntrance(_distance.FinishCorridorEntranceLocation, context, width, height, scalingFactor, displayGeoProvider);
+        DrawFinishCorridorEntrance(_distance.FinishCorridorEntranceLocation, context, scalingFactor, displayGeoProvider);
+        
+        // Finish corridor entrance and finish are directly linked
+        DrawLinkerLine(_distance.FinishCorridorEntranceLocation, _distance.FinishLocation, context, scalingFactor, displayGeoProvider);
         
         // Finish
-        DrawFinish(_distance.FinishLocation, context, width, height, scalingFactor, displayGeoProvider);
+        DrawFinish(_distance.FinishLocation, context, scalingFactor, displayGeoProvider);
     }
 
     /// <summary>
     /// Draw start location
     /// </summary>
-    private void DrawStart(Location startLocation, DrawingContext context, int width, int height, double scalingFactor, IGeoProvider displayGeoProvider)
+    private void DrawStart(Location startLocation, DrawingContext context, double scalingFactor, IGeoProvider displayGeoProvider)
     {
         var startX = displayGeoProvider.LonToX(startLocation.Lon) / scalingFactor;
         var startY = displayGeoProvider.LatToY(startLocation.Lat) / scalingFactor;
@@ -118,9 +128,49 @@ public class DistanceLayer : IVectorLayer, IRasterLayer
     }
     
     /// <summary>
+    /// Draw a fox
+    /// </summary>
+    private void DrawFox(Location fox, DrawingContext context, double scalingFactor, IGeoProvider displayGeoProvider)
+    {
+        var foxX = displayGeoProvider.LonToX(fox.Lon) / scalingFactor;
+        var foxY = displayGeoProvider.LatToY(fox.Lat) / scalingFactor;
+        
+        // Circle
+        context.DrawEllipse(new SolidColorBrush(Colors.Transparent),
+            new Pen(new SolidColorBrush(RendererConstants.FoxColor), RendererConstants.FoxPenThickness),
+            new Point(foxX, foxY),
+            RendererConstants.FoxRadius,
+            RendererConstants.FoxRadius);
+
+        // Name
+        var formattedName = new FormattedText(fox.Fox.Name,
+            Typeface.Default,
+            RendererConstants.FoxNameFontSize,
+            TextAlignment.Left,
+            TextWrapping.NoWrap,
+            new Size(double.MaxValue, double.MaxValue));
+        
+        // Frequency and code
+        var formattedDescription = new FormattedText($"{ FoxHelpers.FormatFoxFrequency(fox.Fox.Frequency) } { fox.Fox.Code }",
+            Typeface.Default,
+            RendererConstants.FoxDescriptionFontSize,
+            TextAlignment.Left,
+            TextWrapping.NoWrap,
+            new Size(double.MaxValue, double.MaxValue));
+        
+        context.DrawText(new SolidColorBrush(RendererConstants.FoxColor),
+            new Point(foxX - formattedName.Bounds.Width / 2.0, foxY - RendererConstants.FinishCorridorEntranceRadius - formattedName.Bounds.Height - formattedDescription.Bounds.Height),
+            formattedName);
+        
+        context.DrawText(new SolidColorBrush(RendererConstants.FoxColor),
+            new Point(foxX - formattedDescription.Bounds.Width / 2.0, foxY - RendererConstants.FinishCorridorEntranceRadius - formattedDescription.Bounds.Height),
+            formattedDescription);
+    }
+    
+    /// <summary>
     /// Draw finish corridor entrance location
     /// </summary>
-    private void DrawFinishCorridorEntrance(Location finishCorridorEntranceLocation, DrawingContext context, int width, int height, double scalingFactor, IGeoProvider displayGeoProvider)
+    private void DrawFinishCorridorEntrance(Location finishCorridorEntranceLocation, DrawingContext context, double scalingFactor, IGeoProvider displayGeoProvider)
     {
         var corridorX = displayGeoProvider.LonToX(finishCorridorEntranceLocation.Lon) / scalingFactor;
         var corridorY = displayGeoProvider.LatToY(finishCorridorEntranceLocation.Lat) / scalingFactor;
@@ -148,7 +198,7 @@ public class DistanceLayer : IVectorLayer, IRasterLayer
     /// <summary>
     /// Draw finish location
     /// </summary>
-    private void DrawFinish(Location finishLocation, DrawingContext context, int width, int height, double scalingFactor, IGeoProvider displayGeoProvider)
+    private void DrawFinish(Location finishLocation, DrawingContext context, double scalingFactor, IGeoProvider displayGeoProvider)
     {
         var finishX = displayGeoProvider.LonToX(finishLocation.Lon) / scalingFactor;
         var finishY = displayGeoProvider.LatToY(finishLocation.Lat) / scalingFactor;
@@ -180,6 +230,22 @@ public class DistanceLayer : IVectorLayer, IRasterLayer
             formattedName);
     }
 
+    /// <summary>
+    /// Draw linker line between two locations on distance
+    /// </summary>
+    private void DrawLinkerLine(Location begin, Location end, DrawingContext context, double scalingFactor, IGeoProvider displayGeoProvider)
+    {
+        var beginX = displayGeoProvider.LonToX(begin.Lon) / scalingFactor;
+        var beginY = displayGeoProvider.LatToY(begin.Lat) / scalingFactor;
+        
+        var endX = displayGeoProvider.LonToX(end.Lon) / scalingFactor;
+        var endY = displayGeoProvider.LatToY(end.Lat) / scalingFactor;
+        
+        context.DrawLine(new Pen(new SolidColorBrush(RendererConstants.LinkerLinesColor), RendererConstants.LinkerLinesThickness),
+            new Point(beginX, beginY),
+            new Point(endX, endY));
+    }
+    
     private void OnMapImageLoaded(DownloadableResourceBase resource)
     {
         var imageResource = resource as CompressedStreamResource;
