@@ -9,14 +9,17 @@ public class WebClientRawStub : IWebClientRaw
 {
     public async Task<TeamDto> GetTeamByIdAsync(Guid id)
     {
-        var teamId = new Guid("AE9EE155-BCDC-44C3-B83F-A4837A3EC443");
-
-        if (id != teamId)
+        switch (id.ToString().ToUpperInvariant())
         {
-            throw new ArgumentException("Team not found!");
+            case "AE9EE155-BCDC-44C3-B83F-A4837A3EC443":
+                return new TeamDto(new Guid("AE9EE155-BCDC-44C3-B83F-A4837A3EC443"), "Foxtaurs");
+            
+            case "4E44C3DE-4B3A-472B-8289-2072A9F7B49C":
+                return new TeamDto(new Guid("4E44C3DE-4B3A-472B-8289-2072A9F7B49C"), "Fox yiffers");
+            
+            default:
+                throw new ArgumentException("Team not found!");
         }
-
-        return new TeamDto(teamId, "Fox yiffers");
     }
 
     public async Task<HunterDto> GetHunterByIdAsync(Guid id)
@@ -26,8 +29,14 @@ public class WebClientRawStub : IWebClientRaw
             case "E7B81F14-5B4E-446A-9892-36B60AF6511E":
                 return new HunterDto(new Guid("E7B81F14-5B4E-446A-9892-36B60AF6511E"), "Garrek", true, new Guid("AE9EE155-BCDC-44C3-B83F-A4837A3EC443"), 54.777324.ToRadians(),39.849310.ToRadians());
             
+            case "42FA82C3-75B7-4837-A37A-636C173DA1AB":
+                return new HunterDto(new Guid("42FA82C3-75B7-4837-A37A-636C173DA1AB"), "Goldfur", true, new Guid("4E44C3DE-4B3A-472B-8289-2072A9F7B49C"), 54.8006538.ToRadians(),39.8636070.ToRadians());
+            
             case "7A598C33-9682-4DC4-95A6-656164D5D7AF":
-                return new HunterDto(new Guid("7A598C33-9682-4DC4-95A6-656164D5D7AF"), "Fossa", true, new Guid("AE9EE155-BCDC-44C3-B83F-A4837A3EC443"), 42.4492759.ToRadians(),19.2731099.ToRadians());
+                return new HunterDto(new Guid("7A598C33-9682-4DC4-95A6-656164D5D7AF"), "Fossa", true, new Guid("4E44C3DE-4B3A-472B-8289-2072A9F7B49C"), 42.4492759.ToRadians(),19.2731099.ToRadians());
+            
+            case "D2EC8AAD-B173-4E2D-A0E0-41762FE196E6":
+                return new HunterDto(new Guid("D2EC8AAD-B173-4E2D-A0E0-41762FE196E6"), "Felekar", true, new Guid("AE9EE155-BCDC-44C3-B83F-A4837A3EC443"), 42.4515011.ToRadians(),19.2778191.ToRadians());
             
             default:
                 throw new ArgumentException("Hunter not found");
@@ -200,7 +209,7 @@ public class WebClientRawStub : IWebClientRaw
                         new Guid("6A6E5E2C-746F-4F6F-B0D0-6C71EEFA1DFF"),
                         new Guid("B2E3E116-723B-4858-85BB-A6BD3BFF252B")
                     },
-                    new List<Guid> { new Guid("E7B81F14-5B4E-446A-9892-36B60AF6511E") }
+                    new List<Guid> { new Guid("E7B81F14-5B4E-446A-9892-36B60AF6511E"), new Guid("42FA82C3-75B7-4837-A37A-636C173DA1AB") }
                 );
 
             case "A59E6C8F-4C5E-47B4-9EF2-8D1B25CD569C":
@@ -230,7 +239,7 @@ public class WebClientRawStub : IWebClientRaw
                         new Guid("4A4B9605-91DA-4DB7-84CC-B1BC932949FB"),
                         new Guid("94FFACBF-9BFC-48AA-B449-DE360DCDC6B9")
                     },
-                    new List<Guid> { new Guid("7A598C33-9682-4DC4-95A6-656164D5D7AF") }
+                    new List<Guid> { new Guid("7A598C33-9682-4DC4-95A6-656164D5D7AF"), new Guid("D2EC8AAD-B173-4E2D-A0E0-41762FE196E6") }
                 );
                 break;
             
@@ -269,7 +278,7 @@ public class WebClientRawStub : IWebClientRaw
                     new Guid("6A6E5E2C-746F-4F6F-B0D0-6C71EEFA1DFF"),
                     new Guid("B2E3E116-723B-4858-85BB-A6BD3BFF252B")
                 },
-                new List<Guid> { new Guid("E7B81F14-5B4E-446A-9892-36B60AF6511E") }
+                new List<Guid> { new Guid("E7B81F14-5B4E-446A-9892-36B60AF6511E"), new Guid("42FA82C3-75B7-4837-A37A-636C173DA1AB") }
             ),
             
             new DistanceDto(
@@ -298,7 +307,7 @@ public class WebClientRawStub : IWebClientRaw
                     new Guid("4A4B9605-91DA-4DB7-84CC-B1BC932949FB"),
                     new Guid("94FFACBF-9BFC-48AA-B449-DE360DCDC6B9")
                 },
-                new List<Guid> { new Guid("7A598C33-9682-4DC4-95A6-656164D5D7AF") }
+                new List<Guid> { new Guid("7A598C33-9682-4DC4-95A6-656164D5D7AF"), new Guid("D2EC8AAD-B173-4E2D-A0E0-41762FE196E6") }
             )
         };
     }
