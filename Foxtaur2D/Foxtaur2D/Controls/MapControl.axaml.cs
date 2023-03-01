@@ -126,7 +126,7 @@ public partial class MapControl : UserControl
 
         _backingArray = null; // It will remain null till the first resize
 
-        _layers.Add(new FlatImageLayer("Resources/HYP_50M_SR_W.tif"));
+        _layers.Add(new FlatImageLayer(@"Resources/HYP_50M_SR_W.jpeg"));
 
         // Listening for properties changes to process resize
         PropertyChanged += OnPropertyChangedListener;
