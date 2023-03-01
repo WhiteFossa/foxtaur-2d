@@ -12,4 +12,10 @@
         <Setter Property="Padding" Value="5" />
         <Setter Property="Margin" Value="1" />
     </Style>
+    
+    <!-- Stack panel with spacing and margin -->
+    <Style Selector="StackPanel.PaddingAndMargin">
+        <Setter Property="Spacing" Value="5" />
+        <Setter Property="Margin" Value="1" />
+    </Style>
 </Styles>

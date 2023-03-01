@@ -17,8 +17,10 @@ public class MainWindowViewModel : ViewModelBase
     private int _consoleCaretIndex;
     
     private int _selectedDistanceIndex;
-    private IList<Distance> _distances;
-    
+    private IList<Distance> _distances = new List<Distance>();
+
+    private IList<Hunter> _hunters = new List<Hunter>();
+
     private MainModel _mainModel;
 
     #region DI
@@ -65,13 +67,28 @@ public class MainWindowViewModel : ViewModelBase
                 _mainModel.Distance = _webClient.GetDistanceByIdAsync(_distances[value].Id).Result;
             }
             
+            // Updating hunters list
+            Hunters = _mainModel.Distance != null ? _mainModel.Distance.Hunters.ToList() : new List<Hunter>();
+
             if (Renderer != null)
             {
                 Renderer.SetActiveDistance(_mainModel.Distance);                    
             }
         }
     }
-    
+
+    /// <summary>
+    /// Current distance's hunters
+    /// </summary>
+    public IList<Hunter> Hunters
+    {
+        get => _hunters;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref _hunters, value);
+        }
+    }
+
     /// <summary>
     /// Map renderer control
     /// </summary>
@@ -95,9 +112,7 @@ public class MainWindowViewModel : ViewModelBase
         
         // Asking for distances
         SelectedDistanceIndex = -1;
-        _distances = _webClient.GetDistancesWithoutIncludeAsync()
-            .Result
-            .ToList();
+        
     }
     
     /// <summary>
@@ -105,9 +120,13 @@ public class MainWindowViewModel : ViewModelBase
     /// </summary>
     public IList<Distance> GetDistances()
     {
+        _distances = _webClient.GetDistancesWithoutIncludeAsync()
+            .Result
+            .ToList();
+        
         return _distances;
     }
-    
+
     /// <summary>
     /// Focus on distance
     /// </summary>

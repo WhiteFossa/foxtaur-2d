@@ -72,27 +72,86 @@
             Width="300">
             
             <!-- Put side controls here -->
-            
-            <!-- Distances -->
-            <StackPanel>
-                <Label>Distance:</Label>
-                    
-                <ComboBox
-                    x:Name="Distances"
-                    HorizontalAlignment="Stretch"
-                    SelectedIndex="{ Binding SelectedDistanceIndex }">
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate>
-                            <Label Content="{ Binding }" />
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                </ComboBox>
+            <StackPanel
+                Classes="PaddingAndMargin">
+                
+                <!-- Distances -->
+                <Border
+                    Classes="VisibleBorders">
+                    <StackPanel
+                        Classes="PaddingAndMargin">
+                        <Label>Distance:</Label>
+                            
+                        <ComboBox
+                            x:Name="Distances"
+                            HorizontalAlignment="Stretch"
+                            SelectedIndex="{ Binding SelectedDistanceIndex }">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Label Content="{ Binding }" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        
+                        <Button
+                            Content="Focus"
+                            Command="{ Binding FocusOnDistanceCommand }"/>
+                        
+                    </StackPanel>
+                </Border>
                     
                 <!-- Distance focus button -->
-                <Button
-                    Content="Focus"
-                    Command="{ Binding FocusOnDistanceCommand }"/>
+                <Border
+                    Classes="VisibleBorders">
+                    
+                    <StackPanel
+                        Classes="PaddingAndMargin">
 
+                        <!-- Displayed hunters -->
+                        <Label>Display:</Label>
+                        
+                        <!-- Single hunter mode -->
+                        <RadioButton
+                            x:Name="HunterDisplayModeSingleHunter"
+                            GroupName="HuntersDisplayMode"
+                            Content="Hunter"/>
+                        
+                        <ComboBox
+                            x:Name="Hunter"
+                            HorizontalAlignment="Stretch"
+                            SelectedIndex="{ Binding SelectedHunterIndex }"
+                            Items="{ Binding Hunters }">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Label Content="{ Binding Name }" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        
+                        <RadioButton
+                            x:Name="HunterDisplayModeTeam"
+                            GroupName="HuntersDisplayMode"
+                            Content="Team"/>
+                        
+                        <ComboBox
+                            x:Name="Team"
+                            HorizontalAlignment="Stretch"
+                            SelectedIndex="{ Binding SelectedTeamIndex }">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Label Content="{ Binding }" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        
+                        <RadioButton
+                            x:Name="HunterDisplayModeEveryone"
+                            IsChecked="true"
+                            GroupName="HuntersDisplayMode"
+                            Content="Everyone"/>
+                        
+                    </StackPanel>
+                </Border>
             </StackPanel>
             
         </Border>

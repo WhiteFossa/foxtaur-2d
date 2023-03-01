@@ -17,6 +17,7 @@ public partial class MainWindow : Window
 
         DataContext = dataContext;
             
+        // Distances
         var distancesComboBox = this.Find<ComboBox>("Distances");
         distancesComboBox.Items = ((MainWindowViewModel)DataContext)
             .GetDistances()
