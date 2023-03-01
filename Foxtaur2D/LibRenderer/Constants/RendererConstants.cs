@@ -1,3 +1,4 @@
+using Avalonia;
 using Avalonia.Media;
 using ImageMagick;
 
@@ -207,6 +208,40 @@ public static class RendererConstants
     /// Linker line thickness
     /// </summary>
     public const double LinkerLinesThickness = 3.0;
+    
+    #endregion
+
+    #region Hunters
+
+    /// <summary>
+    /// Hunter marker size in pixels
+    /// </summary>
+    public static readonly Size HunterMarkerSize = new Size(45, 45);
+
+    /// <summary>
+    /// Active point on hunter marker (this point will be displayed in point with hunter coordinates)
+    /// </summary>
+    public static readonly Point HunterMarkerActivePoint = new Point(22.5, 44);
+
+    /// <summary>
+    /// Hunter name font size
+    /// </summary>
+    public const double HunterNameFontSize = 32;
+
+    /// <summary>
+    /// Shift hunter name down to this amount of pixels
+    /// </summary>
+    public const double HunterNameShiftDown = 15.0;
+    
+    /// <summary>
+    /// Hunter team name font size
+    /// </summary>
+    public const double HunterTeamNameFontSize = 32;
+    
+    /// <summary>
+    /// Hunter element color
+    /// </summary>
+    public static readonly Color HunterColor = new Color(255, 0, 0, 255);
     
     #endregion
 

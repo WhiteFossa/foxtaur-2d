@@ -94,6 +94,15 @@ public partial class MapControl : UserControl
     
     #endregion
 
+    #region Hunters
+
+    /// <summary>
+    /// Layer to display hunters
+    /// </summary>
+    private HuntersLayer _huntersLayer;
+
+    #endregion
+    
     /// <summary>
     /// Logger
     /// </summary>
@@ -397,9 +406,13 @@ public partial class MapControl : UserControl
         
         // Removing existing distance layer
         _layers.Remove(_distanceLayer);
-        
-        _distanceLayer = new DistanceLayer(distance, OnDistanceLoadedHandler, _textDrawer);
+        _distanceLayer = new DistanceLayer(_activeDistance, OnDistanceLoadedHandler, _textDrawer);
         _layers.Add(_distanceLayer);
+        
+        // Hunters layer
+        _layers.Remove(_huntersLayer);
+        _huntersLayer = new HuntersLayer(_activeDistance.Hunters);
+        _layers.Add(_huntersLayer);
         
         _displayBitmap = null;
         

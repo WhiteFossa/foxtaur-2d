@@ -19,6 +19,9 @@
         <None Update="Resources\Fonts\NimbusSans-Regular.otf">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
+        <None Update="Resources\Sprites\hunter_marker.png">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
     <ItemGroup>

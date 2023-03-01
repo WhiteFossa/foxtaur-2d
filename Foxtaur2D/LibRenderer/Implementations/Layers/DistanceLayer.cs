@@ -8,7 +8,6 @@ using LibRenderer.Abstractions.Layers;
 using LibRenderer.Constants;
 using LibResources.Implementations.Resources;
 using LibWebClient.Models;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace LibRenderer.Implementations.Layers;
 

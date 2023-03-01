@@ -21,14 +21,17 @@ public class WebClientRawStub : IWebClientRaw
 
     public async Task<HunterDto> GetHunterByIdAsync(Guid id)
     {
-        var hunterId = new Guid("E7B81F14-5B4E-446A-9892-36B60AF6511E");
-
-        if (id != hunterId)
+        switch (id.ToString().ToUpperInvariant())
         {
-            throw new ArgumentException("Hunter not found!");
+            case "E7B81F14-5B4E-446A-9892-36B60AF6511E":
+                return new HunterDto(new Guid("E7B81F14-5B4E-446A-9892-36B60AF6511E"), "Garrek", true, new Guid("AE9EE155-BCDC-44C3-B83F-A4837A3EC443"), 54.777324.ToRadians(),39.849310.ToRadians());
+            
+            case "7A598C33-9682-4DC4-95A6-656164D5D7AF":
+                return new HunterDto(new Guid("7A598C33-9682-4DC4-95A6-656164D5D7AF"), "Fossa", true, new Guid("AE9EE155-BCDC-44C3-B83F-A4837A3EC443"), 42.4492759.ToRadians(),19.2731099.ToRadians());
+            
+            default:
+                throw new ArgumentException("Hunter not found");
         }
-
-        return new HunterDto(hunterId, "Garrek", true, new Guid("AE9EE155-BCDC-44C3-B83F-A4837A3EC443"), 54.777324.ToRadians(),39.849310.ToRadians());
     }
 
     public async Task<FoxDto> GetFoxByIdAsync(Guid id)
@@ -227,7 +230,7 @@ public class WebClientRawStub : IWebClientRaw
                         new Guid("4A4B9605-91DA-4DB7-84CC-B1BC932949FB"),
                         new Guid("94FFACBF-9BFC-48AA-B449-DE360DCDC6B9")
                     },
-                    new List<Guid> { new Guid("E7B81F14-5B4E-446A-9892-36B60AF6511E") }
+                    new List<Guid> { new Guid("7A598C33-9682-4DC4-95A6-656164D5D7AF") }
                 );
                 break;
             
@@ -295,7 +298,7 @@ public class WebClientRawStub : IWebClientRaw
                     new Guid("4A4B9605-91DA-4DB7-84CC-B1BC932949FB"),
                     new Guid("94FFACBF-9BFC-48AA-B449-DE360DCDC6B9")
                 },
-                new List<Guid> { new Guid("E7B81F14-5B4E-446A-9892-36B60AF6511E") }
+                new List<Guid> { new Guid("7A598C33-9682-4DC4-95A6-656164D5D7AF") }
             )
         };
     }
