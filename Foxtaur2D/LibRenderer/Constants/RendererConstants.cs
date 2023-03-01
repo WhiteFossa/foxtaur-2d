@@ -29,7 +29,7 @@ public static class RendererConstants
     public static readonly Color UiTextColor = new Color(255, 255, 255, 255);
     
     /// <summary>
-    /// UI font path. !! USE RASTER FONTS ONLY !!
+    /// UI font path (used in part of UI only)
     /// </summary>
     public const string UiFontPath = @"Resources/Fonts/NimbusSans-Regular.otf";
     

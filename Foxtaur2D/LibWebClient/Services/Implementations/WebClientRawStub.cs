@@ -188,6 +188,15 @@ public class WebClientRawStub : IWebClientRaw
                         new Guid("6A6E5E2C-746F-4F6F-B0D0-6C71EEFA1DFF"),
                         new Guid("B2E3E116-723B-4858-85BB-A6BD3BFF252B")
                     },
+                    new List<Guid>
+                    {
+                        new Guid("F56B2833-973A-45E2-803C-C7AB6C7752D8"),
+                        new Guid("FEAA7806-7FFC-4CD8-A584-6B41B17A0E77"),
+                        new Guid("AA4A5E4D-5198-4198-97EB-520974785F3F"),
+                        new Guid("1B28D943-71CC-4971-8449-2460B906EC4B"),
+                        new Guid("6A6E5E2C-746F-4F6F-B0D0-6C71EEFA1DFF"),
+                        new Guid("B2E3E116-723B-4858-85BB-A6BD3BFF252B")
+                    },
                     new List<Guid> { new Guid("E7B81F14-5B4E-446A-9892-36B60AF6511E") }
                 );
 
@@ -200,6 +209,15 @@ public class WebClientRawStub : IWebClientRaw
                     new Guid("D2ADFE4A-38D2-472F-A79C-6D3A6A257B6C"),
                     new Guid("3EF50875-524C-4B3C-9EEA-4E339023B777"),
                     new Guid("003062D4-1347-48DA-9193-F90652B09A7E"),
+                    new List<Guid>
+                    {
+                        new Guid("9D448CD1-ADED-43C5-9513-53386548BFCB"),
+                        new Guid("AB533EAA-1E35-4252-AC22-DD8674C8452F"),
+                        new Guid("69A2AD21-FB01-497F-852E-B7EFC754226B"),
+                        new Guid("2C0AAF06-747F-4DB4-A544-D042299F81DD"),
+                        new Guid("4A4B9605-91DA-4DB7-84CC-B1BC932949FB"),
+                        new Guid("94FFACBF-9BFC-48AA-B449-DE360DCDC6B9")
+                    },
                     new List<Guid>
                     {
                         new Guid("9D448CD1-ADED-43C5-9513-53386548BFCB"),
@@ -239,6 +257,15 @@ public class WebClientRawStub : IWebClientRaw
                     new Guid("6A6E5E2C-746F-4F6F-B0D0-6C71EEFA1DFF"),
                     new Guid("B2E3E116-723B-4858-85BB-A6BD3BFF252B")
                 },
+                new List<Guid>
+                {
+                    new Guid("F56B2833-973A-45E2-803C-C7AB6C7752D8"),
+                    new Guid("FEAA7806-7FFC-4CD8-A584-6B41B17A0E77"),
+                    new Guid("AA4A5E4D-5198-4198-97EB-520974785F3F"),
+                    new Guid("1B28D943-71CC-4971-8449-2460B906EC4B"),
+                    new Guid("6A6E5E2C-746F-4F6F-B0D0-6C71EEFA1DFF"),
+                    new Guid("B2E3E116-723B-4858-85BB-A6BD3BFF252B")
+                },
                 new List<Guid> { new Guid("E7B81F14-5B4E-446A-9892-36B60AF6511E") }
             ),
             
@@ -250,6 +277,15 @@ public class WebClientRawStub : IWebClientRaw
                 new Guid("D2ADFE4A-38D2-472F-A79C-6D3A6A257B6C"),
                 new Guid("3EF50875-524C-4B3C-9EEA-4E339023B777"),
                 new Guid("003062D4-1347-48DA-9193-F90652B09A7E"),
+                new List<Guid>
+                {
+                    new Guid("9D448CD1-ADED-43C5-9513-53386548BFCB"),
+                    new Guid("AB533EAA-1E35-4252-AC22-DD8674C8452F"),
+                    new Guid("69A2AD21-FB01-497F-852E-B7EFC754226B"),
+                    new Guid("2C0AAF06-747F-4DB4-A544-D042299F81DD"),
+                    new Guid("4A4B9605-91DA-4DB7-84CC-B1BC932949FB"),
+                    new Guid("94FFACBF-9BFC-48AA-B449-DE360DCDC6B9")
+                },
                 new List<Guid>
                 {
                     new Guid("9D448CD1-ADED-43C5-9513-53386548BFCB"),

@@ -82,6 +82,18 @@ public class DistanceLayer : IVectorLayer, IRasterLayer
             DrawFox(fox, context, scalingFactor, displayGeoProvider);
         }
         
+        // Expected fox taking order
+        var expectedFoxOrderList = _distance.ExpectedFoxesOrder.ToList();
+        
+        DrawLinkerLine(_distance.StartLocation, expectedFoxOrderList.First(), context, scalingFactor, displayGeoProvider); // Start to first fox
+        
+        for (var fli = 0; fli < expectedFoxOrderList.Count() - 1; fli++)
+        {
+            DrawLinkerLine(expectedFoxOrderList[fli], expectedFoxOrderList[fli + 1], context, scalingFactor, displayGeoProvider);
+        }
+        
+        DrawLinkerLine(expectedFoxOrderList.Last(), _distance.FinishCorridorEntranceLocation, context, scalingFactor, displayGeoProvider); // Last fox to finish corridor entrance
+        
         // Finish corridor entrance
         DrawFinishCorridorEntrance(_distance.FinishCorridorEntranceLocation, context, scalingFactor, displayGeoProvider);
         

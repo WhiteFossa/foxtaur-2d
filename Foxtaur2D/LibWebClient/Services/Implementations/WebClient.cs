@@ -40,6 +40,7 @@ public class WebClient : IWebClient
                     new Location(Guid.NewGuid(), "Invalid finish corridor entrance location", LocationType.FinishCorridorEntrance, 0, 0, null),
                     new Location(Guid.NewGuid(), "Invalid finish location", LocationType.Start, 0, 0, null),
                     new List<Location>(),
+                    new List<Location>(),
                     new List<Hunter>()
                 );
             })
@@ -88,6 +89,15 @@ public class WebClient : IWebClient
             foxesLocationsDtos.Add(await _client.GetLocationByIdAsync(foxLocationId));
         }
         
+        // Expected foxes locations order
+        var expectedFoxesOrderLocationsIds = distanceDto
+            .ExpectedFoxesOrderLocationsIds;
+        var expectedFoxesOrderLocationsDtos = new List<LocationDto>();
+        foreach (var expectedFoxOrderLocationId in expectedFoxesOrderLocationsIds)
+        {
+            expectedFoxesOrderLocationsDtos.Add(await _client.GetLocationByIdAsync(expectedFoxOrderLocationId));
+        }
+        
         // Foxes
         var foxesIds = foxesLocationsDtos
             .Select(fl => fl.FoxId);
@@ -134,6 +144,12 @@ public class WebClient : IWebClient
                 var foxDto = foxesDtos.Single(f => f.Id == fl.FoxId);
 
                 return new Location(fl.Id, fl.Name, LocationType.Fox, fl.Lat, fl.Lon, new Fox(foxDto.Id, foxDto.Name, foxDto.Frequency, foxDto.Code));
+            }).ToList(),
+            expectedFoxesOrderLocationsDtos.Select(efol =>
+            {
+                var foxDto = foxesDtos.Single(f => f.Id == efol.FoxId);
+
+                return new Location(efol.Id, efol.Name, LocationType.Fox, efol.Lat, efol.Lon, new Fox(foxDto.Id, foxDto.Name, foxDto.Frequency, foxDto.Code));
             }).ToList(),
             huntersDtos.Select(h =>
             {

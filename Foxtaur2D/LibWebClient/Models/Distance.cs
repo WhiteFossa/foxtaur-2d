@@ -46,6 +46,11 @@ public class Distance
     public IReadOnlyCollection<Location> Foxes { get; }
 
     /// <summary>
+    /// Expected foxes taking order
+    /// </summary>
+    public IReadOnlyCollection<Location> ExpectedFoxesOrder { get; }
+
+    /// <summary>
     /// Hunters on distance
     /// </summary>
     public IReadOnlyCollection<Hunter> Hunters { get; }
@@ -59,6 +64,7 @@ public class Distance
         Location finishCorridorEntranceLocation,
         Location finishLocation,
         IReadOnlyCollection<Location> foxes,
+        IReadOnlyCollection<Location> expectedFoxesOrder,
         IReadOnlyCollection<Hunter> hunters)
     {
         if (string.IsNullOrWhiteSpace(name))
@@ -74,6 +80,7 @@ public class Distance
         FinishCorridorEntranceLocation = finishCorridorEntranceLocation ?? throw new ArgumentNullException(nameof(finishCorridorEntranceLocation));
         FinishLocation = finishLocation ?? throw new ArgumentNullException(nameof(finishLocation));
         Foxes = foxes ?? throw new ArgumentNullException(nameof(foxes));
+        ExpectedFoxesOrder = expectedFoxesOrder ?? throw new ArgumentNullException(nameof(expectedFoxesOrder));
         Hunters = hunters ?? throw new ArgumentNullException(nameof(hunters));
     }
 }
