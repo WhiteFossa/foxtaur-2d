@@ -136,10 +136,11 @@
                         <ComboBox
                             x:Name="Team"
                             HorizontalAlignment="Stretch"
-                            SelectedIndex="{ Binding SelectedTeamIndex }">
+                            SelectedIndex="{ Binding SelectedTeamIndex }"
+                            Items="{ Binding Teams }">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
-                                    <Label Content="{ Binding }" />
+                                    <Label Content="{ Binding Name }" />
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>

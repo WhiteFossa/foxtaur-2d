@@ -21,6 +21,8 @@ public class MainWindowViewModel : ViewModelBase
 
     private IList<Hunter> _hunters = new List<Hunter>();
 
+    private IList<Team> _teams = new List<Team>();
+
     private MainModel _mainModel;
 
     #region DI
@@ -69,6 +71,16 @@ public class MainWindowViewModel : ViewModelBase
             
             // Updating hunters list
             Hunters = _mainModel.Distance != null ? _mainModel.Distance.Hunters.ToList() : new List<Hunter>();
+            
+            // Updating teams list
+            Teams = _mainModel.Distance != null
+                ? _mainModel
+                    .Distance
+                    .Hunters
+                    .Select(h => h.Team)
+                    .Distinct()
+                    .ToList()
+                : new List<Team>();
 
             if (Renderer != null)
             {
@@ -86,6 +98,18 @@ public class MainWindowViewModel : ViewModelBase
         set
         {
             this.RaiseAndSetIfChanged(ref _hunters, value);
+        }
+    }
+
+    /// <summary>
+    /// Current distance teams
+    /// </summary>
+    public IList<Team> Teams
+    {
+        get => _teams;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref _teams, value);
         }
     }
 
