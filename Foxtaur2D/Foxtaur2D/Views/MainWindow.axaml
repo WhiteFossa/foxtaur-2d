@@ -129,6 +129,7 @@
                         <RadioButton
                             x:Name="HunterDisplayModeSingleHunter"
                             GroupName="HuntersDisplayMode"
+                            IsChecked="{ Binding IsSingleHunterModeChecked }"
                             Content="Hunter"/>
                         
                         <ComboBox
@@ -146,6 +147,7 @@
                         <RadioButton
                             x:Name="HunterDisplayModeTeam"
                             GroupName="HuntersDisplayMode"
+                            IsChecked="{ Binding IsSingleTeamModeChecked }"
                             Content="Team"/>
                         
                         <ComboBox
@@ -162,8 +164,8 @@
                         
                         <RadioButton
                             x:Name="HunterDisplayModeEveryone"
-                            IsChecked="true"
                             GroupName="HuntersDisplayMode"
+                            IsChecked="{ Binding IsEveryoneModeChecked }"
                             Content="Everyone"/>
                         
                     </StackPanel>

@@ -15,6 +15,7 @@ using LibGeo.Implementations;
 using LibRenderer.Abstractions.Drawers;
 using LibRenderer.Abstractions.Layers;
 using LibRenderer.Constants;
+using LibRenderer.Enums;
 using LibRenderer.Implementations;
 using LibRenderer.Implementations.Layers;
 using LibRenderer.Implementations.UI;
@@ -110,6 +111,11 @@ public partial class MapControl : UserControl
     /// One team to display (for case when only one team have to be displayed)
     /// </summary>
     private Team _teamToDisplay;
+
+    /// <summary>
+    /// Hunters filtering/display mode
+    /// </summary>
+    private HuntersFilteringMode _huntersFilteringMode;
     
     #endregion
     
@@ -475,9 +481,16 @@ public partial class MapControl : UserControl
     /// <summary>
     /// Set team to display (for "display one team" mode)
     /// </summary>
-    /// <param name="team"></param>
     public void SetTeamToDisplay(Team team)
     {
         _teamToDisplay = team;
+    }
+
+    /// <summary>
+    /// Set hunters filtering mode
+    /// </summary>
+    public void SetHuntersFilteringMode(HuntersFilteringMode filteringMode)
+    {
+        _huntersFilteringMode = filteringMode;
     }
 }

@@ -1,3 +1,4 @@
+using LibRenderer.Enums;
 using LibWebClient.Models;
 
 namespace Foxtaur2D.Models;
@@ -21,4 +22,9 @@ public class MainModel
     /// Displayed team (for single team mode)
     /// </summary>
     public Team DisplayedTeam { get; set; }
+
+    /// <summary>
+    /// Hunters filtering/display mode
+    /// </summary>
+    public HuntersFilteringMode HuntersFilteringMode { get; set; }
 }

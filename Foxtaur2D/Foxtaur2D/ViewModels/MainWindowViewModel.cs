@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reactive;
 using Foxtaur2D.Controls;
 using Foxtaur2D.Models;
+using LibRenderer.Enums;
 using LibWebClient.Models;
 using LibWebClient.Services.Abstract;
 using ReactiveUI;
@@ -26,6 +27,10 @@ public class MainWindowViewModel : ViewModelBase
     private IList<Team> _teams = new List<Team>();
 
     private MainModel _mainModel;
+
+    private bool _isSingleHunterModeChecked;
+    private bool _isSingleTeamModeChecked;
+    private bool _isEveryoneModeChecked;
 
     #region DI
     
@@ -185,7 +190,76 @@ public class MainWindowViewModel : ViewModelBase
     /// Map renderer control
     /// </summary>
     public MapControl Renderer;
-    
+
+    /// <summary>
+    /// Is single hunter mode?
+    /// </summary>
+    public bool IsSingleHunterModeChecked
+    {
+        get => _isSingleHunterModeChecked;
+
+        set
+        {
+            this.RaiseAndSetIfChanged(ref _isSingleHunterModeChecked, value);
+
+            if (value)
+            {
+                _mainModel.HuntersFilteringMode = HuntersFilteringMode.OneHunter;
+
+                if (Renderer != null)
+                {
+                    Renderer.SetHuntersFilteringMode(_mainModel.HuntersFilteringMode);
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Is single team mode checked?
+    /// </summary>
+    public bool IsSingleTeamModeChecked
+    {
+        get => _isSingleTeamModeChecked;
+
+        set
+        {
+            this.RaiseAndSetIfChanged(ref _isSingleTeamModeChecked, value);
+
+            if (value)
+            {
+                _mainModel.HuntersFilteringMode = HuntersFilteringMode.OneTeam;
+                
+                if (Renderer != null)
+                {
+                    Renderer.SetHuntersFilteringMode(_mainModel.HuntersFilteringMode);
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Is "show everyone" mode checked?
+    /// </summary>
+    public bool IsEveryoneModeChecked
+    {
+        get => _isEveryoneModeChecked;
+
+        set
+        {
+            this.RaiseAndSetIfChanged(ref _isEveryoneModeChecked, value);
+
+            if (value)
+            {
+                _mainModel.HuntersFilteringMode = HuntersFilteringMode.Everyone;
+                
+                if (Renderer != null)
+                {
+                    Renderer.SetHuntersFilteringMode(_mainModel.HuntersFilteringMode);
+                }
+            }
+        }
+    }
+
     /// <summary>
     /// Focus on distance
     /// </summary>
@@ -210,6 +284,9 @@ public class MainWindowViewModel : ViewModelBase
 
         // Asking for distances
         LoadDistances();
+        
+        // Showing everyone by default
+        IsEveryoneModeChecked = true;
     }
 
     /// <summary>
