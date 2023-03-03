@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
@@ -116,7 +117,12 @@ public partial class MapControl : UserControl
     /// Hunters filtering/display mode
     /// </summary>
     private HuntersFilteringMode _huntersFilteringMode;
-    
+
+    /// <summary>
+    /// Hunters after filtering, only they will be displayed
+    /// </summary>
+    private IReadOnlyCollection<Hunter> _filteredHunters;
+
     #endregion
     
     /// <summary>
@@ -428,8 +434,7 @@ public partial class MapControl : UserControl
             _distanceLayer = new DistanceLayer(_activeDistance, OnDistanceLoadedHandler, _textDrawer);
             _layers.Add(_distanceLayer);
         
-            _huntersLayer = new HuntersLayer(_activeDistance.Hunters);
-            _layers.Add(_huntersLayer);
+            ApplyHuntersFilter();
         }
         
         _displayBitmap = null;
@@ -476,6 +481,11 @@ public partial class MapControl : UserControl
     public void SetHunterToDisplay(Hunter hunter)
     {
         _hunterToDisplay = hunter;
+
+        if (_huntersFilteringMode == HuntersFilteringMode.OneHunter)
+        {
+            ApplyHuntersFilter();
+        }
     }
 
     /// <summary>
@@ -484,6 +494,11 @@ public partial class MapControl : UserControl
     public void SetTeamToDisplay(Team team)
     {
         _teamToDisplay = team;
+
+        if (_huntersFilteringMode == HuntersFilteringMode.OneTeam)
+        {
+            ApplyHuntersFilter();
+        }
     }
 
     /// <summary>
@@ -492,5 +507,67 @@ public partial class MapControl : UserControl
     public void SetHuntersFilteringMode(HuntersFilteringMode filteringMode)
     {
         _huntersFilteringMode = filteringMode;
+        
+        ApplyHuntersFilter();
+    }
+
+    private void ApplyHuntersFilter()
+    {
+        switch (_huntersFilteringMode)
+        {
+            case HuntersFilteringMode.OneHunter:
+                if (_hunterToDisplay == null)
+                {
+                    _filteredHunters = new List<Hunter>();
+                }
+                else
+                {
+                    _filteredHunters = _activeDistance
+                        .Hunters
+                        .Where(h => h.Id == _hunterToDisplay.Id)
+                        .ToList();
+                }
+                break;
+            
+            case HuntersFilteringMode.OneTeam:
+                if (_teamToDisplay == null)
+                {
+                    _filteredHunters = new List<Hunter>();
+                }
+                else
+                {
+                    _filteredHunters = _activeDistance
+                        .Hunters
+                        .Where(h => h.Team.Id == _teamToDisplay.Id)
+                        .ToList();
+                }
+                break;
+            
+            case HuntersFilteringMode.Everyone:
+                if (_activeDistance == null)
+                {
+                    _filteredHunters = new List<Hunter>();
+                }
+                else
+                {
+                    _filteredHunters = _activeDistance
+                        .Hunters
+                        .ToList();
+                }
+                break;
+            
+            default:
+                throw new InvalidOperationException("Unknown hunters filtering mode!");
+        }
+
+        _layers.Remove(_huntersLayer);
+
+        if (_activeDistance != null)
+        {
+            _huntersLayer = new HuntersLayer(_filteredHunters);
+            _layers.Add(_huntersLayer);
+        }
+        
+        InvalidateVisual();
     }
 }

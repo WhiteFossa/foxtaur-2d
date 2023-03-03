@@ -101,9 +101,15 @@ public class MainWindowViewModel : ViewModelBase
                     .ToList()
                 : new List<Team>();
 
+            IsEveryoneModeChecked = true;
+            _mainModel.HuntersFilteringMode = HuntersFilteringMode.Everyone;
+            SelectedHunterIndex = -1;
+            SelectedTeamIndex = -1;
+            
             if (Renderer != null)
             {
-                Renderer.SetActiveDistance(_mainModel.Distance);                    
+                Renderer.SetActiveDistance(_mainModel.Distance);
+                Renderer.SetHuntersFilteringMode(_mainModel.HuntersFilteringMode);
             }
         }
     }
@@ -287,6 +293,9 @@ public class MainWindowViewModel : ViewModelBase
         
         // Showing everyone by default
         IsEveryoneModeChecked = true;
+        _mainModel.HuntersFilteringMode = HuntersFilteringMode.Everyone;
+        SelectedHunterIndex = -1;
+        SelectedTeamIndex = -1;
     }
 
     /// <summary>
