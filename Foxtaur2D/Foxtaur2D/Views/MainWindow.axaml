@@ -81,17 +81,32 @@
                     <StackPanel
                         Classes="PaddingAndMargin">
                         <Label>Distance:</Label>
+                       
+                        <Grid
+                            ColumnDefinitions="*, Auto"
+                            RowDefinitions="Auto">
+                        
+                            <ComboBox
+                                Grid.Column="0"
+                                Grid.Row="0"
+                                x:Name="Distances"
+                                HorizontalAlignment="Stretch"
+                                SelectedIndex="{ Binding SelectedDistanceIndex }"
+                                Items="{ Binding Distances }">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Label Content="{ Binding Name }" />
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        
+                            <Button
+                                Grid.Column="1"
+                                Grid.Row="0"
+                                Content="Reload"
+                                Command="{ Binding ReloadDistancesCommand }"/>
                             
-                        <ComboBox
-                            x:Name="Distances"
-                            HorizontalAlignment="Stretch"
-                            SelectedIndex="{ Binding SelectedDistanceIndex }">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <Label Content="{ Binding }" />
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
+                        </Grid>
                         
                         <Button
                             Content="Focus"

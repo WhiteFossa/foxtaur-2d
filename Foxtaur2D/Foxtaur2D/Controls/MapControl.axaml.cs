@@ -101,6 +101,16 @@ public partial class MapControl : UserControl
     /// </summary>
     private HuntersLayer _huntersLayer;
 
+    /// <summary>
+    /// One hunter to display (for case when only one hunter have to be displayed)
+    /// </summary>
+    private Hunter _hunterToDisplay;
+
+    /// <summary>
+    /// One team to display (for case when only one team have to be displayed)
+    /// </summary>
+    private Team _teamToDisplay;
+    
     #endregion
     
     /// <summary>
@@ -402,17 +412,19 @@ public partial class MapControl : UserControl
     /// </summary>
     public void SetActiveDistance(Distance distance)
     {
-        _activeDistance = distance ?? throw new ArgumentNullException(nameof(distance));
-        
-        // Removing existing distance layer
+        _activeDistance = distance;
+
         _layers.Remove(_distanceLayer);
-        _distanceLayer = new DistanceLayer(_activeDistance, OnDistanceLoadedHandler, _textDrawer);
-        _layers.Add(_distanceLayer);
-        
-        // Hunters layer
         _layers.Remove(_huntersLayer);
-        _huntersLayer = new HuntersLayer(_activeDistance.Hunters);
-        _layers.Add(_huntersLayer);
+        
+        if (_activeDistance != null)
+        {
+            _distanceLayer = new DistanceLayer(_activeDistance, OnDistanceLoadedHandler, _textDrawer);
+            _layers.Add(_distanceLayer);
+        
+            _huntersLayer = new HuntersLayer(_activeDistance.Hunters);
+            _layers.Add(_huntersLayer);
+        }
         
         _displayBitmap = null;
         
@@ -450,5 +462,22 @@ public partial class MapControl : UserControl
             
             InvalidateVisual();
         });
+    }
+
+    /// <summary>
+    /// Set hunter to display (for "display one hunter" mode)
+    /// </summary>
+    public void SetHunterToDisplay(Hunter hunter)
+    {
+        _hunterToDisplay = hunter;
+    }
+
+    /// <summary>
+    /// Set team to display (for "display one team" mode)
+    /// </summary>
+    /// <param name="team"></param>
+    public void SetTeamToDisplay(Team team)
+    {
+        _teamToDisplay = team;
     }
 }

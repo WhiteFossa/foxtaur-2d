@@ -11,4 +11,14 @@ public class MainModel
     /// Selected distance
     /// </summary>
     public Distance Distance { get; set; }
+
+    /// <summary>
+    /// Displayed hunter (for single hunter mode)
+    /// </summary>
+    public Hunter DisplayedHunter { get; set; }
+
+    /// <summary>
+    /// Displayed team (for single team mode)
+    /// </summary>
+    public Team DisplayedTeam { get; set; }
 }

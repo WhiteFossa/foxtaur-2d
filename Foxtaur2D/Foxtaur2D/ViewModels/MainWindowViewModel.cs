@@ -19,8 +19,10 @@ public class MainWindowViewModel : ViewModelBase
     private int _selectedDistanceIndex;
     private IList<Distance> _distances = new List<Distance>();
 
+    private int _selectedHunterIndex;
     private IList<Hunter> _hunters = new List<Hunter>();
 
+    private int _selectedTeamIndex;
     private IList<Team> _teams = new List<Team>();
 
     private MainModel _mainModel;
@@ -48,7 +50,19 @@ public class MainWindowViewModel : ViewModelBase
         get => _consoleCaretIndex;
         set => this.RaiseAndSetIfChanged(ref _consoleCaretIndex, value);
     }
-    
+
+    /// <summary>
+    /// Distances
+    /// </summary>
+    public IList<Distance> Distances
+    {
+        get => _distances;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref _distances, value);
+        }
+    }
+
     /// <summary>
     /// Selected distance index
     /// </summary>
@@ -90,6 +104,33 @@ public class MainWindowViewModel : ViewModelBase
     }
 
     /// <summary>
+    /// Selected hunter index
+    /// </summary>
+    public int SelectedHunterIndex
+    {
+        get => _selectedHunterIndex;
+
+        set
+        {
+            this.RaiseAndSetIfChanged(ref _selectedHunterIndex, value);
+
+            if (value == -1)
+            {
+                _mainModel.DisplayedHunter = null;
+            }
+            else
+            {
+                _mainModel.DisplayedHunter = Hunters[value];
+            }
+
+            if (Renderer != null)
+            {
+                Renderer.SetHunterToDisplay(_mainModel.DisplayedHunter);
+            }
+        }
+    }
+    
+    /// <summary>
     /// Current distance's hunters
     /// </summary>
     public IList<Hunter> Hunters
@@ -101,6 +142,33 @@ public class MainWindowViewModel : ViewModelBase
         }
     }
 
+    /// <summary>
+    /// Selected team index
+    /// </summary>
+    public int SelectedTeamIndex
+    {
+        get => _selectedTeamIndex;
+
+        set
+        {
+            this.RaiseAndSetIfChanged(ref _selectedTeamIndex, value);
+
+            if (value == -1)
+            {
+                _mainModel.DisplayedTeam = null;
+            }
+            else
+            {
+                _mainModel.DisplayedTeam = Teams[value];
+            }
+
+            if (Renderer != null)
+            {
+                Renderer.SetTeamToDisplay(_mainModel.DisplayedTeam);
+            }
+        }
+    }
+    
     /// <summary>
     /// Current distance teams
     /// </summary>
@@ -123,6 +191,11 @@ public class MainWindowViewModel : ViewModelBase
     /// </summary>
     public ReactiveCommand<Unit, Unit> FocusOnDistanceCommand { get; }
 
+    /// <summary>
+    /// Reload distances
+    /// </summary>
+    public ReactiveCommand<Unit, Unit> ReloadDistancesCommand { get; set; }
+
     public MainWindowViewModel(MainModel mainModel)
     {
         _mainModel = mainModel ?? throw new ArgumentNullException(nameof(mainModel));
@@ -133,22 +206,30 @@ public class MainWindowViewModel : ViewModelBase
             (selectedIndex) => selectedIndex != -1);
             
         FocusOnDistanceCommand = ReactiveCommand.Create(OnFocusOnDistanceCommand, CanFocusOnDistanceCommand);
-        
+        ReloadDistancesCommand = ReactiveCommand.Create(OnReloadDistancesCommand);
+
         // Asking for distances
+        LoadDistances();
+    }
+
+    /// <summary>
+    /// Reload distances
+    /// </summary>
+    private void OnReloadDistancesCommand()
+    {
+        LoadDistances();
+    }
+
+    /// <summary>
+    /// Load distances
+    /// </summary>
+    public void LoadDistances()
+    {
         SelectedDistanceIndex = -1;
         
-    }
-    
-    /// <summary>
-    /// Return distances list
-    /// </summary>
-    public IList<Distance> GetDistances()
-    {
         _distances = _webClient.GetDistancesWithoutIncludeAsync()
             .Result
             .ToList();
-        
-        return _distances;
     }
 
     /// <summary>

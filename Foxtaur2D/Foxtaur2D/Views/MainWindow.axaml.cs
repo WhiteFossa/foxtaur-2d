@@ -16,13 +16,7 @@ public partial class MainWindow : Window
         InitializeComponent();
 
         DataContext = dataContext;
-            
-        // Distances
-        var distancesComboBox = this.Find<ComboBox>("Distances");
-        distancesComboBox.Items = ((MainWindowViewModel)DataContext)
-            .GetDistances()
-            .Select(d => d.Name);
-
+        
         ((MainWindowViewModel)DataContext).Renderer = MapRenderer;
     }
 }
