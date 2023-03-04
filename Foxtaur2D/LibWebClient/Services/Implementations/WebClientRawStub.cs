@@ -241,8 +241,7 @@ public class WebClientRawStub : IWebClientRaw
                     },
                     new List<Guid> { new Guid("7A598C33-9682-4DC4-95A6-656164D5D7AF"), new Guid("D2EC8AAD-B173-4E2D-A0E0-41762FE196E6") }
                 );
-                break;
-            
+
             default:
                 throw new ArgumentException("Wrong ID");
         }

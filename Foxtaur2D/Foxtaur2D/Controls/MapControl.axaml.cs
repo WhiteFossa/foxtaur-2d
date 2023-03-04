@@ -10,19 +10,17 @@ using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using Avalonia.Threading;
-using DynamicData;
 using LibGeo.Abstractions;
 using LibGeo.Implementations;
 using LibRenderer.Abstractions.Drawers;
 using LibRenderer.Abstractions.Layers;
 using LibRenderer.Constants;
 using LibRenderer.Enums;
-using LibRenderer.Implementations;
 using LibRenderer.Implementations.Layers;
 using LibRenderer.Implementations.UI;
 using LibWebClient.Models;
-using NLog;
 using Microsoft.Extensions.DependencyInjection;
+using NLog;
 
 namespace Foxtaur2D.Controls;
 
@@ -160,7 +158,7 @@ public partial class MapControl : UserControl
         PointerWheelChanged += OnWheel;
     }
 
-    private void OnMousePressed(object? sender, PointerPressedEventArgs e)
+    private void OnMousePressed(object sender, PointerPressedEventArgs e)
     {
         _oldMouseX = e.GetCurrentPoint(this).Position.X * _scaling;
         _oldMouseY = e.GetCurrentPoint(this).Position.Y * _scaling;
@@ -171,7 +169,7 @@ public partial class MapControl : UserControl
         }
     }
 
-    private void OnMouseMoved(object? sender, PointerEventArgs e)
+    private void OnMouseMoved(object sender, PointerEventArgs e)
     {
         var newMouseX = e.GetCurrentPoint(this).Position.X * _scaling;
         var newMouseY = e.GetCurrentPoint(this).Position.Y * _scaling;
@@ -192,7 +190,7 @@ public partial class MapControl : UserControl
         InvalidateVisual();
     }
     
-    private void OnMouseReleased(object? sender, PointerReleasedEventArgs e)
+    private void OnMouseReleased(object sender, PointerReleasedEventArgs e)
     {
         if (!e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
         {
@@ -200,7 +198,7 @@ public partial class MapControl : UserControl
         }
     }
     
-    private void OnWheel(object? sender, PointerWheelEventArgs e)
+    private void OnWheel(object sender, PointerWheelEventArgs e)
     {
         var steps = Math.Abs(e.Delta.Y);
 

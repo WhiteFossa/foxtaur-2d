@@ -1,4 +1,3 @@
-using System.Linq;
 using Avalonia.Controls;
 using Foxtaur2D.ViewModels;
 

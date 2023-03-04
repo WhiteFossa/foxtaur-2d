@@ -7,8 +7,8 @@ using Foxtaur2D.Models;
 using LibRenderer.Enums;
 using LibWebClient.Models;
 using LibWebClient.Services.Abstract;
-using ReactiveUI;
 using Microsoft.Extensions.DependencyInjection;
+using ReactiveUI;
 
 namespace Foxtaur2D.ViewModels;
 
