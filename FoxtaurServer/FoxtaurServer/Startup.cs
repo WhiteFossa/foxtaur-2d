@@ -1,4 +1,6 @@
 using System.IO.Compression;
+using FoxtaurServer.Services.Abstract;
+using FoxtaurServer.Services.Implementations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.ResponseCompression;
@@ -122,7 +124,7 @@ public class Startup
 
 
         // Singletons
-
+        services.AddSingleton<IConfigurationService, ConfigurationService>();
 
         // Hosted services
 
