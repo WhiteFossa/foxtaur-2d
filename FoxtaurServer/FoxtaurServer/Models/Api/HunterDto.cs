@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace LibWebClient.Models.DTOs;
+namespace FoxtaurServer.Models.Api;
 
 /// <summary>
 /// Hunter
@@ -11,35 +11,56 @@ public class HunterDto
     /// Hunter Id
     /// </summary>
     [JsonPropertyName("id")]
-    public Guid Id { get; set; }
+    public Guid Id { get; }
 
     /// <summary>
     /// Name
     /// </summary>
     [JsonPropertyName("name")]
-    public string Name { get; set; }
+    public string Name { get; }
     
     /// <summary>
     /// True if hunter is on distance now
     /// </summary>
     [JsonPropertyName("isRunning")]
-    public bool IsRunning { get; set; }
+    public bool IsRunning { get; }
 
     /// <summary>
     /// Team ID, may be null if hunter is teamless
     /// </summary>
     [JsonPropertyName("teamId")]
-    public Guid? TeamId { get; set; }
+    public Guid? TeamId { get; }
 
     /// <summary>
     /// Hunter's latitude
     /// </summary>
     [JsonPropertyName("latitude")]
-    public double Lat { get; set; }
+    public double Lat { get; }
 
     /// <summary>
     /// Hunter's longitude
     /// </summary>
     [JsonPropertyName("longitude")]
-    public double Lon { get; set; }
+    public double Lon { get; }
+
+    public HunterDto(
+        Guid id,
+        string name,
+        bool isRunning,
+        Guid? teamId,
+        double lat,
+        double lon)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            throw new ArgumentException(nameof(name));
+        }
+
+        Id = id;
+        Name = name;
+        IsRunning = isRunning;
+        TeamId = teamId;
+        Lat = lat;
+        Lon = lon;
+    }
 }

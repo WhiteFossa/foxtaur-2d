@@ -57,23 +57,14 @@ public class WebClientRawStub : IWebClientRaw
 
     public async Task<HunterDto> GetHunterByIdAsync(Guid id)
     {
-        switch (id.ToString().ToUpperInvariant())
+        var response = await _httpClient.GetAsync($"{_baseUrl}/Hunters/{id}").ConfigureAwait(false);
+        if (!response.IsSuccessStatusCode)
         {
-            case "E7B81F14-5B4E-446A-9892-36B60AF6511E":
-                return new HunterDto(new Guid("E7B81F14-5B4E-446A-9892-36B60AF6511E"), "Garrek", true, new Guid("AE9EE155-BCDC-44C3-B83F-A4837A3EC443"), 54.777324.ToRadians(),39.849310.ToRadians());
-            
-            case "42FA82C3-75B7-4837-A37A-636C173DA1AB":
-                return new HunterDto(new Guid("42FA82C3-75B7-4837-A37A-636C173DA1AB"), "Goldfur", true, new Guid("4E44C3DE-4B3A-472B-8289-2072A9F7B49C"), 54.8006538.ToRadians(),39.8636070.ToRadians());
-            
-            case "7A598C33-9682-4DC4-95A6-656164D5D7AF":
-                return new HunterDto(new Guid("7A598C33-9682-4DC4-95A6-656164D5D7AF"), "Fossa", true, new Guid("4E44C3DE-4B3A-472B-8289-2072A9F7B49C"), 42.4492759.ToRadians(),19.2731099.ToRadians());
-            
-            case "D2EC8AAD-B173-4E2D-A0E0-41762FE196E6":
-                return new HunterDto(new Guid("D2EC8AAD-B173-4E2D-A0E0-41762FE196E6"), "Felekar", true, new Guid("AE9EE155-BCDC-44C3-B83F-A4837A3EC443"), 42.4515011.ToRadians(),19.2778191.ToRadians());
-            
-            default:
-                throw new ArgumentException("Hunter not found");
+            _logger.Error($"GetHunterByIdAsync failed: { response.StatusCode }");
+            throw new InvalidOperationException();
         }
+        
+        return JsonSerializer.Deserialize<HunterDto>(await response.Content.ReadAsStringAsync());
     }
 
     public async Task<FoxDto> GetFoxByIdAsync(Guid id)

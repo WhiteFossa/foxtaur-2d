@@ -133,7 +133,7 @@ public class WebClient : IWebClient
         var huntersDtos = new List<HunterDto>();
         foreach (var hunterId in huntersIds)
         {
-            huntersDtos.Add(await _client.GetHunterByIdAsync(hunterId));
+            huntersDtos.Add(await _client.GetHunterByIdAsync(hunterId).ConfigureAwait(false));
         }
         
         // Teams
