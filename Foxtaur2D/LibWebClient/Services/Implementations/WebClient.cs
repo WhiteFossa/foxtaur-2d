@@ -42,7 +42,7 @@ public class WebClient : IWebClient
         var maps = new List<Map>();
         foreach (var mapId in mapsIds)
         {
-            var mapDto = await _client.GetMapByIdAsync(mapId);
+            var mapDto = await _client.GetMapByIdAsync(mapId).ConfigureAwait(false);
             maps.Add(new Map(mapDto.Id, mapDto.Name, mapDto.NorthLat, mapDto.SouthLat, mapDto.EastLon, mapDto.WestLon, mapDto.Url));
         }
 
@@ -73,7 +73,7 @@ public class WebClient : IWebClient
             throw new ArgumentException(nameof(distanceId));
         }
 
-        var mapDto = await _client.GetMapByIdAsync(distanceDto.MapId);
+        var mapDto = await _client.GetMapByIdAsync(distanceDto.MapId).ConfigureAwait(false);
         if (mapDto == null)
         {
             throw new InvalidOperationException($"Map with ID={ distanceDto.MapId } is not found!");

@@ -69,20 +69,19 @@ public abstract class DownloadableResourceBase
     public abstract void Download(OnResourceLoaded onLoad);
 
     /// <summary>
-    /// Load resource as a stream from a relative URL
+    /// Load resource as a stream from URL
     /// </summary>
-    protected MemoryStream LoadFromUrl(string relativeUrl)
+    protected MemoryStream LoadFromUrl(string url)
     {
-        if (string.IsNullOrWhiteSpace(relativeUrl))
+        if (string.IsNullOrWhiteSpace(url))
         {
-            throw new ArgumentException(nameof(relativeUrl));
+            throw new ArgumentException(nameof(url));
         }
-
-        var uri = ResourcesConstants.ResourcesBaseUrl + relativeUrl;
+        
         Uri uriResult;
-        if (!Uri.TryCreate(uri, UriKind.Absolute, out uriResult))
+        if (!Uri.TryCreate(url, UriKind.Absolute, out uriResult))
         {
-            throw new ArgumentException(nameof(relativeUrl));
+            throw new ArgumentException(nameof(url));
         }
 
         try
@@ -125,18 +124,18 @@ public abstract class DownloadableResourceBase
         }
     }
 
-    protected void LoadFromUrlToFile(string relativeUrl)
+    protected void LoadFromUrlToFile(string url)
     {
-        if (string.IsNullOrWhiteSpace(relativeUrl))
+        if (string.IsNullOrWhiteSpace(url))
         {
-            throw new ArgumentException(nameof(relativeUrl));
+            throw new ArgumentException(nameof(url));
         }
 
-        using (var downloadStream = LoadFromUrl(relativeUrl))
+        using (var downloadStream = LoadFromUrl(url))
         {
-            var localPath = GetResourceLocalPath(relativeUrl);
+            var localPath = GetResourceLocalPath(url);
             
-            _logger.Info($"Saving { relativeUrl } to { localPath }");
+            _logger.Info($"Saving { url } to { localPath }");
             SaveStreamAsFile(downloadStream, localPath);
         }
     }
@@ -151,7 +150,9 @@ public abstract class DownloadableResourceBase
             throw new ArgumentException(nameof(relativeUrl));
         }
         
-        return ResourcesConstants.DownloadedDirectory + relativeUrl;
+        return (ResourcesConstants.DownloadedDirectory + relativeUrl)
+            .Replace(@"://", @"_")
+            .Replace(@":", "_");
     }
 
     /// <summary>

@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace LibWebClient.Models.DTOs;
 
 /// <summary>
@@ -8,63 +10,42 @@ public class MapDto
     /// <summary>
     /// Map Id
     /// </summary>
-    public Guid Id { get; }
+    [JsonPropertyName("id")]
+    public Guid Id { get; set; }
 
     /// <summary>
     /// Name
     /// </summary>
-    public string Name { get; }
+    [JsonPropertyName("name")]
+    public string Name { get; set; }
 
     /// <summary>
     /// Bounds - north latitude
     /// </summary>
-    public double NorthLat { get; }
+    [JsonPropertyName("northLat")]
+    public double NorthLat { get; set; }
 
     /// <summary>
     /// Bounds - south latitude
     /// </summary>
-    public double SouthLat { get; }
+    [JsonPropertyName("southLat")]
+    public double SouthLat { get; set; }
 
     /// <summary>
     /// Bounds - east longitude
     /// </summary>
-    public double EastLon { get; }
+    [JsonPropertyName("eastLon")]
+    public double EastLon { get; set; }
 
     /// <summary>
     /// Bounds - west longitude
     /// </summary>
-    public double WestLon { get; }
+    [JsonPropertyName("westLon")]
+    public double WestLon { get; set; }
 
     /// <summary>
     /// Full URL
     /// </summary>
-    public string Url { get; }
-
-    public MapDto(Guid id,
-        string name,
-        double northLat,
-        double southLat,
-        double eastLon,
-        double westLon,
-        string url
-    )
-    {
-        if (string.IsNullOrWhiteSpace(name))
-        {
-            throw new ArgumentException(nameof(name));
-        }
-
-        if (string.IsNullOrWhiteSpace(url))
-        {
-            throw new ArgumentException(nameof(url));
-        }
-
-        Id = id;
-        Name = name;
-        NorthLat = northLat;
-        SouthLat = southLat;
-        EastLon = eastLon;
-        WestLon = westLon;
-        Url = url;
-    }
+    [JsonPropertyName("url")]
+    public string Url { get; set; }
 }

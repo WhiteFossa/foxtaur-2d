@@ -122,6 +122,7 @@ public class Startup
         // DI
         // Scoped
         services.AddScoped<IDistancesService, DistancesService>();
+        services.AddScoped<IMapsService, MapsService>();
 
         // Singletons
         services.AddSingleton<IConfigurationService, ConfigurationService>();

@@ -189,29 +189,14 @@ public class WebClientRawStub : IWebClientRaw
 
     public async Task<MapDto> GetMapByIdAsync(Guid id)
     {
-        switch (id.ToString().ToUpperInvariant())
+        var response = await _httpClient.GetAsync($"{_baseUrl}/Maps/{id}").ConfigureAwait(false);
+        if (!response.IsSuccessStatusCode)
         {
-            case "2754AEB3-9E20-4017-8858-D4E5982D3802":
-                return new MapDto(new Guid("2754AEB3-9E20-4017-8858-D4E5982D3802"),
-                    "Давыдово",
-                    54.807812457.ToRadians(),
-                    54.757759918.ToRadians(),
-                    39.879142801.ToRadians(),
-                    39.823302090.ToRadians(),
-                    @"Maps/Davydovo/Davydovo.tif.zst");
-
-            case "2947B1E8-E54F-4C47-80E3-1A1E8AC045F7":
-                return new MapDto(new Guid("2947B1E8-E54F-4C47-80E3-1A1E8AC045F7"),
-                    "Gorica",
-                    42.454572697.ToRadians(),
-                    42.440712652.ToRadians(),
-                    19.281242689.ToRadians(),
-                    19.262488444.ToRadians(),
-                    @"Maps/Gorica/Gorica.tif.zst");
-
-            default:
-                throw new ArgumentException("Wrong ID");
+            _logger.Error($"GetMapByIdAsync failed: { response.StatusCode }");
+            throw new InvalidOperationException();
         }
+        
+        return JsonSerializer.Deserialize<MapDto>(await response.Content.ReadAsStringAsync());
     }
 
     public async Task<DistanceDto> GetDistanceByIdAsync(Guid id)
