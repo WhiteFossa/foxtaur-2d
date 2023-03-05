@@ -78,29 +78,14 @@ public class WebClientRawStub : IWebClientRaw
 
     public async Task<FoxDto> GetFoxByIdAsync(Guid id)
     {
-        switch (id.ToString().ToUpperInvariant())
+        var response = await _httpClient.GetAsync($"{_baseUrl}/Foxes/{id}").ConfigureAwait(false);
+        if (!response.IsSuccessStatusCode)
         {
-            case "FC7BB34B-F9F0-4E7A-98D1-7699CC1B4423":
-                return new FoxDto(new Guid("FC7BB34B-F9F0-4E7A-98D1-7699CC1B4423"), "Emerlina", 145000000, "MOE");
-            
-            case "830EFB6A-0064-48AC-8BF8-70502C3A619D":
-                return new FoxDto(new Guid("830EFB6A-0064-48AC-8BF8-70502C3A619D"), "Fler", 145500000, "MOI");
-            
-            case "B262C3A7-7D79-41C7-BE02-CAA3BB3B957B":
-                return new FoxDto(new Guid("B262C3A7-7D79-41C7-BE02-CAA3BB3B957B"), "Lima", 144000000, "MOS");
-            
-            case "0E25C2A8-3BF3-485C-BB24-81F65BBF3EF6":
-                return new FoxDto(new Guid("0E25C2A8-3BF3-485C-BB24-81F65BBF3EF6"), "Rita", 146000000, "MOH");
-            
-            case "F46CFCA4-937D-45A4-8302-2D2DA8E9F1AA":
-                return new FoxDto(new Guid("F46CFCA4-937D-45A4-8302-2D2DA8E9F1AA"), "Krita", 146000000, "MO5");
-            
-            case "545A8D1C-301F-49B9-AEA6-5CFD4C8B5D9B":
-                return new FoxDto(new Guid("545A8D1C-301F-49B9-AEA6-5CFD4C8B5D9B"), "Malena", 144500000, "MO");
-            
-            default:
-                throw new ArgumentException("Fox not found");
+            _logger.Error($"GetFoxByIdAsync failed: { response.StatusCode }");
+            throw new InvalidOperationException();
         }
+        
+        return JsonSerializer.Deserialize<FoxDto>(await response.Content.ReadAsStringAsync());
     }
 
     public async Task<LocationDto> GetLocationByIdAsync(Guid id)

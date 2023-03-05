@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace LibWebClient.Models.DTOs;
 
 /// <summary>
@@ -8,42 +10,24 @@ public class FoxDto
     /// <summary>
     /// Fox ID
     /// </summary>
-    public Guid Id { get; }
+    [JsonPropertyName("id")]
+    public Guid Id { get; set; }
 
     /// <summary>
     /// Fox name
     /// </summary>
-    public string Name { get; }
+    [JsonPropertyName("name")]
+    public string Name { get; set; }
 
     /// <summary>
     /// Fox frequency in Hz
     /// </summary>
-    public double Frequency { get; }
+    [JsonPropertyName("frequency")]
+    public double Frequency { get; set; }
 
     /// <summary>
     /// Fox code
     /// </summary>
-    public string Code { get; }
-
-    public FoxDto(
-        Guid id,
-        string name,
-        double frequency,
-        string code)
-    {
-        if (string.IsNullOrWhiteSpace(name))
-        {
-            throw new ArgumentException(nameof(name));
-        }
-
-        if (string.IsNullOrWhiteSpace(code))
-        {
-            throw new ArgumentException(nameof(code));
-        }
-
-        Id = id;
-        Name = name;
-        Frequency = frequency;
-        Code = code;
-    }
+    [JsonPropertyName("code")]
+    public string Code { get; set; }
 }

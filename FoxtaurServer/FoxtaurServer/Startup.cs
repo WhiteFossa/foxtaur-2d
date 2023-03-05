@@ -124,6 +124,7 @@ public class Startup
         services.AddScoped<IDistancesService, DistancesService>();
         services.AddScoped<IMapsService, MapsService>();
         services.AddScoped<ITeamsService, TeamsService>();
+        services.AddScoped<IFoxesService, FoxesService>();
 
         // Singletons
         services.AddSingleton<IConfigurationService, ConfigurationService>();

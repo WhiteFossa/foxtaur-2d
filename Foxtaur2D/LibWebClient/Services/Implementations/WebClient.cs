@@ -123,7 +123,7 @@ public class WebClient : IWebClient
         var foxesDtos = new List<FoxDto>();
         foreach (var foxId in foxesIds)
         {
-            foxesDtos.Add(await _client.GetFoxByIdAsync(foxId.Value));
+            foxesDtos.Add(await _client.GetFoxByIdAsync(foxId.Value).ConfigureAwait(false));
         }
         
         // Hunters
