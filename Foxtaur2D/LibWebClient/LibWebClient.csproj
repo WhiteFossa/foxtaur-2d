@@ -8,7 +8,14 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\LibAuxiliary\LibAuxiliary.csproj" />
       <ProjectReference Include="..\LibGeo\LibGeo.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="NLog">
+        <HintPath>..\..\..\..\..\..\..\..\home\fossa\.nuget\packages\nlog\5.1.2\lib\netstandard2.0\NLog.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
 </Project>

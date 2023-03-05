@@ -1,12 +1,12 @@
-namespace FoxtaurServer.Services.Abstract;
+namespace LibAuxiliary.Abstract;
 
 /// <summary>
-/// Configuration service
+/// Service to read configuration
 /// </summary>
 public interface IConfigurationService
 {
     /// <summary>
     /// Get configuration string (with check is it set)
     /// </summary>
-    Task<string> GetConfigurationString(string key);
+    string GetConfigurationString(string key);
 }

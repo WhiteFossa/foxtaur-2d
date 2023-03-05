@@ -283,6 +283,9 @@
           "net7.0": {
             "targetAlias": "net7.0",
             "projectReferences": {
+              "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibAuxiliary/LibAuxiliary.csproj": {
+                "projectPath": "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibAuxiliary/LibAuxiliary.csproj"
+              },
               "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibGeo/LibGeo.csproj": {
                 "projectPath": "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibGeo/LibGeo.csproj"
               }

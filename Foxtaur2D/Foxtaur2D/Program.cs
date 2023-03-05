@@ -5,6 +5,8 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.ReactiveUI;
 using Foxtaur2D.Logging;
+using LibAuxiliary.Abstract;
+using LibAuxiliary.Implementations;
 using LibRenderer.Abstractions.Drawers;
 using LibRenderer.Implementations.Drawers;
 using LibWebClient.Services.Abstract;
@@ -19,26 +21,30 @@ namespace Foxtaur2D;
 
 public class Program
 {
+    private static IConfigurationRoot _configuration;
+    
     /// <summary>
     /// Dependency injection service provider
     /// </summary>
     public static ServiceProvider Di { get; set; }
-    
+
     // Initialization code. Don't use any Avalonia, third-party APIs or any
     // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
     // yet and stuff might break.
     [STAThread]
     public static void Main(string[] args)
     {
+        // Configuration
+        var builder = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json", true, true)
+            .AddJsonFile("appsettings.Development.json", true, true);
+
+        _configuration = builder.Build();
+        
         // Preparing DI
         Di = ConfigureServices()
             .BuildServiceProvider();
-        
-        var builder = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json", true, true);
-
-        var configuration = builder.Build();
         
         // Setting-up NLog
         ConfigurationItemFactory
@@ -46,7 +52,7 @@ public class Program
             .Targets
             .RegisterDefinition("ControlLogging", typeof(ControlLoggingTarget));
         
-        LogManager.Configuration = new NLogLoggingConfiguration(configuration.GetSection("NLog"));
+        LogManager.Configuration = new NLogLoggingConfiguration(_configuration.GetSection("NLog"));
         
         BuildAvaloniaApp()
             .StartWithClassicDesktopLifetime(args);
@@ -64,9 +70,13 @@ public class Program
     {
         IServiceCollection services = new ServiceCollection();
 
+        services.AddSingleton<IConfiguration>(_configuration);
+        
         services.AddSingleton<IWebClientRaw, WebClientRawStub>();
         services.AddSingleton<IWebClient, WebClient>();
         services.AddSingleton<ITextDrawer, TextDrawer>();
+        services.AddSingleton<IConfigurationService, ConfigurationService>();
+        
         
         return services;
     }

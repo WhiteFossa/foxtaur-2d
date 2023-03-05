@@ -1,17 +1,30 @@
+using LibAuxiliary.Abstract;
+using LibAuxiliary.Constants;
 using LibWebClient.Enums;
 using LibWebClient.Models;
 using LibWebClient.Models.DTOs;
 using LibWebClient.Services.Abstract;
+using NLog;
 
 namespace LibWebClient.Services.Implementations;
 
 public class WebClient : IWebClient
 {
+    private Logger _logger = LogManager.GetCurrentClassLogger();
     private IWebClientRaw _client;
+    private IConfigurationService _configurationService;
+    
+    private string _baseUrl;
 
-    public WebClient(IWebClientRaw webClient)
+    public WebClient(IWebClientRaw webClient,
+        IConfigurationService configurationService)
     {
         _client = webClient;
+        _configurationService = configurationService;
+
+        _baseUrl = _configurationService.GetConfigurationString(ConfigConstants.ServerUrlSettingName);
+        
+        _logger.Info($"Working with { _baseUrl } server");
     }
     
     public async Task<IReadOnlyCollection<Distance>> GetDistancesWithoutIncludeAsync()
