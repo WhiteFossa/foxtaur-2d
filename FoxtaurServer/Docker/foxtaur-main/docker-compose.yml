@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+
+  # Foxtaur Main
+  foxtaur-main:
+    image: foxtaur-main:latest
+    container_name: foxtaur-main
+    restart: always
+
+    ports:
+        - 127.0.0.1:5035:80
+
+    volumes:
+      - foxtaur_logs:/opt/foxtaur/logs
+
+    networks:
+      - dev_foxtaur-net
+
+volumes:
+
+  # Logs
+  foxtaur_logs:
+
+networks:
+  dev_foxtaur-net:
+    driver: bridge
+    external: false # Switch to true when infrastructure will be ready
+
+
