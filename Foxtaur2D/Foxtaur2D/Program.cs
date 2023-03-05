@@ -73,13 +73,13 @@ public class Program
         services.AddSingleton<IConfiguration>(_configuration);
         
         // Singletons
-        services.AddSingleton<IWebClientRaw, WebClientRawStub>();
+        services.AddSingleton<IWebClientRaw, WebClientRaw>();
         services.AddSingleton<IWebClient, WebClient>();
         services.AddSingleton<ITextDrawer, TextDrawer>();
         services.AddSingleton<IConfigurationService, ConfigurationService>();
         
         // HTTP clients
-        services.AddHttpClient<IWebClientRaw, WebClientRawStub>();
+        services.AddHttpClient<IWebClientRaw, WebClientRaw>();
         
         return services;
     }

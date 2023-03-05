@@ -79,19 +79,19 @@ public class WebClient : IWebClient
             throw new InvalidOperationException($"Map with ID={ distanceDto.MapId } is not found!");
         }
 
-        var startDto = await _client.GetLocationByIdAsync(distanceDto.StartLocationId);
+        var startDto = await _client.GetLocationByIdAsync(distanceDto.StartLocationId).ConfigureAwait(false);
         if (startDto == null)
         {
             throw new InvalidOperationException($"Start location (ID={ distanceDto.StartLocationId }) is not found!");
         }
         
-        var finishCorridorEntranceDto = await _client.GetLocationByIdAsync(distanceDto.FinishCorridorEntranceLocationId);
+        var finishCorridorEntranceDto = await _client.GetLocationByIdAsync(distanceDto.FinishCorridorEntranceLocationId).ConfigureAwait(false);
         if (finishCorridorEntranceDto == null)
         {
             throw new InvalidOperationException($"Finish corridor entrance location (ID={ distanceDto.FinishCorridorEntranceLocationId }) is not found!");
         }
         
-        var finishDto = await _client.GetLocationByIdAsync(distanceDto.FinishLocationId);
+        var finishDto = await _client.GetLocationByIdAsync(distanceDto.FinishLocationId).ConfigureAwait(false);
         if (finishDto == null)
         {
             throw new InvalidOperationException($"Finish location (ID={ distanceDto.FinishLocationId }) is not found!");
@@ -104,7 +104,7 @@ public class WebClient : IWebClient
         var foxesLocationsDtos = new List<LocationDto>();
         foreach (var foxLocationId in foxesLocationsIds)
         {
-            foxesLocationsDtos.Add(await _client.GetLocationByIdAsync(foxLocationId));
+            foxesLocationsDtos.Add(await _client.GetLocationByIdAsync(foxLocationId).ConfigureAwait(false));
         }
         
         // Expected foxes locations order
@@ -113,7 +113,7 @@ public class WebClient : IWebClient
         var expectedFoxesOrderLocationsDtos = new List<LocationDto>();
         foreach (var expectedFoxOrderLocationId in expectedFoxesOrderLocationsIds)
         {
-            expectedFoxesOrderLocationsDtos.Add(await _client.GetLocationByIdAsync(expectedFoxOrderLocationId));
+            expectedFoxesOrderLocationsDtos.Add(await _client.GetLocationByIdAsync(expectedFoxOrderLocationId).ConfigureAwait(false));
         }
         
         // Foxes

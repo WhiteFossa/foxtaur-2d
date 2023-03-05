@@ -126,6 +126,7 @@ public class Startup
         services.AddScoped<ITeamsService, TeamsService>();
         services.AddScoped<IFoxesService, FoxesService>();
         services.AddScoped<IHuntersService, HuntersService>();
+        services.AddScoped<ILocationsService, LocationsService>();
 
         // Singletons
         services.AddSingleton<IConfigurationService, ConfigurationService>();
