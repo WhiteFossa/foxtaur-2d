@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace LibWebClient.Models.DTOs;
 
 /// <summary>
@@ -8,80 +10,60 @@ public class DistanceDto
     /// <summary>
     /// Distance ID
     /// </summary>
-    public Guid Id { get; }
+    [JsonPropertyName("id")]
+    public Guid Id { get; set; }
 
     /// <summary>
     /// Name
     /// </summary>
-    public string Name { get; }
+    [JsonPropertyName("name")]
+    public string Name { get; set; }
 
     /// <summary>
     /// Associated map
     /// </summary>
-    public Guid MapId { get; }
+    [JsonPropertyName("mapId")]
+    public Guid MapId { get; set; }
 
     /// <summary>
     /// Is someone running here?
     /// </summary>
-    public bool IsActive { get; }
+    [JsonPropertyName("isActive")]
+    public bool IsActive { get; set; }
 
     /// <summary>
     /// Start location ID
     /// </summary>
-    public Guid StartLocationId { get; }
+    [JsonPropertyName("startLocationId")]
+    public Guid StartLocationId { get; set; }
 
     /// <summary>
     /// Finish corridor entrance location ID
     /// </summary>
-    public Guid FinishCorridorEntranceLocationId { get; }
+    [JsonPropertyName("finishCorridorEntranceLocationId")]
+    public Guid FinishCorridorEntranceLocationId { get; set; }
 
     /// <summary>
     /// Finish location ID
     /// </summary>
-    public Guid FinishLocationId { get; }
+    [JsonPropertyName("finishLocationId")]
+    public Guid FinishLocationId { get; set; }
 
     /// <summary>
     /// Foxes on distance
     /// </summary>
-    public IReadOnlyCollection<Guid> FoxesLocationsIds { get; }
+    [JsonPropertyName("foxesLocationsIds")]
+    public IReadOnlyCollection<Guid> FoxesLocationsIds { get; set; }
 
     /// <summary>
     /// Expected foxes taking order (points to locations)
     /// </summary>
-    public IReadOnlyCollection<Guid> ExpectedFoxesOrderLocationsIds { get; }
+    [JsonPropertyName("expectedFoxesOrderLocationId")]
+    public IReadOnlyCollection<Guid> ExpectedFoxesOrderLocationsIds { get; set; }
     
     /// <summary>
     /// Hunters on distance
     /// </summary>
-    public IReadOnlyCollection<Guid> HuntersIds { get; }
-
-    public DistanceDto(
-        Guid id,
-        string name,
-        Guid mapId,
-        bool isActive,
-        Guid startLocationId,
-        Guid finishCorridorEntranceLocationId,
-        Guid finishLocationId,
-        IReadOnlyCollection<Guid> foxesLocationsIds,
-        IReadOnlyCollection<Guid> expectedFoxesOrderLocationsIds,
-        IReadOnlyCollection<Guid> huntersIds)
-    {
-        if (string.IsNullOrWhiteSpace(name))
-        {
-            throw new ArgumentException(nameof(name));
-        }
-
-        FoxesLocationsIds = foxesLocationsIds ?? throw new ArgumentNullException(nameof(foxesLocationsIds));
-        ExpectedFoxesOrderLocationsIds = expectedFoxesOrderLocationsIds ?? throw new ArgumentNullException(nameof(expectedFoxesOrderLocationsIds));
-        HuntersIds = huntersIds ?? throw new ArgumentNullException(nameof(huntersIds));
-
-        Id = id;
-        Name = name;
-        MapId = mapId;
-        IsActive = isActive;
-        StartLocationId = startLocationId;
-        FinishCorridorEntranceLocationId = finishCorridorEntranceLocationId;
-        FinishLocationId = finishLocationId;
-    }
+    [JsonPropertyName("huntersIds")]
+    public IReadOnlyCollection<Guid> HuntersIds { get; set; }
 }

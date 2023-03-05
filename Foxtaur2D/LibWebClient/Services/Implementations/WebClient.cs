@@ -1,3 +1,4 @@
+using LibWebClient.Constants;
 using LibWebClient.Enums;
 using LibWebClient.Models;
 using LibWebClient.Models.DTOs;
@@ -17,15 +18,23 @@ public class WebClient : IWebClient
         _client = webClient;
         
         // Querying information about the server
-        var serverInfo = _client.GetServerInfo().Result;
+        var serverInfo = _client.GetServerInfoAsync().Result;
         
         _logger.Info($"Server name: { serverInfo.Name }");
         _logger.Info($"Protocol version: { serverInfo.ProtocolVersion }");
+
+        if (WebClientConstants.ProtocolVersion != serverInfo.ProtocolVersion)
+        {
+            _logger.Error($"Protocol version mismatch. Expected { WebClientConstants.ProtocolVersion }, got { serverInfo.ProtocolVersion }.");
+            _logger.Error("Client update required!");
+
+            throw new InvalidOperationException();
+        }
     }
     
     public async Task<IReadOnlyCollection<Distance>> GetDistancesWithoutIncludeAsync()
     {
-        var distances = await _client.ListDistancesAsync();
+        var distances = await _client.ListDistancesAsync().ConfigureAwait(false);
 
         var mapsIds = distances
             .Select(d => d.MapId);
@@ -58,7 +67,7 @@ public class WebClient : IWebClient
 
     public async Task<Distance> GetDistanceByIdAsync(Guid distanceId)
     {
-        var distanceDto = await _client.GetDistanceByIdAsync(distanceId);
+        var distanceDto = await _client.GetDistanceByIdAsync(distanceId).ConfigureAwait(false);
         if (distanceDto == null)
         {
             throw new ArgumentException(nameof(distanceId));

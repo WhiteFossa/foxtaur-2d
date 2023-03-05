@@ -121,7 +121,7 @@ public class Startup
 
         // DI
         // Scoped
-
+        services.AddScoped<IDistancesService, DistancesService>();
 
         // Singletons
         services.AddSingleton<IConfigurationService, ConfigurationService>();

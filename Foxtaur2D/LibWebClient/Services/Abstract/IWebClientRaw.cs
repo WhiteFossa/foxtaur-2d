@@ -11,7 +11,7 @@ public interface IWebClientRaw
     /// Get information about the server
     /// </summary>
     /// <returns></returns>
-    Task<ServerInfoDto> GetServerInfo();
+    Task<ServerInfoDto> GetServerInfoAsync();
     
     /// <summary>
     /// Gets team by ID. Throws ArgumentException if team with given ID is not found
