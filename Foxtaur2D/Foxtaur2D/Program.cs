@@ -37,8 +37,7 @@ public class Program
         // Configuration
         var builder = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json", true, true)
-            .AddJsonFile("appsettings.Development.json", true, true);
+            .AddJsonFile("appsettings.json", true, true);
 
         _configuration = builder.Build();
         
