@@ -8,6 +8,12 @@ namespace LibWebClient.Services.Abstract;
 public interface IWebClientRaw
 {
     /// <summary>
+    /// Get information about the server
+    /// </summary>
+    /// <returns></returns>
+    Task<ServerInfoDto> GetServerInfo();
+    
+    /// <summary>
     /// Gets team by ID. Throws ArgumentException if team with given ID is not found
     /// </summary>
     Task<TeamDto> GetTeamByIdAsync(Guid id);

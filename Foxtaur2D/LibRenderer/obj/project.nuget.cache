@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "8WlPdvH6JEkbVpEb1UY7In0WIx1+P1LW/tlCX9f9/4lx0q6ZEMusJW2gR9VaLKF+h97STCphxHog1KLCDIVuIg==",
+  "dgSpecHash": "EK7qJVyzkHgt7tLDjr09OxbGrPFJVVRFH69fMVuON+PkAx+ZZCMRl66kZkDrztxiIPkFpLpAs8X6yrggvtaMlw==",
   "success": true,
   "projectFilePath": "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibRenderer/LibRenderer.csproj",
   "expectedPackageFiles": [
@@ -12,6 +12,13 @@
     "/home/fossa/.nuget/packages/maxrev.gdal.core/3.6.1.100/maxrev.gdal.core.3.6.1.100.nupkg.sha512",
     "/home/fossa/.nuget/packages/maxrev.gdal.linuxruntime.minimal/3.6.1.100/maxrev.gdal.linuxruntime.minimal.3.6.1.100.nupkg.sha512",
     "/home/fossa/.nuget/packages/maxrev.gdal.windowsruntime.minimal/3.6.1.110/maxrev.gdal.windowsruntime.minimal.3.6.1.110.nupkg.sha512",
+    "/home/fossa/.nuget/packages/microsoft.extensions.dependencyinjection/7.0.0/microsoft.extensions.dependencyinjection.7.0.0.nupkg.sha512",
+    "/home/fossa/.nuget/packages/microsoft.extensions.dependencyinjection.abstractions/7.0.0/microsoft.extensions.dependencyinjection.abstractions.7.0.0.nupkg.sha512",
+    "/home/fossa/.nuget/packages/microsoft.extensions.http/7.0.0/microsoft.extensions.http.7.0.0.nupkg.sha512",
+    "/home/fossa/.nuget/packages/microsoft.extensions.logging/7.0.0/microsoft.extensions.logging.7.0.0.nupkg.sha512",
+    "/home/fossa/.nuget/packages/microsoft.extensions.logging.abstractions/7.0.0/microsoft.extensions.logging.abstractions.7.0.0.nupkg.sha512",
+    "/home/fossa/.nuget/packages/microsoft.extensions.options/7.0.0/microsoft.extensions.options.7.0.0.nupkg.sha512",
+    "/home/fossa/.nuget/packages/microsoft.extensions.primitives/7.0.0/microsoft.extensions.primitives.7.0.0.nupkg.sha512",
     "/home/fossa/.nuget/packages/microsoft.netcore.platforms/1.0.1/microsoft.netcore.platforms.1.0.1.nupkg.sha512",
     "/home/fossa/.nuget/packages/microsoft.netcore.targets/1.0.1/microsoft.netcore.targets.1.0.1.nupkg.sha512",
     "/home/fossa/.nuget/packages/system.componentmodel.annotations/4.5.0/system.componentmodel.annotations.4.5.0.nupkg.sha512",

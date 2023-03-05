@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace FoxtaurServer.Models.Api;
+namespace LibWebClient.Models.DTOs;
 
 /// <summary>
 /// Server info
@@ -11,17 +11,11 @@ public class ServerInfoDto
     /// Server name
     /// </summary>
     [JsonPropertyName("name")]
-    public string Name { get; }
+    public string Name { get; set; }
 
     /// <summary>
     /// Protocol version
     /// </summary>
     [JsonPropertyName("protocolVersion")]
-    public int ProtocolVersion { get; }
-
-    public ServerInfoDto(string name, int protocolVersion)
-    {
-        Name = name;
-        ProtocolVersion = protocolVersion;
-    }
+    public int ProtocolVersion { get; set; }
 }

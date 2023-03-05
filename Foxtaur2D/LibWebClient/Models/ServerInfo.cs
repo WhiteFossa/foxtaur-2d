@@ -1,26 +1,27 @@
-using System.Text.Json.Serialization;
-
-namespace FoxtaurServer.Models.Api;
+namespace LibWebClient.Models;
 
 /// <summary>
 /// Server info
 /// </summary>
-public class ServerInfoDto
+public class ServerInfo
 {
     /// <summary>
     /// Server name
     /// </summary>
-    [JsonPropertyName("name")]
     public string Name { get; }
 
     /// <summary>
     /// Protocol version
     /// </summary>
-    [JsonPropertyName("protocolVersion")]
     public int ProtocolVersion { get; }
 
-    public ServerInfoDto(string name, int protocolVersion)
+    public ServerInfo(string name, int protocolVersion)
     {
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            throw new ArgumentException(nameof(name));
+        }
+        
         Name = name;
         ProtocolVersion = protocolVersion;
     }
