@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace LibWebClient.Models.DTOs;
 
 /// <summary>
@@ -8,21 +10,12 @@ public class TeamDto
     /// <summary>
     /// Team Id
     /// </summary>
-    public Guid Id { get; }
+    [JsonPropertyName("id")]
+    public Guid Id { get; set; }
 
     /// <summary>
     /// Name
     /// </summary>
-    public string Name { get; }
-
-    public TeamDto(Guid id, string name)
-    {
-        if (string.IsNullOrWhiteSpace(name))
-        {
-            throw new ArgumentException(nameof(name));
-        }
-
-        Id = id;
-        Name = name;
-    }
+    [JsonPropertyName("name")]
+    public string Name { get; set; }
 }

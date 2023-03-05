@@ -145,7 +145,7 @@ public class WebClient : IWebClient
         {
             if (teamId.HasValue)
             {
-                teamsDtos.Add(await _client.GetTeamByIdAsync(teamId.Value));
+                teamsDtos.Add(await _client.GetTeamByIdAsync(teamId.Value).ConfigureAwait(false));
             }
         }
 

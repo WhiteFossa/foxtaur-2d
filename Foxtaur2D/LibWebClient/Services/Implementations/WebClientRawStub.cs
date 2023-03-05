@@ -45,17 +45,14 @@ public class WebClientRawStub : IWebClientRaw
 
     public async Task<TeamDto> GetTeamByIdAsync(Guid id)
     {
-        switch (id.ToString().ToUpperInvariant())
+        var response = await _httpClient.GetAsync($"{_baseUrl}/Teams/{id}").ConfigureAwait(false);
+        if (!response.IsSuccessStatusCode)
         {
-            case "AE9EE155-BCDC-44C3-B83F-A4837A3EC443":
-                return new TeamDto(new Guid("AE9EE155-BCDC-44C3-B83F-A4837A3EC443"), "Foxtaurs");
-            
-            case "4E44C3DE-4B3A-472B-8289-2072A9F7B49C":
-                return new TeamDto(new Guid("4E44C3DE-4B3A-472B-8289-2072A9F7B49C"), "Fox yiffers");
-            
-            default:
-                throw new ArgumentException("Team not found!");
+            _logger.Error($"GetTeamByIdAsync failed: { response.StatusCode }");
+            throw new InvalidOperationException();
         }
+        
+        return JsonSerializer.Deserialize<TeamDto>(await response.Content.ReadAsStringAsync());
     }
 
     public async Task<HunterDto> GetHunterByIdAsync(Guid id)

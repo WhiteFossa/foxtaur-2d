@@ -123,6 +123,7 @@ public class Startup
         // Scoped
         services.AddScoped<IDistancesService, DistancesService>();
         services.AddScoped<IMapsService, MapsService>();
+        services.AddScoped<ITeamsService, TeamsService>();
 
         // Singletons
         services.AddSingleton<IConfigurationService, ConfigurationService>();
