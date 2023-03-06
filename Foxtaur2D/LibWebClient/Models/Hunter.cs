@@ -30,12 +30,18 @@ public class Hunter
     /// </summary>
     public HunterLocation LastKnownLocation { get; }
 
+    /// <summary>
+    /// Hunter locations history, from old to new
+    /// </summary>
+    public IReadOnlyCollection<HunterLocation> LocationsHistory { get; }
+
     public Hunter(
         Guid id,
         string name,
         bool isRunning,
         Team team,
-        HunterLocation lastKnownLocation)
+        HunterLocation lastKnownLocation,
+        IReadOnlyCollection<HunterLocation> locationsHistory)
     {
         if (string.IsNullOrWhiteSpace(name))
         {
@@ -47,5 +53,6 @@ public class Hunter
         IsRunning = isRunning;
         Team = team;
         LastKnownLocation = lastKnownLocation ?? throw new ArgumentNullException(nameof(lastKnownLocation));
+        LocationsHistory = locationsHistory ?? throw new ArgumentNullException(nameof(locationsHistory));
     }
 }

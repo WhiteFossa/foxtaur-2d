@@ -76,5 +76,28 @@ public class HuntersLayer : IVectorLayer
         context.DrawText(new SolidColorBrush(RendererConstants.HunterColor),
             new Point(hunterX - formattedTeamName.Bounds.Width / 2.0, markerPosition.Y - formattedTeamName.Bounds.Height),
             formattedTeamName);
+        
+        // Movements history
+        var locationsHistoryAsList = hunter.LocationsHistory.ToList();
+        for (var mhi = 0; mhi < locationsHistoryAsList.Count() - 1; mhi++)
+        {
+            DrawLinkerLine(locationsHistoryAsList[mhi], locationsHistoryAsList[mhi + 1], context, scalingFactor, displayGeoProvider);
+        }
+    }
+    
+    /// <summary>
+    /// Draw linker line between two hunter locations
+    /// </summary>
+    private void DrawLinkerLine(HunterLocation begin, HunterLocation end, DrawingContext context, double scalingFactor, IGeoProvider displayGeoProvider)
+    {
+        var beginX = displayGeoProvider.LonToX(begin.Lon) / scalingFactor;
+        var beginY = displayGeoProvider.LatToY(begin.Lat) / scalingFactor;
+        
+        var endX = displayGeoProvider.LonToX(end.Lon) / scalingFactor;
+        var endY = displayGeoProvider.LatToY(end.Lat) / scalingFactor;
+        
+        context.DrawLine(new Pen(new SolidColorBrush(RendererConstants.HunterLinkerLinesColor), RendererConstants.HunterLinkerLinesThickness),
+            new Point(beginX, beginY),
+            new Point(endX, endY));
     }
 }

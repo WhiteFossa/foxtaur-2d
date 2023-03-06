@@ -136,6 +136,13 @@ public class WebClient : IWebClient
             huntersDtos.Add(await _client.GetHunterByIdAsync(hunterId).ConfigureAwait(false));
         }
         
+        // Hunters locations histories
+        var huntersLocationsHistories = new Dictionary<Guid, IReadOnlyCollection<HunterLocationDto>>();
+        foreach (var hunterId in huntersIds)
+        {
+            huntersLocationsHistories.Add(hunterId, await _client.GetHunterLocationsHistoryAsync(hunterId, DateTime.MinValue)); // From the earliest time
+        }
+        
         // Teams
         var teamsIds = huntersDtos
             .Select(h => h.TeamId);
@@ -179,7 +186,8 @@ public class WebClient : IWebClient
                     h.Name,
                     h.IsRunning,
                     team,
-                    new HunterLocation(h.LastKnownLocation.Id, h.LastKnownLocation.Timestamp, h.LastKnownLocation.Lat, h.LastKnownLocation.Lon, h.LastKnownLocation.Alt));
+                    new HunterLocation(h.LastKnownLocation.Id, h.LastKnownLocation.Timestamp, h.LastKnownLocation.Lat, h.LastKnownLocation.Lon, h.LastKnownLocation.Alt),
+                    huntersLocationsHistories[h.Id].Select(hlh => new HunterLocation(hlh.Id, hlh.Timestamp, hlh.Lat, hlh.Lon, hlh.Alt)).ToList());
             }).ToList());
     }
 }

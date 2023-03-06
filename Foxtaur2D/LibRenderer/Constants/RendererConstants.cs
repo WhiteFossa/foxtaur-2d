@@ -243,6 +243,16 @@ public static class RendererConstants
     /// </summary>
     public static readonly Color HunterColor = new Color(255, 0, 0, 255);
     
+    /// <summary>
+    /// Hunter linker lines color
+    /// </summary>
+    public static readonly Color HunterLinkerLinesColor = new Color(255, 0, 0, 255);
+
+    /// <summary>
+    /// Hunter linker line thickness
+    /// </summary>
+    public const double HunterLinkerLinesThickness = 3.0;
+    
     #endregion
 
     #endregion

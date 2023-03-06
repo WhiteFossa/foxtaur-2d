@@ -126,4 +126,16 @@ public class WebClientRaw : IWebClientRaw
         
         return JsonSerializer.Deserialize<IReadOnlyCollection<DistanceDto>>(await response.Content.ReadAsStringAsync());
     }
+
+    public async Task<IReadOnlyCollection<HunterLocationDto>> GetHunterLocationsHistoryAsync(Guid id, DateTime fromTime)
+    {
+        var response = await _httpClient.GetAsync($"{_baseUrl}/Hunters/{id}/LocationsHistory/{fromTime.Ticks}").ConfigureAwait(false);
+        if (!response.IsSuccessStatusCode)
+        {
+            _logger.Error($"GetHunterLocationsHistoryAsync failed: { response.StatusCode }");
+            throw new InvalidOperationException();
+        }
+        
+        return JsonSerializer.Deserialize<IReadOnlyCollection<HunterLocationDto>>(await response.Content.ReadAsStringAsync());
+    }
 }

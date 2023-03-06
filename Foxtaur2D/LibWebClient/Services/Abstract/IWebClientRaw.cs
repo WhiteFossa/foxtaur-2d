@@ -12,7 +12,7 @@ public interface IWebClientRaw
     /// </summary>
     /// <returns></returns>
     Task<ServerInfoDto> GetServerInfoAsync();
-    
+
     /// <summary>
     /// Gets team by ID. Throws ArgumentException if team with given ID is not found
     /// </summary>
@@ -47,4 +47,11 @@ public interface IWebClientRaw
     /// Lists all available distances
     /// </summary>
     Task<IReadOnlyCollection<DistanceDto>> ListDistancesAsync();
+
+    /// <summary>
+    /// Get hunter locations history for hunter with given ID, starting from FromTime
+    /// Locations are ordered from old to new
+    /// </summary>
+    Task<IReadOnlyCollection<HunterLocationDto>> GetHunterLocationsHistoryAsync(Guid id, DateTime fromTime);
+
 }
