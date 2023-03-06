@@ -10,7 +10,7 @@ public class GlobalConstants
     /// <summary>
     /// Protocol version
     /// </summary>
-    public const int ProtocolVersion = 2;
+    public const int ProtocolVersion = 3;
     
     #endregion
 

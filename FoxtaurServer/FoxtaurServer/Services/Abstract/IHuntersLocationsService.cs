@@ -18,4 +18,10 @@ public interface IHuntersLocationsService
     /// Will return null if hunter ID is incorrect
     /// </summary>
     Task<HunterLocationDto> GetLastHunterLocationByHunterId(Guid id);
+
+    /// <summary>
+    /// Get hunter locations history by hunter ID.
+    /// Will return null if hunter ID is incorrect
+    /// </summary>
+    Task<IReadOnlyCollection<HunterLocationDto>> GetHunterLocationsHistoryByHunterId(Guid id);
 }

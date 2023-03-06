@@ -10,10 +10,13 @@ namespace FoxtaurServer.Controllers.Api;
 public class HuntersController : Controller
 {
     private readonly IHuntersService _huntersService;
+    private readonly IHuntersLocationsService _huntersLocationsService;
 
-    public HuntersController(IHuntersService huntersService)
+    public HuntersController(IHuntersService huntersService,
+        IHuntersLocationsService huntersLocationsService)
     {
         _huntersService = huntersService;
+        _huntersLocationsService = huntersLocationsService;
     }
     
     /// <summary>
@@ -31,5 +34,22 @@ public class HuntersController : Controller
         }
 
         return Ok(hunter);
+    }
+
+    /// <summary>
+    /// Get hunter locations history by hunter ID
+    /// </summary>
+    [Route("api/Hunters/{id}/LocationsHistory")]
+    [HttpGet]
+    public async Task<ActionResult<HunterDto>> GetHunterLocationsHistoryById(Guid id)
+    {
+        var locationsHistory = await _huntersLocationsService.GetHunterLocationsHistoryByHunterId(id);
+
+        if (locationsHistory == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(locationsHistory);
     }
 }
