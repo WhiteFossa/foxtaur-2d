@@ -12,4 +12,10 @@ public interface IHuntersLocationsService
     /// Will return null if location wasn't found
     /// </summary>
     Task<HunterLocationDto> GetHunterLocationByIdAsync(Guid id);
+
+    /// <summary>
+    /// Get last hunter location for given hunter
+    /// Will return null if hunter ID is incorrect
+    /// </summary>
+    Task<HunterLocationDto> GetLastHunterLocationByHunterId(Guid id);
 }
