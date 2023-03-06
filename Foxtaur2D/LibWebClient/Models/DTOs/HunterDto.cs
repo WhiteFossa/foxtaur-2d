@@ -30,10 +30,4 @@ public class HunterDto
     /// </summary>
     [JsonPropertyName("teamId")]
     public Guid? TeamId { get; set; }
-
-    /// <summary>
-    /// Last known hunter location
-    /// </summary>
-    [JsonPropertyName("lastKnownLocation")]
-    public HunterLocationDto LastKnownLocation { get; set; }
 }

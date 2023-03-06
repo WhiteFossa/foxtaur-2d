@@ -186,7 +186,6 @@ public class WebClient : IWebClient
                     h.Name,
                     h.IsRunning,
                     team,
-                    new HunterLocation(h.LastKnownLocation.Id, h.LastKnownLocation.Timestamp, h.LastKnownLocation.Lat, h.LastKnownLocation.Lon, h.LastKnownLocation.Alt),
                     huntersLocationsHistories[h.Id].Select(hlh => new HunterLocation(hlh.Id, hlh.Timestamp, hlh.Lat, hlh.Lon, hlh.Alt)).ToList());
             }).ToList());
     }

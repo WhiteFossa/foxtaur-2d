@@ -30,19 +30,12 @@ public class HunterDto
     /// </summary>
     [JsonPropertyName("teamId")]
     public Guid? TeamId { get; }
-    
-    /// <summary>
-    /// Last known hunter location
-    /// </summary>
-    [JsonPropertyName("lastKnownLocation")]
-    public HunterLocationDto LastKnownLocation { get; }
 
     public HunterDto(
         Guid id,
         string name,
         bool isRunning,
-        Guid? teamId,
-        HunterLocationDto lastKnownLocation)
+        Guid? teamId)
     {
         if (string.IsNullOrWhiteSpace(name))
         {
@@ -53,6 +46,5 @@ public class HunterDto
         Name = name;
         IsRunning = isRunning;
         TeamId = teamId;
-        LastKnownLocation = lastKnownLocation ?? throw new ArgumentNullException(nameof(lastKnownLocation));
     }
 }
