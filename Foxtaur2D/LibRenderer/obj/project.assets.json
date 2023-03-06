@@ -1142,6 +1142,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v7.0",
         "dependencies": {
+          "Avalonia": "0.10.18",
           "LibAuxiliary": "1.0.0",
           "LibGeo": "1.0.0",
           "Microsoft.Extensions.Http": "7.0.0"

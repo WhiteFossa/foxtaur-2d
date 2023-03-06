@@ -1,3 +1,5 @@
+using Avalonia.Media;
+
 namespace LibWebClient.Models;
 
 /// <summary>
@@ -15,9 +17,12 @@ public class Team
     /// </summary>
     public string Name { get; }
 
+    public Color Color { get; }
+
     public Team(
         Guid id,
-        string name)
+        string name,
+        Color color)
     {
         if (string.IsNullOrWhiteSpace(name))
         {
@@ -26,5 +31,6 @@ public class Team
 
         Id = id;
         Name = name;
+        Color = color;
     }
 }

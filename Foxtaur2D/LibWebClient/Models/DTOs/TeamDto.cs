@@ -18,4 +18,10 @@ public class TeamDto
     /// </summary>
     [JsonPropertyName("name")]
     public string Name { get; set; }
+    
+    /// <summary>
+    /// Color
+    /// </summary>
+    [JsonPropertyName("color")]
+    public ColorDto Color { get; set; }
 }

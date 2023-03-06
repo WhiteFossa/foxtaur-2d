@@ -75,7 +75,7 @@ public class HuntersLayer : IVectorLayer
             new Point(hunterX - formattedName.Bounds.Width / 2.0, markerPosition.Y - formattedName.Bounds.Height - formattedTeamName.Bounds.Height + RendererConstants.HunterNameShiftDown),
             formattedName);
         
-        context.DrawText(new SolidColorBrush(RendererConstants.HunterColor),
+        context.DrawText(new SolidColorBrush(hunter.Team.Color),
             new Point(hunterX - formattedTeamName.Bounds.Width / 2.0, markerPosition.Y - formattedTeamName.Bounds.Height),
             formattedTeamName);
         

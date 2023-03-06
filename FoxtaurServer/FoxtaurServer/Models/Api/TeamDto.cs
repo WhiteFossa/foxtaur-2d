@@ -19,7 +19,13 @@ public class TeamDto
     [JsonPropertyName("name")]
     public string Name { get; }
 
-    public TeamDto(Guid id, string name)
+    /// <summary>
+    /// Color
+    /// </summary>
+    [JsonPropertyName("color")]
+    public ColorDto Color { get; }
+
+    public TeamDto(Guid id, string name, ColorDto color)
     {
         if (string.IsNullOrWhiteSpace(name))
         {
@@ -28,5 +34,6 @@ public class TeamDto
 
         Id = id;
         Name = name;
+        Color = color ?? throw new ArgumentNullException(nameof(color));
     }
 }

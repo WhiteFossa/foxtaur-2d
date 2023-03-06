@@ -1,3 +1,4 @@
+using Avalonia.Media;
 using LibWebClient.Constants;
 using LibWebClient.Enums;
 using LibWebClient.Models;
@@ -180,7 +181,7 @@ public class WebClient : IWebClient
             {
                 var teamDto = teamsDtos
                     .FirstOrDefault(td => td.Id == h.TeamId);
-                var team = teamDto != null ? new Team(teamDto.Id, teamDto.Name) : null;
+                var team = teamDto != null ? new Team(teamDto.Id, teamDto.Name, new Color(teamDto.Color.A, teamDto.Color.R, teamDto.Color.G, teamDto.Color.B)) : null;
                 
                 return new Hunter(h.Id,
                     h.Name,
