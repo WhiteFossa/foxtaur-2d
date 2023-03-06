@@ -37,13 +37,13 @@ public class HuntersController : Controller
     }
 
     /// <summary>
-    /// Get hunter locations history by hunter ID
+    /// Get hunter locations history by hunter ID since FromTime (in ticks)
     /// </summary>
-    [Route("api/Hunters/{id}/LocationsHistory")]
+    [Route("api/Hunters/{id}/LocationsHistory/{fromTime}")]
     [HttpGet]
-    public async Task<ActionResult<HunterDto>> GetHunterLocationsHistoryById(Guid id)
+    public async Task<ActionResult<HunterDto>> GetHunterLocationsHistoryById(Guid id, long fromTime)
     {
-        var locationsHistory = await _huntersLocationsService.GetHunterLocationsHistoryByHunterId(id);
+        var locationsHistory = await _huntersLocationsService.GetHunterLocationsHistoryByHunterId(id, new DateTime(fromTime));
 
         if (locationsHistory == null)
         {

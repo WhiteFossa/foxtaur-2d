@@ -20,8 +20,8 @@ public interface IHuntersLocationsService
     Task<HunterLocationDto> GetLastHunterLocationByHunterId(Guid id);
 
     /// <summary>
-    /// Get hunter locations history by hunter ID.
+    /// Get hunter locations history by hunter ID starting from fromTime
     /// Will return null if hunter ID is incorrect
     /// </summary>
-    Task<IReadOnlyCollection<HunterLocationDto>> GetHunterLocationsHistoryByHunterId(Guid id);
+    Task<IReadOnlyCollection<HunterLocationDto>> GetHunterLocationsHistoryByHunterId(Guid id, DateTime fromTime);
 }

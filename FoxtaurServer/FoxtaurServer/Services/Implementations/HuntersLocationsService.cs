@@ -68,7 +68,7 @@ public class HuntersLocationsService : IHuntersLocationsService
             .Last();
     }
 
-    public async Task<IReadOnlyCollection<HunterLocationDto>> GetHunterLocationsHistoryByHunterId(Guid id)
+    public async Task<IReadOnlyCollection<HunterLocationDto>> GetHunterLocationsHistoryByHunterId(Guid id, DateTime fromTime)
     {
         if (!_locationsByHunters.ContainsKey(id))
         {
@@ -76,6 +76,7 @@ public class HuntersLocationsService : IHuntersLocationsService
         }
 
         return _locationsByHunters[id]
+            .Where(hl => hl.Timestamp >= fromTime)
             .OrderBy(hl => hl.Timestamp)
             .ToList();
     }
