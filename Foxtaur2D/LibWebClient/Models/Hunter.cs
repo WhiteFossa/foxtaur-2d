@@ -26,22 +26,16 @@ public class Hunter
     public Team Team { get; }
 
     /// <summary>
-    /// Hunter's latitude
+    /// Last known hunter location
     /// </summary>
-    public double Lat { get; }
-
-    /// <summary>
-    /// Hunter's longitude
-    /// </summary>
-    public double Lon { get; }
+    public HunterLocation LastKnownLocation { get; }
 
     public Hunter(
         Guid id,
         string name,
         bool isRunning,
         Team team,
-        double lat,
-        double lon)
+        HunterLocation lastKnownLocation)
     {
         if (string.IsNullOrWhiteSpace(name))
         {
@@ -52,7 +46,6 @@ public class Hunter
         Name = name;
         IsRunning = isRunning;
         Team = team;
-        Lat = lat;
-        Lon = lon;
+        LastKnownLocation = lastKnownLocation ?? throw new ArgumentNullException(nameof(lastKnownLocation));
     }
 }

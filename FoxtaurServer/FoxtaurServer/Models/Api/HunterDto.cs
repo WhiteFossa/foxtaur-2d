@@ -53,6 +53,6 @@ public class HunterDto
         Name = name;
         IsRunning = isRunning;
         TeamId = teamId;
-        LastKnownLocation = lastKnownLocation ?? throw new ArgumentException(nameof(lastKnownLocation));
+        LastKnownLocation = lastKnownLocation ?? throw new ArgumentNullException(nameof(lastKnownLocation));
     }
 }

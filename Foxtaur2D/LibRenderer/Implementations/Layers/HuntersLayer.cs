@@ -44,8 +44,8 @@ public class HuntersLayer : IVectorLayer
     /// </summary>
     private void DrawHunter(Hunter hunter, DrawingContext context, double scalingFactor, IGeoProvider displayGeoProvider)
     {
-        var hunterX = displayGeoProvider.LonToX(hunter.Lon) / scalingFactor;
-        var hunterY = displayGeoProvider.LatToY(hunter.Lat) / scalingFactor;
+        var hunterX = displayGeoProvider.LonToX(hunter.LastKnownLocation.Lon) / scalingFactor;
+        var hunterY = displayGeoProvider.LatToY(hunter.LastKnownLocation.Lat) / scalingFactor;
         
         // Marker position
         var markerPosition = new Point(hunterX, hunterY) - RendererConstants.HunterMarkerActivePoint;

@@ -32,14 +32,8 @@ public class HunterDto
     public Guid? TeamId { get; set; }
 
     /// <summary>
-    /// Hunter's latitude
+    /// Last known hunter location
     /// </summary>
-    [JsonPropertyName("latitude")]
-    public double Lat { get; set; }
-
-    /// <summary>
-    /// Hunter's longitude
-    /// </summary>
-    [JsonPropertyName("longitude")]
-    public double Lon { get; set; }
+    [JsonPropertyName("lastKnownLocation")]
+    public HunterLocationDto LastKnownLocation { get; set; }
 }

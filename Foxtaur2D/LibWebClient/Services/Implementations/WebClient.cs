@@ -175,7 +175,11 @@ public class WebClient : IWebClient
                     .FirstOrDefault(td => td.Id == h.TeamId);
                 var team = teamDto != null ? new Team(teamDto.Id, teamDto.Name) : null;
                 
-                return new Hunter(h.Id, h.Name, h.IsRunning, team, h.Lat, h.Lon);
+                return new Hunter(h.Id,
+                    h.Name,
+                    h.IsRunning,
+                    team,
+                    new HunterLocation(h.LastKnownLocation.Id, h.LastKnownLocation.Timestamp, h.LastKnownLocation.Lat, h.LastKnownLocation.Lon, h.LastKnownLocation.Alt));
             }).ToList());
     }
 }
