@@ -246,4 +246,23 @@ public static class RendererConstants
     #endregion
 
     #endregion
+    
+    #region Data transmission
+
+    /// <summary>
+    /// Color for indicator of hunter data download initialization
+    /// </summary>
+    public static Color HuntersDataDownloadInitiatedColor = Colors.Yellow;
+
+    /// <summary>
+    /// Color for indicator of hunter data download completion
+    /// </summary>
+    public static Color HuntersDataDownloadCompletedColor = Colors.Green;
+    
+    /// <summary>
+    /// Color for indicator of hunter data download failure
+    /// </summary>
+    public static Color HuntersDataDownloadFailureColor = Colors.Red;
+    
+    #endregion
 }

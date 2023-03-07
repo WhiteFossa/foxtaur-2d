@@ -180,7 +180,27 @@
                         
                         <Label>Data connection:</Label>
                         
-                        <!-- Data update indicator -->
+                        <!-- Hunters data reload interval -->
+                        <StackPanel
+                            Orientation="Horizontal">
+                            
+                            <Label>Hunters data reload interval:</Label>
+                        
+                            <Label
+                                VerticalAlignment="Center"
+                                Content="{ Binding HuntersDataReloadIntervalText }">
+                            </Label>    
+                        </StackPanel>
+                        
+                        <Slider
+                            Minimum="1000"
+                            Maximum="30000"
+                            Ticks="100"
+                            Value="{ Binding HuntersDataReloadInterval }"
+                            VerticalAlignment="Center">
+                        </Slider>
+                        
+                        <!-- Hunters data update indicator -->
                         <Label
                             BorderBrush="Black"
                             BorderThickness="1"

@@ -5,6 +5,7 @@ using System.Reactive;
 using Avalonia.Media;
 using Foxtaur2D.Controls;
 using Foxtaur2D.Models;
+using LibRenderer.Constants;
 using LibRenderer.Enums;
 using LibWebClient.Models;
 using LibWebClient.Services.Abstract;
@@ -34,7 +35,10 @@ public class MainWindowViewModel : ViewModelBase
     private bool _isEveryoneModeChecked;
 
     private IBrush _huntersDataBackground;
-    
+
+    private double _huntersDataReloadInterval;
+    private string _huntersDataReloadIntervalText;
+
     #region DI
     
     private readonly IWebClient _webClient = Program.Di.GetService<IWebClient>();
@@ -114,6 +118,7 @@ public class MainWindowViewModel : ViewModelBase
                 Renderer.SetActiveDistance(_mainModel.Distance);
                 Renderer.SetHuntersFilteringMode(_mainModel.HuntersFilteringMode);
                 Renderer.SetHuntersDataStateInfo = SetHuntersDataState;
+                Renderer.SetHuntersDataReloadInterval(HuntersDataReloadInterval);
             }
         }
     }
@@ -284,6 +289,35 @@ public class MainWindowViewModel : ViewModelBase
     }
 
     /// <summary>
+    /// Hunters data reload interval in milliseconds
+    /// </summary>
+    public double HuntersDataReloadInterval
+    {
+        get => _huntersDataReloadInterval;
+
+        set
+        {
+            this.RaiseAndSetIfChanged(ref _huntersDataReloadInterval, value);
+            FormatHuntersDataReloadIntervalText();
+
+            if (Renderer != null)
+            {
+                Renderer.SetHuntersDataReloadInterval(value);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Hunters data reload interval text (in seconds)
+    /// </summary>
+    public string HuntersDataReloadIntervalText
+    {
+        get => _huntersDataReloadIntervalText;
+
+        set => this.RaiseAndSetIfChanged(ref _huntersDataReloadIntervalText, value);
+    }
+    
+    /// <summary>
     /// Focus on distance
     /// </summary>
     public ReactiveCommand<Unit, Unit> FocusOnDistanceCommand { get; }
@@ -316,6 +350,9 @@ public class MainWindowViewModel : ViewModelBase
         
         // Marking initial data state
         SetHuntersDataState(HuntersDataState.Downloaded);
+        
+        // Initial interval
+        HuntersDataReloadInterval = 1000; // TODO: Save/load it
     }
 
     /// <summary>
@@ -354,20 +391,25 @@ public class MainWindowViewModel : ViewModelBase
         switch (state)
         {
             case HuntersDataState.Failed:
-                HuntersDataBackground = new SolidColorBrush(Colors.Red);
+                HuntersDataBackground = new SolidColorBrush(RendererConstants.HuntersDataDownloadFailureColor);
                 return;
                 
             case HuntersDataState.DownloadInitiated:
-                HuntersDataBackground = new SolidColorBrush(Colors.Yellow);
+                HuntersDataBackground = new SolidColorBrush(RendererConstants.HuntersDataDownloadInitiatedColor);
                 return;
             
             case HuntersDataState.Downloaded:
-                HuntersDataBackground = new SolidColorBrush(Colors.Green);
+                HuntersDataBackground = new SolidColorBrush(RendererConstants.HuntersDataDownloadCompletedColor);
                 return;
             
             default:
                 throw new ArgumentException("Unknown hunters data state");
         }
+    }
+
+    private void FormatHuntersDataReloadIntervalText()
+    {
+        HuntersDataReloadIntervalText = $"{(HuntersDataReloadInterval/1000.0):.0}s";
     }
     
     #region Logging

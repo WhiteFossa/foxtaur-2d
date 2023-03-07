@@ -148,12 +148,12 @@ public partial class MapControl : UserControl
     /// <summary>
     /// Hunters data is reloaded on this timer tick
     /// </summary>
-    private Timer _reloadTimer;
+    private Timer _huntersDataReloadTimer;
     
     /// <summary>
     /// Mutex to protect hunters data from corruption
     /// </summary>
-    private Mutex _reloadMutex = new Mutex();
+    private Mutex _huntersDataReloadMutex = new Mutex();
 
     /// <summary>
     /// Call this to display hunters data state info on UI
@@ -188,10 +188,10 @@ public partial class MapControl : UserControl
         PointerWheelChanged += OnWheel;
         
         // Setting up reload timer
-        _reloadTimer = new Timer(1000); // TODO: Set me in UI
-        _reloadTimer.Elapsed += OnReloadTimer;
-        _reloadTimer.AutoReset = true;
-        _reloadTimer.Enabled = true;
+        _huntersDataReloadTimer = new Timer(1000); // TODO: Set me in UI
+        _huntersDataReloadTimer.Elapsed += OnHuntersDataReloadTimer;
+        _huntersDataReloadTimer.AutoReset = true;
+        _huntersDataReloadTimer.Enabled = true;
     }
 
     private void OnMousePressed(object sender, PointerPressedEventArgs e)
@@ -556,7 +556,7 @@ public partial class MapControl : UserControl
     {
         try
         {
-            _reloadMutex.WaitOne();
+            _huntersDataReloadMutex.WaitOne();
             
             switch (_huntersFilteringMode)
             {
@@ -609,14 +609,14 @@ public partial class MapControl : UserControl
         }
         finally
         {
-            _reloadMutex.ReleaseMutex();
+            _huntersDataReloadMutex.ReleaseMutex();
         }
     }
     
     /// <summary>
     /// Called when hunters information needs to be reloaded
     /// </summary>
-    private void OnReloadTimer(object sender, ElapsedEventArgs e)
+    private void OnHuntersDataReloadTimer(object sender, ElapsedEventArgs e)
     {
         Dispatcher.UIThread.InvokeAsync(() =>
         {
@@ -625,7 +625,7 @@ public partial class MapControl : UserControl
 
         try
         {
-            _reloadMutex.WaitOne();
+            _huntersDataReloadMutex.WaitOne();
             
             if (_filteredHunters == null || !_filteredHunters.Any())
             {
@@ -641,7 +641,7 @@ public partial class MapControl : UserControl
         }
         finally
         {
-            _reloadMutex.ReleaseMutex();
+            _huntersDataReloadMutex.ReleaseMutex();
         }
     }
 
@@ -687,7 +687,7 @@ public partial class MapControl : UserControl
 
         try
         {
-            _reloadMutex.WaitOne();
+            _huntersDataReloadMutex.WaitOne();
             
             huntersIdsToReload = _filteredHunters
                 .Select(fh => fh.Id)
@@ -695,7 +695,7 @@ public partial class MapControl : UserControl
         }
         finally
         {
-            _reloadMutex.ReleaseMutex();
+            _huntersDataReloadMutex.ReleaseMutex();
         }
 
         var newHuntersData = new List<Hunter>();
@@ -719,7 +719,7 @@ public partial class MapControl : UserControl
 
         try
         {
-            _reloadMutex.WaitOne();
+            _huntersDataReloadMutex.WaitOne();
             
             // We need to reload it because hunters list could change during load
             huntersIdsToReload = _filteredHunters
@@ -732,7 +732,7 @@ public partial class MapControl : UserControl
         }
         finally
         {
-            _reloadMutex.ReleaseMutex();
+            _huntersDataReloadMutex.ReleaseMutex();
         }
         
         Dispatcher.UIThread.InvokeAsync(() =>
@@ -740,5 +740,10 @@ public partial class MapControl : UserControl
             MarkHuntersDataAsActual();
             InvalidateVisual();
         });
+    }
+
+    public void SetHuntersDataReloadInterval(double interval)
+    {
+        _huntersDataReloadTimer.Interval = interval;
     }
 }
