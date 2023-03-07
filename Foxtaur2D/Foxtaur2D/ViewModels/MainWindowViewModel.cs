@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
+using Avalonia.Media;
 using Foxtaur2D.Controls;
 using Foxtaur2D.Models;
 using LibRenderer.Enums;
@@ -32,6 +33,8 @@ public class MainWindowViewModel : ViewModelBase
     private bool _isSingleTeamModeChecked;
     private bool _isEveryoneModeChecked;
 
+    private IBrush _huntersDataBackground;
+    
     #region DI
     
     private readonly IWebClient _webClient = Program.Di.GetService<IWebClient>();
@@ -110,6 +113,7 @@ public class MainWindowViewModel : ViewModelBase
             {
                 Renderer.SetActiveDistance(_mainModel.Distance);
                 Renderer.SetHuntersFilteringMode(_mainModel.HuntersFilteringMode);
+                Renderer.SetHuntersDataStateInfo = SetHuntersDataState;
             }
         }
     }
@@ -267,6 +271,19 @@ public class MainWindowViewModel : ViewModelBase
     }
 
     /// <summary>
+    /// Background for Hunters Data indicator
+    /// </summary>
+    public IBrush HuntersDataBackground
+    {
+        get => _huntersDataBackground;
+
+        set
+        {
+            this.RaiseAndSetIfChanged(ref _huntersDataBackground, value);
+        }
+    }
+
+    /// <summary>
     /// Focus on distance
     /// </summary>
     public ReactiveCommand<Unit, Unit> FocusOnDistanceCommand { get; }
@@ -296,6 +313,9 @@ public class MainWindowViewModel : ViewModelBase
         _mainModel.HuntersFilteringMode = HuntersFilteringMode.Everyone;
         SelectedHunterIndex = -1;
         SelectedTeamIndex = -1;
+        
+        // Marking initial data state
+        SetHuntersDataState(HuntersDataState.Downloaded);
     }
 
     /// <summary>
@@ -324,6 +344,30 @@ public class MainWindowViewModel : ViewModelBase
     private void OnFocusOnDistanceCommand()
     {
         Renderer.FocusOnDistance();
+    }
+
+    /// <summary>
+    /// Set hunters data state
+    /// </summary>
+    public void SetHuntersDataState(HuntersDataState state)
+    {
+        switch (state)
+        {
+            case HuntersDataState.Failed:
+                HuntersDataBackground = new SolidColorBrush(Colors.Red);
+                return;
+                
+            case HuntersDataState.DownloadInitiated:
+                HuntersDataBackground = new SolidColorBrush(Colors.Yellow);
+                return;
+            
+            case HuntersDataState.Downloaded:
+                HuntersDataBackground = new SolidColorBrush(Colors.Green);
+                return;
+            
+            default:
+                throw new ArgumentException("Unknown hunters data state");
+        }
     }
     
     #region Logging

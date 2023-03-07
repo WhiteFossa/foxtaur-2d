@@ -170,6 +170,28 @@
                         
                     </StackPanel>
                 </Border>
+                
+                <!-- Hunters data -->
+                <Border
+                    Classes="VisibleBorders">
+                    
+                    <StackPanel
+                        Classes="PaddingAndMargin">
+                        
+                        <Label>Data connection:</Label>
+                        
+                        <!-- Data update indicator -->
+                        <Label
+                            BorderBrush="Black"
+                            BorderThickness="1"
+                            Background="{ Binding HuntersDataBackground }"
+                            HorizontalContentAlignment="Center">
+                            Hunters data
+                        </Label>
+                        
+                    </StackPanel>
+                    
+                </Border>
             </StackPanel>
             
         </Border>

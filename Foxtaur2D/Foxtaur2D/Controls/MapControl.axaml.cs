@@ -28,6 +28,15 @@ using Timer = System.Timers.Timer;
 
 namespace Foxtaur2D.Controls;
 
+#region Delegates
+
+/// <summary>
+/// Delegate for setting information about current hunters data state
+/// </summary>
+public delegate void SetHunterDataStateInfoDelegate(HuntersDataState state);
+
+#endregion
+
 public partial class MapControl : UserControl
 {
     #region Control sizes
@@ -145,6 +154,11 @@ public partial class MapControl : UserControl
     /// Mutex to protect hunters data from corruption
     /// </summary>
     private Mutex _reloadMutex = new Mutex();
+
+    /// <summary>
+    /// Call this to display hunters data state info on UI
+    /// </summary>
+    public SetHunterDataStateInfoDelegate SetHuntersDataStateInfo;
     
     #endregion
     
@@ -604,7 +618,10 @@ public partial class MapControl : UserControl
     /// </summary>
     private void OnReloadTimer(object sender, ElapsedEventArgs e)
     {
-        MarkHuntersDataReloadStart();
+        Dispatcher.UIThread.InvokeAsync(() =>
+        {
+            MarkHuntersDataReloadStart();
+        });
 
         try
         {
@@ -612,7 +629,10 @@ public partial class MapControl : UserControl
             
             if (_filteredHunters == null || !_filteredHunters.Any())
             {
-                MarkHuntersDataAsActual();
+                Dispatcher.UIThread.InvokeAsync(() =>
+                {
+                    MarkHuntersDataAsActual();
+                });
                 return;
             }
 
@@ -630,7 +650,10 @@ public partial class MapControl : UserControl
     /// </summary>
     private void MarkHuntersDataAsActual()
     {
-        _logger.Info("Hunters data updated");
+        if (SetHuntersDataStateInfo != null)
+        {
+            SetHuntersDataStateInfo(HuntersDataState.Downloaded);
+        }
     }
 
     /// <summary>
@@ -638,7 +661,10 @@ public partial class MapControl : UserControl
     /// </summary>
     private void MarkHuntersDataReloadStart()
     {
-        _logger.Info("Hunters data realod initiated");
+        if (SetHuntersDataStateInfo != null)
+        {
+            SetHuntersDataStateInfo(HuntersDataState.DownloadInitiated);
+        }
     }
 
     /// <summary>
@@ -646,7 +672,10 @@ public partial class MapControl : UserControl
     /// </summary>
     private void MarkHuntersDataReloadFailure()
     {
-        _logger.Error("Hunters data realod failed!");
+        if (SetHuntersDataStateInfo != null)
+        {
+            SetHuntersDataStateInfo(HuntersDataState.Failed);
+        }
     }
     
     /// <summary>
@@ -678,7 +707,7 @@ public partial class MapControl : UserControl
                 newHuntersData.Add(_webClient.GetHunterByIdAsync(hunterId, _activeDistance.FirstHunterStartTime).Result);
             }
         }
-        catch (Exception e)
+        catch (Exception)
         {
             Dispatcher.UIThread.InvokeAsync(() =>
             {
