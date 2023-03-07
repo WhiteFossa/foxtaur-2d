@@ -642,6 +642,14 @@ public partial class MapControl : UserControl
     }
 
     /// <summary>
+    /// Marks (on UI) hunters data reload failure
+    /// </summary>
+    private void MarkHuntersDataReloadFailure()
+    {
+        _logger.Error("Hunters data realod failed!");
+    }
+    
+    /// <summary>
     /// Reload hunters data. Must be called on separate thread
     /// </summary>
     private void ReloadHuntersData()
@@ -662,11 +670,24 @@ public partial class MapControl : UserControl
         }
 
         var newHuntersData = new List<Hunter>();
-        foreach (var hunterId in huntersIdsToReload)
+        try
         {
-            newHuntersData.Add(_webClient.GetHunterByIdAsync(hunterId, _activeDistance.FirstHunterStartTime).Result);
+            
+            foreach (var hunterId in huntersIdsToReload)
+            {
+                newHuntersData.Add(_webClient.GetHunterByIdAsync(hunterId, _activeDistance.FirstHunterStartTime).Result);
+            }
         }
-        
+        catch (Exception e)
+        {
+            Dispatcher.UIThread.InvokeAsync(() =>
+            {
+                MarkHuntersDataReloadFailure();
+            });
+            
+            return;
+        }
+
         try
         {
             _reloadMutex.WaitOne();

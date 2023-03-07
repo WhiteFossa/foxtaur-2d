@@ -32,6 +32,11 @@ public class HuntersLayer : IHuntersVectorLayer
     
     public void Draw(DrawingContext context, int width, int height, double scalingFactor, IGeoProvider displayGeoProvider, IReadOnlyCollection<Hunter> hunters)
     {
+        if (hunters == null)
+        {
+            return;
+        }
+        
         foreach (var hunter in hunters)
         {
             DrawHunter(hunter, context, scalingFactor, displayGeoProvider);
