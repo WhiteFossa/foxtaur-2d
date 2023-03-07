@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -19,8 +21,10 @@ using LibRenderer.Enums;
 using LibRenderer.Implementations.Layers;
 using LibRenderer.Implementations.UI;
 using LibWebClient.Models;
+using LibWebClient.Services.Abstract;
 using Microsoft.Extensions.DependencyInjection;
 using NLog;
+using Timer = System.Timers.Timer;
 
 namespace Foxtaur2D.Controls;
 
@@ -122,7 +126,7 @@ public partial class MapControl : UserControl
     private IReadOnlyCollection<Hunter> _filteredHunters;
 
     #endregion
-    
+
     /// <summary>
     /// Logger
     /// </summary>
@@ -131,6 +135,21 @@ public partial class MapControl : UserControl
     #region DI
 
     private readonly ITextDrawer _textDrawer;
+    private readonly IWebClient _webClient;
+    
+    #endregion
+    
+    #region Reloading
+    
+    /// <summary>
+    /// Hunters data is reloaded on this timer tick
+    /// </summary>
+    private Timer _reloadTimer;
+    
+    /// <summary>
+    /// Mutex to protect hunters data from corruption
+    /// </summary>
+    private Mutex _reloadMutex = new Mutex();
     
     #endregion
     
@@ -141,12 +160,14 @@ public partial class MapControl : UserControl
     public MapControl()
     {
         _textDrawer = Program.Di.GetService<ITextDrawer>();
+        _webClient = Program.Di.GetService<IWebClient>();
         
         InitializeComponent();
 
         _backingArray = null; // It will remain null till the first resize
 
         _layers.Add(new FlatImageLayer(@"Resources/HYP_50M_SR_W.jpeg"));
+        _layers.Add(new HuntersLayer());
 
         // Listening for properties changes to process resize
         PropertyChanged += OnPropertyChangedListener;
@@ -156,6 +177,12 @@ public partial class MapControl : UserControl
         PointerReleased += OnMouseReleased;
         PointerMoved += OnMouseMoved;
         PointerWheelChanged += OnWheel;
+        
+        // Setting up reload timer
+        _reloadTimer = new Timer(1000); // TODO: Set me in UI
+        _reloadTimer.Elapsed += OnReloadTimer;
+        _reloadTimer.AutoReset = true;
+        _reloadTimer.Enabled = true;
     }
 
     private void OnMousePressed(object sender, PointerPressedEventArgs e)
@@ -339,8 +366,16 @@ public partial class MapControl : UserControl
             if (layer is IVectorLayer)
             {
                 var vectorLayer = layer as IVectorLayer;
-                
-                vectorLayer.Draw(context, _viewportWidth, _viewportHeight, _scaling, _backingImageGeoProvider);
+
+                if (layer is IHuntersVectorLayer)
+                {
+                    // Special case - hunters layer
+                    (vectorLayer as IHuntersVectorLayer).Draw(context, _viewportWidth, _viewportHeight, _scaling, _backingImageGeoProvider, _filteredHunters);
+                }
+                else
+                {
+                    vectorLayer.Draw(context, _viewportWidth, _viewportHeight, _scaling, _backingImageGeoProvider);
+                }
             }
         }
     }
@@ -511,61 +546,155 @@ public partial class MapControl : UserControl
 
     private void ApplyHuntersFilter()
     {
-        switch (_huntersFilteringMode)
+        try
         {
-            case HuntersFilteringMode.OneHunter:
-                if (_hunterToDisplay == null)
-                {
-                    _filteredHunters = new List<Hunter>();
-                }
-                else
-                {
-                    _filteredHunters = _activeDistance
-                        .Hunters
-                        .Where(h => h.Id == _hunterToDisplay.Id)
-                        .ToList();
-                }
-                break;
+            _reloadMutex.WaitOne();
             
-            case HuntersFilteringMode.OneTeam:
-                if (_teamToDisplay == null)
-                {
-                    _filteredHunters = new List<Hunter>();
-                }
-                else
-                {
-                    _filteredHunters = _activeDistance
-                        .Hunters
-                        .Where(h => h.Team.Id == _teamToDisplay.Id)
-                        .ToList();
-                }
-                break;
+            switch (_huntersFilteringMode)
+            {
+                case HuntersFilteringMode.OneHunter:
+                    if (_hunterToDisplay == null)
+                    {
+                        _filteredHunters = new List<Hunter>();
+                    }
+                    else
+                    {
+                        _filteredHunters = _activeDistance
+                            .Hunters
+                            .Where(h => h.Id == _hunterToDisplay.Id)
+                            .ToList();
+                    }
+                    break;
             
-            case HuntersFilteringMode.Everyone:
-                if (_activeDistance == null)
-                {
-                    _filteredHunters = new List<Hunter>();
-                }
-                else
-                {
-                    _filteredHunters = _activeDistance
-                        .Hunters
-                        .ToList();
-                }
-                break;
+                case HuntersFilteringMode.OneTeam:
+                    if (_teamToDisplay == null)
+                    {
+                        _filteredHunters = new List<Hunter>();
+                    }
+                    else
+                    {
+                        _filteredHunters = _activeDistance
+                            .Hunters
+                            .Where(h => h.Team.Id == _teamToDisplay.Id)
+                            .ToList();
+                    }
+                    break;
             
-            default:
-                throw new InvalidOperationException("Unknown hunters filtering mode!");
+                case HuntersFilteringMode.Everyone:
+                    if (_activeDistance == null)
+                    {
+                        _filteredHunters = new List<Hunter>();
+                    }
+                    else
+                    {
+                        _filteredHunters = _activeDistance
+                            .Hunters
+                            .ToList();
+                    }
+                    break;
+            
+                default:
+                    throw new InvalidOperationException("Unknown hunters filtering mode!");
+            }
+            
+            InvalidateVisual();
+        }
+        finally
+        {
+            _reloadMutex.ReleaseMutex();
+        }
+    }
+    
+    /// <summary>
+    /// Called when hunters information needs to be reloaded
+    /// </summary>
+    private void OnReloadTimer(object sender, ElapsedEventArgs e)
+    {
+        MarkHuntersDataReloadStart();
+
+        try
+        {
+            _reloadMutex.WaitOne();
+            
+            if (_filteredHunters == null || !_filteredHunters.Any())
+            {
+                MarkHuntersDataAsActual();
+                return;
+            }
+
+            var realodDataThread = new Thread(() => ReloadHuntersData());
+            realodDataThread.Start();
+        }
+        finally
+        {
+            _reloadMutex.ReleaseMutex();
+        }
+    }
+
+    /// <summary>
+    /// Marks (on UI) hunters data as actual
+    /// </summary>
+    private void MarkHuntersDataAsActual()
+    {
+        _logger.Info("Hunters data updated");
+    }
+
+    /// <summary>
+    /// Marks (on UI) hunters data reload start
+    /// </summary>
+    private void MarkHuntersDataReloadStart()
+    {
+        _logger.Info("Hunters data realod initiated");
+    }
+
+    /// <summary>
+    /// Reload hunters data. Must be called on separate thread
+    /// </summary>
+    private void ReloadHuntersData()
+    {
+        IReadOnlyCollection<Guid> huntersIdsToReload;
+
+        try
+        {
+            _reloadMutex.WaitOne();
+            
+            huntersIdsToReload = _filteredHunters
+                .Select(fh => fh.Id)
+                .ToList();
+        }
+        finally
+        {
+            _reloadMutex.ReleaseMutex();
         }
 
-        _layers.Remove(_huntersLayer);
-
-        if (_activeDistance != null)
+        var newHuntersData = new List<Hunter>();
+        foreach (var hunterId in huntersIdsToReload)
         {
-            _huntersLayer = new HuntersLayer(_filteredHunters);
-            _layers.Add(_huntersLayer);
+            newHuntersData.Add(_webClient.GetHunterByIdAsync(hunterId, _activeDistance.FirstHunterStartTime).Result);
         }
         
-        InvalidateVisual();
+        try
+        {
+            _reloadMutex.WaitOne();
+            
+            // We need to reload it because hunters list could change during load
+            huntersIdsToReload = _filteredHunters
+                .Select(fh => fh.Id)
+                .ToList();
+
+            _filteredHunters = newHuntersData
+                .Where(nhd => huntersIdsToReload.Contains(nhd.Id))
+                .ToList();
+        }
+        finally
+        {
+            _reloadMutex.ReleaseMutex();
+        }
+        
+        Dispatcher.UIThread.InvokeAsync(() =>
+        {
+            MarkHuntersDataAsActual();
+            InvalidateVisual();
+        });
     }
 }

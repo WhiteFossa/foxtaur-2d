@@ -10,11 +10,13 @@ public class HuntersLocationsService : IHuntersLocationsService
 
     public HuntersLocationsService()
     {
+        var random = new Random();
+        
         // Garrek
         _locationsByHunters.Add(new Guid("E7B81F14-5B4E-446A-9892-36B60AF6511E"),
             new List<HunterLocationDto>()
             {
-                new HunterLocationDto(new Guid("00E0F9FC-F24F-47D4-9D6B-987AEF912261"), DateTime.UtcNow, 54.777324.ToRadians(),39.849310.ToRadians(), 130.0), // Newest
+                new HunterLocationDto(new Guid("00E0F9FC-F24F-47D4-9D6B-987AEF912261"), DateTime.UtcNow, 54.777324.ToRadians() + (random.NextDouble() / 100).ToRadians(), 39.849310.ToRadians() + (random.NextDouble() / 100).ToRadians(), 130.0), // Newest
                 new HunterLocationDto(new Guid("9369F744-C49C-462A-9E16-6D251312D6BB"), new DateTime(2023, 03, 06, 08, 10, 01), 54.775352.ToRadians(), 39.850687.ToRadians(), 129.0),
                 new HunterLocationDto(new Guid("65DA1BC5-10AD-497C-AC1B-342E8ED5F714"), new DateTime(2023, 03, 06, 08, 09, 01), 54.772510.ToRadians(), 39.852705.ToRadians(), 128.0),
                 new HunterLocationDto(new Guid("5983399C-43B4-40FA-8591-B3B023B9E19A"), new DateTime(2023, 03, 06, 08, 08, 01), 54.768484.ToRadians(), 39.852592.ToRadians(), 127.0),

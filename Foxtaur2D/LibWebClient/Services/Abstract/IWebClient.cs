@@ -17,4 +17,9 @@ public interface IWebClient
     /// Get distance by ID
     /// </summary>
     Task<Distance> GetDistanceByIdAsync(Guid distanceId);
+
+    /// <summary>
+    /// Get hunter by ID
+    /// </summary>
+    Task<Hunter> GetHunterByIdAsync(Guid hunterId, DateTime loadLocationsFrom);
 }

@@ -142,7 +142,7 @@ public class WebClient : IWebClient
         var huntersLocationsHistories = new Dictionary<Guid, IReadOnlyCollection<HunterLocationDto>>();
         foreach (var hunterId in huntersIds)
         {
-            huntersLocationsHistories.Add(hunterId, await _client.GetHunterLocationsHistoryAsync(hunterId, distanceDto.FirstHunterStartTime));
+            huntersLocationsHistories.Add(hunterId, await _client.GetHunterLocationsHistoryAsync(hunterId, distanceDto.FirstHunterStartTime).ConfigureAwait(false));
         }
         
         // Teams
@@ -192,5 +192,20 @@ public class WebClient : IWebClient
                     new Color(h.Color.A, h.Color.R, h.Color.G, h.Color.B));
             }).ToList(),
             distanceDto.FirstHunterStartTime);
+    }
+
+    public async Task<Hunter> GetHunterByIdAsync(Guid hunterId, DateTime loadLocationsFrom)
+    {
+        var hunterDto = await _client.GetHunterByIdAsync(hunterId).ConfigureAwait(false);
+        var hunterLocationsHistoryDto = await _client.GetHunterLocationsHistoryAsync(hunterId, loadLocationsFrom).ConfigureAwait(false);
+        var teamDto = hunterDto.TeamId.HasValue ? await _client.GetTeamByIdAsync(hunterDto.TeamId.Value).ConfigureAwait(false) : null;
+        var team = teamDto != null ? new Team(teamDto.Id, teamDto.Name, new Color(teamDto.Color.A, teamDto.Color.R, teamDto.Color.G, teamDto.Color.B)) : null;
+
+        return new Hunter(hunterDto.Id,
+            hunterDto.Name,
+            hunterDto.IsRunning,
+            team,
+            hunterLocationsHistoryDto.Select(hlh => new HunterLocation(hlh.Id, hlh.Timestamp, hlh.Lat, hlh.Lon, hlh.Alt)).ToList(),
+            new Color(hunterDto.Color.A, hunterDto.Color.R, hunterDto.Color.G, hunterDto.Color.B));
     }
 }

@@ -6,34 +6,33 @@ using LibGeo.Abstractions;
 using LibRenderer.Abstractions.Layers;
 using LibRenderer.Constants;
 using LibWebClient.Models;
+using NLog;
 
 namespace LibRenderer.Implementations.Layers;
 
 /// <summary>
 /// Layer to draw hunters
 /// </summary>
-public class HuntersLayer : IVectorLayer
+public class HuntersLayer : IHuntersVectorLayer
 {
-    /// <summary>
-    /// Hunters to display
-    /// </summary>
-    private IReadOnlyCollection<Hunter> _hunters;
-    
     /// <summary>
     /// Bitmap with hunter marker
     /// </summary>
-    private Bitmap _hunterMarker;
+    private readonly Bitmap _hunterMarker;
 
-    public HuntersLayer(IReadOnlyCollection<Hunter> hunters)
+    public HuntersLayer()
     {
-        _hunters = hunters ?? throw new ArgumentNullException(nameof(hunters));
-
         _hunterMarker = new Bitmap(@"Resources/Sprites/hunter_marker.png");
     }
     
     public void Draw(DrawingContext context, int width, int height, double scalingFactor, IGeoProvider displayGeoProvider)
     {
-        foreach (var hunter in _hunters)
+        throw new NotImplementedException("Call overloaded method instead!");
+    }
+    
+    public void Draw(DrawingContext context, int width, int height, double scalingFactor, IGeoProvider displayGeoProvider, IReadOnlyCollection<Hunter> hunters)
+    {
+        foreach (var hunter in hunters)
         {
             DrawHunter(hunter, context, scalingFactor, displayGeoProvider);
         }
@@ -45,7 +44,7 @@ public class HuntersLayer : IVectorLayer
     private void DrawHunter(Hunter hunter, DrawingContext context, double scalingFactor, IGeoProvider displayGeoProvider)
     {
         var lastKnownLocation = hunter.LocationsHistory.Last();
-        
+
         var hunterX = displayGeoProvider.LonToX(lastKnownLocation.Lon) / scalingFactor;
         var hunterY = displayGeoProvider.LatToY(lastKnownLocation.Lat) / scalingFactor;
         
