@@ -99,12 +99,7 @@ public partial class MapControl : UserControl
     #endregion
 
     #region Hunters
-
-    /// <summary>
-    /// Layer to display hunters
-    /// </summary>
-    private HuntersLayer _huntersLayer;
-
+    
     /// <summary>
     /// One hunter to display (for case when only one hunter have to be displayed)
     /// </summary>
@@ -460,8 +455,7 @@ public partial class MapControl : UserControl
         _activeDistance = distance;
 
         _layers.Remove(_distanceLayer);
-        _layers.Remove(_huntersLayer);
-        
+
         if (_activeDistance != null)
         {
             _distanceLayer = new DistanceLayer(_activeDistance, OnDistanceLoadedHandler, _textDrawer);
