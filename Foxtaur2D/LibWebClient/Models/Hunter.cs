@@ -1,3 +1,5 @@
+using Avalonia.Media;
+
 namespace LibWebClient.Models;
 
 /// <summary>
@@ -29,13 +31,19 @@ public class Hunter
     /// Hunter locations history, from old to new
     /// </summary>
     public IReadOnlyCollection<HunterLocation> LocationsHistory { get; }
+    
+    /// <summary>
+    /// Color
+    /// </summary>
+    public Color Color { get; }
 
     public Hunter(
         Guid id,
         string name,
         bool isRunning,
         Team team,
-        IReadOnlyCollection<HunterLocation> locationsHistory)
+        IReadOnlyCollection<HunterLocation> locationsHistory,
+        Color color)
     {
         if (string.IsNullOrWhiteSpace(name))
         {
@@ -47,5 +55,6 @@ public class Hunter
         IsRunning = isRunning;
         Team = team;
         LocationsHistory = locationsHistory ?? throw new ArgumentNullException(nameof(locationsHistory));
+        Color = color;
     }
 }

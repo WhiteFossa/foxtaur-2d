@@ -67,6 +67,12 @@ public class DistanceDto
     [JsonPropertyName("huntersIds")]
     public IReadOnlyCollection<Guid> HuntersIds { get; }
 
+    /// <summary>
+    /// First hunter start time (client will load hunters histories since this time)
+    /// </summary>
+    [JsonPropertyName("firstHunterStartTime")]
+    public DateTime FirstHunterStartTime { get; }
+
     public DistanceDto(
         Guid id,
         string name,
@@ -77,7 +83,8 @@ public class DistanceDto
         Guid finishLocationId,
         IReadOnlyCollection<Guid> foxesLocationsIds,
         IReadOnlyCollection<Guid> expectedFoxesOrderLocationsIds,
-        IReadOnlyCollection<Guid> huntersIds)
+        IReadOnlyCollection<Guid> huntersIds,
+        DateTime firstHunterStartTime)
     {
         if (string.IsNullOrWhiteSpace(name))
         {
@@ -95,5 +102,6 @@ public class DistanceDto
         StartLocationId = startLocationId;
         FinishCorridorEntranceLocationId = finishCorridorEntranceLocationId;
         FinishLocationId = finishLocationId;
+        FirstHunterStartTime = firstHunterStartTime;
     }
 }

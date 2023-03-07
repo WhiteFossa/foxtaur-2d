@@ -17,6 +17,9 @@ public class Team
     /// </summary>
     public string Name { get; }
 
+    /// <summary>
+    /// Color
+    /// </summary>
     public Color Color { get; }
 
     public Team(

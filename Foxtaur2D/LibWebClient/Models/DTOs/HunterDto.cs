@@ -30,4 +30,10 @@ public class HunterDto
     /// </summary>
     [JsonPropertyName("teamId")]
     public Guid? TeamId { get; set; }
+    
+    /// <summary>
+    /// Color
+    /// </summary>
+    [JsonPropertyName("color")]
+    public ColorDto Color { get; set; }
 }

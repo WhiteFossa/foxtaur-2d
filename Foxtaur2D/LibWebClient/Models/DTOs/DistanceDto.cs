@@ -66,4 +66,10 @@ public class DistanceDto
     /// </summary>
     [JsonPropertyName("huntersIds")]
     public IReadOnlyCollection<Guid> HuntersIds { get; set; }
+    
+    /// <summary>
+    /// First hunter start time (we will load hunters histories since this time)
+    /// </summary>
+    [JsonPropertyName("firstHunterStartTime")]
+    public DateTime FirstHunterStartTime { get; set; }
 }

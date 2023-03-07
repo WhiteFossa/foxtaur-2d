@@ -60,7 +60,8 @@ public class WebClient : IWebClient
                     new Location(Guid.NewGuid(), "Invalid finish location", LocationType.Start, 0, 0, null),
                     new List<Location>(),
                     new List<Location>(),
-                    new List<Hunter>()
+                    new List<Hunter>(),
+                    d.FirstHunterStartTime
                 );
             })
             .ToList();
@@ -141,7 +142,7 @@ public class WebClient : IWebClient
         var huntersLocationsHistories = new Dictionary<Guid, IReadOnlyCollection<HunterLocationDto>>();
         foreach (var hunterId in huntersIds)
         {
-            huntersLocationsHistories.Add(hunterId, await _client.GetHunterLocationsHistoryAsync(hunterId, DateTime.MinValue)); // From the earliest time
+            huntersLocationsHistories.Add(hunterId, await _client.GetHunterLocationsHistoryAsync(hunterId, distanceDto.FirstHunterStartTime));
         }
         
         // Teams
@@ -187,7 +188,9 @@ public class WebClient : IWebClient
                     h.Name,
                     h.IsRunning,
                     team,
-                    huntersLocationsHistories[h.Id].Select(hlh => new HunterLocation(hlh.Id, hlh.Timestamp, hlh.Lat, hlh.Lon, hlh.Alt)).ToList());
-            }).ToList());
+                    huntersLocationsHistories[h.Id].Select(hlh => new HunterLocation(hlh.Id, hlh.Timestamp, hlh.Lat, hlh.Lon, hlh.Alt)).ToList(),
+                    new Color(h.Color.A, h.Color.R, h.Color.G, h.Color.B));
+            }).ToList(),
+            distanceDto.FirstHunterStartTime);
     }
 }

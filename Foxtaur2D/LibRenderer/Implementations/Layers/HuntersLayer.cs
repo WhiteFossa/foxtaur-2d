@@ -71,7 +71,7 @@ public class HuntersLayer : IVectorLayer
             TextWrapping.NoWrap,
             new Size(double.MaxValue, double.MaxValue));
         
-        context.DrawText(new SolidColorBrush(RendererConstants.HunterColor),
+        context.DrawText(new SolidColorBrush(hunter.Color),
             new Point(hunterX - formattedName.Bounds.Width / 2.0, markerPosition.Y - formattedName.Bounds.Height - formattedTeamName.Bounds.Height + RendererConstants.HunterNameShiftDown),
             formattedName);
         
@@ -83,14 +83,14 @@ public class HuntersLayer : IVectorLayer
         var locationsHistoryAsList = hunter.LocationsHistory.ToList();
         for (var mhi = 0; mhi < locationsHistoryAsList.Count() - 1; mhi++)
         {
-            DrawLinkerLine(locationsHistoryAsList[mhi], locationsHistoryAsList[mhi + 1], context, scalingFactor, displayGeoProvider);
+            DrawLinkerLine(locationsHistoryAsList[mhi], locationsHistoryAsList[mhi + 1], hunter.Color, context, scalingFactor, displayGeoProvider);
         }
     }
     
     /// <summary>
     /// Draw linker line between two hunter locations
     /// </summary>
-    private void DrawLinkerLine(HunterLocation begin, HunterLocation end, DrawingContext context, double scalingFactor, IGeoProvider displayGeoProvider)
+    private void DrawLinkerLine(HunterLocation begin, HunterLocation end, Color color, DrawingContext context, double scalingFactor, IGeoProvider displayGeoProvider)
     {
         var beginX = displayGeoProvider.LonToX(begin.Lon) / scalingFactor;
         var beginY = displayGeoProvider.LatToY(begin.Lat) / scalingFactor;
@@ -98,7 +98,7 @@ public class HuntersLayer : IVectorLayer
         var endX = displayGeoProvider.LonToX(end.Lon) / scalingFactor;
         var endY = displayGeoProvider.LatToY(end.Lat) / scalingFactor;
         
-        context.DrawLine(new Pen(new SolidColorBrush(RendererConstants.HunterLinkerLinesColor), RendererConstants.HunterLinkerLinesThickness),
+        context.DrawLine(new Pen(new SolidColorBrush(color), RendererConstants.HunterLinkerLinesThickness),
             new Point(beginX, beginY),
             new Point(endX, endY));
     }

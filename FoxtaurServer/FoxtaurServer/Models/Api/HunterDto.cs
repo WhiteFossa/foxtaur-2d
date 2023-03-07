@@ -30,12 +30,19 @@ public class HunterDto
     /// </summary>
     [JsonPropertyName("teamId")]
     public Guid? TeamId { get; }
+    
+    /// <summary>
+    /// Color
+    /// </summary>
+    [JsonPropertyName("color")]
+    public ColorDto Color { get; }
 
     public HunterDto(
         Guid id,
         string name,
         bool isRunning,
-        Guid? teamId)
+        Guid? teamId,
+        ColorDto color)
     {
         if (string.IsNullOrWhiteSpace(name))
         {
@@ -46,5 +53,6 @@ public class HunterDto
         Name = name;
         IsRunning = isRunning;
         TeamId = teamId;
+        Color = color ?? throw new ArgumentNullException(nameof(color));
     }
 }

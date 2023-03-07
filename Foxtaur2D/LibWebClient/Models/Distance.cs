@@ -54,6 +54,11 @@ public class Distance
     /// Hunters on distance
     /// </summary>
     public IReadOnlyCollection<Hunter> Hunters { get; }
+    
+    /// <summary>
+    /// First hunter start time (we will load hunters histories since this time)
+    /// </summary>
+    public DateTime FirstHunterStartTime { get; }
 
     public Distance(
         Guid id,
@@ -65,7 +70,7 @@ public class Distance
         Location finishLocation,
         IReadOnlyCollection<Location> foxes,
         IReadOnlyCollection<Location> expectedFoxesOrder,
-        IReadOnlyCollection<Hunter> hunters)
+        IReadOnlyCollection<Hunter> hunters,DateTime firstHunterStartTime)
     {
         if (string.IsNullOrWhiteSpace(name))
         {
@@ -82,5 +87,6 @@ public class Distance
         Foxes = foxes ?? throw new ArgumentNullException(nameof(foxes));
         ExpectedFoxesOrder = expectedFoxesOrder ?? throw new ArgumentNullException(nameof(expectedFoxesOrder));
         Hunters = hunters ?? throw new ArgumentNullException(nameof(hunters));
+        FirstHunterStartTime = firstHunterStartTime;
     }
 }

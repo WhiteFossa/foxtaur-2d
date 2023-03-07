@@ -35,7 +35,8 @@ public class DistancesService : IDistancesService
                 new Guid("6A6E5E2C-746F-4F6F-B0D0-6C71EEFA1DFF"),
                 new Guid("B2E3E116-723B-4858-85BB-A6BD3BFF252B")
             },
-            new List<Guid> { new Guid("E7B81F14-5B4E-446A-9892-36B60AF6511E"), new Guid("42FA82C3-75B7-4837-A37A-636C173DA1AB") }
+            new List<Guid> { new Guid("E7B81F14-5B4E-446A-9892-36B60AF6511E"), new Guid("42FA82C3-75B7-4837-A37A-636C173DA1AB") },
+            new DateTime(2023, 03, 06, 08, 00, 00)
         ));
         
         _distances.Add(new DistanceDto(
@@ -64,7 +65,8 @@ public class DistancesService : IDistancesService
                 new Guid("4A4B9605-91DA-4DB7-84CC-B1BC932949FB"),
                 new Guid("94FFACBF-9BFC-48AA-B449-DE360DCDC6B9")
             },
-            new List<Guid> { new Guid("7A598C33-9682-4DC4-95A6-656164D5D7AF"), new Guid("D2EC8AAD-B173-4E2D-A0E0-41762FE196E6") }
+            new List<Guid> { new Guid("7A598C33-9682-4DC4-95A6-656164D5D7AF"), new Guid("D2EC8AAD-B173-4E2D-A0E0-41762FE196E6") },
+            new DateTime(2023, 03, 06, 08, 00, 00)
         ));
     }
     

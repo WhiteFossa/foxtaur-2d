@@ -237,16 +237,6 @@ public static class RendererConstants
     /// Hunter team name font size
     /// </summary>
     public const double HunterTeamNameFontSize = 32;
-    
-    /// <summary>
-    /// Hunter element color
-    /// </summary>
-    public static readonly Color HunterColor = new Color(255, 0, 0, 255);
-    
-    /// <summary>
-    /// Hunter linker lines color
-    /// </summary>
-    public static readonly Color HunterLinkerLinesColor = new Color(255, 0, 0, 255);
 
     /// <summary>
     /// Hunter linker line thickness
