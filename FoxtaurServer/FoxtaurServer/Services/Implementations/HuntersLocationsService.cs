@@ -89,7 +89,13 @@ public class HuntersLocationsService : IHuntersLocationsService
         (
         _locationsByHunters
             .Where(lbh => huntersIds.Contains(lbh.Key))
-            .Select(hld => new KeyValuePair<Guid, IReadOnlyCollection<HunterLocationDto>>(hld.Key, hld.Value.AsReadOnly()))
+            .Select(hld => new KeyValuePair<Guid, IReadOnlyCollection<HunterLocationDto>>(
+                hld.Key,
+                hld
+                    .Value
+                    .OrderBy(hl => hl.Timestamp)
+                    .ToList()
+                    .AsReadOnly()))
         );
     }
 }

@@ -21,6 +21,7 @@ using LibRenderer.Enums;
 using LibRenderer.Implementations.Layers;
 using LibRenderer.Implementations.UI;
 using LibWebClient.Models;
+using LibWebClient.Models.Requests;
 using LibWebClient.Services.Abstract;
 using Microsoft.Extensions.DependencyInjection;
 using NLog;
@@ -698,14 +699,10 @@ public partial class MapControl : UserControl
             _huntersDataReloadMutex.ReleaseMutex();
         }
 
-        var newHuntersData = new List<Hunter>();
+        var newHuntersLocationsData = new Dictionary<Guid, IReadOnlyCollection<HunterLocation>>();
         try
         {
-            
-            foreach (var hunterId in huntersIdsToReload)
-            {
-                newHuntersData.Add(_webClient.GetHunterByIdAsync(hunterId, _activeDistance.FirstHunterStartTime).Result);
-            }
+            newHuntersLocationsData = _webClient.MassGetHuntersLocationsAsync(new HuntersLocationsMassGetRequest(huntersIdsToReload, _activeDistance.FirstHunterStartTime)).Result;
         }
         catch (Exception)
         {
@@ -720,14 +717,17 @@ public partial class MapControl : UserControl
         try
         {
             _huntersDataReloadMutex.WaitOne();
-            
-            // We need to reload it because hunters list could change during load
-            huntersIdsToReload = _filteredHunters
-                .Select(fh => fh.Id)
-                .ToList();
 
-            _filteredHunters = newHuntersData
-                .Where(nhd => huntersIdsToReload.Contains(nhd.Id))
+            _filteredHunters = _filteredHunters
+                .Select(h => new Hunter
+                (
+                    h.Id,
+                    h.Name,
+                    h.IsRunning,
+                    h.Team,
+                    newHuntersLocationsData[h.Id],
+                    h.Color
+                ))
                 .ToList();
         }
         finally
