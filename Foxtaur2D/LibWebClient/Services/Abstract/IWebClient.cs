@@ -1,4 +1,5 @@
 using LibWebClient.Models;
+using LibWebClient.Models.Requests;
 
 namespace LibWebClient.Services.Abstract;
 
@@ -22,4 +23,9 @@ public interface IWebClient
     /// Get hunter by ID
     /// </summary>
     Task<Hunter> GetHunterByIdAsync(Guid hunterId, DateTime loadLocationsFrom);
+
+    /// <summary>
+    /// Mass get hunters locations
+    /// </summary>
+    Task<Dictionary<Guid, IReadOnlyCollection<HunterLocation>>> MassGetHuntersLocationsAsync(HuntersLocationsMassGetRequest request);
 }

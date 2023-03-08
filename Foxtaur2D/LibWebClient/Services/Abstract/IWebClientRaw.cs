@@ -1,4 +1,5 @@
 using LibWebClient.Models.DTOs;
+using LibWebClient.Models.Requests;
 
 namespace LibWebClient.Services.Abstract;
 
@@ -53,5 +54,10 @@ public interface IWebClientRaw
     /// Locations are ordered from old to new
     /// </summary>
     Task<IReadOnlyCollection<HunterLocationDto>> GetHunterLocationsHistoryAsync(Guid id, DateTime fromTime);
+    
+    /// <summary>
+    /// Mass get hunters locations
+    /// </summary>
+    Task<Dictionary<Guid, IReadOnlyCollection<HunterLocationDto>>> MassGetHuntersLocationsAsync(HuntersLocationsMassGetRequest request);
 
 }

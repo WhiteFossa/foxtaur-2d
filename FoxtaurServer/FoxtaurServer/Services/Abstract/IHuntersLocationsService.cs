@@ -17,11 +17,16 @@ public interface IHuntersLocationsService
     /// Get last hunter location for given hunter
     /// Will return null if hunter ID is incorrect
     /// </summary>
-    Task<HunterLocationDto> GetLastHunterLocationByHunterId(Guid id);
+    Task<HunterLocationDto> GetLastHunterLocationByHunterIdAsync(Guid id);
 
     /// <summary>
-    /// Get hunter locations history by hunter ID starting from fromTime
+    /// Get hunter locations history (ordered) by hunter ID starting from fromTime
     /// Will return null if hunter ID is incorrect
     /// </summary>
-    Task<IReadOnlyCollection<HunterLocationDto>> GetHunterLocationsHistoryByHunterId(Guid id, DateTime fromTime);
+    Task<IReadOnlyCollection<HunterLocationDto>> GetHunterLocationsHistoryByHunterIdAsync(Guid id, DateTime fromTime);
+
+    /// <summary>
+    /// Get hunters locations dictionary, where key is hunter id from huntersIds, and value is locations history (ordered) starting from fromTime
+    /// </summary>
+    Task<Dictionary<Guid, IReadOnlyCollection<HunterLocationDto>>> MassGetHuntersLocationsAsync(IReadOnlyCollection<Guid> huntersIds, DateTime fromTime);
 }

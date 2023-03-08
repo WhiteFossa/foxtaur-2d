@@ -58,7 +58,7 @@ public class HuntersLocationsService : IHuntersLocationsService
             .SingleOrDefault(hl => hl.Id == id);
     }
 
-    public async Task<HunterLocationDto> GetLastHunterLocationByHunterId(Guid id)
+    public async Task<HunterLocationDto> GetLastHunterLocationByHunterIdAsync(Guid id)
     {
         if (!_locationsByHunters.ContainsKey(id))
         {
@@ -70,7 +70,7 @@ public class HuntersLocationsService : IHuntersLocationsService
             .Last();
     }
 
-    public async Task<IReadOnlyCollection<HunterLocationDto>> GetHunterLocationsHistoryByHunterId(Guid id, DateTime fromTime)
+    public async Task<IReadOnlyCollection<HunterLocationDto>> GetHunterLocationsHistoryByHunterIdAsync(Guid id, DateTime fromTime)
     {
         if (!_locationsByHunters.ContainsKey(id))
         {
@@ -81,5 +81,15 @@ public class HuntersLocationsService : IHuntersLocationsService
             .Where(hl => hl.Timestamp >= fromTime)
             .OrderBy(hl => hl.Timestamp)
             .ToList();
+    }
+
+    public async Task<Dictionary<Guid, IReadOnlyCollection<HunterLocationDto>>> MassGetHuntersLocationsAsync(IReadOnlyCollection<Guid> huntersIds, DateTime fromTime)
+    {
+        return new Dictionary<Guid, IReadOnlyCollection<HunterLocationDto>>
+        (
+        _locationsByHunters
+            .Where(lbh => huntersIds.Contains(lbh.Key))
+            .Select(hld => new KeyValuePair<Guid, IReadOnlyCollection<HunterLocationDto>>(hld.Key, hld.Value.AsReadOnly()))
+        );
     }
 }

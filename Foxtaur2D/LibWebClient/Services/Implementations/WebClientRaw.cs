@@ -1,9 +1,11 @@
+using System.Net.Http.Json;
 using System.Text.Json;
 using LibAuxiliary.Abstract;
 using LibAuxiliary.Constants;
 using LibGeo.Implementations.Helpers;
 using LibWebClient.Enums;
 using LibWebClient.Models.DTOs;
+using LibWebClient.Models.Requests;
 using LibWebClient.Services.Abstract;
 using NLog;
 
@@ -137,5 +139,17 @@ public class WebClientRaw : IWebClientRaw
         }
         
         return JsonSerializer.Deserialize<IReadOnlyCollection<HunterLocationDto>>(await response.Content.ReadAsStringAsync());
+    }
+
+    public async Task<Dictionary<Guid, IReadOnlyCollection<HunterLocationDto>>> MassGetHuntersLocationsAsync(HuntersLocationsMassGetRequest request)
+    {
+        var response = await _httpClient.PostAsJsonAsync($"{_baseUrl}/HuntersLocations/MassGet", request).ConfigureAwait(false);
+        if (!response.IsSuccessStatusCode)
+        {
+            _logger.Error($"MassGetHuntersLocationsAsync failed: { response.StatusCode }");
+            throw new InvalidOperationException();
+        }
+        
+        return JsonSerializer.Deserialize<Dictionary<Guid, IReadOnlyCollection<HunterLocationDto>>>(await response.Content.ReadAsStringAsync());
     }
 }

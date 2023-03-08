@@ -3,6 +3,7 @@ using LibWebClient.Constants;
 using LibWebClient.Enums;
 using LibWebClient.Models;
 using LibWebClient.Models.DTOs;
+using LibWebClient.Models.Requests;
 using LibWebClient.Services.Abstract;
 using NLog;
 
@@ -131,7 +132,7 @@ public class WebClient : IWebClient
         // Hunters
         var huntersIds = distanceDto
             .HuntersIds;
-
+        
         var huntersDtos = new List<HunterDto>();
         foreach (var hunterId in huntersIds)
         {
@@ -207,5 +208,18 @@ public class WebClient : IWebClient
             team,
             hunterLocationsHistoryDto.Select(hlh => new HunterLocation(hlh.Id, hlh.Timestamp, hlh.Lat, hlh.Lon, hlh.Alt)).ToList(),
             new Color(hunterDto.Color.A, hunterDto.Color.R, hunterDto.Color.G, hunterDto.Color.B));
+    }
+
+    public async Task<Dictionary<Guid, IReadOnlyCollection<HunterLocation>>> MassGetHuntersLocationsAsync(HuntersLocationsMassGetRequest request)
+    {
+        _ = request ?? throw new ArgumentNullException(nameof(request));
+        
+        var locationsDictionary = await _client.MassGetHuntersLocationsAsync(request).ConfigureAwait(false);
+
+        return new Dictionary<Guid, IReadOnlyCollection<HunterLocation>>(locationsDictionary
+            .Select(l => new KeyValuePair<Guid, IReadOnlyCollection<HunterLocation>>(l.Key, l
+                .Value
+                .Select(hl => new HunterLocation(hl.Id, hl.Timestamp, hl.Lat, hl.Lon, hl.Alt))
+                .ToList())));
     }
 }

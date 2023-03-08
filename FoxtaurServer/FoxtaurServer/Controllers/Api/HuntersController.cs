@@ -43,7 +43,7 @@ public class HuntersController : Controller
     [HttpGet]
     public async Task<ActionResult<HunterDto>> GetHunterLocationsHistoryById(Guid id, long fromTime)
     {
-        var locationsHistory = await _huntersLocationsService.GetHunterLocationsHistoryByHunterId(id, new DateTime(fromTime));
+        var locationsHistory = await _huntersLocationsService.GetHunterLocationsHistoryByHunterIdAsync(id, new DateTime(fromTime));
 
         if (locationsHistory == null)
         {
