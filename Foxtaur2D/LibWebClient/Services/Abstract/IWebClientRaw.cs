@@ -54,4 +54,6 @@ public interface IWebClientRaw
     /// </summary>
     Task<Dictionary<Guid, IReadOnlyCollection<HunterLocationDto>>> MassGetHuntersLocationsAsync(HuntersLocationsMassGetRequest request);
 
+    Task<IReadOnlyCollection<FoxDto>> MassGetFoxesAsync(FoxesMassGetRequest request);
+
 }

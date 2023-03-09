@@ -27,4 +27,11 @@ public class FoxesService : IFoxesService
         return _foxes
             .SingleOrDefault(f => f.Id == id);
     }
+
+    public async Task<IReadOnlyCollection<FoxDto>> MassGetFoxesAsync(IReadOnlyCollection<Guid> foxesIds)
+    {
+        return _foxes
+            .Where(f => foxesIds.Contains(f.Id))
+            .ToList();
+    }
 }

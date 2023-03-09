@@ -1,4 +1,5 @@
 using FoxtaurServer.Models.Api;
+using FoxtaurServer.Models.Api.Requests;
 using FoxtaurServer.Services.Abstract;
 using Microsoft.AspNetCore.Mvc;
 
@@ -31,5 +32,22 @@ public class FoxesController : Controller
         }
 
         return Ok(fox);
+    }
+    
+    /// <summary>
+    /// Mass get foxes
+    /// </summary>
+    [Route("api/Foxes/MassGet")]
+    [HttpPost]
+    public async Task<ActionResult<IReadOnlyCollection<FoxDto>>> MassGetFoxes([FromBody]FoxesMassGetRequest request)
+    {
+        if (request == null)
+        {
+            return BadRequest();
+        }
+
+        var result = await _foxesService.MassGetFoxesAsync(request.FoxesIds);
+
+        return Ok(result);
     }
 }

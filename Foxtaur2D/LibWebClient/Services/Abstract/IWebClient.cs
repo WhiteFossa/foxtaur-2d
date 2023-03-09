@@ -28,4 +28,9 @@ public interface IWebClient
     /// Mass get hunters locations
     /// </summary>
     Task<Dictionary<Guid, IReadOnlyCollection<HunterLocation>>> MassGetHuntersLocationsAsync(HuntersLocationsMassGetRequest request);
+
+    /// <summary>
+    /// Mass get foxes
+    /// </summary>
+    Task<IReadOnlyCollection<Fox>> MassGetFoxesAsync(FoxesMassGetRequest request);
 }

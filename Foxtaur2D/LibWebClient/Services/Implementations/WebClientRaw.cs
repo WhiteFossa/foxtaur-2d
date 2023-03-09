@@ -140,4 +140,16 @@ public class WebClientRaw : IWebClientRaw
         
         return JsonSerializer.Deserialize<Dictionary<Guid, IReadOnlyCollection<HunterLocationDto>>>(await response.Content.ReadAsStringAsync());
     }
+
+    public async Task<IReadOnlyCollection<FoxDto>> MassGetFoxesAsync(FoxesMassGetRequest request)
+    {
+        var response = await _httpClient.PostAsJsonAsync($"{_baseUrl}/Foxes/MassGet", request).ConfigureAwait(false);
+        if (!response.IsSuccessStatusCode)
+        {
+            _logger.Error($"MassGetFoxesAsync failed: { response.StatusCode }");
+            throw new InvalidOperationException();
+        }
+        
+        return JsonSerializer.Deserialize<IReadOnlyCollection<FoxDto>>(await response.Content.ReadAsStringAsync());
+    }
 }

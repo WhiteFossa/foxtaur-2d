@@ -121,13 +121,9 @@ public class WebClient : IWebClient
         
         // Foxes
         var foxesIds = foxesLocationsDtos
-            .Select(fl => fl.FoxId);
-
-        var foxesDtos = new List<FoxDto>();
-        foreach (var foxId in foxesIds)
-        {
-            foxesDtos.Add(await _client.GetFoxByIdAsync(foxId.Value).ConfigureAwait(false));
-        }
+            .Select(fl => fl.FoxId.Value)
+            .ToList();
+        var foxes = await MassGetFoxesAsync(new FoxesMassGetRequest(foxesIds)).ConfigureAwait(false);
         
         // Hunters
         var huntersIds = distanceDto
@@ -167,15 +163,15 @@ public class WebClient : IWebClient
             new Location(finishDto.Id, finishDto.Name, finishDto.Type, finishDto.Lat, finishDto.Lon, null),
             foxesLocationsDtos.Select(fl =>
             {
-                var foxDto = foxesDtos.Single(f => f.Id == fl.FoxId);
-
-                return new Location(fl.Id, fl.Name, LocationType.Fox, fl.Lat, fl.Lon, new Fox(foxDto.Id, foxDto.Name, foxDto.Frequency, foxDto.Code));
+                var fox = foxes.Single(f => f.Id == fl.FoxId);
+                
+                return new Location(fl.Id, fl.Name, LocationType.Fox, fl.Lat, fl.Lon, fox);
             }).ToList(),
             expectedFoxesOrderLocationsDtos.Select(efol =>
             {
-                var foxDto = foxesDtos.Single(f => f.Id == efol.FoxId);
+                var fox = foxes.Single(f => f.Id == efol.FoxId);
 
-                return new Location(efol.Id, efol.Name, LocationType.Fox, efol.Lat, efol.Lon, new Fox(foxDto.Id, foxDto.Name, foxDto.Frequency, foxDto.Code));
+                return new Location(efol.Id, efol.Name, LocationType.Fox, efol.Lat, efol.Lon, fox);
             }).ToList(),
             huntersDtos.Select(h =>
             {
@@ -223,5 +219,16 @@ public class WebClient : IWebClient
                 .Value
                 .Select(hl => new HunterLocation(hl.Id, hl.Timestamp, hl.Lat, hl.Lon, hl.Alt))
                 .ToList())));
+    }
+
+    public async Task<IReadOnlyCollection<Fox>> MassGetFoxesAsync(FoxesMassGetRequest request)
+    {
+        _ = request ?? throw new ArgumentNullException(nameof(request));
+
+        var foxes = await _client.MassGetFoxesAsync(request).ConfigureAwait(false);
+
+        return foxes
+            .Select(f => new Fox(f.Id, f.Name, f.Frequency, f.Code))
+            .ToList();
     }
 }
