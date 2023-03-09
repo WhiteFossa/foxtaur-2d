@@ -41,7 +41,7 @@ public delegate void SetHunterDataStateInfoDelegate(HuntersDataState state);
 public partial class MapControl : UserControl
 {
     #region Control sizes
-    
+
     /// <summary>
     /// Screen scaling
     /// </summary>
@@ -56,9 +56,9 @@ public partial class MapControl : UserControl
     /// Viewport height
     /// </summary>
     private int _viewportHeight;
-    
+
     #endregion
-    
+
     #region Drawing
 
     /// <summary>
@@ -70,7 +70,7 @@ public partial class MapControl : UserControl
     /// Layers to display
     /// </summary>
     private List<ILayer> _layers = new List<ILayer>();
-    
+
     /// <summary>
     /// Backing image geoprovider
     /// </summary>
@@ -87,29 +87,29 @@ public partial class MapControl : UserControl
     private Bitmap _displayBitmap;
 
     #endregion
-    
+
     #region Mouse
 
     private bool _isDisplayMoving;
-    
+
     private double _oldMouseX;
     private double _oldMouseY;
-    
+
     #endregion
 
     #region Distances
-    
+
     private Distance _activeDistance;
 
     /// <summary>
     /// Distance layer
     /// </summary>
     private DistanceLayer _distanceLayer;
-    
+
     #endregion
 
     #region Hunters
-    
+
     /// <summary>
     /// One hunter to display (for case when only one hunter have to be displayed)
     /// </summary>
@@ -136,21 +136,21 @@ public partial class MapControl : UserControl
     /// Logger
     /// </summary>
     private Logger _logger = LogManager.GetCurrentClassLogger();
-    
+
     #region DI
 
     private readonly ITextDrawer _textDrawer;
     private readonly IWebClient _webClient;
-    
+
     #endregion
-    
+
     #region Reloading
-    
+
     /// <summary>
     /// Hunters data is reloaded on this timer tick
     /// </summary>
     private Timer _huntersDataReloadTimer;
-    
+
     /// <summary>
     /// Mutex to protect hunters data from corruption
     /// </summary>
@@ -160,18 +160,18 @@ public partial class MapControl : UserControl
     /// Call this to display hunters data state info on UI
     /// </summary>
     public SetHunterDataStateInfoDelegate SetHuntersDataStateInfo;
-    
+
     #endregion
-    
+
     #region Debug
 
     #endregion
-    
+
     public MapControl()
     {
         _textDrawer = Program.Di.GetService<ITextDrawer>();
         _webClient = Program.Di.GetService<IWebClient>();
-        
+
         InitializeComponent();
 
         _backingArray = null; // It will remain null till the first resize
@@ -181,13 +181,13 @@ public partial class MapControl : UserControl
 
         // Listening for properties changes to process resize
         PropertyChanged += OnPropertyChangedListener;
-        
+
         // Setting-up input events
         PointerPressed += OnMousePressed;
         PointerReleased += OnMouseReleased;
         PointerMoved += OnMouseMoved;
         PointerWheelChanged += OnWheel;
-        
+
         // Setting up reload timer
         _huntersDataReloadTimer = new Timer(1000); // TODO: Set me in UI
         _huntersDataReloadTimer.Elapsed += OnHuntersDataReloadTimer;
@@ -214,7 +214,7 @@ public partial class MapControl : UserControl
         if (_isDisplayMoving)
         {
             (_backingImageGeoProvider as DisplayGeoProvider).MoveDisplay(_oldMouseX, _oldMouseY, newMouseX, newMouseY);
-            
+
             _displayBitmap = null;
         }
 
@@ -223,10 +223,10 @@ public partial class MapControl : UserControl
 
         _oldMouseX = newMouseX;
         _oldMouseY = newMouseY;
-        
+
         InvalidateVisual();
     }
-    
+
     private void OnMouseReleased(object sender, PointerReleasedEventArgs e)
     {
         if (!e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
@@ -234,7 +234,7 @@ public partial class MapControl : UserControl
             _isDisplayMoving = false;
         }
     }
-    
+
     private void OnWheel(object sender, PointerWheelEventArgs e)
     {
         var steps = Math.Abs(e.Delta.Y);
@@ -248,11 +248,11 @@ public partial class MapControl : UserControl
         {
             zoomFactor = RendererConstants.ZoomOutStep;
         }
-        
+
         (_backingImageGeoProvider as DisplayGeoProvider).Zoom((_backingImageGeoProvider as DisplayGeoProvider).Resolution * zoomFactor, _oldMouseX, _oldMouseY);
-        
+
         _displayBitmap = null;
-        
+
         InvalidateVisual();
     }
 
@@ -260,7 +260,7 @@ public partial class MapControl : UserControl
     {
         AvaloniaXamlLoader.Load(this);
     }
-    
+
     /// <summary>
     /// Properties change listener
     /// </summary>
@@ -272,7 +272,7 @@ public partial class MapControl : UserControl
             OnResize((Rect)e.NewValue);
         }
     }
-    
+
     /// <summary>
     /// Called when control resized
     /// </summary>
@@ -282,34 +282,34 @@ public partial class MapControl : UserControl
 
         _viewportWidth = (int)(bounds.Width * _scaling);
         _viewportHeight = (int)(bounds.Height * _scaling);
-        
+
         // Recreating backing array
         _backingArray = new byte[_viewportWidth * _viewportHeight * 4];
-        
+
         // Re-setup backing image geoprovider
         _backingImageGeoProvider = new DisplayGeoProvider(_viewportWidth, _viewportHeight);
 
         _displayBitmap = null;
     }
-    
+
     /// <summary>
     /// Render the control
     /// </summary>
     public override void Render(DrawingContext context)
     {
         base.Render(context);
-        
+
         // Regenerating background image if needed
         if (_displayBitmap == null)
         {
             GenerateDisplayBitmap();
         }
-        
+
         context.DrawImage(_displayBitmap, new Rect(0, 0, _viewportWidth, _viewportHeight));
 
         // Vector layers
         DrawVectorLayers(context);
-        
+
         // UI
         _uiDrawer.Draw(context, _viewportWidth, _viewportHeight, _scaling);
     }
@@ -331,30 +331,30 @@ public partial class MapControl : UserControl
                     // Is not ready yet
                     continue;
                 }
-                
+
                 var layerPixels = rasterLayer.GetPixelsArray();
                 for (var y = 0; y < _viewportHeight; y++)
                 {
                     Parallel.For(0, _viewportWidth,
-                    x =>
-                    {
-                        var backingLat = _backingImageGeoProvider.YToLat(y);
-                        var backingLon = _backingImageGeoProvider.XToLon(x);
-                        var backingIndex = (y * _viewportWidth + x) * 4;
-
-                        var isPixelExist = rasterLayer.GetPixelCoordinates(backingLat, backingLon, out var layerX, out var layerY);
-                        if (isPixelExist)
+                        x =>
                         {
-                            GetPixelWithInterpolation(layerPixels, rasterLayer.Width, rasterLayer.Height, (int)layerX, (int)layerY, out var lp0, out var lp1, out var lp2, out var lp3);
-                    
-                            var opacity = lp3 / (double)0xFF;
+                            var backingLat = _backingImageGeoProvider.YToLat(y);
+                            var backingLon = _backingImageGeoProvider.XToLon(x);
+                            var backingIndex = (y * _viewportWidth + x) * 4;
 
-                            _backingArray[backingIndex] = MixBrightness(lp0, _backingArray[backingIndex], opacity);
-                            _backingArray[backingIndex + 1] = MixBrightness(lp1, _backingArray[backingIndex + 1], opacity);
-                            _backingArray[backingIndex + 2] = MixBrightness(lp2, _backingArray[backingIndex + 2], opacity);
-                            _backingArray[backingIndex + 3] = 0xFF;
-                        }
-                    });
+                            var isPixelExist = rasterLayer.GetPixelCoordinates(backingLat, backingLon, out var layerX, out var layerY);
+                            if (isPixelExist)
+                            {
+                                GetPixelWithInterpolation(layerPixels, rasterLayer.Width, rasterLayer.Height, (int)layerX, (int)layerY, out var lp0, out var lp1, out var lp2, out var lp3);
+
+                                var opacity = lp3 / (double)0xFF;
+
+                                _backingArray[backingIndex] = MixBrightness(lp0, _backingArray[backingIndex], opacity);
+                                _backingArray[backingIndex + 1] = MixBrightness(lp1, _backingArray[backingIndex + 1], opacity);
+                                _backingArray[backingIndex + 2] = MixBrightness(lp2, _backingArray[backingIndex + 2], opacity);
+                                _backingArray[backingIndex + 3] = 0xFF;
+                            }
+                        });
                 }
             }
         }
@@ -389,7 +389,7 @@ public partial class MapControl : UserControl
             }
         }
     }
-    
+
     public void GetPixelWithInterpolation(byte[] pixels, int width, int height, double x, double y, out byte r0, out byte r1, out byte r2, out byte r3)
     {
         var x1 = (int)x;
@@ -401,7 +401,7 @@ public partial class MapControl : UserControl
             GetPixel(pixels, width, x1, y1, out r0, out r1, out r2, out r3);
             return;
         }
-        
+
         var x2 = x1 + 1;
         var y2 = y1 + 1;
 
@@ -418,12 +418,12 @@ public partial class MapControl : UserControl
         var q11 = k1 * p41 + k2 * p11;
         var q12 = k1 * p42 + k2 * p12;
         var q13 = k1 * p43 + k2 * p13;
-        
+
         var q20 = k1 * p30 + k2 * p20;
         var q21 = k1 * p31 + k2 * p21;
         var q22 = k1 * p32 + k2 * p22;
         var q23 = k1 * p33 + k2 * p23;
-        
+
         // x2 - x1 is always 1
         var k3 = x - x1;
         var k4 = x2 - x;
@@ -433,14 +433,14 @@ public partial class MapControl : UserControl
         r2 = (byte)Math.Floor(q12 * k4 + q22 * k3 + 0.5);
         r3 = (byte)Math.Floor(q13 * k4 + q23 * k3 + 0.5);
     }
-    
+
     /// <summary>
     /// To avoid heap allocation
     /// </summary>
     private void GetPixel(byte[] pixels, int width, int x, int y, out byte r0, out byte r1, out byte r2, out byte r3)
     {
         var index = (y * width + x) * 4;
-        
+
         r0 = pixels[index + 0];
         r1 = pixels[index + 1];
         r2 = pixels[index + 2];
@@ -461,7 +461,7 @@ public partial class MapControl : UserControl
 
         return (byte)newBrightness;
     }
-    
+
     /// <summary>
     /// Set active distance
     /// </summary>
@@ -475,12 +475,12 @@ public partial class MapControl : UserControl
         {
             _distanceLayer = new DistanceLayer(_activeDistance, OnDistanceLoadedHandler, _textDrawer);
             _layers.Add(_distanceLayer);
-        
+
             ApplyHuntersFilter();
         }
-        
+
         _displayBitmap = null;
-        
+
         InvalidateVisual();
     }
 
@@ -496,10 +496,10 @@ public partial class MapControl : UserControl
 
         var latCenter = (_activeDistance.Map.NorthLat + _activeDistance.Map.SouthLat) / 2.0;
         var lonCenter = (_activeDistance.Map.EastLon + _activeDistance.Map.WestLon) / 2.0;
-        
+
         (_backingImageGeoProvider as DisplayGeoProvider).CenterDisplay(latCenter, lonCenter);
         _displayBitmap = null;
-        
+
         InvalidateVisual();
     }
 
@@ -512,7 +512,7 @@ public partial class MapControl : UserControl
         {
             // Distance have raster component, so invalidate raster image and redraw
             _displayBitmap = null;
-            
+
             InvalidateVisual();
         });
     }
@@ -549,7 +549,7 @@ public partial class MapControl : UserControl
     public void SetHuntersFilteringMode(HuntersFilteringMode filteringMode)
     {
         _huntersFilteringMode = filteringMode;
-        
+
         ApplyHuntersFilter();
     }
 
@@ -558,7 +558,7 @@ public partial class MapControl : UserControl
         try
         {
             _huntersDataReloadMutex.WaitOne();
-            
+
             switch (_huntersFilteringMode)
             {
                 case HuntersFilteringMode.OneHunter:
@@ -573,8 +573,9 @@ public partial class MapControl : UserControl
                             .Where(h => h.Id == _hunterToDisplay.Id)
                             .ToList();
                     }
+
                     break;
-            
+
                 case HuntersFilteringMode.OneTeam:
                     if (_teamToDisplay == null)
                     {
@@ -587,8 +588,9 @@ public partial class MapControl : UserControl
                             .Where(h => h.Team.Id == _teamToDisplay.Id)
                             .ToList();
                     }
+
                     break;
-            
+
                 case HuntersFilteringMode.Everyone:
                     if (_activeDistance == null)
                     {
@@ -600,12 +602,13 @@ public partial class MapControl : UserControl
                             .Hunters
                             .ToList();
                     }
+
                     break;
-            
+
                 default:
                     throw new InvalidOperationException("Unknown hunters filtering mode!");
             }
-            
+
             InvalidateVisual();
         }
         finally
@@ -613,27 +616,21 @@ public partial class MapControl : UserControl
             _huntersDataReloadMutex.ReleaseMutex();
         }
     }
-    
+
     /// <summary>
     /// Called when hunters information needs to be reloaded
     /// </summary>
     private void OnHuntersDataReloadTimer(object sender, ElapsedEventArgs e)
     {
-        Dispatcher.UIThread.InvokeAsync(() =>
-        {
-            MarkHuntersDataReloadStart();
-        });
+        Dispatcher.UIThread.InvokeAsync(() => { MarkHuntersDataReloadStart(); });
 
         try
         {
             _huntersDataReloadMutex.WaitOne();
-            
+
             if (_filteredHunters == null || !_filteredHunters.Any())
             {
-                Dispatcher.UIThread.InvokeAsync(() =>
-                {
-                    MarkHuntersDataAsActual();
-                });
+                Dispatcher.UIThread.InvokeAsync(() => { MarkHuntersDataAsActual(); });
                 return;
             }
 
@@ -678,7 +675,7 @@ public partial class MapControl : UserControl
             SetHuntersDataStateInfo(HuntersDataState.Failed);
         }
     }
-    
+
     /// <summary>
     /// Reload hunters data. Must be called on separate thread
     /// </summary>
@@ -689,7 +686,7 @@ public partial class MapControl : UserControl
         try
         {
             _huntersDataReloadMutex.WaitOne();
-            
+
             huntersIdsToReload = _filteredHunters
                 .Select(fh => fh.Id)
                 .ToList();
@@ -706,14 +703,12 @@ public partial class MapControl : UserControl
         }
         catch (Exception)
         {
-            Dispatcher.UIThread.InvokeAsync(() =>
-            {
-                MarkHuntersDataReloadFailure();
-            });
-            
+            Dispatcher.UIThread.InvokeAsync(() => { MarkHuntersDataReloadFailure(); });
+
             return;
         }
 
+        // Important: If distance was changed during data download, then we can find NEW, DIFFERENT _filteredHunters
         try
         {
             _huntersDataReloadMutex.WaitOne();
@@ -725,7 +720,7 @@ public partial class MapControl : UserControl
                     h.Name,
                     h.IsRunning,
                     h.Team,
-                    newHuntersLocationsData[h.Id],
+                    GetHunterLocationFromDictionaryWithLogging(newHuntersLocationsData, h.LocationsHistory, h.Id), // Skipping the update if hunters list changed and we can't find hunter data
                     h.Color
                 ))
                 .ToList();
@@ -734,7 +729,7 @@ public partial class MapControl : UserControl
         {
             _huntersDataReloadMutex.ReleaseMutex();
         }
-        
+
         Dispatcher.UIThread.InvokeAsync(() =>
         {
             MarkHuntersDataAsActual();
@@ -742,7 +737,27 @@ public partial class MapControl : UserControl
         });
     }
 
-    public void SetHuntersDataReloadInterval(double interval)
+    private IReadOnlyCollection<HunterLocation> GetHunterLocationFromDictionaryWithLogging(Dictionary<Guid, IReadOnlyCollection<HunterLocation>> dictionary,
+        IReadOnlyCollection<HunterLocation> oldLocations,
+        Guid hunterId)
+    {
+        if (dictionary.ContainsKey(hunterId))
+        {
+            return dictionary[hunterId];
+        }
+        else
+        {
+            Dispatcher.UIThread.InvokeAsync(() =>
+            {
+                _logger.Error("Cant't find hunter in hunters location dictionary!");
+            });
+            
+            return oldLocations;
+        }
+    }
+
+
+public void SetHuntersDataReloadInterval(double interval)
     {
         _huntersDataReloadTimer.Interval = interval;
     }
