@@ -23,12 +23,7 @@ public interface IWebClientRaw
     /// Gets hunter by ID. Throws ArgumentException if hunter with given ID is not found
     /// </summary>
     Task<HunterDto> GetHunterByIdAsync(Guid id);
-
-    /// <summary>
-    /// Get fox by ID. Throws ArgumentException if fox with given ID is not found
-    /// </summary>
-    Task<FoxDto> GetFoxByIdAsync(Guid id);
-
+    
     /// <summary>
     /// Get location by ID. Throws ArgumentException if location with given ID is not found
     /// </summary>

@@ -18,23 +18,6 @@ public class FoxesController : Controller
     }
     
     /// <summary>
-    /// Get fox by Id
-    /// </summary>
-    [Route("api/Foxes/{id}")]
-    [HttpGet]
-    public async Task<ActionResult<FoxDto>> GetFoxById(Guid id)
-    {
-        var fox = await _foxesService.GetFoxByIdAsync(id);
-
-        if (fox == null)
-        {
-            return NotFound();
-        }
-
-        return Ok(fox);
-    }
-    
-    /// <summary>
     /// Mass get foxes
     /// </summary>
     [Route("api/Foxes/MassGet")]

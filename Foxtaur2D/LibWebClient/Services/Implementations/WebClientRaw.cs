@@ -69,18 +69,6 @@ public class WebClientRaw : IWebClientRaw
         return JsonSerializer.Deserialize<HunterDto>(await response.Content.ReadAsStringAsync());
     }
 
-    public async Task<FoxDto> GetFoxByIdAsync(Guid id)
-    {
-        var response = await _httpClient.GetAsync($"{_baseUrl}/Foxes/{id}").ConfigureAwait(false);
-        if (!response.IsSuccessStatusCode)
-        {
-            _logger.Error($"GetFoxByIdAsync failed: { response.StatusCode }");
-            throw new InvalidOperationException();
-        }
-        
-        return JsonSerializer.Deserialize<FoxDto>(await response.Content.ReadAsStringAsync());
-    }
-
     public async Task<LocationDto> GetLocationByIdAsync(Guid id)
     {
         var response = await _httpClient.GetAsync($"{_baseUrl}/Locations/{id}").ConfigureAwait(false);
