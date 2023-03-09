@@ -35,21 +35,4 @@ public class HuntersController : Controller
 
         return Ok(hunter);
     }
-
-    /// <summary>
-    /// Get hunter locations history by hunter ID since FromTime (in ticks)
-    /// </summary>
-    [Route("api/Hunters/{id}/LocationsHistory/{fromTime}")]
-    [HttpGet]
-    public async Task<ActionResult<HunterDto>> GetHunterLocationsHistoryById(Guid id, long fromTime)
-    {
-        var locationsHistory = await _huntersLocationsService.GetHunterLocationsHistoryByHunterIdAsync(id, new DateTime(fromTime));
-
-        if (locationsHistory == null)
-        {
-            return NotFound();
-        }
-
-        return Ok(locationsHistory);
-    }
 }

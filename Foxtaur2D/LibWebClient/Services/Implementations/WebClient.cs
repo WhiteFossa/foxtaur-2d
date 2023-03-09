@@ -140,11 +140,9 @@ public class WebClient : IWebClient
         }
         
         // Hunters locations histories
-        var huntersLocationsHistories = new Dictionary<Guid, IReadOnlyCollection<HunterLocationDto>>();
-        foreach (var hunterId in huntersIds)
-        {
-            huntersLocationsHistories.Add(hunterId, await _client.GetHunterLocationsHistoryAsync(hunterId, distanceDto.FirstHunterStartTime).ConfigureAwait(false));
-        }
+        var huntersLocationsHistories = await _client.MassGetHuntersLocationsAsync(
+            new HuntersLocationsMassGetRequest(
+                huntersIds, distanceDto.FirstHunterStartTime)).ConfigureAwait(false);
         
         // Teams
         var teamsIds = huntersDtos
@@ -198,7 +196,11 @@ public class WebClient : IWebClient
     public async Task<Hunter> GetHunterByIdAsync(Guid hunterId, DateTime loadLocationsFrom)
     {
         var hunterDto = await _client.GetHunterByIdAsync(hunterId).ConfigureAwait(false);
-        var hunterLocationsHistoryDto = await _client.GetHunterLocationsHistoryAsync(hunterId, loadLocationsFrom).ConfigureAwait(false);
+
+        var hunterLocationsHistoryDto = (await _client.MassGetHuntersLocationsAsync(
+            new HuntersLocationsMassGetRequest(
+                new List<Guid>() { hunterId }, loadLocationsFrom)).ConfigureAwait(false))[hunterId];
+            
         var teamDto = hunterDto.TeamId.HasValue ? await _client.GetTeamByIdAsync(hunterDto.TeamId.Value).ConfigureAwait(false) : null;
         var team = teamDto != null ? new Team(teamDto.Id, teamDto.Name, new Color(teamDto.Color.A, teamDto.Color.R, teamDto.Color.G, teamDto.Color.B)) : null;
 

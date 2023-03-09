@@ -48,12 +48,6 @@ public interface IWebClientRaw
     /// Lists all available distances
     /// </summary>
     Task<IReadOnlyCollection<DistanceDto>> ListDistancesAsync();
-
-    /// <summary>
-    /// Get hunter locations history for hunter with given ID, starting from FromTime
-    /// Locations are ordered from old to new
-    /// </summary>
-    Task<IReadOnlyCollection<HunterLocationDto>> GetHunterLocationsHistoryAsync(Guid id, DateTime fromTime);
     
     /// <summary>
     /// Mass get hunters locations

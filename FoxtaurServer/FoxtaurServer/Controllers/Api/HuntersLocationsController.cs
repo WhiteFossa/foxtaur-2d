@@ -18,23 +18,6 @@ public class HuntersLocationsController : Controller
     }
     
     /// <summary>
-    /// Get hunter location by Id
-    /// </summary>
-    [Route("api/HuntersLocations/{id}")]
-    [HttpGet]
-    public async Task<ActionResult<HunterLocationDto>> GetHunterLocationById(Guid id)
-    {
-        var hunterLocation = await _huntersLocationsService.GetHunterLocationByIdAsync(id);
-
-        if (hunterLocation == null)
-        {
-            return NotFound();
-        }
-
-        return Ok(hunterLocation);
-    }
-
-    /// <summary>
     /// Mass get hunters locations
     /// </summary>
     [Route("api/HuntersLocations/MassGet")]
