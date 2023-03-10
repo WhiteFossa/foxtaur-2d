@@ -1,4 +1,5 @@
 using FoxtaurServer.Models.Api.Requests;
+using FoxtaurServer.Services.Abstract.Models;
 using FoxtaurServer.Services.Abstract.Models.Enums;
 
 namespace FoxtaurServer.Services.Abstract;
@@ -12,4 +13,9 @@ public interface IAccountsService
     /// Register a new user
     /// </summary>
     Task<UserRegistrationResult> RegisterUserAsync(RegistrationRequest request);
+
+    /// <summary>
+    /// Logs user in
+    /// </summary>
+    Task<LoginResult> LoginAsync(LoginRequest request);
 }
