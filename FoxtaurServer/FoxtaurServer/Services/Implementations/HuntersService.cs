@@ -44,4 +44,13 @@ public class HuntersService : IHuntersService
         return _hunters
             .SingleOrDefault(h => h.Id == id);
     }
+
+    public async Task<IReadOnlyCollection<HunterDto>> MassGetHuntersAsync(IReadOnlyCollection<Guid> huntersIds)
+    {
+        _ = huntersIds ?? throw new ArgumentNullException(nameof(huntersIds));
+
+        return _hunters
+            .Where(h => huntersIds.Contains(h.Id))
+            .ToList();
+    }
 }

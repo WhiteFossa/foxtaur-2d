@@ -122,25 +122,8 @@ public class WebClient : IWebClient
         // Hunters
         var huntersIds = distanceDto
             .HuntersIds;
+        var hunters = await MassGetHuntersAsync(new HuntersMassGetRequest(huntersIds)).ConfigureAwait(false);
         
-        var huntersDtos = new List<HunterDto>();
-        foreach (var hunterId in huntersIds)
-        {
-            huntersDtos.Add(await _client.GetHunterByIdAsync(hunterId).ConfigureAwait(false));
-        }
-        
-        // Hunters locations histories
-        var huntersLocationsHistories = await _client.MassGetHuntersLocationsAsync(
-            new HuntersLocationsMassGetRequest(
-                huntersIds, distanceDto.FirstHunterStartTime)).ConfigureAwait(false);
-        
-        // Teams
-        var teamsIds = huntersDtos
-            .Where(h => h.TeamId.HasValue)
-            .Select(h => h.TeamId.Value)
-            .ToList();
-        var teams = await MassGetTeamsAsync(new TeamsMassGetRequest(teamsIds)).ConfigureAwait(false);
-
         return new Distance(
             distanceDto.Id,
             distanceDto.Name,
@@ -161,39 +144,8 @@ public class WebClient : IWebClient
 
                 return new Location(efol.Id, efol.Name, LocationType.Fox, efol.Lat, efol.Lon, fox);
             }).ToList(),
-            huntersDtos.Select(h =>
-            {
-                var team = teams
-                    .FirstOrDefault(td => td.Id == h.TeamId);
-
-                return new Hunter(h.Id,
-                    h.Name,
-                    h.IsRunning,
-                    team,
-                    huntersLocationsHistories[h.Id].Select(hlh => new HunterLocation(hlh.Id, hlh.Timestamp, hlh.Lat, hlh.Lon, hlh.Alt)).ToList(),
-                    new Color(h.Color.A, h.Color.R, h.Color.G, h.Color.B));
-            }).ToList(),
+            hunters,
             distanceDto.FirstHunterStartTime);
-    }
-
-    public async Task<Hunter> GetHunterByIdAsync(Guid hunterId, DateTime loadLocationsFrom)
-    {
-        var hunterDto = await _client.GetHunterByIdAsync(hunterId).ConfigureAwait(false);
-
-        var hunterLocationsHistoryDto = (await _client.MassGetHuntersLocationsAsync(
-            new HuntersLocationsMassGetRequest(
-                new List<Guid>() { hunterId }, loadLocationsFrom)).ConfigureAwait(false))[hunterId];
-            
-        var team = hunterDto.TeamId.HasValue
-            ? (await MassGetTeamsAsync(new TeamsMassGetRequest(new List<Guid>() { hunterDto.TeamId.Value })).ConfigureAwait(false)).First()
-            : null;
-
-        return new Hunter(hunterDto.Id,
-            hunterDto.Name,
-            hunterDto.IsRunning,
-            team,
-            hunterLocationsHistoryDto.Select(hlh => new HunterLocation(hlh.Id, hlh.Timestamp, hlh.Lat, hlh.Lon, hlh.Alt)).ToList(),
-            new Color(hunterDto.Color.A, hunterDto.Color.R, hunterDto.Color.G, hunterDto.Color.B));
     }
 
     public async Task<Dictionary<Guid, IReadOnlyCollection<HunterLocation>>> MassGetHuntersLocationsAsync(HuntersLocationsMassGetRequest request)
@@ -239,6 +191,31 @@ public class WebClient : IWebClient
 
         return maps
             .Select(m => new Map(m.Id, m.Name, m.NorthLat, m.SouthLat, m.EastLon, m.WestLon, m.Url))
+            .ToList();
+    }
+
+    public async Task<IReadOnlyCollection<Hunter>> MassGetHuntersAsync(HuntersMassGetRequest request)
+    {
+        _ = request ?? throw new ArgumentNullException(nameof(request));
+
+        var hunters = await _client.MassGetHuntersAsync(request).ConfigureAwait(false);
+        
+        var teamsIds = hunters
+            .Where(h => h.TeamId.HasValue)
+            .Select(h => h.TeamId.Value)
+            .ToList();
+        var teams = await MassGetTeamsAsync(new TeamsMassGetRequest(teamsIds)).ConfigureAwait(false);
+
+        var locationsHistories = await MassGetHuntersLocationsAsync(new HuntersLocationsMassGetRequest(request.HuntersIds, DateTime.MinValue)).ConfigureAwait(false); // TODO: Switch to real time
+
+        return hunters
+            .Select(h => new Hunter(
+                h.Id,
+                h.Name,
+                h.IsRunning,
+                h.TeamId != null ? teams.Single(t => t.Id == h.TeamId.Value) : null,
+                locationsHistories[h.Id],
+                new Color(h.Color.A, h.Color.R, h.Color.G, h.Color.B)))
             .ToList();
     }
 }

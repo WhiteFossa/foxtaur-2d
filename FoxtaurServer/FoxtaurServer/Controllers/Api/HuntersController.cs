@@ -1,4 +1,5 @@
 using FoxtaurServer.Models.Api;
+using FoxtaurServer.Models.Api.Requests;
 using FoxtaurServer.Services.Abstract;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,19 +21,19 @@ public class HuntersController : Controller
     }
     
     /// <summary>
-    /// Get hunter by Id
+    /// Mass get hunters
     /// </summary>
-    [Route("api/Hunters/{id}")]
-    [HttpGet]
-    public async Task<ActionResult<HunterDto>> GetHunterById(Guid id)
+    [Route("api/Hunters/MassGet")]
+    [HttpPost]
+    public async Task<ActionResult<IReadOnlyCollection<HunterDto>>> MassGetMaps([FromBody]HuntersMassGetRequest request)
     {
-        var hunter = await _huntersService.GetHunterByIdAsync(id);
-
-        if (hunter == null)
+        if (request == null || request.HuntersIds == null)
         {
-            return NotFound();
+            return BadRequest();
         }
 
-        return Ok(hunter);
+        var result = await _huntersService.MassGetHuntersAsync(request.HuntersIds);
+
+        return Ok(result);
     }
 }

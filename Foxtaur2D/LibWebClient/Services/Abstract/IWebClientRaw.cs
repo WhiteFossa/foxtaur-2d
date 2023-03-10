@@ -15,11 +15,6 @@ public interface IWebClientRaw
     Task<ServerInfoDto> GetServerInfoAsync();
     
     /// <summary>
-    /// Gets hunter by ID. Throws ArgumentException if hunter with given ID is not found
-    /// </summary>
-    Task<HunterDto> GetHunterByIdAsync(Guid id);
-    
-    /// <summary>
     /// Get location by ID. Throws ArgumentException if location with given ID is not found
     /// </summary>
     Task<LocationDto> GetLocationByIdAsync(Guid id);
@@ -53,4 +48,9 @@ public interface IWebClientRaw
     /// Mass get maps
     /// </summary>
     Task<IReadOnlyCollection<MapDto>> MassGetMapsAsync(MapsMassGetRequest request);
+    
+    /// <summary>
+    /// Mass get hunters
+    /// </summary>
+    Task<IReadOnlyCollection<HunterDto>> MassGetHuntersAsync(HuntersMassGetRequest request);
 }

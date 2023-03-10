@@ -8,8 +8,7 @@ namespace FoxtaurServer.Services.Abstract;
 public interface IHuntersService
 {
     /// <summary>
-    /// Get hunter by ID
-    /// Will return null if hunter with given ID doesn't exist
+    /// Mass get hunters by their IDs
     /// </summary>
-    Task<HunterDto> GetHunterByIdAsync(Guid id);
+    Task<IReadOnlyCollection<HunterDto>> MassGetHuntersAsync(IReadOnlyCollection<Guid> huntersIds);
 }

@@ -18,12 +18,7 @@ public interface IWebClient
     /// Get distance by ID
     /// </summary>
     Task<Distance> GetDistanceByIdAsync(Guid distanceId);
-
-    /// <summary>
-    /// Get hunter by ID
-    /// </summary>
-    Task<Hunter> GetHunterByIdAsync(Guid hunterId, DateTime loadLocationsFrom);
-
+    
     /// <summary>
     /// Mass get hunters locations
     /// </summary>
@@ -43,4 +38,9 @@ public interface IWebClient
     /// Mass get maps
     /// </summary>
     Task<IReadOnlyCollection<Map>> MassGetMapsAsync(MapsMassGetRequest request);
+    
+    /// <summary>
+    /// Mass get hunters
+    /// </summary>
+    Task<IReadOnlyCollection<Hunter>> MassGetHuntersAsync(HuntersMassGetRequest request);
 }

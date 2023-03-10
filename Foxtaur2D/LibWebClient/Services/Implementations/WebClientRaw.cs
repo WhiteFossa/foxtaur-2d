@@ -45,18 +45,6 @@ public class WebClientRaw : IWebClientRaw
         return JsonSerializer.Deserialize<ServerInfoDto>(await response.Content.ReadAsStringAsync());
     }
 
-    public async Task<HunterDto> GetHunterByIdAsync(Guid id)
-    {
-        var response = await _httpClient.GetAsync($"{_baseUrl}/Hunters/{id}").ConfigureAwait(false);
-        if (!response.IsSuccessStatusCode)
-        {
-            _logger.Error($"GetHunterByIdAsync failed: { response.StatusCode }");
-            throw new InvalidOperationException();
-        }
-        
-        return JsonSerializer.Deserialize<HunterDto>(await response.Content.ReadAsStringAsync());
-    }
-
     public async Task<LocationDto> GetLocationByIdAsync(Guid id)
     {
         var response = await _httpClient.GetAsync($"{_baseUrl}/Locations/{id}").ConfigureAwait(false);
@@ -139,5 +127,17 @@ public class WebClientRaw : IWebClientRaw
         }
         
         return JsonSerializer.Deserialize<IReadOnlyCollection<MapDto>>(await response.Content.ReadAsStringAsync());
+    }
+
+    public async Task<IReadOnlyCollection<HunterDto>> MassGetHuntersAsync(HuntersMassGetRequest request)
+    {
+        var response = await _httpClient.PostAsJsonAsync($"{_baseUrl}/Hunters/MassGet", request).ConfigureAwait(false);
+        if (!response.IsSuccessStatusCode)
+        {
+            _logger.Error($"MassGetHuntersAsync failed: { response.StatusCode }");
+            throw new InvalidOperationException();
+        }
+        
+        return JsonSerializer.Deserialize<IReadOnlyCollection<HunterDto>>(await response.Content.ReadAsStringAsync());
     }
 }
