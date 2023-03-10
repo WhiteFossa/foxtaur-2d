@@ -1,6 +1,7 @@
 using FoxtaurServer.Models.Api;
 using FoxtaurServer.Models.Api.Requests;
 using FoxtaurServer.Services.Abstract;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FoxtaurServer.Controllers.Api;
@@ -8,6 +9,7 @@ namespace FoxtaurServer.Controllers.Api;
 /// <summary>
 /// Controller to work with maps
 /// </summary>
+[Authorize]
 [ApiController]
 public class MapsController : ControllerBase
 {
@@ -21,6 +23,7 @@ public class MapsController : ControllerBase
     /// <summary>
     /// Mass get maps
     /// </summary>
+    [AllowAnonymous]
     [Route("api/Maps/MassGet")]
     [HttpPost]
     public async Task<ActionResult<IReadOnlyCollection<MapDto>>> MassGetMaps([FromBody]MapsMassGetRequest request)

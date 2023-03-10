@@ -6,6 +6,7 @@ using FoxtaurServer.Models.Api.Requests;
 using FoxtaurServer.Models.Identity;
 using FoxtaurServer.Services.Abstract;
 using FoxtaurServer.Services.Abstract.Models.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -15,6 +16,7 @@ namespace FoxtaurServer.Controllers.Api;
 /// <summary>
 /// Controller for registration, login and so on
 /// </summary>
+[Authorize]
 [ApiController]
 public class AccountsController : ControllerBase
 {
@@ -28,6 +30,7 @@ public class AccountsController : ControllerBase
     /// <summary>
     /// User registration
     /// </summary>
+    [AllowAnonymous]
     [HttpPost]  
     [Route("api/Accounts/Register")]  
     public async Task<IActionResult> Register([FromBody]RegistrationRequest request)  
@@ -58,6 +61,10 @@ public class AccountsController : ControllerBase
         }
     }
     
+    /// <summary>
+    /// Logging in
+    /// </summary>
+    [AllowAnonymous]
     [HttpPost]  
     [Route("api/Accounts/login")]  
     public async Task<IActionResult> Login([FromBody] LoginRequest request)  

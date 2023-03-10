@@ -43,7 +43,7 @@ public class GlobalConstants
     /// <summary>
     /// JWT lifetime in hours
     /// </summary>
-    public const int JwtLifetime = 3;
+    public const int JwtLifetime = 24;
 
     #endregion
 }

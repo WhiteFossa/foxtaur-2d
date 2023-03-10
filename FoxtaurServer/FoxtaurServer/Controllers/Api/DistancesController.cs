@@ -1,5 +1,6 @@
 using FoxtaurServer.Models.Api;
 using FoxtaurServer.Services.Abstract;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FoxtaurServer.Controllers.Api;
@@ -7,6 +8,7 @@ namespace FoxtaurServer.Controllers.Api;
 /// <summary>
 /// Controller to work with distances
 /// </summary>
+[Authorize]
 [ApiController]
 public class DistancesController : ControllerBase
 {
@@ -20,6 +22,7 @@ public class DistancesController : ControllerBase
     /// <summary>
     /// List distances
     /// </summary>
+    [AllowAnonymous]
     [Route("api/Distances/Index")]
     [HttpGet]
     public async Task<IReadOnlyCollection<DistanceDto>> Index()
@@ -30,6 +33,7 @@ public class DistancesController : ControllerBase
     /// <summary>
     /// Get distance by Id
     /// </summary>
+    [AllowAnonymous]
     [Route("api/Distances/{id}")]
     [HttpGet]
     public async Task<ActionResult<DistanceDto>> GetDistanceById(Guid id)

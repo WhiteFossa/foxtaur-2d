@@ -1,6 +1,7 @@
 using FoxtaurServer.Models.Api;
 using FoxtaurServer.Models.Api.Requests;
 using FoxtaurServer.Services.Abstract;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FoxtaurServer.Controllers.Api;
@@ -8,6 +9,7 @@ namespace FoxtaurServer.Controllers.Api;
 /// <summary>
 /// Controller to work with teams
 /// </summary>
+[Authorize]
 [ApiController]
 public class TeamsController : ControllerBase
 {
@@ -21,6 +23,7 @@ public class TeamsController : ControllerBase
     /// <summary>
     /// Mass get teams
     /// </summary>
+    [AllowAnonymous]
     [Route("api/Teams/MassGet")]
     [HttpPost]
     public async Task<ActionResult<IReadOnlyCollection<TeamDto>>> MassGetTeams([FromBody]TeamsMassGetRequest request)

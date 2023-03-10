@@ -1,6 +1,7 @@
 using FoxtaurServer.Models.Api;
 using FoxtaurServer.Models.Api.Requests;
 using FoxtaurServer.Services.Abstract;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FoxtaurServer.Controllers.Api;
@@ -8,6 +9,7 @@ namespace FoxtaurServer.Controllers.Api;
 /// <summary>
 /// Controller to work with hunters locations
 /// </summary>
+[Authorize]
 [ApiController]
 public class HuntersLocationsController : ControllerBase
 {
@@ -21,6 +23,7 @@ public class HuntersLocationsController : ControllerBase
     /// <summary>
     /// Mass get hunters locations
     /// </summary>
+    [AllowAnonymous]
     [Route("api/HuntersLocations/MassGet")]
     [HttpPost]
     public async Task<ActionResult<HuntersLocationsDictionaryDto>> MassGetHuntersLocations([FromBody]HuntersLocationsMassGetRequest request)

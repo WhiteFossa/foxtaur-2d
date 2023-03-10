@@ -1,6 +1,7 @@
 using FoxtaurServer.Constants;
 using FoxtaurServer.Models.Api;
 using FoxtaurServer.Services.Abstract;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FoxtaurServer.Controllers.Api;
@@ -8,6 +9,7 @@ namespace FoxtaurServer.Controllers.Api;
 /// <summary>
 /// Controller, returning basic server information
 /// </summary>
+[Authorize]
 [ApiController]
 public class ServerInfoController : ControllerBase
 {
@@ -21,6 +23,7 @@ public class ServerInfoController : ControllerBase
     /// <summary>
     /// Get server info
     /// </summary>
+    [AllowAnonymous]
     [Route("api/ServerInfo")]
     [Route("api/ServerInfo/Index")]
     [HttpGet]
