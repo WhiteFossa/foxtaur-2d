@@ -22,7 +22,7 @@ public class TeamsController : Controller
     /// </summary>
     [Route("api/Teams/MassGet")]
     [HttpPost]
-    public async Task<ActionResult<IReadOnlyCollection<TeamDto>>> MassGetFoxes([FromBody]TeamsMassGetRequest request)
+    public async Task<ActionResult<IReadOnlyCollection<TeamDto>>> MassGetTeams([FromBody]TeamsMassGetRequest request)
     {
         if (request == null || request.TeamsIds == null)
         {

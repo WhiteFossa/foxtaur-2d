@@ -8,7 +8,7 @@ namespace FoxtaurServer.Services.Abstract;
 public interface IMapsService
 {
     /// <summary>
-    /// Get map by Id. Will return null if map doesn't exist
+    /// Mass get maps by their IDs
     /// </summary>
-    Task<MapDto> GetMapByIdAsync(Guid id);
+    Task<IReadOnlyCollection<MapDto>> MassGetMapsAsync(IReadOnlyCollection<Guid> mapsIds);
 }

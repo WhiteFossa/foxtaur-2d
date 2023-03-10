@@ -69,18 +69,6 @@ public class WebClientRaw : IWebClientRaw
         return JsonSerializer.Deserialize<LocationDto>(await response.Content.ReadAsStringAsync());
     }
 
-    public async Task<MapDto> GetMapByIdAsync(Guid id)
-    {
-        var response = await _httpClient.GetAsync($"{_baseUrl}/Maps/{id}").ConfigureAwait(false);
-        if (!response.IsSuccessStatusCode)
-        {
-            _logger.Error($"GetMapByIdAsync failed: { response.StatusCode }");
-            throw new InvalidOperationException();
-        }
-        
-        return JsonSerializer.Deserialize<MapDto>(await response.Content.ReadAsStringAsync());
-    }
-
     public async Task<DistanceDto> GetDistanceByIdAsync(Guid id)
     {
         var response = await _httpClient.GetAsync($"{_baseUrl}/Distances/{id}").ConfigureAwait(false);
@@ -139,5 +127,17 @@ public class WebClientRaw : IWebClientRaw
         }
         
         return JsonSerializer.Deserialize<IReadOnlyCollection<TeamDto>>(await response.Content.ReadAsStringAsync());
+    }
+
+    public async Task<IReadOnlyCollection<MapDto>> MassGetMapsAsync(MapsMassGetRequest request)
+    {
+        var response = await _httpClient.PostAsJsonAsync($"{_baseUrl}/Maps/MassGet", request).ConfigureAwait(false);
+        if (!response.IsSuccessStatusCode)
+        {
+            _logger.Error($"MassGetMapsAsync failed: { response.StatusCode }");
+            throw new InvalidOperationException();
+        }
+        
+        return JsonSerializer.Deserialize<IReadOnlyCollection<MapDto>>(await response.Content.ReadAsStringAsync());
     }
 }

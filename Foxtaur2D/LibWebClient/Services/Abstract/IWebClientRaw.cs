@@ -23,12 +23,7 @@ public interface IWebClientRaw
     /// Get location by ID. Throws ArgumentException if location with given ID is not found
     /// </summary>
     Task<LocationDto> GetLocationByIdAsync(Guid id);
-
-    /// <summary>
-    /// Get map by ID. Throws ArgumentException if map with given ID is not found
-    /// </summary>
-    Task<MapDto> GetMapByIdAsync(Guid id);
-
+    
     /// <summary>
     /// Get distance by ID. Throws ArgumentException if map with given ID is not found
     /// </summary>
@@ -53,5 +48,9 @@ public interface IWebClientRaw
     /// Mass get teams
     /// </summary>
     Task<IReadOnlyCollection<TeamDto>> MassGetTeamsAsync(TeamsMassGetRequest request);
-
+    
+    /// <summary>
+    /// Mass get maps
+    /// </summary>
+    Task<IReadOnlyCollection<MapDto>> MassGetMapsAsync(MapsMassGetRequest request);
 }

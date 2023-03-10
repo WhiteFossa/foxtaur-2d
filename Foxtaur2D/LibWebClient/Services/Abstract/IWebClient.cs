@@ -38,4 +38,9 @@ public interface IWebClient
     /// Mass get teams
     /// </summary>
     Task<IReadOnlyCollection<Team>> MassGetTeamsAsync(TeamsMassGetRequest request);
+    
+    /// <summary>
+    /// Mass get maps
+    /// </summary>
+    Task<IReadOnlyCollection<Map>> MassGetMapsAsync(MapsMassGetRequest request);
 }

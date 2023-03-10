@@ -39,22 +39,19 @@ public class WebClient : IWebClient
         var distances = await _client.ListDistancesAsync().ConfigureAwait(false);
 
         var mapsIds = distances
-            .Select(d => d.MapId);
-
-        var maps = new List<Map>();
-        foreach (var mapId in mapsIds)
-        {
-            var mapDto = await _client.GetMapByIdAsync(mapId).ConfigureAwait(false);
-            maps.Add(new Map(mapDto.Id, mapDto.Name, mapDto.NorthLat, mapDto.SouthLat, mapDto.EastLon, mapDto.WestLon, mapDto.Url));
-        }
-
+            .Select(d => d.MapId)
+            .ToList();
+        var maps = await _client.MassGetMapsAsync(new MapsMassGetRequest(mapsIds)).ConfigureAwait(false);
+        
         return distances
             .Select(d =>
             {
+                var mapDto = maps.Single(m => m.Id == d.MapId);
+                
                 return new Distance(
                     d.Id,
                     d.Name,
-                    maps.FirstOrDefault(m => m.Id == d.MapId),
+                    new Map(mapDto.Id, mapDto.Name, mapDto.NorthLat, mapDto.SouthLat, mapDto.EastLon, mapDto.WestLon, mapDto.Url),
                     d.IsActive,
                     new Location(Guid.NewGuid(), "Invalid start location", LocationType.Start, 0, 0, null),
                     new Location(Guid.NewGuid(), "Invalid finish corridor entrance location", LocationType.FinishCorridorEntrance, 0, 0, null),
@@ -76,11 +73,8 @@ public class WebClient : IWebClient
             throw new ArgumentException(nameof(distanceId));
         }
 
-        var mapDto = await _client.GetMapByIdAsync(distanceDto.MapId).ConfigureAwait(false);
-        if (mapDto == null)
-        {
-            throw new InvalidOperationException($"Map with ID={ distanceDto.MapId } is not found!");
-        }
+        var map = (await MassGetMapsAsync(new MapsMassGetRequest(new List<Guid>() { distanceDto.MapId })).ConfigureAwait(false))
+            .Single();
 
         var startDto = await _client.GetLocationByIdAsync(distanceDto.StartLocationId).ConfigureAwait(false);
         if (startDto == null)
@@ -150,7 +144,7 @@ public class WebClient : IWebClient
         return new Distance(
             distanceDto.Id,
             distanceDto.Name,
-            new Map(mapDto.Id, mapDto.Name, mapDto.NorthLat, mapDto.SouthLat, mapDto.EastLon, mapDto.WestLon, mapDto.Url),
+            map,
             distanceDto.IsActive,
             new Location(startDto.Id, startDto.Name, startDto.Type, startDto.Lat, startDto.Lon, null),
             new Location(finishCorridorEntranceDto.Id, finishCorridorEntranceDto.Name, finishCorridorEntranceDto.Type, finishCorridorEntranceDto.Lat, finishCorridorEntranceDto.Lon, null),
@@ -234,6 +228,17 @@ public class WebClient : IWebClient
 
         return teams
             .Select(t => new Team(t.Id, t.Name, new Color(t.Color.A, t.Color.R, t.Color.G, t.Color.B)))
+            .ToList();
+    }
+
+    public async Task<IReadOnlyCollection<Map>> MassGetMapsAsync(MapsMassGetRequest request)
+    {
+        _ = request ?? throw new ArgumentNullException(nameof(request));
+
+        var maps = await _client.MassGetMapsAsync(request).ConfigureAwait(false);
+
+        return maps
+            .Select(m => new Map(m.Id, m.Name, m.NorthLat, m.SouthLat, m.EastLon, m.WestLon, m.Url))
             .ToList();
     }
 }

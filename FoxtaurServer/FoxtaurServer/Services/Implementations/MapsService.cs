@@ -26,10 +26,13 @@ public class MapsService : IMapsService
             19.262488444.ToRadians(),
             @"https://static.foxtaur.me/Maps/Gorica/Gorica.tif.zst"));
     }
-    
-    public async Task<MapDto> GetMapByIdAsync(Guid id)
+
+    public async Task<IReadOnlyCollection<MapDto>> MassGetMapsAsync(IReadOnlyCollection<Guid> mapsIds)
     {
+        _ = mapsIds ?? throw new ArgumentNullException(nameof(mapsIds));
+
         return _maps
-            .SingleOrDefault(m => m.Id == id);
+            .Where(m => mapsIds.Contains(m.Id))
+            .ToList();
     }
 }

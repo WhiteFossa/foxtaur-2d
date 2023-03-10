@@ -1,4 +1,5 @@
 using FoxtaurServer.Models.Api;
+using FoxtaurServer.Models.Api.Requests;
 using FoxtaurServer.Services.Abstract;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,21 +16,21 @@ public class MapsController : Controller
     {
         _mapsService = mapsService;
     }
-    
-    /// <summary>
-    /// Get map by Id
-    /// </summary>
-    [Route("api/Maps/{id}")]
-    [HttpGet]
-    public async Task<ActionResult<MapDto>> GetMapById(Guid id)
-    {
-        var map = await _mapsService.GetMapByIdAsync(id);
 
-        if (map == null)
+    /// <summary>
+    /// Mass get maps
+    /// </summary>
+    [Route("api/Maps/MassGet")]
+    [HttpPost]
+    public async Task<ActionResult<IReadOnlyCollection<MapDto>>> MassGetMaps([FromBody]MapsMassGetRequest request)
+    {
+        if (request == null || request.MapsIds == null)
         {
-            return NotFound();
+            return BadRequest();
         }
 
-        return Ok(map);
+        var result = await _mapsService.MassGetMapsAsync(request.MapsIds);
+
+        return Ok(result);
     }
 }
