@@ -33,4 +33,9 @@ public interface IWebClient
     /// Mass get foxes
     /// </summary>
     Task<IReadOnlyCollection<Fox>> MassGetFoxesAsync(FoxesMassGetRequest request);
+
+    /// <summary>
+    /// Mass get teams
+    /// </summary>
+    Task<IReadOnlyCollection<Team>> MassGetTeamsAsync(TeamsMassGetRequest request);
 }

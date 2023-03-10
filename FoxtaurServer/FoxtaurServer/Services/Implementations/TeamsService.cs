@@ -14,9 +14,12 @@ public class TeamsService : ITeamsService
         _teams.Add(new TeamDto(new Guid("4E44C3DE-4B3A-472B-8289-2072A9F7B49C"), "Fox yiffers", new ColorDto(0, 255, 0, 255)));
     }
 
-    public async Task<TeamDto> GetTeamByIdAsync(Guid id)
+    public async Task<IReadOnlyCollection<TeamDto>> MassGetTeamsAsync(IReadOnlyCollection<Guid> teamsIds)
     {
+        _ = teamsIds ?? throw new ArgumentNullException(nameof(teamsIds));
+
         return _teams
-            .SingleOrDefault(t => t.Id == id);
+            .Where(t => teamsIds.Contains(t.Id))
+            .ToList();
     }
 }

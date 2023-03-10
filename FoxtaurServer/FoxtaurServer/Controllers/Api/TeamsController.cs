@@ -1,4 +1,5 @@
 using FoxtaurServer.Models.Api;
+using FoxtaurServer.Models.Api.Requests;
 using FoxtaurServer.Services.Abstract;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,19 +18,19 @@ public class TeamsController : Controller
     }
     
     /// <summary>
-    /// Get team by Id
+    /// Mass get teams
     /// </summary>
-    [Route("api/Teams/{id}")]
-    [HttpGet]
-    public async Task<ActionResult<TeamDto>> GetTeamById(Guid id)
+    [Route("api/Teams/MassGet")]
+    [HttpPost]
+    public async Task<ActionResult<IReadOnlyCollection<TeamDto>>> MassGetFoxes([FromBody]TeamsMassGetRequest request)
     {
-        var team = await _teamsService.GetTeamByIdAsync(id);
-
-        if (team == null)
+        if (request == null || request.TeamsIds == null)
         {
-            return NotFound();
+            return BadRequest();
         }
 
-        return Ok(team);
+        var result = await _teamsService.MassGetTeamsAsync(request.TeamsIds);
+
+        return Ok(result);
     }
 }

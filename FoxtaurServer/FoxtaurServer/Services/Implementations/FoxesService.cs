@@ -22,14 +22,10 @@ public class FoxesService : IFoxesService
         _foxes.Add(new FoxDto(new Guid("545A8D1C-301F-49B9-AEA6-5CFD4C8B5D9B"), "Malena", 144500000, "MO"));
     }
 
-    public async Task<FoxDto> GetFoxByIdAsync(Guid id)
-    {
-        return _foxes
-            .SingleOrDefault(f => f.Id == id);
-    }
-
     public async Task<IReadOnlyCollection<FoxDto>> MassGetFoxesAsync(IReadOnlyCollection<Guid> foxesIds)
     {
+        _ = foxesIds ?? throw new ArgumentNullException(nameof(foxesIds));
+        
         return _foxes
             .Where(f => foxesIds.Contains(f.Id))
             .ToList();

@@ -8,8 +8,7 @@ namespace FoxtaurServer.Services.Abstract;
 public interface ITeamsService
 {
     /// <summary>
-    /// Get team by ID
-    /// Will return null if team didn't found
+    /// Mass get teams by their IDs
     /// </summary>
-    Task<TeamDto> GetTeamByIdAsync(Guid id);
+    Task<IReadOnlyCollection<TeamDto>> MassGetTeamsAsync(IReadOnlyCollection<Guid> teamsIds);
 }

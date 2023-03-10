@@ -24,7 +24,7 @@ public class FoxesController : Controller
     [HttpPost]
     public async Task<ActionResult<IReadOnlyCollection<FoxDto>>> MassGetFoxes([FromBody]FoxesMassGetRequest request)
     {
-        if (request == null)
+        if (request == null || request.FoxesIds == null)
         {
             return BadRequest();
         }

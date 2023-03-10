@@ -51,38 +51,6 @@ public class HuntersLocationsService : IHuntersLocationsService
             });
     }
     
-    public async Task<HunterLocationDto> GetHunterLocationByIdAsync(Guid id)
-    {
-        return _locationsByHunters
-            .SelectMany(lbh => lbh.Value)
-            .SingleOrDefault(hl => hl.Id == id);
-    }
-
-    public async Task<HunterLocationDto> GetLastHunterLocationByHunterIdAsync(Guid id)
-    {
-        if (!_locationsByHunters.ContainsKey(id))
-        {
-            return null;
-        }
-
-        return _locationsByHunters[id]
-            .OrderBy(hl => hl.Timestamp)
-            .Last();
-    }
-
-    public async Task<IReadOnlyCollection<HunterLocationDto>> GetHunterLocationsHistoryByHunterIdAsync(Guid id, DateTime fromTime)
-    {
-        if (!_locationsByHunters.ContainsKey(id))
-        {
-            return null;
-        }
-
-        return _locationsByHunters[id]
-            .Where(hl => hl.Timestamp >= fromTime)
-            .OrderBy(hl => hl.Timestamp)
-            .ToList();
-    }
-
     public async Task<Dictionary<Guid, IReadOnlyCollection<HunterLocationDto>>> MassGetHuntersLocationsAsync(IReadOnlyCollection<Guid> huntersIds, DateTime fromTime)
     {
         return new Dictionary<Guid, IReadOnlyCollection<HunterLocationDto>>

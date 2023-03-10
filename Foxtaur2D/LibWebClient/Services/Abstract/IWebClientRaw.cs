@@ -13,12 +13,7 @@ public interface IWebClientRaw
     /// </summary>
     /// <returns></returns>
     Task<ServerInfoDto> GetServerInfoAsync();
-
-    /// <summary>
-    /// Gets team by ID. Throws ArgumentException if team with given ID is not found
-    /// </summary>
-    Task<TeamDto> GetTeamByIdAsync(Guid id);
-
+    
     /// <summary>
     /// Gets hunter by ID. Throws ArgumentException if hunter with given ID is not found
     /// </summary>
@@ -49,6 +44,14 @@ public interface IWebClientRaw
     /// </summary>
     Task<Dictionary<Guid, IReadOnlyCollection<HunterLocationDto>>> MassGetHuntersLocationsAsync(HuntersLocationsMassGetRequest request);
 
+    /// <summary>
+    /// Mass get foxes
+    /// </summary>
     Task<IReadOnlyCollection<FoxDto>> MassGetFoxesAsync(FoxesMassGetRequest request);
+
+    /// <summary>
+    /// Mass get teams
+    /// </summary>
+    Task<IReadOnlyCollection<TeamDto>> MassGetTeamsAsync(TeamsMassGetRequest request);
 
 }

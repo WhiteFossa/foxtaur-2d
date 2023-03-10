@@ -45,18 +45,6 @@ public class WebClientRaw : IWebClientRaw
         return JsonSerializer.Deserialize<ServerInfoDto>(await response.Content.ReadAsStringAsync());
     }
 
-    public async Task<TeamDto> GetTeamByIdAsync(Guid id)
-    {
-        var response = await _httpClient.GetAsync($"{_baseUrl}/Teams/{id}").ConfigureAwait(false);
-        if (!response.IsSuccessStatusCode)
-        {
-            _logger.Error($"GetTeamByIdAsync failed: { response.StatusCode }");
-            throw new InvalidOperationException();
-        }
-        
-        return JsonSerializer.Deserialize<TeamDto>(await response.Content.ReadAsStringAsync());
-    }
-
     public async Task<HunterDto> GetHunterByIdAsync(Guid id)
     {
         var response = await _httpClient.GetAsync($"{_baseUrl}/Hunters/{id}").ConfigureAwait(false);
@@ -139,5 +127,17 @@ public class WebClientRaw : IWebClientRaw
         }
         
         return JsonSerializer.Deserialize<IReadOnlyCollection<FoxDto>>(await response.Content.ReadAsStringAsync());
+    }
+
+    public async Task<IReadOnlyCollection<TeamDto>> MassGetTeamsAsync(TeamsMassGetRequest request)
+    {
+        var response = await _httpClient.PostAsJsonAsync($"{_baseUrl}/Teams/MassGet", request).ConfigureAwait(false);
+        if (!response.IsSuccessStatusCode)
+        {
+            _logger.Error($"MassGetTeamsAsync failed: { response.StatusCode }");
+            throw new InvalidOperationException();
+        }
+        
+        return JsonSerializer.Deserialize<IReadOnlyCollection<TeamDto>>(await response.Content.ReadAsStringAsync());
     }
 }

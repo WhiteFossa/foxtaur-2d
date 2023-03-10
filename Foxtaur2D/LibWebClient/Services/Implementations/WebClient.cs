@@ -142,16 +142,10 @@ public class WebClient : IWebClient
         
         // Teams
         var teamsIds = huntersDtos
-            .Select(h => h.TeamId);
-
-        var teamsDtos = new List<TeamDto>();
-        foreach (var teamId in teamsIds)
-        {
-            if (teamId.HasValue)
-            {
-                teamsDtos.Add(await _client.GetTeamByIdAsync(teamId.Value).ConfigureAwait(false));
-            }
-        }
+            .Where(h => h.TeamId.HasValue)
+            .Select(h => h.TeamId.Value)
+            .ToList();
+        var teams = await MassGetTeamsAsync(new TeamsMassGetRequest(teamsIds)).ConfigureAwait(false);
 
         return new Distance(
             distanceDto.Id,
@@ -175,10 +169,9 @@ public class WebClient : IWebClient
             }).ToList(),
             huntersDtos.Select(h =>
             {
-                var teamDto = teamsDtos
+                var team = teams
                     .FirstOrDefault(td => td.Id == h.TeamId);
-                var team = teamDto != null ? new Team(teamDto.Id, teamDto.Name, new Color(teamDto.Color.A, teamDto.Color.R, teamDto.Color.G, teamDto.Color.B)) : null;
-                
+
                 return new Hunter(h.Id,
                     h.Name,
                     h.IsRunning,
@@ -197,8 +190,9 @@ public class WebClient : IWebClient
             new HuntersLocationsMassGetRequest(
                 new List<Guid>() { hunterId }, loadLocationsFrom)).ConfigureAwait(false))[hunterId];
             
-        var teamDto = hunterDto.TeamId.HasValue ? await _client.GetTeamByIdAsync(hunterDto.TeamId.Value).ConfigureAwait(false) : null;
-        var team = teamDto != null ? new Team(teamDto.Id, teamDto.Name, new Color(teamDto.Color.A, teamDto.Color.R, teamDto.Color.G, teamDto.Color.B)) : null;
+        var team = hunterDto.TeamId.HasValue
+            ? (await MassGetTeamsAsync(new TeamsMassGetRequest(new List<Guid>() { hunterDto.TeamId.Value })).ConfigureAwait(false)).First()
+            : null;
 
         return new Hunter(hunterDto.Id,
             hunterDto.Name,
@@ -229,6 +223,17 @@ public class WebClient : IWebClient
 
         return foxes
             .Select(f => new Fox(f.Id, f.Name, f.Frequency, f.Code))
+            .ToList();
+    }
+
+    public async Task<IReadOnlyCollection<Team>> MassGetTeamsAsync(TeamsMassGetRequest request)
+    {
+        _ = request ?? throw new ArgumentNullException(nameof(request));
+
+        var teams = await _client.MassGetTeamsAsync(request).ConfigureAwait(false);
+
+        return teams
+            .Select(t => new Team(t.Id, t.Name, new Color(t.Color.A, t.Color.R, t.Color.G, t.Color.B)))
             .ToList();
     }
 }
