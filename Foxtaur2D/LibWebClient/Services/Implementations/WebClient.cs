@@ -122,7 +122,7 @@ public class WebClient : IWebClient
         // Hunters
         var huntersIds = distanceDto
             .HuntersIds;
-        var hunters = await MassGetHuntersAsync(new HuntersMassGetRequest(huntersIds)).ConfigureAwait(false);
+        var hunters = await MassGetHuntersAsync(new HuntersMassGetRequest(huntersIds), distanceDto.FirstHunterStartTime).ConfigureAwait(false);
         
         return new Distance(
             distanceDto.Id,
@@ -194,7 +194,7 @@ public class WebClient : IWebClient
             .ToList();
     }
 
-    public async Task<IReadOnlyCollection<Hunter>> MassGetHuntersAsync(HuntersMassGetRequest request)
+    public async Task<IReadOnlyCollection<Hunter>> MassGetHuntersAsync(HuntersMassGetRequest request, DateTime locationsHistoriesFromTime)
     {
         _ = request ?? throw new ArgumentNullException(nameof(request));
 
@@ -206,7 +206,7 @@ public class WebClient : IWebClient
             .ToList();
         var teams = await MassGetTeamsAsync(new TeamsMassGetRequest(teamsIds)).ConfigureAwait(false);
 
-        var locationsHistories = await MassGetHuntersLocationsAsync(new HuntersLocationsMassGetRequest(request.HuntersIds, DateTime.MinValue)).ConfigureAwait(false); // TODO: Switch to real time
+        var locationsHistories = await MassGetHuntersLocationsAsync(new HuntersLocationsMassGetRequest(request.HuntersIds, locationsHistoriesFromTime)).ConfigureAwait(false);
 
         return hunters
             .Select(h => new Hunter(

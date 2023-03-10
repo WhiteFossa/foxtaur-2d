@@ -42,5 +42,5 @@ public interface IWebClient
     /// <summary>
     /// Mass get hunters
     /// </summary>
-    Task<IReadOnlyCollection<Hunter>> MassGetHuntersAsync(HuntersMassGetRequest request);
+    Task<IReadOnlyCollection<Hunter>> MassGetHuntersAsync(HuntersMassGetRequest request, DateTime locationsHistoriesFromTime);
 }
