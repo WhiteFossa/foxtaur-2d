@@ -125,8 +125,8 @@ public class WebClientRaw : IWebClientRaw
             _logger.Error($"MassGetHuntersLocationsAsync failed: { response.StatusCode }");
             throw new InvalidOperationException();
         }
-        
-        return JsonSerializer.Deserialize<Dictionary<Guid, IReadOnlyCollection<HunterLocationDto>>>(await response.Content.ReadAsStringAsync());
+
+        return JsonSerializer.Deserialize<HuntersLocationsDictionaryDto>(await response.Content.ReadAsStringAsync()).HuntersLocations;
     }
 
     public async Task<IReadOnlyCollection<FoxDto>> MassGetFoxesAsync(FoxesMassGetRequest request)

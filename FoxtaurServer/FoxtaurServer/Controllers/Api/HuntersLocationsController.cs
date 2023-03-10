@@ -31,6 +31,6 @@ public class HuntersLocationsController : Controller
         
         var result = await _huntersLocationsService.MassGetHuntersLocationsAsync(request.HuntersIds, request.FromTime);
 
-        return Ok(result);
+        return Ok(new HuntersLocationsDictionaryDto(result));
     }
 }
