@@ -1,0 +1,4 @@
+﻿FROM postgres
+ENV POSTGRES_PASSWORD 6Ch8s3J1RXcquLWnkCPjpq7UdUaEDL
+ENV POSTGRES_DB foxtaur
+COPY ./db-init-scripts/setup_db.sql /docker-entrypoint-initdb.d/

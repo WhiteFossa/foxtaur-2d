@@ -25,6 +25,6 @@ volumes:
 networks:
   dev_foxtaur-net:
     driver: bridge
-    external: false # Switch to true when infrastructure will be ready
+    external: true
 
 

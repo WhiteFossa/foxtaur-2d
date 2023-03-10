@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+
+  # PostgreSQL
+  postgresql-foxtaur:
+    image: foxtaur-infrastructure-postgres
+    container_name: postgresql-foxtaur
+    restart: always
+
+    ports:
+      - 127.0.0.1:5432:5432 # Do not need it in Prod
+
+    environment:
+      POSTGRES_PASSWORD: 6Ch8s3J1RXcquLWnkCPjpq7UdUaEDL
+
+    volumes:
+      - foxtaur_postgresql_data:/var/lib/postgresql/data
+
+    networks:
+      - foxtaur-net
+
+  # Adminer
+  adminer-foxtaur:
+    image: adminer
+    container_name: adminer-foxtaur
+    restart: always
+
+    ports:
+      - 127.0.0.1:9081:8080
+
+    networks:
+      - foxtaur-net
+volumes:
+
+  # Foxtaur postgresql database storage
+  foxtaur_postgresql_data:
+
+networks:
+  foxtaur-net:
+    driver: bridge

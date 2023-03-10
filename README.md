@@ -9,6 +9,12 @@ Create directories:
 
 # Build and run on Docker
 
+# Infrastructure
+
+Duild image: $ docker build -f dockerfile-foxtaur-infrastructure -t foxtaur-infrastructure-postgres .
+
+Run container: $ docker-compose up -d
+
 # Main image
 
 Build image: $ docker build -f dockerfile-foxtaur-main -t foxtaur-main .
