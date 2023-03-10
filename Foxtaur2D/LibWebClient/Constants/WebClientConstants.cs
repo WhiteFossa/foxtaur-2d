@@ -8,5 +8,5 @@ public class WebClientConstants
     /// <summary>
     /// Client able to work with this protocol version
     /// </summary>
-    public const int ProtocolVersion = 5;
+    public const int ProtocolVersion = 6;
 }
