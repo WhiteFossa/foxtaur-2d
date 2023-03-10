@@ -65,10 +65,13 @@ public class LocationsService : ILocationsService
         // Gorica - Finish
         _locations.Add(new LocationDto(new Guid("003062D4-1347-48DA-9193-F90652B09A7E"), "Finish", LocationType.Finish, 42.4496250.ToRadians(), 19.2662307.ToRadians(), null));
     }
-    
-    public async Task<LocationDto> GetLocationByIdAsync(Guid id)
+
+    public async Task<IReadOnlyCollection<LocationDto>> MassGetLocationsAsync(IReadOnlyCollection<Guid> locationsIds)
     {
+        _ = locationsIds ?? throw new ArgumentNullException(nameof(locationsIds));
+        
         return _locations
-            .SingleOrDefault(l => l.Id == id);
+            .Where(l => locationsIds.Contains(l.Id))
+            .ToList();
     }
 }

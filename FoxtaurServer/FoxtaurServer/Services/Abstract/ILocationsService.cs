@@ -8,8 +8,7 @@ namespace FoxtaurServer.Services.Abstract;
 public interface ILocationsService
 {
     /// <summary>
-    /// Get location by id
-    /// Will return null if location with given ID doesn't exist
+    /// Mass get locations by their IDs
     /// </summary>
-    Task<LocationDto> GetLocationByIdAsync(Guid id);
+    Task<IReadOnlyCollection<LocationDto>> MassGetLocationsAsync(IReadOnlyCollection<Guid> locationsIds);
 }

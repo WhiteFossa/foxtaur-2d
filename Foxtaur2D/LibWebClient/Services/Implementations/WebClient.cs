@@ -76,48 +76,24 @@ public class WebClient : IWebClient
         var map = (await MassGetMapsAsync(new MapsMassGetRequest(new List<Guid>() { distanceDto.MapId })).ConfigureAwait(false))
             .Single();
 
-        var startDto = await _client.GetLocationByIdAsync(distanceDto.StartLocationId).ConfigureAwait(false);
-        if (startDto == null)
-        {
-            throw new InvalidOperationException($"Start location (ID={ distanceDto.StartLocationId }) is not found!");
-        }
-        
-        var finishCorridorEntranceDto = await _client.GetLocationByIdAsync(distanceDto.FinishCorridorEntranceLocationId).ConfigureAwait(false);
-        if (finishCorridorEntranceDto == null)
-        {
-            throw new InvalidOperationException($"Finish corridor entrance location (ID={ distanceDto.FinishCorridorEntranceLocationId }) is not found!");
-        }
-        
-        var finishDto = await _client.GetLocationByIdAsync(distanceDto.FinishLocationId).ConfigureAwait(false);
-        if (finishDto == null)
-        {
-            throw new InvalidOperationException($"Finish location (ID={ distanceDto.FinishLocationId }) is not found!");
-        }
+        var start = (await MassGetLocationsAsync(new LocationsMassGetRequest(new List<Guid>() { distanceDto.StartLocationId })).ConfigureAwait(false))
+            .Single();
 
+        var finishCorridorEntrance = (await MassGetLocationsAsync(new LocationsMassGetRequest(new List<Guid>() { distanceDto.FinishCorridorEntranceLocationId })).ConfigureAwait(false))
+            .Single();
+
+        var finish = (await MassGetLocationsAsync(new LocationsMassGetRequest(new List<Guid>() { distanceDto.FinishLocationId })).ConfigureAwait(false))
+            .Single();
+        
         // Foxes locations
         var foxesLocationsIds = distanceDto
             .FoxesLocationsIds;
-
-        var foxesLocationsDtos = new List<LocationDto>();
-        foreach (var foxLocationId in foxesLocationsIds)
-        {
-            foxesLocationsDtos.Add(await _client.GetLocationByIdAsync(foxLocationId).ConfigureAwait(false));
-        }
+        var foxesLocations = await MassGetLocationsAsync(new LocationsMassGetRequest(foxesLocationsIds)).ConfigureAwait(false);
         
         // Expected foxes locations order
         var expectedFoxesOrderLocationsIds = distanceDto
             .ExpectedFoxesOrderLocationsIds;
-        var expectedFoxesOrderLocationsDtos = new List<LocationDto>();
-        foreach (var expectedFoxOrderLocationId in expectedFoxesOrderLocationsIds)
-        {
-            expectedFoxesOrderLocationsDtos.Add(await _client.GetLocationByIdAsync(expectedFoxOrderLocationId).ConfigureAwait(false));
-        }
-        
-        // Foxes
-        var foxesIds = foxesLocationsDtos
-            .Select(fl => fl.FoxId.Value)
-            .ToList();
-        var foxes = await MassGetFoxesAsync(new FoxesMassGetRequest(foxesIds)).ConfigureAwait(false);
+        var expectedFoxesOrderLocations = await MassGetLocationsAsync(new LocationsMassGetRequest(expectedFoxesOrderLocationsIds)).ConfigureAwait(false);
         
         // Hunters
         var huntersIds = distanceDto
@@ -129,21 +105,11 @@ public class WebClient : IWebClient
             distanceDto.Name,
             map,
             distanceDto.IsActive,
-            new Location(startDto.Id, startDto.Name, startDto.Type, startDto.Lat, startDto.Lon, null),
-            new Location(finishCorridorEntranceDto.Id, finishCorridorEntranceDto.Name, finishCorridorEntranceDto.Type, finishCorridorEntranceDto.Lat, finishCorridorEntranceDto.Lon, null),
-            new Location(finishDto.Id, finishDto.Name, finishDto.Type, finishDto.Lat, finishDto.Lon, null),
-            foxesLocationsDtos.Select(fl =>
-            {
-                var fox = foxes.Single(f => f.Id == fl.FoxId);
-                
-                return new Location(fl.Id, fl.Name, LocationType.Fox, fl.Lat, fl.Lon, fox);
-            }).ToList(),
-            expectedFoxesOrderLocationsDtos.Select(efol =>
-            {
-                var fox = foxes.Single(f => f.Id == efol.FoxId);
-
-                return new Location(efol.Id, efol.Name, LocationType.Fox, efol.Lat, efol.Lon, fox);
-            }).ToList(),
+            start,
+            finishCorridorEntrance,
+            finish,
+            foxesLocations,
+            expectedFoxesOrderLocations,
             hunters,
             distanceDto.FirstHunterStartTime);
     }
@@ -216,6 +182,30 @@ public class WebClient : IWebClient
                 h.TeamId != null ? teams.Single(t => t.Id == h.TeamId.Value) : null,
                 locationsHistories[h.Id],
                 new Color(h.Color.A, h.Color.R, h.Color.G, h.Color.B)))
+            .ToList();
+    }
+
+    public async Task<IReadOnlyCollection<Location>> MassGetLocationsAsync(LocationsMassGetRequest request)
+    {
+        _ = request ?? throw new ArgumentNullException(nameof(request));
+
+        var locations = await _client.MassGetLocationsAsync(request).ConfigureAwait(false);
+
+        var foxesIds = locations
+            .Where(l => l.FoxId.HasValue)
+            .Select(l => l.FoxId.Value)
+            .ToList();
+        var foxes = await MassGetFoxesAsync(new FoxesMassGetRequest(foxesIds)).ConfigureAwait(false);
+
+        return locations
+            .Select(l =>
+            {
+                var fox = l.FoxId.HasValue
+                    ? foxes.Single(f => f.Id == l.FoxId.Value)
+                    : null;
+                
+                return new Location(l.Id, l.Name, l.Type, l.Lat, l.Lon, fox);
+            })
             .ToList();
     }
 }

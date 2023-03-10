@@ -1,11 +1,12 @@
 using System.Text.Json.Serialization;
+using LibWebClient.Models.Abstract;
 
 namespace LibWebClient.Models.DTOs;
 
 /// <summary>
 /// Team
 /// </summary>
-public class TeamDto
+public class TeamDto : IIdedDto
 {
     /// <summary>
     /// Team Id

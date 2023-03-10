@@ -1,11 +1,12 @@
 using System.Text.Json.Serialization;
+using LibWebClient.Models.Abstract;
 
 namespace LibWebClient.Models.DTOs;
 
 /// <summary>
 /// Hunter
 /// </summary>
-public class HunterDto
+public class HunterDto : IIdedDto
 {
     /// <summary>
     /// Hunter Id

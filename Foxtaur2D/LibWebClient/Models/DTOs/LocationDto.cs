@@ -1,12 +1,13 @@
 using System.Text.Json.Serialization;
 using LibWebClient.Enums;
+using LibWebClient.Models.Abstract;
 
 namespace LibWebClient.Models.DTOs;
 
 /// <summary>
 /// Location
 /// </summary>
-public class LocationDto
+public class LocationDto : IIdedDto
 {
     /// <summary>
     /// Location ID

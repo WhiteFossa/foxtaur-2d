@@ -1,4 +1,5 @@
 using FoxtaurServer.Models.Api;
+using FoxtaurServer.Models.Api.Requests;
 using FoxtaurServer.Services.Abstract;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,21 +16,21 @@ public class LocationsController : Controller
     {
         _locationsService = locationsService;
     }
-    
-    /// <summary>
-    /// Get location by Id
-    /// </summary>
-    [Route("api/Locations/{id}")]
-    [HttpGet]
-    public async Task<ActionResult<LocationDto>> GetLocationById(Guid id)
-    {
-        var location = await _locationsService.GetLocationByIdAsync(id);
 
-        if (location == null)
+    /// <summary>
+    /// Mass get locations
+    /// </summary>
+    [Route("api/Locations/MassGet")]
+    [HttpPost]
+    public async Task<ActionResult<IReadOnlyCollection<LocationDto>>> MassGetLocations([FromBody]LocationsMassGetRequest request)
+    {
+        if (request == null || request.LocationsIds == null)
         {
-            return NotFound();
+            return BadRequest();
         }
 
-        return Ok(location);
+        var result = await _locationsService.MassGetLocationsAsync(request.LocationsIds);
+
+        return Ok(result);
     }
 }

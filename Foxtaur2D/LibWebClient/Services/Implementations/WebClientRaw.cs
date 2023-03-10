@@ -4,6 +4,7 @@ using LibAuxiliary.Abstract;
 using LibAuxiliary.Constants;
 using LibGeo.Implementations.Helpers;
 using LibWebClient.Enums;
+using LibWebClient.Models.Abstract;
 using LibWebClient.Models.DTOs;
 using LibWebClient.Models.Requests;
 using LibWebClient.Services.Abstract;
@@ -43,18 +44,6 @@ public class WebClientRaw : IWebClientRaw
         }
         
         return JsonSerializer.Deserialize<ServerInfoDto>(await response.Content.ReadAsStringAsync());
-    }
-
-    public async Task<LocationDto> GetLocationByIdAsync(Guid id)
-    {
-        var response = await _httpClient.GetAsync($"{_baseUrl}/Locations/{id}").ConfigureAwait(false);
-        if (!response.IsSuccessStatusCode)
-        {
-            _logger.Error($"GetLocationByIdAsync failed: { response.StatusCode }");
-            throw new InvalidOperationException();
-        }
-        
-        return JsonSerializer.Deserialize<LocationDto>(await response.Content.ReadAsStringAsync());
     }
 
     public async Task<DistanceDto> GetDistanceByIdAsync(Guid id)
@@ -101,8 +90,9 @@ public class WebClientRaw : IWebClientRaw
             _logger.Error($"MassGetFoxesAsync failed: { response.StatusCode }");
             throw new InvalidOperationException();
         }
-        
-        return JsonSerializer.Deserialize<IReadOnlyCollection<FoxDto>>(await response.Content.ReadAsStringAsync());
+
+        var result = JsonSerializer.Deserialize<IReadOnlyCollection<FoxDto>>(await response.Content.ReadAsStringAsync());
+        return ReorderResult(result, request.FoxesIds);
     }
 
     public async Task<IReadOnlyCollection<TeamDto>> MassGetTeamsAsync(TeamsMassGetRequest request)
@@ -114,7 +104,8 @@ public class WebClientRaw : IWebClientRaw
             throw new InvalidOperationException();
         }
         
-        return JsonSerializer.Deserialize<IReadOnlyCollection<TeamDto>>(await response.Content.ReadAsStringAsync());
+        var result = JsonSerializer.Deserialize<IReadOnlyCollection<TeamDto>>(await response.Content.ReadAsStringAsync());
+        return ReorderResult(result, request.TeamsIds);
     }
 
     public async Task<IReadOnlyCollection<MapDto>> MassGetMapsAsync(MapsMassGetRequest request)
@@ -126,7 +117,8 @@ public class WebClientRaw : IWebClientRaw
             throw new InvalidOperationException();
         }
         
-        return JsonSerializer.Deserialize<IReadOnlyCollection<MapDto>>(await response.Content.ReadAsStringAsync());
+        var result = JsonSerializer.Deserialize<IReadOnlyCollection<MapDto>>(await response.Content.ReadAsStringAsync());
+        return ReorderResult(result, request.MapsIds);
     }
 
     public async Task<IReadOnlyCollection<HunterDto>> MassGetHuntersAsync(HuntersMassGetRequest request)
@@ -138,6 +130,33 @@ public class WebClientRaw : IWebClientRaw
             throw new InvalidOperationException();
         }
         
-        return JsonSerializer.Deserialize<IReadOnlyCollection<HunterDto>>(await response.Content.ReadAsStringAsync());
+        var result = JsonSerializer.Deserialize<IReadOnlyCollection<HunterDto>>(await response.Content.ReadAsStringAsync());
+        return ReorderResult(result, request.HuntersIds);
+    }
+
+    public async Task<IReadOnlyCollection<LocationDto>> MassGetLocationsAsync(LocationsMassGetRequest request)
+    {
+        var response = await _httpClient.PostAsJsonAsync($"{_baseUrl}/Locations/MassGet", request).ConfigureAwait(false);
+        if (!response.IsSuccessStatusCode)
+        {
+            _logger.Error($"MassGetLocationsAsync failed: { response.StatusCode }");
+            throw new InvalidOperationException();
+        }
+
+        var result = JsonSerializer.Deserialize<IReadOnlyCollection<LocationDto>>(await response.Content.ReadAsStringAsync());
+        return ReorderResult(result, request.LocationsIds);
+    }
+
+    /// <summary>
+    /// Reorder request result such way, that result items are orderer as request IDs
+    /// </summary>
+    private IReadOnlyCollection<T> ReorderResult<T>(IReadOnlyCollection<T> result, IReadOnlyCollection<Guid> requestOrder) where T : IIdedDto
+    {
+        var resultAsList = result
+            .ToList();
+        
+        return requestOrder
+            .Select(x => resultAsList.Single(r => r.Id == x))
+            .ToList();
     }
 }

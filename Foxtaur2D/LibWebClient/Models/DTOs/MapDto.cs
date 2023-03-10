@@ -1,11 +1,12 @@
 using System.Text.Json.Serialization;
+using LibWebClient.Models.Abstract;
 
 namespace LibWebClient.Models.DTOs;
 
 /// <summary>
 /// Map (as it returned from server)
 /// </summary>
-public class MapDto
+public class MapDto : IIdedDto
 {
     /// <summary>
     /// Map Id

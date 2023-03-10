@@ -1,11 +1,12 @@
 using System.Text.Json.Serialization;
+using LibWebClient.Models.Abstract;
 
 namespace LibWebClient.Models.DTOs;
 
 /// <summary>
 /// Hunter location, it have more specific data than usual location
 /// </summary>
-public class HunterLocationDto
+public class HunterLocationDto : IIdedDto
 {
     /// <summary>
     /// Location ID

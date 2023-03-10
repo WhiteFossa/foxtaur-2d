@@ -1,11 +1,12 @@
 using System.Text.Json.Serialization;
+using LibWebClient.Models.Abstract;
 
 namespace LibWebClient.Models.DTOs;
 
 /// <summary>
 /// Fox
 /// </summary>
-public class FoxDto
+public class FoxDto : IIdedDto
 {
     /// <summary>
     /// Fox ID
