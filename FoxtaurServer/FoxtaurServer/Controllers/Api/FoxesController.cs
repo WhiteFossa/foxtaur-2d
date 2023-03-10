@@ -8,7 +8,8 @@ namespace FoxtaurServer.Controllers.Api;
 /// <summary>
 /// Controller to work with foxes
 /// </summary>
-public class FoxesController : Controller
+[ApiController]
+public class FoxesController : ControllerBase
 {
     private readonly IFoxesService _foxesService;
 

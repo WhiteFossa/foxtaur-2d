@@ -8,7 +8,8 @@ namespace FoxtaurServer.Controllers.Api;
 /// <summary>
 /// Controller to work with teams
 /// </summary>
-public class TeamsController : Controller
+[ApiController]
+public class TeamsController : ControllerBase
 {
     private readonly ITeamsService _teamsService;
 

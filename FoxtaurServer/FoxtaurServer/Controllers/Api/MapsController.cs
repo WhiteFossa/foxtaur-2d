@@ -8,7 +8,8 @@ namespace FoxtaurServer.Controllers.Api;
 /// <summary>
 /// Controller to work with maps
 /// </summary>
-public class MapsController : Controller
+[ApiController]
+public class MapsController : ControllerBase
 {
     private readonly IMapsService _mapsService;
 

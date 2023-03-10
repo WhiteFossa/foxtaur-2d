@@ -8,7 +8,8 @@ namespace FoxtaurServer.Controllers.Api;
 /// <summary>
 /// Controller, returning basic server information
 /// </summary>
-public class ServerInfoController : Controller
+[ApiController]
+public class ServerInfoController : ControllerBase
 {
     private readonly IConfigurationService _configurationService;
 

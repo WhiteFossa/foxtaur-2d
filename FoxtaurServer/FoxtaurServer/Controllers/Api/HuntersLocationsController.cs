@@ -8,7 +8,8 @@ namespace FoxtaurServer.Controllers.Api;
 /// <summary>
 /// Controller to work with hunters locations
 /// </summary>
-public class HuntersLocationsController : Controller
+[ApiController]
+public class HuntersLocationsController : ControllerBase
 {
     private readonly IHuntersLocationsService _huntersLocationsService;
 

@@ -1,10 +1,16 @@
 using System.IO.Compression;
+using System.Text;
+using FoxtaurServer.Dao;
+using FoxtaurServer.Models.Identity;
 using FoxtaurServer.Services.Abstract;
 using FoxtaurServer.Services.Implementations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.EntityFrameworkCore;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 namespace FoxtaurServer;
 
@@ -40,13 +46,13 @@ public class Startup
         
         #region  DB Contexts
 
-        /*// Security
+        // Security
         services.AddDbContext<SecurityDbContext>(options =>
             options
-                .UseNpgsql(Configuration.GetConnectionString("SecurityConnection")),
+                .UseNpgsql(Configuration.GetConnectionString("MainConnection")),
             ServiceLifetime.Transient);
 
-        // Main
+        /*// Main
         services.AddDbContext<MainDbContext>(options =>
             options
                 .UseNpgsql(Configuration.GetConnectionString("MainConnection"),
@@ -55,69 +61,48 @@ public class Startup
 
         #endregion
         
-        /*// Identity
-        services.AddTransient<IUserValidator<User>, OptionalEmailUserValidator<User>>();
-
-        services.AddIdentity<User, IdentityRole>()
-            .AddEntityFrameworkStores<SecurityDbContext>()
-            .AddDefaultTokenProviders();*/
+        // Identity
+        services.AddIdentity<User, IdentityRole>()  
+            .AddEntityFrameworkStores<SecurityDbContext>()  
+            .AddDefaultTokenProviders(); 
 
         // TODO: Move me to config
         services.Configure<IdentityOptions>(options =>
         {
             // Password settings
             options.Password.RequireDigit = true;
-            options.Password.RequiredLength = 8;
+            options.Password.RequiredLength = 16;
             options.Password.RequireNonAlphanumeric = false;
             options.Password.RequireUppercase = true;
-            options.Password.RequireLowercase = false;
+            options.Password.RequireLowercase = true;
             options.Password.RequiredUniqueChars = 6;
-
-            // Lockout settings
-            options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
-            options.Lockout.MaxFailedAccessAttempts = 10;
-            options.Lockout.AllowedForNewUsers = true;
-
+            
             // User settings
             options.User.RequireUniqueEmail = true;
         });
 
-        // Session
-        services.AddDistributedMemoryCache();
-
-        services.AddSession(options =>
-        {
-            options.IdleTimeout = TimeSpan.FromSeconds(10);
-            options.Cookie.HttpOnly = true;
-            options.Cookie.IsEssential = true;
-        });
-
-        services.ConfigureApplicationCookie(options =>
-        {
-            // Cookie settings
-            options.Cookie.HttpOnly = true;
-            options.ExpireTimeSpan = TimeSpan.FromDays(150);
-
-            // If the LoginPath isn't set, ASP.NET Core defaults
-            // the path to /Account/Login.
-            options.LoginPath = "/Account/Login";
-
-            // If the AccessDeniedPath isn't set, ASP.NET Core defaults
-            // the path to /Account/AccessDenied.
-            options.AccessDeniedPath = "/Account/AccessDenied";
-
-            options.SlidingExpiration = true;
-        });
-
-        /*// Fallback policy - require authentification
-        services.AddAuthorization(options =>
-        {
-            options.FallbackPolicy = new AuthorizationPolicyBuilder()
-                .RequireAuthenticatedUser()
-                .Build();
-        });*/
-
-        services.AddHttpContextAccessor();
+        // Adding Authentication  
+        services.AddAuthentication(options =>  
+            {  
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;  
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;  
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;  
+            })  
+  
+            // Adding Jwt Bearer  
+            .AddJwtBearer(options =>  
+            {  
+                options.SaveToken = true;  
+                options.RequireHttpsMetadata = false;  
+                options.TokenValidationParameters = new TokenValidationParameters()  
+                {  
+                    ValidateIssuer = true,  
+                    ValidateAudience = true,  
+                    ValidAudience = Configuration["JWT:ValidAudience"],  
+                    ValidIssuer = Configuration["JWT:ValidIssuer"],  
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]))  
+                };  
+            });  
 
         // DI
         // Scoped
@@ -128,6 +113,7 @@ public class Startup
         services.AddScoped<IHuntersService, HuntersService>();
         services.AddScoped<ILocationsService, LocationsService>();
         services.AddScoped<IHuntersLocationsService, HuntersLocationsService>();
+        services.AddScoped<IAccountsService, AccountsService>();
 
         // Singletons
         services.AddSingleton<IConfigurationService, ConfigurationService>();
@@ -143,15 +129,6 @@ public class Startup
     {
         // Compression
         app.UseResponseCompression();
-        
-        /*if (env.IsDevelopment())
-        {
-            app.UseDeveloperExceptionPage();
-        }
-        else
-        {
-            app.UseExceptionHandler("/Error");
-        }*/
 
         app.UseStaticFiles();
 
@@ -161,9 +138,6 @@ public class Startup
         app.UseRouting();
 
         app.UseAuthorization();
-
-        // Session
-        app.UseSession();
 
         app.UseEndpoints(endpoints =>
         {

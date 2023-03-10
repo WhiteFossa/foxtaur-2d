@@ -7,7 +7,8 @@ namespace FoxtaurServer.Controllers.Api;
 /// <summary>
 /// Controller to work with distances
 /// </summary>
-public class DistancesController : Controller
+[ApiController]
+public class DistancesController : ControllerBase
 {
     private readonly IDistancesService _distancesService;
 
