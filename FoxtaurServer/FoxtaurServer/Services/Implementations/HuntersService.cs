@@ -1,3 +1,5 @@
+using FoxtaurServer.Dao.Abstract;
+using FoxtaurServer.Mappers.Abstract;
 using FoxtaurServer.Models.Api;
 using FoxtaurServer.Services.Abstract;
 using LibAuxiliary.Helpers;
@@ -6,13 +8,16 @@ namespace FoxtaurServer.Services.Implementations;
 
 public class HuntersService : IHuntersService
 {
-    private readonly IHuntersLocationsService _huntersLocationsService;
-    
+    private readonly IProfilesDao _profilesDao;
+    private readonly IProfilesMapper _profilesMapper;
+
     private List<HunterDto> _hunters = new List<HunterDto>();
 
-    public HuntersService(IHuntersLocationsService huntersLocationsService)
+    public HuntersService(IProfilesDao profilesDao,
+        IProfilesMapper profilesMapper)
     {
-        _huntersLocationsService = huntersLocationsService;
+        _profilesDao = profilesDao;
+        _profilesMapper = profilesMapper;
         
         _hunters.Add(new HunterDto(new Guid("E7B81F14-5B4E-446A-9892-36B60AF6511E"),
             "Garrek",
@@ -52,5 +57,12 @@ public class HuntersService : IHuntersService
         return _hunters
             .Where(h => huntersIds.Contains(h.Id))
             .ToList();
+    }
+
+    public async Task<IReadOnlyCollection<ProfileDto>> MassGetHuntersProfilesAsync(IReadOnlyCollection<Guid> huntersIds)
+    {
+        _ = huntersIds ?? throw new ArgumentNullException(nameof(huntersIds));
+
+        return _profilesMapper.Map(await _profilesDao.GetProfilesAsync(huntersIds.Select(hid => hid.ToString()).ToList()));
     }
 }

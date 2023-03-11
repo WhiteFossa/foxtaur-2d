@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using FoxtaurServer.Dao.Models;
 using FoxtaurServer.Models.Api;
 using FoxtaurServer.Models.Api.Requests;
 using FoxtaurServer.Models.Identity;
@@ -32,7 +33,7 @@ public class HuntersController : ControllerBase
     [AllowAnonymous]
     [Route("api/Hunters/MassGet")]
     [HttpPost]
-    public async Task<ActionResult<IReadOnlyCollection<HunterDto>>> MassGetMaps([FromBody]HuntersMassGetRequest request)
+    public async Task<ActionResult<IReadOnlyCollection<HunterDto>>> MassGetHunters([FromBody]HuntersMassGetRequest request)
     {
         if (request == null || request.HuntersIds == null)
         {
@@ -40,6 +41,24 @@ public class HuntersController : ControllerBase
         }
 
         var result = await _huntersService.MassGetHuntersAsync(request.HuntersIds);
+
+        return Ok(result);
+    }
+    
+    /// <summary>
+    /// Mass get profiles
+    /// </summary>
+    [AllowAnonymous]
+    [Route("api/Hunters/Profiles/MassGet")]
+    [HttpPost]
+    public async Task<ActionResult<IReadOnlyCollection<ProfileDto>>> MassGetProfiles([FromBody]ProfilesMassGetRequest request)
+    {
+        if (request == null || request.HuntersIds == null)
+        {
+            return BadRequest();
+        }
+
+        var result = await _huntersService.MassGetHuntersProfilesAsync(request.HuntersIds);
 
         return Ok(result);
     }

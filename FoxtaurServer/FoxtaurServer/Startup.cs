@@ -125,6 +125,7 @@ public class Startup
         services.AddSingleton<IConfigurationService, ConfigurationService>();
         services.AddSingleton<ITeamsMapper, TeamsMapper>();
         services.AddSingleton<IColorsMapper, ColorsMapper>();
+        services.AddSingleton<IProfilesMapper, ProfilesMapper>();
 
         // Hosted services
         

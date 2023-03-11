@@ -1,3 +1,4 @@
+using FoxtaurServer.Dao.Models;
 using FoxtaurServer.Models.Api.Requests;
 using FoxtaurServer.Services.Abstract.Models;
 using FoxtaurServer.Services.Abstract.Models.Enums;

@@ -11,4 +11,9 @@ public interface IHuntersService
     /// Mass get hunters by their IDs
     /// </summary>
     Task<IReadOnlyCollection<HunterDto>> MassGetHuntersAsync(IReadOnlyCollection<Guid> huntersIds);
+
+    /// <summary>
+    /// Mass get hunters profiles
+    /// </summary>
+    Task<IReadOnlyCollection<ProfileDto>> MassGetHuntersProfilesAsync(IReadOnlyCollection<Guid> huntersIds);
 }
