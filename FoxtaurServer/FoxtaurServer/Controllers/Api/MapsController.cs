@@ -50,4 +50,38 @@ public class MapsController : ControllerBase
 
         return Ok(result);
     }
+    
+    /// <summary>
+    /// Create new map
+    /// </summary>
+    [Route("api/Maps/Create")]
+    [HttpPost]
+    public async Task<ActionResult<MapDto>> CreateMap([FromBody]CreateMapRequest request)
+    {
+        if (request == null)
+        {
+            return BadRequest();
+        }
+
+        if (string.IsNullOrWhiteSpace(request.Name))
+        {
+            return BadRequest("Map name must be specified.");
+        }
+
+        var newMap = await _mapsService.CreateNewMapAsync(new MapDto(
+            Guid.Empty,
+            request.Name,
+            request.NorthLat,
+            request.SouthLat,
+            request.EastLon,
+            request.WestLon,
+            request.Url));
+        
+        if (newMap == null)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, $"Generic error during map creation");
+        }
+
+        return Ok(newMap);
+    }
 }

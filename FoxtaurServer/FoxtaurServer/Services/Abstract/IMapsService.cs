@@ -13,4 +13,9 @@ public interface IMapsService
     Task<IReadOnlyCollection<MapDto>> MassGetMapsAsync(IReadOnlyCollection<Guid> mapsIds);
     
     Task<IReadOnlyCollection<MapDto>> GetAllMapsAsync();
+    
+    /// <summary>
+    /// Create new map. Can return null in case of failure
+    /// </summary>
+    Task<MapDto> CreateNewMapAsync(MapDto map);
 }

@@ -15,9 +15,23 @@ public interface IMapsDao
     Task<IReadOnlyCollection<Map>> GetMapsAsync(IReadOnlyCollection<Guid> mapsIds);
 
     /// <summary>
+    /// Return map by name or null if not found
+    /// </summary>
+    Task<Map> GetMapByNameAsync(string name);
+    
+    /// <summary>
     /// Get all teams
     /// </summary>
     Task<IReadOnlyCollection<Map>> GetAllMapsAsync();
     
-    #endregion   
+    #endregion
+    
+    #region Create and update
+
+    /// <summary>
+    /// Create new map. ID will be written into map.Id
+    /// </summary>
+    Task CreateAsync(Map map);
+
+    #endregion
 }

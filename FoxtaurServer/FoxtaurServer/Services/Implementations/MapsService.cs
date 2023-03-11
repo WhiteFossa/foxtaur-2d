@@ -2,7 +2,6 @@ using FoxtaurServer.Dao.Abstract;
 using FoxtaurServer.Mappers.Abstract;
 using FoxtaurServer.Models.Api;
 using FoxtaurServer.Services.Abstract;
-using LibAuxiliary.Helpers;
 
 namespace FoxtaurServer.Services.Implementations;
 
@@ -28,5 +27,23 @@ public class MapsService : IMapsService
     public async Task<IReadOnlyCollection<MapDto>> GetAllMapsAsync()
     {
         return _mapsMapper.Map(await _mapsDao.GetAllMapsAsync());
+    }
+
+    public async Task<MapDto> CreateNewMapAsync(MapDto map)
+    {
+        _ = map ?? throw new ArgumentNullException(nameof(map));
+        
+        // Do we have map with such name?
+        var existingMap = await _mapsDao.GetMapByNameAsync(map.Name);
+        if (existingMap != null)
+        {
+            return null;
+        }
+        
+        var mappedMap = _mapsMapper.Map(map);
+        
+        await _mapsDao.CreateAsync(mappedMap);
+
+        return new MapDto(mappedMap.Id, map.Name, map.NorthLat, map.SouthLat, map.EastLon, map.WestLon, map.Url);
     }
 }
