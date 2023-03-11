@@ -25,5 +25,7 @@ public enum Category
     
     InternationalMaster = 9,
     
-    HonoredMaster = 10
+    HonoredMaster = 10,
+    
+    NotSpecified = 11
 }

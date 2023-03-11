@@ -119,6 +119,7 @@ public class Startup
         services.AddScoped<IHuntersLocationsService, HuntersLocationsService>();
         services.AddScoped<IAccountsService, AccountsService>();
         services.AddScoped<ITeamsDao, TeamsDao>();
+        services.AddScoped<IProfilesDao, ProfilesDao>();
 
         // Singletons
         services.AddSingleton<IConfigurationService, ConfigurationService>();

@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using System.Text;
 using FoxtaurServer.Constants;
+using FoxtaurServer.Dao.Abstract;
+using FoxtaurServer.Dao.Models;
+using FoxtaurServer.Dao.Models.Enums;
 using Microsoft.IdentityModel.Tokens;
 using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
 
@@ -17,12 +20,15 @@ public class AccountsService : IAccountsService
 {
     private readonly UserManager<User> _userManager;
     private readonly IConfigurationService _configurationService;
+    private readonly IProfilesDao _profilesDao;
 
     public AccountsService(UserManager<User> userManager,
-        IConfigurationService configurationService)
+        IConfigurationService configurationService,
+        IProfilesDao profilesDao)
     {
         _userManager = userManager;
         _configurationService = configurationService;
+        _profilesDao = profilesDao;
     }
     
     public async Task<UserRegistrationResult> RegisterUserAsync(RegistrationRequest request)
@@ -50,6 +56,26 @@ public class AccountsService : IAccountsService
         {
             return UserRegistrationResult.ErrWeakPassword; // Most probably reason.
         }
+        
+        // Preparing new, empty profile for user
+        var newProfile = new Profile()
+        {
+            Id = user.Id,
+            FirstName = GlobalConstants.NewProfileFirstName,
+            MiddleName = GlobalConstants.NewProfileMiddleName,
+            LastName = GlobalConstants.NewProfileLastName,
+            Sex = GlobalConstants.NewProfileSex,
+            DateOfBirth = GlobalConstants.NewProfileDateOfBirth,
+            Phone = GlobalConstants.NewProfilePhone,
+            Team = null,
+            Category = GlobalConstants.NewProfileCategory,
+            ColorR = GlobalConstants.NewProfileColorR,
+            ColorG = GlobalConstants.NewProfileColorG,
+            ColorB = GlobalConstants.NewProfileColorB,
+            ColorA = GlobalConstants.NewProfileColorA
+        };
+
+        await _profilesDao.CreateAsync(newProfile);
 
         return UserRegistrationResult.OK;
     }
