@@ -19,6 +19,7 @@ public class ProfilesDao : IProfilesDao
         
         return _dbContext
             .Profiles
+            .Include(p => p.Team)
             .Where(p => profilesIds.Contains(p.Id))
             .ToList();
     }
