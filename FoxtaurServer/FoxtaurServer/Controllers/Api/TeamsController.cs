@@ -40,6 +40,19 @@ public class TeamsController : ControllerBase
     }
     
     /// <summary>
+    /// Get all existing teams
+    /// </summary>
+    [AllowAnonymous]
+    [Route("api/Teams/GetAll")]
+    [HttpGet]
+    public async Task<ActionResult<IReadOnlyCollection<TeamDto>>> GetAllTeams()
+    {
+        var result = await _teamsService.GetAllTeamsAsync();
+
+        return Ok(result);
+    }
+    
+    /// <summary>
     /// Create new team
     /// </summary>
     [Route("api/Teams/Create")]

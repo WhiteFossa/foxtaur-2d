@@ -19,6 +19,11 @@ public interface ITeamsDao
     /// </summary>
     Task<Team> GetTeamByNameAsync(string name);
     
+    /// <summary>
+    /// Get all teams
+    /// </summary>
+    Task<IReadOnlyCollection<Team>> GetAllTeamsAsync();
+    
     #endregion
 
     #region Create and update

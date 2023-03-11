@@ -25,6 +25,11 @@ public class TeamsService : ITeamsService
         return _teamsMapper.Map(await _teamsDao.GetTeamsAsync(teamsIds));
     }
 
+    public async Task<IReadOnlyCollection<TeamDto>> GetAllTeamsAsync()
+    {
+        return _teamsMapper.Map(await _teamsDao.GetAllTeamsAsync());
+    }
+
     public async Task<TeamDto> CreateNewTeamAsync(TeamDto team)
     {
         _ = team ?? throw new ArgumentNullException(nameof(team));

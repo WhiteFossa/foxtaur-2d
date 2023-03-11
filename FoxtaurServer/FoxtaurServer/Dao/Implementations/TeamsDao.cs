@@ -29,6 +29,13 @@ public class TeamsDao : ITeamsDao
             .SingleOrDefault(t => t.Name.ToLower().Equals(name.ToLower()));
     }
 
+    public async Task<IReadOnlyCollection<Team>> GetAllTeamsAsync()
+    {
+        return _dbContext
+            .Teams
+            .ToList();
+    }
+
     public async Task CreateAsync(Team team)
     {
         _ = team ?? throw new ArgumentNullException(nameof(team));

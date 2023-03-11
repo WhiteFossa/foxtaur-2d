@@ -11,6 +11,11 @@ public interface ITeamsService
     /// Mass get teams by their IDs
     /// </summary>
     Task<IReadOnlyCollection<TeamDto>> MassGetTeamsAsync(IReadOnlyCollection<Guid> teamsIds);
+    
+    /// <summary>
+    /// Get all existing teams
+    /// </summary>
+    Task<IReadOnlyCollection<TeamDto>> GetAllTeamsAsync();
 
     /// <summary>
     /// Create new team. Can return null in case of failure
