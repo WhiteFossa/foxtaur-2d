@@ -17,11 +17,16 @@ public class MainDbContext : DbContext
     /// Hunters profiles
     /// </summary>
     public DbSet<Profile> Profiles { get; set; }
-
+    
     /// <summary>
     /// Maps
     /// </summary>
     public DbSet<Map> Maps { get; set; }
+
+    /// <summary>
+    /// Foxes
+    /// </summary>
+    public DbSet<Fox> Foxes { get; set; }
 
     public MainDbContext(DbContextOptions<MainDbContext> options) : base(options)
     {

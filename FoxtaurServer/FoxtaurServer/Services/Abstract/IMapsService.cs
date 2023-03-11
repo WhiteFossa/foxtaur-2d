@@ -12,10 +12,13 @@ public interface IMapsService
     /// </summary>
     Task<IReadOnlyCollection<MapDto>> MassGetMapsAsync(IReadOnlyCollection<Guid> mapsIds);
     
+    /// <summary>
+    /// Get all maps
+    /// </summary>
     Task<IReadOnlyCollection<MapDto>> GetAllMapsAsync();
     
     /// <summary>
-    /// Create new map. Can return null in case of failure
+    /// Create new map. Will return null in case of failure
     /// </summary>
     Task<MapDto> CreateNewMapAsync(MapDto map);
 }

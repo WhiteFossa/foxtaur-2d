@@ -20,7 +20,7 @@ public interface IMapsDao
     Task<Map> GetMapByNameAsync(string name);
     
     /// <summary>
-    /// Get all teams
+    /// Get all maps
     /// </summary>
     Task<IReadOnlyCollection<Map>> GetAllMapsAsync();
     

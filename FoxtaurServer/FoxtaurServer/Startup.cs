@@ -1,5 +1,6 @@
 using System.IO.Compression;
 using System.Text;
+using FoxtaurServer.Constants;
 using FoxtaurServer.Dao;
 using FoxtaurServer.Dao.Abstract;
 using FoxtaurServer.Dao.Implementations;
@@ -102,9 +103,9 @@ public class Startup
                 {  
                     ValidateIssuer = true,  
                     ValidateAudience = true,  
-                    ValidAudience = Configuration["JWT:ValidAudience"],  
-                    ValidIssuer = Configuration["JWT:ValidIssuer"],  
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]))  
+                    ValidAudience = Configuration[GlobalConstants.JwtValidAudienceSettingName],  
+                    ValidIssuer = Configuration[GlobalConstants.JwtValidIssuerSettingName],  
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration[GlobalConstants.JwtSecretSettingName]))  
                 };  
             });  
 
@@ -121,6 +122,7 @@ public class Startup
         services.AddScoped<ITeamsDao, TeamsDao>();
         services.AddScoped<IProfilesDao, ProfilesDao>();
         services.AddScoped<IMapsDao, MapsDao>();
+        services.AddScoped<IFoxesDao, FoxesDao>();
 
         // Singletons
         services.AddSingleton<IConfigurationService, ConfigurationService>();
@@ -128,6 +130,7 @@ public class Startup
         services.AddSingleton<IColorsMapper, ColorsMapper>();
         services.AddSingleton<IProfilesMapper, ProfilesMapper>();
         services.AddSingleton<IMapsMapper, MapsMapper>();
+        services.AddSingleton<IFoxesMapper, FoxesMapper>();
 
         // Hosted services
         
