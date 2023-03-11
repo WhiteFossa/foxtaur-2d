@@ -37,4 +37,17 @@ public class MapsController : ControllerBase
 
         return Ok(result);
     }
+    
+    /// <summary>
+    /// Get all maps
+    /// </summary>
+    [AllowAnonymous]
+    [Route("api/Maps/GetAll")]
+    [HttpGet]
+    public async Task<ActionResult<IReadOnlyCollection<MapDto>>> GetAllMaps()
+    {
+        var result = await _mapsService.GetAllMapsAsync();
+
+        return Ok(result);
+    }
 }

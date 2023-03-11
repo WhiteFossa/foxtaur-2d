@@ -120,12 +120,14 @@ public class Startup
         services.AddScoped<IAccountsService, AccountsService>();
         services.AddScoped<ITeamsDao, TeamsDao>();
         services.AddScoped<IProfilesDao, ProfilesDao>();
+        services.AddScoped<IMapsDao, MapsDao>();
 
         // Singletons
         services.AddSingleton<IConfigurationService, ConfigurationService>();
         services.AddSingleton<ITeamsMapper, TeamsMapper>();
         services.AddSingleton<IColorsMapper, ColorsMapper>();
         services.AddSingleton<IProfilesMapper, ProfilesMapper>();
+        services.AddSingleton<IMapsMapper, MapsMapper>();
 
         // Hosted services
         

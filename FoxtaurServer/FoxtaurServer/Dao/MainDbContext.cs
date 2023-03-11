@@ -18,6 +18,11 @@ public class MainDbContext : DbContext
     /// </summary>
     public DbSet<Profile> Profiles { get; set; }
 
+    /// <summary>
+    /// Maps
+    /// </summary>
+    public DbSet<Map> Maps { get; set; }
+
     public MainDbContext(DbContextOptions<MainDbContext> options) : base(options)
     {
 

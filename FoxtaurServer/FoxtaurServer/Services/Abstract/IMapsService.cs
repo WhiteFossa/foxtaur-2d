@@ -11,4 +11,6 @@ public interface IMapsService
     /// Mass get maps by their IDs
     /// </summary>
     Task<IReadOnlyCollection<MapDto>> MassGetMapsAsync(IReadOnlyCollection<Guid> mapsIds);
+    
+    Task<IReadOnlyCollection<MapDto>> GetAllMapsAsync();
 }
