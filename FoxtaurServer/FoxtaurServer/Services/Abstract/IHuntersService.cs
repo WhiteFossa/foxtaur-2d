@@ -1,4 +1,5 @@
 using FoxtaurServer.Models.Api;
+using FoxtaurServer.Models.Api.Requests;
 
 namespace FoxtaurServer.Services.Abstract;
 
@@ -16,4 +17,9 @@ public interface IHuntersService
     /// Mass get hunters profiles
     /// </summary>
     Task<IReadOnlyCollection<ProfileDto>> MassGetHuntersProfilesAsync(IReadOnlyCollection<Guid> huntersIds);
+
+    /// <summary>
+    /// Update hunter's profile
+    /// </summary>
+    Task<ProfileDto> UpdateHunterProfileAsync(ProfileUpdateRequest request);
 }

@@ -63,27 +63,21 @@ public class HuntersController : ControllerBase
         return Ok(result);
     }
 
-    /*/// <summary>
-    /// Set team to hunter
+    /// <summary>
+    /// Update profile
     /// </summary>
-    [Route("api/Hunters/SetTeam")]
+    [Route("api/Hunters/Profiles/Update")]
     [HttpPost]
-    public async Task<IActionResult> SetHunterTeam([FromBody]SetHunterTeamRequest request)
+    public async Task<ActionResult<ProfileDto>> UpdateProfile([FromBody]ProfileUpdateRequest request)
     {
         if (request == null)
         {
             return BadRequest();
         }
 
-        var userName = User.Identity.Name;
-        var user = await _userManager.FindByNameAsync(userName);
+        var result = await _huntersService.UpdateHunterProfileAsync(request);
 
-        var result = await _huntersService.AssignTeamToHunter(user.Id, request.TeamId);
-        if (result)
-        {
-            return Ok("Team assigned.");
-        }
-
-        return BadRequest("Team not assigned.");
-    }*/
+        return Ok(result);
+    }
+    
 }
