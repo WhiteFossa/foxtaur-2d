@@ -1,6 +1,10 @@
 using System.IO.Compression;
 using System.Text;
 using FoxtaurServer.Dao;
+using FoxtaurServer.Dao.Abstract;
+using FoxtaurServer.Dao.Implementations;
+using FoxtaurServer.Mappers.Abstract;
+using FoxtaurServer.Mappers.Implementations;
 using FoxtaurServer.Models.Identity;
 using FoxtaurServer.Services.Abstract;
 using FoxtaurServer.Services.Implementations;
@@ -52,12 +56,12 @@ public class Startup
                 .UseNpgsql(Configuration.GetConnectionString("MainConnection")),
             ServiceLifetime.Transient);
 
-        /*// Main
+        // Main
         services.AddDbContext<MainDbContext>(options =>
             options
                 .UseNpgsql(Configuration.GetConnectionString("MainConnection"),
                     o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)),
-            ServiceLifetime.Transient);*/
+            ServiceLifetime.Transient);
 
         #endregion
         
@@ -114,14 +118,18 @@ public class Startup
         services.AddScoped<ILocationsService, LocationsService>();
         services.AddScoped<IHuntersLocationsService, HuntersLocationsService>();
         services.AddScoped<IAccountsService, AccountsService>();
+        services.AddScoped<ITeamsDao, TeamsDao>();
 
         // Singletons
         services.AddSingleton<IConfigurationService, ConfigurationService>();
+        services.AddSingleton<ITeamsMapper, TeamsMapper>();
+        services.AddSingleton<IColorsMapper, ColorsMapper>();
 
         // Hosted services
-
-
+        
+        // Various settings
         services.AddMvc();
+        services.AddHttpContextAccessor();
     }
     
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,7 +1,10 @@
+using System.Security.Claims;
 using FoxtaurServer.Models.Api;
 using FoxtaurServer.Models.Api.Requests;
+using FoxtaurServer.Models.Identity;
 using FoxtaurServer.Services.Abstract;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FoxtaurServer.Controllers.Api;
@@ -14,13 +17,13 @@ namespace FoxtaurServer.Controllers.Api;
 public class HuntersController : ControllerBase
 {
     private readonly IHuntersService _huntersService;
-    private readonly IHuntersLocationsService _huntersLocationsService;
+    private readonly UserManager<User> _userManager;
 
     public HuntersController(IHuntersService huntersService,
-        IHuntersLocationsService huntersLocationsService)
+        UserManager<User> userManager)
     {
         _huntersService = huntersService;
-        _huntersLocationsService = huntersLocationsService;
+        _userManager = userManager;
     }
     
     /// <summary>
@@ -41,13 +44,27 @@ public class HuntersController : ControllerBase
         return Ok(result);
     }
 
-    /// <summary>
+    /*/// <summary>
     /// Set team to hunter
     /// </summary>
     [Route("api/Hunters/SetTeam")]
     [HttpPost]
     public async Task<IActionResult> SetHunterTeam([FromBody]SetHunterTeamRequest request)
     {
-        return Ok("Team assigned.");
-    }
+        if (request == null)
+        {
+            return BadRequest();
+        }
+
+        var userName = User.Identity.Name;
+        var user = await _userManager.FindByNameAsync(userName);
+
+        var result = await _huntersService.AssignTeamToHunter(user.Id, request.TeamId);
+        if (result)
+        {
+            return Ok("Team assigned.");
+        }
+
+        return BadRequest("Team not assigned.");
+    }*/
 }

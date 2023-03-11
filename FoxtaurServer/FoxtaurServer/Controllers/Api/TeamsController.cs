@@ -2,6 +2,7 @@ using FoxtaurServer.Models.Api;
 using FoxtaurServer.Models.Api.Requests;
 using FoxtaurServer.Services.Abstract;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FoxtaurServer.Controllers.Api;
@@ -36,5 +37,31 @@ public class TeamsController : ControllerBase
         var result = await _teamsService.MassGetTeamsAsync(request.TeamsIds);
 
         return Ok(result);
+    }
+    
+    /// <summary>
+    /// Create new team
+    /// </summary>
+    [Route("api/Teams/Create")]
+    [HttpPost]
+    public async Task<ActionResult<TeamDto>> CreateTeam([FromBody]CreateTeamRequest request)
+    {
+        if (request == null)
+        {
+            return BadRequest();
+        }
+
+        if (string.IsNullOrWhiteSpace(request.Name))
+        {
+            return BadRequest("Team name must be specified.");
+        }
+
+        var newTeam = await _teamsService.CreateNewTeamAsync(new TeamDto(Guid.Empty, request.Name, request.Color));
+        if (newTeam == null)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, $"Generic error during team creation");
+        }
+
+        return Ok(newTeam);
     }
 }

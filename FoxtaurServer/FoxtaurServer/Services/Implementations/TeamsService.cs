@@ -1,3 +1,5 @@
+using FoxtaurServer.Dao.Abstract;
+using FoxtaurServer.Mappers.Abstract;
 using FoxtaurServer.Models.Api;
 using FoxtaurServer.Services.Abstract;
 
@@ -5,21 +7,39 @@ namespace FoxtaurServer.Services.Implementations;
 
 public class TeamsService : ITeamsService
 {
-    private List<TeamDto> _teams = new List<TeamDto>();
+    private readonly ITeamsDao _teamsDao;
 
-    public TeamsService()
+    private readonly ITeamsMapper _teamsMapper;
+    
+    public TeamsService(ITeamsDao teamsDao,
+        ITeamsMapper teamsMapper)
     {
-        _teams.Add(new TeamDto(new Guid("AE9EE155-BCDC-44C3-B83F-A4837A3EC443"), "Foxtaurs", new ColorDto(0, 0, 255, 255)));
-
-        _teams.Add(new TeamDto(new Guid("4E44C3DE-4B3A-472B-8289-2072A9F7B49C"), "Fox yiffers", new ColorDto(0, 255, 0, 255)));
+        _teamsDao = teamsDao;
+        _teamsMapper = teamsMapper;
     }
 
     public async Task<IReadOnlyCollection<TeamDto>> MassGetTeamsAsync(IReadOnlyCollection<Guid> teamsIds)
     {
         _ = teamsIds ?? throw new ArgumentNullException(nameof(teamsIds));
 
-        return _teams
-            .Where(t => teamsIds.Contains(t.Id))
-            .ToList();
+        return _teamsMapper.Map(await _teamsDao.GetTeamsAsync(teamsIds));
+    }
+
+    public async Task<TeamDto> CreateNewTeamAsync(TeamDto team)
+    {
+        _ = team ?? throw new ArgumentNullException(nameof(team));
+
+        // Do we have team with such name?
+        var existingTeam = await _teamsDao.GetTeamByNameAsync(team.Name);
+        if (existingTeam != null)
+        {
+            return null;
+        }
+        
+        var mappedTeam = _teamsMapper.Map(team);
+        
+        await _teamsDao.CreateAsync(mappedTeam);
+
+        return new TeamDto(mappedTeam.Id, team.Name, team.Color);
     }
 }
