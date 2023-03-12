@@ -27,6 +27,8 @@ public class ProfilesDao : IProfilesDao
     public async Task CreateAsync(Profile profile)
     {
         _ = profile ?? throw new ArgumentNullException(nameof(profile));
+
+        await LoadLinkedEntitiesAsync(profile);
         
         await _dbContext.Profiles.AddAsync(profile);
         

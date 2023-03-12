@@ -28,6 +28,11 @@ public class MainDbContext : DbContext
     /// </summary>
     public DbSet<Fox> Foxes { get; set; }
 
+    /// <summary>
+    /// Locations
+    /// </summary>
+    public DbSet<Location> Locations { get; set; }
+
     public MainDbContext(DbContextOptions<MainDbContext> options) : base(options)
     {
 

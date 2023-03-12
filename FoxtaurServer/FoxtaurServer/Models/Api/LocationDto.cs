@@ -1,5 +1,5 @@
 using System.Text.Json.Serialization;
-using FoxtaurServer.Models.Api.Enums;
+using FoxtaurServer.Dao.Models.Enums;
 
 namespace FoxtaurServer.Models.Api;
 

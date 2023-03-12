@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace FoxtaurServer.Dao.Models;
 
 /// <summary>
@@ -8,6 +10,7 @@ public class Map
     /// <summary>
     /// Map Id
     /// </summary>
+    [Key]
     public Guid Id { get; set; }
 
     /// <summary>

@@ -1,4 +1,4 @@
-namespace FoxtaurServer.Models.Api.Enums;
+namespace FoxtaurServer.Dao.Models.Enums;
 
 /// <summary>
 /// Possible location types
