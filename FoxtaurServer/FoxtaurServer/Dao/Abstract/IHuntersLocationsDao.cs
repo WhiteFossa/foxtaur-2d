@@ -19,9 +19,14 @@ public interface IHuntersLocationsDao
     #region Create and update
 
     /// <summary>
-    /// Mass create new hunter locations
+    /// Mass create new hunters locations
     /// </summary>
-    Task MassCreateAsync(IReadOnlyCollection<HunterLocation> hunterLocations);
+    Task MassCreateAsync(IReadOnlyCollection<HunterLocation> huntersLocations);
 
+    /// <summary>
+    /// Mass update existing hunters locations
+    /// </summary>
+    Task MassUpdateAsync(IReadOnlyCollection<HunterLocation> huntersLocations);
+    
     #endregion 
 }

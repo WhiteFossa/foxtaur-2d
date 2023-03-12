@@ -30,15 +30,27 @@ public class HuntersLocationsService : IHuntersLocationsService
     public async Task<Dictionary<Guid, IReadOnlyCollection<HunterLocationDto>>> MassCreateHuntersLocationsAsync(IReadOnlyCollection<HunterLocationDto> huntersLocations, Guid hunterId)
     {
         _ = huntersLocations ?? throw new ArgumentNullException(nameof(huntersLocations));
-        
-        var huntersLocationsForDb = _huntersLocationsMapper.Map(huntersLocations);
-        foreach (var hunterLocationForDb in huntersLocationsForDb)
+
+        var existingHunterLocationsIds = (await _huntersLocationsDao.GetHuntersLocationsByHuntersIdsAsync(new List<Guid>() { hunterId }, DateTime.MinValue))
+            .Select(hl => hl.Id)
+            .ToList();
+
+        var hunterLocationsForDb = _huntersLocationsMapper.Map(huntersLocations);
+        foreach (var hunterLocationForDb in hunterLocationsForDb)
         {
             hunterLocationForDb.Hunter = new Profile() { Id = hunterId.ToString() }; // DAO must restore full profile by ID 
         }
+
+        var toInsert = hunterLocationsForDb
+            .Where(hltdb => !existingHunterLocationsIds.Contains(hltdb.Id))
+            .ToList();
         
-        // TODO: Add UPDATE functionality for case if location already exist
-        await _huntersLocationsDao.MassCreateAsync(huntersLocationsForDb);
+        var toUpdate = hunterLocationsForDb
+            .Where(hltdb => existingHunterLocationsIds.Contains(hltdb.Id))
+            .ToList();
+        
+        await _huntersLocationsDao.MassCreateAsync(toInsert);
+        await _huntersLocationsDao.MassUpdateAsync(toUpdate);
 
         return await MassGetHuntersLocationsAsync(new List<Guid>() { hunterId }, DateTime.MinValue);
     }
