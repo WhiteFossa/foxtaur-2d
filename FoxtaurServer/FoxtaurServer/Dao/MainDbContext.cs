@@ -74,12 +74,6 @@ public class MainDbContext : DbContext
         
         modelBuilder
             .Entity<Distance>()
-            .HasMany(d => d.ExpectedFoxesOrderLocations)
-            .WithMany(l => l.AsExpectedFoxOrderLocationInDistances)
-            .UsingEntity(join => join.ToTable("DistancesToExpectedFoxesOrderLocations"));
-
-        modelBuilder
-            .Entity<Distance>()
             .HasMany(d => d.Hunters)
             .WithMany(h => h.ParticipatedInDistances);
     }

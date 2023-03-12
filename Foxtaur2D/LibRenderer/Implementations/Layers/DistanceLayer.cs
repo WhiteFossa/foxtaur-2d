@@ -82,7 +82,7 @@ public class DistanceLayer : IVectorLayer, IRasterLayer
         }
         
         // Expected fox taking order
-        var expectedFoxOrderList = _distance.ExpectedFoxesOrder.ToList();
+        var expectedFoxOrderList = _distance.Foxes.ToList();
         
         DrawLinkerLine(_distance.StartLocation, expectedFoxOrderList.First(), context, scalingFactor, displayGeoProvider); // Start to first fox
         

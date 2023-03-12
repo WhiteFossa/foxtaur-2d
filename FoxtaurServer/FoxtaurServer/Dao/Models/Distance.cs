@@ -44,11 +44,6 @@ public class Distance
     /// Foxes on distance
     /// </summary>
     public IList<Location> FoxesLocations { get; set; }
-
-    /// <summary>
-    /// Expected foxes taking order
-    /// </summary>
-    public IList<Location> ExpectedFoxesOrderLocations { get; set; }
     
     /// <summary>
     /// Hunters on distance

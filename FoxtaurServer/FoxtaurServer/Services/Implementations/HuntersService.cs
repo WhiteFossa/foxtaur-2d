@@ -98,7 +98,7 @@ public class HuntersService : IHuntersService
         {
             await _distancesDao.UpdateAsync(distance);
         }
-        catch (Exception e)
+        catch (Exception)
         {
             return new RegistrationOnDistanceResponseDto(RegistrationOnDistanceResult.Failure);
         }

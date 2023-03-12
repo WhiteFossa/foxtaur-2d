@@ -39,13 +39,7 @@ public class CreateDistanceRequest
     /// </summary>
     [JsonPropertyName("foxesLocationsIds")]
     public IReadOnlyCollection<Guid> FoxesLocationsIds { get; set; }
-
-    /// <summary>
-    /// Expected foxes taking order (points to locations)
-    /// </summary>
-    [JsonPropertyName("expectedFoxesOrderLocationId")]
-    public IReadOnlyCollection<Guid> ExpectedFoxesOrderLocationsIds { get; set; }
-
+    
     /// <summary>
     /// First hunter start time (client will load hunters histories since this time)
     /// </summary>

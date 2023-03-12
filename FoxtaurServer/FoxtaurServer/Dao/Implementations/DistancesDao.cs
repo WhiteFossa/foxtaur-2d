@@ -61,7 +61,6 @@ public class DistancesDao : IDistancesDao
         oldDistance.FinishCorridorEntranceLocation = distance.FinishCorridorEntranceLocation;
         oldDistance.FinishLocation = distance.FinishLocation;
         oldDistance.FoxesLocations = distance.FoxesLocations;
-        oldDistance.ExpectedFoxesOrderLocations = distance.ExpectedFoxesOrderLocations;
         oldDistance.Hunters = distance.Hunters;
         oldDistance.FirstHunterStartTime = distance.FirstHunterStartTime;
         
@@ -81,11 +80,6 @@ public class DistancesDao : IDistancesDao
         for (var fli = 0; fli < distance.FoxesLocations.Count; fli ++)
         {
             distance.FoxesLocations[fli] = await LoadLinkedLocationAsync(distance.FoxesLocations[fli]);
-        }
-        
-        for (var efoli = 0; efoli < distance.ExpectedFoxesOrderLocations.Count; efoli ++)
-        {
-            distance.ExpectedFoxesOrderLocations[efoli] = await LoadLinkedLocationAsync(distance.ExpectedFoxesOrderLocations[efoli]);
         }
 
         for (var hi = 0; hi < distance.Hunters.Count; hi++)
@@ -160,8 +154,6 @@ public class DistancesDao : IDistancesDao
             .Include(d => d.FinishLocation)
             .Include(d => d.FoxesLocations)
             .ThenInclude(fl => fl.Fox)
-            .Include(d => d.ExpectedFoxesOrderLocations)
-            .ThenInclude(efol => efol.Fox)
             .Include(d => d.Hunters)
             .ThenInclude(h => h.Team);
     }

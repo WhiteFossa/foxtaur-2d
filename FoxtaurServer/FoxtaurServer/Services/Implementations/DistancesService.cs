@@ -51,7 +51,6 @@ public class DistancesService : IDistancesService
             distance.FinishCorridorEntranceLocationId,
             distance.FinishLocationId,
             distance.FoxesLocationsIds,
-            distance.ExpectedFoxesOrderLocationsIds,
             distance.HuntersIds,
             distance.FirstHunterStartTime);
     }

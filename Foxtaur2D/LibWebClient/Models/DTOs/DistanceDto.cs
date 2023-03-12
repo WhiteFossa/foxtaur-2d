@@ -55,12 +55,6 @@ public class DistanceDto : IIdedDto
     /// </summary>
     [JsonPropertyName("foxesLocationsIds")]
     public IReadOnlyCollection<Guid> FoxesLocationsIds { get; set; }
-
-    /// <summary>
-    /// Expected foxes taking order (points to locations)
-    /// </summary>
-    [JsonPropertyName("expectedFoxesOrderLocationId")]
-    public IReadOnlyCollection<Guid> ExpectedFoxesOrderLocationsIds { get; set; }
     
     /// <summary>
     /// Hunters on distance

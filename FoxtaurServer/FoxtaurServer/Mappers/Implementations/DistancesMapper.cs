@@ -32,7 +32,6 @@ public class DistancesMapper : IDistancesMapper
             distance.FinishCorridorEntranceLocation.Id,
             distance.FinishLocation.Id,
             distance.FoxesLocations.Select(fl => fl.Id).ToList(),
-            distance.ExpectedFoxesOrderLocations.Select(efol => efol.Id).ToList(),
             distance.Hunters.Select(h => Guid.Parse(h.Id)).ToList(),
             distance.FirstHunterStartTime);
     }
@@ -54,7 +53,6 @@ public class DistancesMapper : IDistancesMapper
             FinishCorridorEntranceLocation = new Location() { Id = distance.FinishCorridorEntranceLocationId },
             FinishLocation = new Location() { Id = distance.FinishLocationId },
             FoxesLocations = distance.FoxesLocationsIds.Select(flid => new Location() { Id = flid }).ToList(),
-            ExpectedFoxesOrderLocations = distance.ExpectedFoxesOrderLocationsIds.Select(efolid => new Location() { Id = efolid }).ToList(),
             Hunters = distance.HuntersIds.Select(hid => new Profile() { Id = hid.ToString() }).ToList(),
             FirstHunterStartTime = distance.FirstHunterStartTime
         };

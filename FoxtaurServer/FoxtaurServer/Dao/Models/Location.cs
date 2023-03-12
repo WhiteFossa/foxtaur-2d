@@ -60,9 +60,4 @@ public class Location
     /// This location acts as fox in those distances
     /// </summary>
     public List<Distance> AsFoxLocationInDistances { get; set; }
-    
-    /// <summary>
-    /// This location acts as expected fox order location in those distances
-    /// </summary>
-    public List<Distance> AsExpectedFoxOrderLocationInDistances { get; set; }
 }

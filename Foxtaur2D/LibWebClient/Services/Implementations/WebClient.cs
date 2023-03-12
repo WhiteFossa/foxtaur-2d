@@ -57,7 +57,6 @@ public class WebClient : IWebClient
                     new Location(Guid.NewGuid(), "Invalid finish corridor entrance location", LocationType.FinishCorridorEntrance, 0, 0, null),
                     new Location(Guid.NewGuid(), "Invalid finish location", LocationType.Start, 0, 0, null),
                     new List<Location>(),
-                    new List<Location>(),
                     new List<Hunter>(),
                     d.FirstHunterStartTime
                 );
@@ -90,11 +89,6 @@ public class WebClient : IWebClient
             .FoxesLocationsIds;
         var foxesLocations = await MassGetLocationsAsync(new LocationsMassGetRequest(foxesLocationsIds)).ConfigureAwait(false);
         
-        // Expected foxes locations order
-        var expectedFoxesOrderLocationsIds = distanceDto
-            .ExpectedFoxesOrderLocationsIds;
-        var expectedFoxesOrderLocations = await MassGetLocationsAsync(new LocationsMassGetRequest(expectedFoxesOrderLocationsIds)).ConfigureAwait(false);
-        
         // Hunters
         var huntersIds = distanceDto
             .HuntersIds;
@@ -109,7 +103,6 @@ public class WebClient : IWebClient
             finishCorridorEntrance,
             finish,
             foxesLocations,
-            expectedFoxesOrderLocations,
             hunters,
             distanceDto.FirstHunterStartTime);
     }

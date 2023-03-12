@@ -56,12 +56,6 @@ public class DistanceDto
     public IReadOnlyCollection<Guid> FoxesLocationsIds { get; }
 
     /// <summary>
-    /// Expected foxes taking order (points to locations)
-    /// </summary>
-    [JsonPropertyName("expectedFoxesOrderLocationId")]
-    public IReadOnlyCollection<Guid> ExpectedFoxesOrderLocationsIds { get; }
-    
-    /// <summary>
     /// Hunters on distance
     /// </summary>
     [JsonPropertyName("huntersIds")]
@@ -82,7 +76,6 @@ public class DistanceDto
         Guid finishCorridorEntranceLocationId,
         Guid finishLocationId,
         IReadOnlyCollection<Guid> foxesLocationsIds,
-        IReadOnlyCollection<Guid> expectedFoxesOrderLocationsIds,
         IReadOnlyCollection<Guid> huntersIds,
         DateTime firstHunterStartTime)
     {
@@ -92,7 +85,6 @@ public class DistanceDto
         }
 
         FoxesLocationsIds = foxesLocationsIds ?? throw new ArgumentNullException(nameof(foxesLocationsIds));
-        ExpectedFoxesOrderLocationsIds = expectedFoxesOrderLocationsIds ?? throw new ArgumentNullException(nameof(expectedFoxesOrderLocationsIds));
         HuntersIds = huntersIds ?? throw new ArgumentNullException(nameof(huntersIds));
 
         Id = id;
