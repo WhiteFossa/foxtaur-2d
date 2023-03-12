@@ -9,12 +9,6 @@ namespace FoxtaurServer.Models.Api.Requests;
 public class ProfileUpdateRequest
 {
     /// <summary>
-    /// Hunter ID
-    /// </summary>
-    [JsonPropertyName("id")]
-    public Guid Id { get; set; }
-    
-    /// <summary>
     /// First name
     /// </summary>
     [JsonPropertyName("firstName")]

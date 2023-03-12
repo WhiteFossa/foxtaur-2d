@@ -50,13 +50,13 @@ public class HuntersService : IHuntersService
         return _profilesMapper.Map(await _profilesDao.GetProfilesAsync(huntersIds.Select(hid => hid.ToString()).ToList()));
     }
 
-    public async Task<ProfileDto> UpdateHunterProfileAsync(ProfileUpdateRequest request)
+    public async Task<ProfileDto> UpdateHunterProfileAsync(ProfileUpdateRequest request, Guid hunterId)
     {
         _ = request ?? throw new ArgumentNullException(nameof(request));
 
         var profile = new Profile()
         {
-            Id = request.Id.ToString(),
+            Id = hunterId.ToString(),
             FirstName = request.FirstName,
             MiddleName = request.MiddleName,
             LastName = request.LastName,

@@ -75,8 +75,10 @@ public class HuntersController : ControllerBase
         {
             return BadRequest();
         }
+        
+        var currentUser = await _userManager.FindByNameAsync(User.Identity.Name);
 
-        var result = await _huntersService.UpdateHunterProfileAsync(request);
+        var result = await _huntersService.UpdateHunterProfileAsync(request, Guid.Parse(currentUser.Id));
 
         return Ok(result);
     }
