@@ -1,4 +1,5 @@
 using FoxtaurServer.Dao.Models;
+using FoxtaurServer.Models.Api;
 using Microsoft.EntityFrameworkCore;
 
 namespace FoxtaurServer.Dao;
@@ -38,8 +39,48 @@ public class MainDbContext : DbContext
     /// </summary>
     public DbSet<HunterLocation> HuntersLocations { get; set; }
 
+    /// <summary>
+    /// Distances
+    /// </summary>
+    public DbSet<Distance> Distances { get; set; }
+
     public MainDbContext(DbContextOptions<MainDbContext> options) : base(options)
     {
+    }
 
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        // Distances
+        modelBuilder
+            .Entity<Distance>()
+            .HasOne(d => d.StartLocation)
+            .WithMany(l => l.AsStartInDistances);
+
+        modelBuilder
+            .Entity<Distance>()
+            .HasOne(d => d.FinishCorridorEntranceLocation)
+            .WithMany(l => l.AsFinishCorridorEntranceInDistances);
+        
+        modelBuilder
+            .Entity<Distance>()
+            .HasOne(d => d.FinishLocation)
+            .WithMany(l => l.AsFinishLocationInDistances);
+        
+        modelBuilder
+            .Entity<Distance>()
+            .HasMany(d => d.FoxesLocations)
+            .WithMany(l => l.AsFoxLocationInDistances)
+            .UsingEntity(join => join.ToTable("DistancesToFoxesLocations"));
+        
+        modelBuilder
+            .Entity<Distance>()
+            .HasMany(d => d.ExpectedFoxesOrderLocations)
+            .WithMany(l => l.AsExpectedFoxOrderLocationInDistances)
+            .UsingEntity(join => join.ToTable("DistancesToExpectedFoxesOrderLocations"));
+
+        modelBuilder
+            .Entity<Distance>()
+            .HasMany(d => d.Hunters)
+            .WithMany(h => h.ParticipatedInDistances);
     }
 }

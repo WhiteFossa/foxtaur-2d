@@ -73,4 +73,9 @@ public class Profile
     /// B-component of hunter color
     /// </summary>
     public byte ColorB { get; set; }
+
+    /// <summary>
+    /// List of distances, to what hunter was registered
+    /// </summary>
+    public IList<Distance> ParticipatedInDistances { get; set; }
 }
