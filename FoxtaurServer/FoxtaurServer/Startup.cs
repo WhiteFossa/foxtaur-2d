@@ -124,7 +124,8 @@ public class Startup
         services.AddScoped<IMapsDao, MapsDao>();
         services.AddScoped<IFoxesDao, FoxesDao>();
         services.AddScoped<ILocationsDao, LocationsDao>();
-
+        services.AddScoped<IHuntersLocationsDao, HuntersLocationsDao>();
+        
         // Singletons
         services.AddSingleton<IConfigurationService, ConfigurationService>();
         services.AddSingleton<ITeamsMapper, TeamsMapper>();
@@ -133,6 +134,7 @@ public class Startup
         services.AddSingleton<IMapsMapper, MapsMapper>();
         services.AddSingleton<IFoxesMapper, FoxesMapper>();
         services.AddSingleton<ILocationsMapper, LocationsMapper>();
+        services.AddSingleton<IHuntersLocationsMapper, HuntersLocationsMapper>();
 
         // Hosted services
         

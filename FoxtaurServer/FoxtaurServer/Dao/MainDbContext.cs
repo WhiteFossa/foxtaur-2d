@@ -33,6 +33,11 @@ public class MainDbContext : DbContext
     /// </summary>
     public DbSet<Location> Locations { get; set; }
 
+    /// <summary>
+    /// Hunters locations
+    /// </summary>
+    public DbSet<HunterLocation> HuntersLocations { get; set; }
+
     public MainDbContext(DbContextOptions<MainDbContext> options) : base(options)
     {
 

@@ -18,13 +18,10 @@ namespace FoxtaurServer.Controllers.Api;
 public class HuntersController : ControllerBase
 {
     private readonly IHuntersService _huntersService;
-    private readonly UserManager<User> _userManager;
 
-    public HuntersController(IHuntersService huntersService,
-        UserManager<User> userManager)
+    public HuntersController(IHuntersService huntersService)
     {
         _huntersService = huntersService;
-        _userManager = userManager;
     }
     
     /// <summary>

@@ -1,0 +1,72 @@
+using FoxtaurServer.Dao.Abstract;
+using FoxtaurServer.Dao.Models;
+using Microsoft.EntityFrameworkCore;
+
+namespace FoxtaurServer.Dao.Implementations;
+
+public class HuntersLocationsDao : IHuntersLocationsDao
+{
+    private readonly MainDbContext _dbContext;
+
+    public HuntersLocationsDao(MainDbContext dbContext)
+    {
+        _dbContext = dbContext;
+    }
+    
+    public async Task<IReadOnlyCollection<HunterLocation>> GetHuntersLocationsByHuntersIdsAsync(IReadOnlyCollection<Guid> huntersIds, DateTime fromTime)
+    {
+        _ = huntersIds ?? throw new ArgumentNullException(nameof(huntersIds));
+
+        var stringedHuntersIds = huntersIds
+            .Select(hid => hid.ToString())
+            .ToList();
+
+        return _dbContext
+            .HuntersLocations
+            .Include(hl => hl.Hunter)
+            .Where(hl => hl.Timestamp >= fromTime)
+            .Where(hl => stringedHuntersIds.Contains(hl.Hunter.Id))
+            .ToList();
+    }
+
+    public async Task MassCreateAsync(IReadOnlyCollection<HunterLocation> hunterLocations)
+    {
+        _ = hunterLocations ?? throw new ArgumentNullException(nameof(hunterLocations));
+
+        foreach (var location in hunterLocations)
+        {
+            await LoadLinkedEntitiesAsync(location);
+        
+            await _dbContext.HuntersLocations.AddAsync(location);
+        }
+        
+        var affected = await _dbContext.SaveChangesAsync();
+        if (affected != hunterLocations.Count)
+        {
+            throw new InvalidOperationException($"Expected to insert { hunterLocations.Count } row, actually inserted { affected } rows!");
+        }
+    }
+
+    private async Task LoadLinkedEntitiesAsync(HunterLocation hunterLocation)
+    {
+        _ = hunterLocation ?? throw new ArgumentNullException(nameof(hunterLocation));
+
+        hunterLocation.Hunter = await LoadLinkedHunterAsync(hunterLocation.Hunter);
+    }
+    
+    private async Task<Profile> LoadLinkedHunterAsync(Profile hunter)
+    {
+        if (hunter == null)
+        {
+            return null;
+        }
+
+        var loadedHunter = await _dbContext.Profiles.SingleOrDefaultAsync(p => p.Id.ToLower() == hunter.Id.ToLower());
+        if (loadedHunter == null)
+        {
+            throw new ArgumentException(nameof(hunter));
+        }
+
+        return loadedHunter;
+    }
+}
