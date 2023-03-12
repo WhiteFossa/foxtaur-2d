@@ -125,6 +125,7 @@ public class Startup
         services.AddScoped<IFoxesDao, FoxesDao>();
         services.AddScoped<ILocationsDao, LocationsDao>();
         services.AddScoped<IHuntersLocationsDao, HuntersLocationsDao>();
+        services.AddScoped<IDistancesDao, DistancesDao>();
         
         // Singletons
         services.AddSingleton<IConfigurationService, ConfigurationService>();
@@ -135,6 +136,7 @@ public class Startup
         services.AddSingleton<IFoxesMapper, FoxesMapper>();
         services.AddSingleton<ILocationsMapper, LocationsMapper>();
         services.AddSingleton<IHuntersLocationsMapper, HuntersLocationsMapper>();
+        services.AddSingleton<IDistancesMapper, DistancesMapper>();
 
         // Hosted services
         
