@@ -51,7 +51,6 @@ public class ProfilesDao : IProfilesDao
 
         await LoadLinkedEntitiesAsync(profile);
         
-        oldProfile.Id = profile.Id;
         oldProfile.FirstName = profile.FirstName;
         oldProfile.MiddleName = profile.MiddleName;
         oldProfile.LastName = profile.LastName;

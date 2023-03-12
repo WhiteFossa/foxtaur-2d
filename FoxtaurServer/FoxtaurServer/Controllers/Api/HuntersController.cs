@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using FoxtaurServer.Dao.Models;
 using FoxtaurServer.Models.Api;
+using FoxtaurServer.Models.Api.Enums;
 using FoxtaurServer.Models.Api.Requests;
 using FoxtaurServer.Models.Identity;
 using FoxtaurServer.Services.Abstract;
@@ -18,10 +19,13 @@ namespace FoxtaurServer.Controllers.Api;
 public class HuntersController : ControllerBase
 {
     private readonly IHuntersService _huntersService;
+    private readonly UserManager<User> _userManager;
 
-    public HuntersController(IHuntersService huntersService)
+    public HuntersController(IHuntersService huntersService,
+        UserManager<User> userManager)
     {
         _huntersService = huntersService;
+        _userManager = userManager;
     }
     
     /// <summary>
@@ -76,5 +80,23 @@ public class HuntersController : ControllerBase
 
         return Ok(result);
     }
-    
+
+    /// <summary>
+    /// Register on distance
+    /// </summary>
+    [Route("api/Hunters/RegisterOnDistance")]
+    [HttpPost]
+    public async Task<ActionResult<ProfileDto>> UpdateProfile([FromBody]RegisterOnDistanceRequest request)
+    {
+        if (request == null)
+        {
+            return BadRequest();
+        }
+
+        var currentUser = await _userManager.FindByNameAsync(User.Identity.Name);
+        
+        var result = await _huntersService.RegisterOnDistanceAsync(request, Guid.Parse(currentUser.Id));
+        
+        return Ok(result);
+    }
 }

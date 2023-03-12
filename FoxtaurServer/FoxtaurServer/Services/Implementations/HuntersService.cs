@@ -2,6 +2,7 @@ using FoxtaurServer.Dao.Abstract;
 using FoxtaurServer.Dao.Models;
 using FoxtaurServer.Mappers.Abstract;
 using FoxtaurServer.Models.Api;
+using FoxtaurServer.Models.Api.Enums;
 using FoxtaurServer.Models.Api.Requests;
 using FoxtaurServer.Services.Abstract;
 using LibAuxiliary.Helpers;
@@ -13,14 +14,17 @@ public class HuntersService : IHuntersService
     private readonly IProfilesDao _profilesDao;
     private readonly IProfilesMapper _profilesMapper;
     private readonly IColorsMapper _colorsMapper;
+    private readonly IDistancesDao _distancesDao;
     
     public HuntersService(IProfilesDao profilesDao,
         IProfilesMapper profilesMapper,
-        IColorsMapper colorsMapper)
+        IColorsMapper colorsMapper,
+        IDistancesDao distancesDao)
     {
         _profilesDao = profilesDao;
         _profilesMapper = profilesMapper;
         _colorsMapper = colorsMapper;
+        _distancesDao = distancesDao;
     }
 
     public async Task<IReadOnlyCollection<HunterDto>> MassGetHuntersAsync(IReadOnlyCollection<Guid> huntersIds)
@@ -70,5 +74,35 @@ public class HuntersService : IHuntersService
         await _profilesDao.UpdateAsync(profile);
         
         return _profilesMapper.Map(profile);
+    }
+
+    public async Task<RegistrationOnDistanceResponseDto> RegisterOnDistanceAsync(RegisterOnDistanceRequest request, Guid hunterId)
+    {
+        _ = request ?? throw new ArgumentNullException(nameof(request));
+
+        var distance = await _distancesDao.GetDistanceByIdAsync(request.DistanceId);
+        if (distance == null)
+        {
+            return new RegistrationOnDistanceResponseDto(RegistrationOnDistanceResult.DistanceNotFound);
+        }
+
+        if (distance.Hunters.Select(h => h.Id).Contains(hunterId.ToString()))
+        {
+            // Hunter already registered on this distance
+            return new RegistrationOnDistanceResponseDto(RegistrationOnDistanceResult.AlreadyRegistered);
+        }
+        
+        distance.Hunters.Add(new Profile() { Id = hunterId.ToString() });
+
+        try
+        {
+            await _distancesDao.UpdateAsync(distance);
+        }
+        catch (Exception e)
+        {
+            return new RegistrationOnDistanceResponseDto(RegistrationOnDistanceResult.Failure);
+        }
+        
+        return new RegistrationOnDistanceResponseDto(RegistrationOnDistanceResult.Success);
     }
 }

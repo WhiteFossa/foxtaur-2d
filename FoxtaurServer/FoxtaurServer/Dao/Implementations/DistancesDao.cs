@@ -41,7 +41,33 @@ public class DistancesDao : IDistancesDao
         
         await _dbContext.SaveChangesAsync();
     }
-    
+
+    public async Task UpdateAsync(Distance distance)
+    {
+        _ = distance ?? throw new ArgumentNullException(nameof(distance));
+        
+        var oldDistance = await GetDistanceByIdAsync(distance.Id);
+        if (oldDistance == null)
+        {
+            throw new ArgumentException(nameof(distance.Id));
+        }
+
+        await LoadLinkedEntitiesAsync(distance);
+
+        oldDistance.Name = distance.Name;
+        oldDistance.Map = distance.Map;
+        oldDistance.IsActive = distance.IsActive;
+        oldDistance.StartLocation = distance.StartLocation;
+        oldDistance.FinishCorridorEntranceLocation = distance.FinishCorridorEntranceLocation;
+        oldDistance.FinishLocation = distance.FinishLocation;
+        oldDistance.FoxesLocations = distance.FoxesLocations;
+        oldDistance.ExpectedFoxesOrderLocations = distance.ExpectedFoxesOrderLocations;
+        oldDistance.Hunters = distance.Hunters;
+        oldDistance.FirstHunterStartTime = distance.FirstHunterStartTime;
+        
+        await _dbContext.SaveChangesAsync();
+    }
+
     private async Task LoadLinkedEntitiesAsync(Distance distance)
     {
         _ = distance ?? throw new ArgumentNullException(nameof(distance));

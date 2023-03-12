@@ -22,4 +22,9 @@ public interface IHuntersService
     /// Update hunter's profile
     /// </summary>
     Task<ProfileDto> UpdateHunterProfileAsync(ProfileUpdateRequest request);
+
+    /// <summary>
+    /// Register hunter on distance
+    /// </summary>
+    Task<RegistrationOnDistanceResponseDto> RegisterOnDistanceAsync(RegisterOnDistanceRequest request, Guid hunterId);
 }

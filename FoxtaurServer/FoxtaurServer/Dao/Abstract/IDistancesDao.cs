@@ -32,6 +32,11 @@ public interface IDistancesDao
     /// Create new distance. ID will be written into distance.Id
     /// </summary>
     Task CreateAsync(Distance distance);
+    
+    /// <summary>
+    /// Overwrite distance with new values
+    /// </summary>
+    Task UpdateAsync(Distance distance);
 
     #endregion
     
