@@ -5,7 +5,6 @@ using FoxtaurServer.Models.Api;
 using FoxtaurServer.Models.Api.Enums;
 using FoxtaurServer.Models.Api.Requests;
 using FoxtaurServer.Services.Abstract;
-using LibAuxiliary.Helpers;
 
 namespace FoxtaurServer.Services.Implementations;
 

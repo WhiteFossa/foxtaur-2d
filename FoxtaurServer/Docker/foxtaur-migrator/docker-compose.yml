@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+
+  # foxtaur-migrator
+  foxtaur-migrator:
+    image: foxtaur-migrator:latest
+    container_name: foxtaur-migrator
+
+    networks:
+      - foxtaur-infrastructure_foxtaur-net
+
+networks:
+  foxtaur-infrastructure_foxtaur-net:
+    driver: bridge
+    external: true
+
+

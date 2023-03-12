@@ -11,9 +11,14 @@ Create directories:
 
 # Infrastructure
 
-Duild image: $ docker build -f dockerfile-foxtaur-infrastructure -t foxtaur-infrastructure-postgres .
+Build image: $ docker build -f dockerfile-foxtaur-infrastructure -t foxtaur-infrastructure-postgres .
 
 Run container: $ docker-compose up -d
+
+# Apply migrations
+
+Build image: $ docker build -f dockerfile-foxtaur-migrator -t foxtaur-migrator .
+Run container: Go to Docker/foxtaur-migrator and invoke: $ docker-compose up
 
 # Main image
 

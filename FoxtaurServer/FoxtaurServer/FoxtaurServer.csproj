@@ -27,8 +27,4 @@
       </Content>
     </ItemGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\LibAuxiliary\LibAuxiliary.csproj" />
-    </ItemGroup>
-
 </Project>

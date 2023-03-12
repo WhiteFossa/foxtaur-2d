@@ -15,7 +15,7 @@ services:
       - foxtaur_logs:/opt/foxtaur/logs
 
     networks:
-      - dev_foxtaur-net
+      - foxtaur-infrastructure_foxtaur-net
 
 volumes:
 
@@ -23,7 +23,7 @@ volumes:
   foxtaur_logs:
 
 networks:
-  dev_foxtaur-net:
+  foxtaur-infrastructure_foxtaur-net:
     driver: bridge
     external: true
 
