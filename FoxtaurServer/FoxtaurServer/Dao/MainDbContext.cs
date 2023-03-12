@@ -44,6 +44,11 @@ public class MainDbContext : DbContext
     /// </summary>
     public DbSet<Distance> Distances { get; set; }
 
+    /// <summary>
+    /// Distances to foxes locations linkers
+    /// </summary>
+    public DbSet<DistanceToFoxLocationLinker> DistanceToFoxLocationLinkers { get; set; }
+
     public MainDbContext(DbContextOptions<MainDbContext> options) : base(options)
     {
     }
@@ -69,12 +74,17 @@ public class MainDbContext : DbContext
         modelBuilder
             .Entity<Distance>()
             .HasMany(d => d.FoxesLocations)
-            .WithMany(l => l.AsFoxLocationInDistances)
-            .UsingEntity(join => join.ToTable("DistancesToFoxesLocations"));
+            .WithOne(dtll => dtll.Distance);
         
         modelBuilder
             .Entity<Distance>()
             .HasMany(d => d.Hunters)
             .WithMany(h => h.ParticipatedInDistances);
+        
+        // Locations
+        modelBuilder
+            .Entity<Location>()
+            .HasMany(l => l.AsFoxLocationInDistanceToFoxLocationLinkers)
+            .WithOne(dtll => dtll.FoxLocation);
     }
 }

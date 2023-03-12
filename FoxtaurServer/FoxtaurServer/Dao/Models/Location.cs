@@ -57,7 +57,7 @@ public class Location
     public List<Distance> AsFinishLocationInDistances { get; set; }
     
     /// <summary>
-    /// This location acts as fox in those distances
+    /// This location acts as fox in those linkers
     /// </summary>
-    public List<Distance> AsFoxLocationInDistances { get; set; }
+    public List<DistanceToFoxLocationLinker> AsFoxLocationInDistanceToFoxLocationLinkers { get; set; }
 }

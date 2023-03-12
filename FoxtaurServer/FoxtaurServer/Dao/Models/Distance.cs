@@ -43,7 +43,7 @@ public class Distance
     /// <summary>
     /// Foxes on distance
     /// </summary>
-    public IList<Location> FoxesLocations { get; set; }
+    public IList<DistanceToFoxLocationLinker> FoxesLocations { get; set; }
     
     /// <summary>
     /// Hunters on distance

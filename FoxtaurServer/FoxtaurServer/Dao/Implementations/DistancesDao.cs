@@ -79,7 +79,7 @@ public class DistancesDao : IDistancesDao
 
         for (var fli = 0; fli < distance.FoxesLocations.Count; fli ++)
         {
-            distance.FoxesLocations[fli] = await LoadLinkedLocationAsync(distance.FoxesLocations[fli]);
+            distance.FoxesLocations[fli] = await LoadLinkedDistanceToFoxLocationLinkerAsync(distance.FoxesLocations[fli]);
         }
 
         for (var hi = 0; hi < distance.Hunters.Count; hi++)
@@ -105,6 +105,26 @@ public class DistancesDao : IDistancesDao
         }
 
         return loadedLocation;
+    }
+    
+    private async Task<DistanceToFoxLocationLinker> LoadLinkedDistanceToFoxLocationLinkerAsync(DistanceToFoxLocationLinker linker)
+    {
+        if (linker == null)
+        {
+            return null;
+        }
+
+        var loadedLinker = await _dbContext
+            .DistanceToFoxLocationLinkers
+            .Include(l => l.FoxLocation)
+            .ThenInclude(fl => fl.Fox)
+            .SingleOrDefaultAsync(l => l.Id == linker.Id);
+        if (loadedLinker == null)
+        {
+            throw new ArgumentException(nameof(linker));
+        }
+
+        return loadedLinker;
     }
     
     private async Task<Profile> LoadLinkedHunterAsync(Profile profile)
@@ -153,6 +173,7 @@ public class DistancesDao : IDistancesDao
             .Include(d => d.FinishCorridorEntranceLocation)
             .Include(d => d.FinishLocation)
             .Include(d => d.FoxesLocations)
+            .ThenInclude(l => l.FoxLocation)
             .ThenInclude(fl => fl.Fox)
             .Include(d => d.Hunters)
             .ThenInclude(h => h.Team);

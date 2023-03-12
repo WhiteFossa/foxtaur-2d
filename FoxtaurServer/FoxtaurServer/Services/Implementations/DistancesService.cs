@@ -1,4 +1,5 @@
 using FoxtaurServer.Dao.Abstract;
+using FoxtaurServer.Dao.Models;
 using FoxtaurServer.Mappers.Abstract;
 using FoxtaurServer.Models.Api;
 using FoxtaurServer.Services.Abstract;
@@ -9,12 +10,15 @@ public class DistancesService : IDistancesService
 {
     private readonly IDistancesDao _distancesDao;
     private readonly IDistancesMapper _distancesMapper;
+    private readonly IDistanceToFoxLocationLinkersDao _distanceToFoxLocationLinkersDao;
 
     public DistancesService(IDistancesDao distancesDao,
-        IDistancesMapper distancesMapper)
+        IDistancesMapper distancesMapper,
+        IDistanceToFoxLocationLinkersDao distanceToFoxLocationLinkersDao)
     {
         _distancesDao = distancesDao;
         _distancesMapper = distancesMapper;
+        _distanceToFoxLocationLinkersDao = distanceToFoxLocationLinkersDao;
     }
     
     public async Task<IReadOnlyCollection<DistanceDto>> ListDistancesAsync()
@@ -39,9 +43,28 @@ public class DistancesService : IDistancesService
         }
         
         var mappedDistance = _distancesMapper.Map(distance);
-
+        
         await _distancesDao.CreateAsync(mappedDistance);
 
+        // Creating fox orders locations linkers
+        var foxesLocationsIds = distance.FoxesLocationsIds.ToList();
+        
+        var linkers = new List<DistanceToFoxLocationLinker>();
+        for (var fli = 0; fli < foxesLocationsIds.Count; fli ++)
+        {
+            linkers.Add(new DistanceToFoxLocationLinker()
+            {
+                Distance = mappedDistance,
+                FoxLocation = new Location() { Id = foxesLocationsIds[fli] }, // DAO will load full location
+                Order = fli
+            });
+        }
+
+        await _distanceToFoxLocationLinkersDao.MassCreateAsync(linkers);
+
+        mappedDistance.FoxesLocations = linkers;
+        await _distancesDao.UpdateAsync(mappedDistance);
+        
         return new DistanceDto(
             mappedDistance.Id,
             distance.Name,

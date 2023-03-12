@@ -23,6 +23,12 @@ public class DistancesMapper : IDistancesMapper
             return null;
         }
 
+        var orderedFoxesLocationsIds = distance
+            .FoxesLocations
+            .OrderBy(l => l.Order)
+            .Select(l => l.FoxLocation.Id)
+            .ToList();
+
         return new DistanceDto(
             distance.Id,
             distance.Name,
@@ -31,7 +37,7 @@ public class DistancesMapper : IDistancesMapper
             distance.StartLocation.Id,
             distance.FinishCorridorEntranceLocation.Id,
             distance.FinishLocation.Id,
-            distance.FoxesLocations.Select(fl => fl.Id).ToList(),
+            orderedFoxesLocationsIds,
             distance.Hunters.Select(h => Guid.Parse(h.Id)).ToList(),
             distance.FirstHunterStartTime);
     }
@@ -52,7 +58,7 @@ public class DistancesMapper : IDistancesMapper
             StartLocation = new Location() { Id = distance.StartLocationId }, // DAO !MUST! load full entities
             FinishCorridorEntranceLocation = new Location() { Id = distance.FinishCorridorEntranceLocationId },
             FinishLocation = new Location() { Id = distance.FinishLocationId },
-            FoxesLocations = distance.FoxesLocationsIds.Select(flid => new Location() { Id = flid }).ToList(),
+            FoxesLocations = new List<DistanceToFoxLocationLinker>(), // !! MAP LINKERS OUTSIDE !!
             Hunters = distance.HuntersIds.Select(hid => new Profile() { Id = hid.ToString() }).ToList(),
             FirstHunterStartTime = distance.FirstHunterStartTime
         };

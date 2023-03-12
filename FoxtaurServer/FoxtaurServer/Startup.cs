@@ -4,6 +4,7 @@ using FoxtaurServer.Constants;
 using FoxtaurServer.Dao;
 using FoxtaurServer.Dao.Abstract;
 using FoxtaurServer.Dao.Implementations;
+using FoxtaurServer.Dao.Models;
 using FoxtaurServer.Mappers.Abstract;
 using FoxtaurServer.Mappers.Implementations;
 using FoxtaurServer.Models.Identity;
@@ -126,6 +127,7 @@ public class Startup
         services.AddScoped<ILocationsDao, LocationsDao>();
         services.AddScoped<IHuntersLocationsDao, HuntersLocationsDao>();
         services.AddScoped<IDistancesDao, DistancesDao>();
+        services.AddScoped<IDistanceToFoxLocationLinkersDao, DistanceToFoxLocationLinkersDao>();
         
         // Singletons
         services.AddSingleton<IConfigurationService, ConfigurationService>();
