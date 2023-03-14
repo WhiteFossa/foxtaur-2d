@@ -872,6 +872,45 @@
           }
         }
       },
+      "Microsoft.Extensions.Configuration/7.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Extensions.Configuration.Abstractions": "7.0.0",
+          "Microsoft.Extensions.Primitives": "7.0.0"
+        },
+        "compile": {
+          "lib/net7.0/Microsoft.Extensions.Configuration.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net7.0/Microsoft.Extensions.Configuration.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/net6.0/_._": {}
+        }
+      },
+      "Microsoft.Extensions.Configuration.Abstractions/7.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Extensions.Primitives": "7.0.0"
+        },
+        "compile": {
+          "lib/net7.0/Microsoft.Extensions.Configuration.Abstractions.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net7.0/Microsoft.Extensions.Configuration.Abstractions.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/net6.0/_._": {}
+        }
+      },
       "Microsoft.Extensions.DependencyInjection/7.0.0": {
         "type": "package",
         "dependencies": {
@@ -1021,6 +1060,19 @@
           "lib/netstandard1.0/_._": {}
         }
       },
+      "NLog/5.1.2": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/NLog.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/NLog.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "System.ComponentModel.Annotations/4.5.0": {
         "type": "package",
         "compile": {
@@ -1104,6 +1156,9 @@
       "LibAuxiliary/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v7.0",
+        "dependencies": {
+          "Microsoft.Extensions.Configuration": "7.0.0"
+        },
         "compile": {
           "bin/placeholder/LibAuxiliary.dll": {}
         },
@@ -1129,6 +1184,7 @@
           "MaxRev.Gdal.Core": "3.6.1.100",
           "MaxRev.Gdal.LinuxRuntime.Minimal": "3.6.1.100",
           "MaxRev.Gdal.WindowsRuntime.Minimal": "3.6.1.110",
+          "NLog": "5.1.2",
           "ZstdNet": "1.4.5"
         },
         "compile": {
@@ -1145,7 +1201,8 @@
           "Avalonia": "0.10.18",
           "LibAuxiliary": "1.0.0",
           "LibGeo": "1.0.0",
-          "Microsoft.Extensions.Http": "7.0.0"
+          "Microsoft.Extensions.Http": "7.0.0",
+          "NLog": "5.1.2"
         },
         "compile": {
           "bin/placeholder/LibWebClient.dll": {}
@@ -1572,6 +1629,60 @@
         "runtimes/win-x64/native/zstd.dll"
       ]
     },
+    "Microsoft.Extensions.Configuration/7.0.0": {
+      "sha512": "tldQUBWt/xeH2K7/hMPPo5g8zuLc3Ro9I5d4o/XrxvxOCA2EZBtW7bCHHTc49fcBtvB8tLAb/Qsmfrq+2SJ4vA==",
+      "type": "package",
+      "path": "microsoft.extensions.configuration/7.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "buildTransitive/net461/Microsoft.Extensions.Configuration.targets",
+        "buildTransitive/net462/_._",
+        "buildTransitive/net6.0/_._",
+        "buildTransitive/netcoreapp2.0/Microsoft.Extensions.Configuration.targets",
+        "lib/net462/Microsoft.Extensions.Configuration.dll",
+        "lib/net462/Microsoft.Extensions.Configuration.xml",
+        "lib/net6.0/Microsoft.Extensions.Configuration.dll",
+        "lib/net6.0/Microsoft.Extensions.Configuration.xml",
+        "lib/net7.0/Microsoft.Extensions.Configuration.dll",
+        "lib/net7.0/Microsoft.Extensions.Configuration.xml",
+        "lib/netstandard2.0/Microsoft.Extensions.Configuration.dll",
+        "lib/netstandard2.0/Microsoft.Extensions.Configuration.xml",
+        "microsoft.extensions.configuration.7.0.0.nupkg.sha512",
+        "microsoft.extensions.configuration.nuspec",
+        "useSharedDesignerContext.txt"
+      ]
+    },
+    "Microsoft.Extensions.Configuration.Abstractions/7.0.0": {
+      "sha512": "f34u2eaqIjNO9YLHBz8rozVZ+TcFiFs0F3r7nUJd7FRkVSxk8u4OpoK226mi49MwexHOR2ibP9MFvRUaLilcQQ==",
+      "type": "package",
+      "path": "microsoft.extensions.configuration.abstractions/7.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "buildTransitive/net461/Microsoft.Extensions.Configuration.Abstractions.targets",
+        "buildTransitive/net462/_._",
+        "buildTransitive/net6.0/_._",
+        "buildTransitive/netcoreapp2.0/Microsoft.Extensions.Configuration.Abstractions.targets",
+        "lib/net462/Microsoft.Extensions.Configuration.Abstractions.dll",
+        "lib/net462/Microsoft.Extensions.Configuration.Abstractions.xml",
+        "lib/net6.0/Microsoft.Extensions.Configuration.Abstractions.dll",
+        "lib/net6.0/Microsoft.Extensions.Configuration.Abstractions.xml",
+        "lib/net7.0/Microsoft.Extensions.Configuration.Abstractions.dll",
+        "lib/net7.0/Microsoft.Extensions.Configuration.Abstractions.xml",
+        "lib/netstandard2.0/Microsoft.Extensions.Configuration.Abstractions.dll",
+        "lib/netstandard2.0/Microsoft.Extensions.Configuration.Abstractions.xml",
+        "microsoft.extensions.configuration.abstractions.7.0.0.nupkg.sha512",
+        "microsoft.extensions.configuration.abstractions.nuspec",
+        "useSharedDesignerContext.txt"
+      ]
+    },
     "Microsoft.Extensions.DependencyInjection/7.0.0": {
       "sha512": "elNeOmkeX3eDVG6pYVeV82p29hr+UKDaBhrZyWvWLw/EVZSYEkZlQdkp0V39k/Xehs2Qa0mvoCvkVj3eQxNQ1Q==",
       "type": "package",
@@ -1840,6 +1951,30 @@
         "microsoft.netcore.targets.1.0.1.nupkg.sha512",
         "microsoft.netcore.targets.nuspec",
         "runtime.json"
+      ]
+    },
+    "NLog/5.1.2": {
+      "sha512": "JfQY93ure3IPVTN3eabBewBGvrcXcWIlaesFEXdy5UzIymfIT9yCgLISYtM0cOhjWziIaUr/6Z9NC2RwtjwrsQ==",
+      "type": "package",
+      "path": "nlog/5.1.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "N.png",
+        "lib/net35/NLog.dll",
+        "lib/net35/NLog.xml",
+        "lib/net45/NLog.dll",
+        "lib/net45/NLog.xml",
+        "lib/net46/NLog.dll",
+        "lib/net46/NLog.xml",
+        "lib/netstandard1.3/NLog.dll",
+        "lib/netstandard1.3/NLog.xml",
+        "lib/netstandard1.5/NLog.dll",
+        "lib/netstandard1.5/NLog.xml",
+        "lib/netstandard2.0/NLog.dll",
+        "lib/netstandard2.0/NLog.xml",
+        "nlog.5.1.2.nupkg.sha512",
+        "nlog.nuspec"
       ]
     },
     "System.ComponentModel.Annotations/4.5.0": {
@@ -2193,41 +2328,49 @@
     ]
   },
   "packageFolders": {
-    "/home/fossa/.nuget/packages/": {}
+    "C:\\Users\\Fossa\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibRenderer/LibRenderer.csproj",
+      "projectUniqueName": "C:\\Non work\\foxtaur-2d\\Foxtaur2D\\LibRenderer\\LibRenderer.csproj",
       "projectName": "LibRenderer",
-      "projectPath": "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibRenderer/LibRenderer.csproj",
-      "packagesPath": "/home/fossa/.nuget/packages/",
-      "outputPath": "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibRenderer/obj/",
+      "projectPath": "C:\\Non work\\foxtaur-2d\\Foxtaur2D\\LibRenderer\\LibRenderer.csproj",
+      "packagesPath": "C:\\Users\\Fossa\\.nuget\\packages\\",
+      "outputPath": "C:\\Non work\\foxtaur-2d\\Foxtaur2D\\LibRenderer\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "/home/fossa/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\Fossa\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net7.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
-            "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibAuxiliary/LibAuxiliary.csproj": {
-              "projectPath": "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibAuxiliary/LibAuxiliary.csproj"
+            "C:\\Non work\\foxtaur-2d\\Foxtaur2D\\LibAuxiliary\\LibAuxiliary.csproj": {
+              "projectPath": "C:\\Non work\\foxtaur-2d\\Foxtaur2D\\LibAuxiliary\\LibAuxiliary.csproj"
             },
-            "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibGeo/LibGeo.csproj": {
-              "projectPath": "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibGeo/LibGeo.csproj"
+            "C:\\Non work\\foxtaur-2d\\Foxtaur2D\\LibGeo\\LibGeo.csproj": {
+              "projectPath": "C:\\Non work\\foxtaur-2d\\Foxtaur2D\\LibGeo\\LibGeo.csproj"
             },
-            "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibResources/LibResources.csproj": {
-              "projectPath": "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibResources/LibResources.csproj"
+            "C:\\Non work\\foxtaur-2d\\Foxtaur2D\\LibResources\\LibResources.csproj": {
+              "projectPath": "C:\\Non work\\foxtaur-2d\\Foxtaur2D\\LibResources\\LibResources.csproj"
             },
-            "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibWebClient/LibWebClient.csproj": {
-              "projectPath": "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibWebClient/LibWebClient.csproj"
+            "C:\\Non work\\foxtaur-2d\\Foxtaur2D\\LibWebClient\\LibWebClient.csproj": {
+              "projectPath": "C:\\Non work\\foxtaur-2d\\Foxtaur2D\\LibWebClient\\LibWebClient.csproj"
             }
           }
         }
@@ -2267,7 +2410,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/lib64/dotnet/sdk/7.0.103/RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.102\\RuntimeIdentifierGraph.json"
       }
     }
   }
