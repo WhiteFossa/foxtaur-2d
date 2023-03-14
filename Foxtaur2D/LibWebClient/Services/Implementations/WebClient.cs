@@ -173,7 +173,7 @@ public class WebClient : IWebClient
                 h.Name,
                 h.IsRunning,
                 h.TeamId != null ? teams.Single(t => t.Id == h.TeamId.Value) : null,
-                locationsHistories[h.Id],
+                locationsHistories.ContainsKey(h.Id) ? locationsHistories[h.Id] : new List<HunterLocation>(),
                 new Color(h.Color.A, h.Color.R, h.Color.G, h.Color.B)))
             .ToList();
     }

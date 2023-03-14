@@ -48,6 +48,11 @@ public class HuntersLayer : IHuntersVectorLayer
     /// </summary>
     private void DrawHunter(Hunter hunter, DrawingContext context, double scalingFactor, IGeoProvider displayGeoProvider)
     {
+        if (!hunter.LocationsHistory.Any())
+        {
+            return; // We don't know where shi is
+        }
+        
         var lastKnownLocation = hunter.LocationsHistory.Last();
 
         var hunterX = displayGeoProvider.LonToX(lastKnownLocation.Lon) / scalingFactor;

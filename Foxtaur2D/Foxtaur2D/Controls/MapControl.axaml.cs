@@ -720,7 +720,8 @@ public partial class MapControl : UserControl
                     h.Name,
                     h.IsRunning,
                     h.Team,
-                    GetHunterLocationFromDictionaryWithLogging(newHuntersLocationsData, h.LocationsHistory, h.Id), // Skipping the update if hunters list changed and we can't find hunter data
+                    GetHunterLocationFromDictionaryWithLogging(newHuntersLocationsData, h), // Skipping the update if hunters list changed and we can't find hunter data
+                    // or if hunter have no coordinates at all
                     h.Color
                 ))
                 .ToList();
@@ -737,22 +738,22 @@ public partial class MapControl : UserControl
         });
     }
 
-    private IReadOnlyCollection<HunterLocation> GetHunterLocationFromDictionaryWithLogging(Dictionary<Guid, IReadOnlyCollection<HunterLocation>> dictionary,
-        IReadOnlyCollection<HunterLocation> oldLocations,
-        Guid hunterId)
+    private IReadOnlyCollection<HunterLocation> GetHunterLocationFromDictionaryWithLogging(
+        Dictionary<Guid, IReadOnlyCollection<HunterLocation>> dictionary,
+        Hunter hunter)
     {
-        if (dictionary.ContainsKey(hunterId))
+        if (dictionary.ContainsKey(hunter.Id))
         {
-            return dictionary[hunterId];
+            return dictionary[hunter.Id];
         }
         else
         {
             Dispatcher.UIThread.InvokeAsync(() =>
             {
-                _logger.Error("Cant't find hunter in hunters location dictionary!");
+                _logger.Warn($"Cant't find hunter with name { hunter.Name } ({ hunter.Id }) in hunters location dictionary!");
             });
             
-            return oldLocations;
+            return hunter.LocationsHistory;
         }
     }
 
