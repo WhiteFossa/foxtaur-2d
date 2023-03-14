@@ -3,17 +3,45 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewModels="clr-namespace:FoxtaurTracker.ViewModels"
              x:Class="FoxtaurTracker.Views.MainPage"
-             Title="MainPage">
+             Title="Main">
 
     <!-- Model -->
     <ContentPage.BindingContext>
         <viewModels:MainViewModel />
     </ContentPage.BindingContext>
 
+    <ScrollView>
 
-    <VerticalStackLayout>
+        <VerticalStackLayout
+            VerticalOptions="Center">
 
-        <Label FontSize="22" FontAttributes="Bold" Text="{Binding Title}" VerticalOptions="End" />
+            <Grid
+                RowSpacing="10"
+                Padding="10">
 
-    </VerticalStackLayout>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                    <Button
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Text="Log in"
+                        Command="{ Binding LogInCommand }"/>
+
+                    <Button
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Text="Register"
+                        Command="{ Binding RegisterCommand }"/>
+
+            </Grid>
+
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

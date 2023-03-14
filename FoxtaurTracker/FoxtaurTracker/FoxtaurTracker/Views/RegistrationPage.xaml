@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FoxtaurTracker.Views.RegistrationPage"
+             xmlns:viewModels="clr-namespace:FoxtaurTracker.ViewModels"
+             Title="Registration">
+
+    <!-- Model -->
+    <ContentPage.BindingContext>
+        <viewModels:RegistrationViewModel />
+    </ContentPage.BindingContext>
+
+    <ScrollView>
+
+        <VerticalStackLayout
+            VerticalOptions="Center">
+
+            <Grid
+                Padding="10"
+                RowSpacing="10">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Login -->
+                <Grid
+                    Grid.Column="0"
+                    Grid.Row="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Text="Login:" />
+
+                    <Border
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        StrokeShape="RoundRectangle 10">
+
+                        <Entry
+                            Placeholder="Enter login" />
+
+                    </Border>
+                </Grid>
+
+                <!-- Password -->
+                <Grid
+                    Grid.Column="0"
+                    Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Text="Password:" />
+
+                    <Border
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        StrokeShape="RoundRectangle 10">
+
+                        <Entry
+                            IsPassword="True"
+                            Placeholder="Enter password" />
+
+                    </Border>
+                </Grid>
+
+                <!-- Repeat password -->
+                <Grid
+                    Grid.Column="0"
+                    Grid.Row="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Text="Repeat password:" />
+
+                    <Border
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        StrokeShape="RoundRectangle 10">
+
+                        <Entry
+                            IsPassword="True"
+                            Placeholder="Repeat password" />
+
+                    </Border>
+                </Grid>
+
+                <Button
+                    Grid.Row="3"
+                    Grid.Column="0"
+                    Text="Register"
+                    Command="{ Binding RegisterCommand }"/>
+
+            </Grid>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
