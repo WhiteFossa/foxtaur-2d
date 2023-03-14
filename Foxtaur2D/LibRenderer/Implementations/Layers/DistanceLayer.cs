@@ -31,13 +31,15 @@ public class DistanceLayer : IVectorLayer, IRasterLayer
 
     private OnDistanceLoaded _onDistanceLoadedEvent;
     
-    public int Order { get; set; }
+    public int Order { get; private set; }
     
     /// <summary>
     /// OnDistanceLoadedEvent is called on separate thread!
     /// </summary>
-    public DistanceLayer(Distance distanceModel, OnDistanceLoaded onDistanceLoadedEvent, ITextDrawer textDrawer)
+    public DistanceLayer(Distance distanceModel, OnDistanceLoaded onDistanceLoadedEvent, ITextDrawer textDrawer, int orderLayer)
     {
+        Order = orderLayer;
+        
         _textDrawer = textDrawer ?? throw new ArgumentNullException(nameof(textDrawer));
         _distance = distanceModel ?? throw new ArgumentNullException(nameof(distanceModel));
         _onDistanceLoadedEvent = onDistanceLoadedEvent ?? throw new ArgumentNullException(nameof(onDistanceLoadedEvent));
@@ -262,7 +264,7 @@ public class DistanceLayer : IVectorLayer, IRasterLayer
     private void OnMapImageLoaded(DownloadableResourceBase resource)
     {
         var imageResource = resource as CompressedStreamResource;
-        _mapLayer = new GeoTiffLayer(imageResource.DecompressedStream, _textDrawer);
+        _mapLayer = new GeoTiffLayer(imageResource.DecompressedStream, _textDrawer, Order); // Inheriting order from distance because image is a part of distance
         _mapLayer.Load();
         
         // Map is ready

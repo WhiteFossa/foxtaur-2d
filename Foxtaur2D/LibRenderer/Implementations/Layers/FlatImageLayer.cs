@@ -17,10 +17,12 @@ public class FlatImageLayer : IRasterLayer
     public int Width { get; private set; }
     public int Height { get; private set; }
     
-    public int Order { get; set; }
+    public int Order { get; private set; }
     
-    public FlatImageLayer(string path)
+    public FlatImageLayer(string path, int layerOrder)
     {
+        Order = layerOrder;
+        
         _image = new MagickImage(path);
 
         Width = _image.Width;

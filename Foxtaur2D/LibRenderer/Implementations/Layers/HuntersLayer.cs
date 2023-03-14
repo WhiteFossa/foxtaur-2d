@@ -20,10 +20,12 @@ public class HuntersLayer : IHuntersVectorLayer
     /// </summary>
     private readonly Bitmap _hunterMarker;
 
-    public int Order { get; set; }
+    public int Order { get; private set; }
     
-    public HuntersLayer()
+    public HuntersLayer(int layerOrder)
     {
+        Order = layerOrder;
+        
         _hunterMarker = new Bitmap(@"Resources/Sprites/hunter_marker.png");
     }
     

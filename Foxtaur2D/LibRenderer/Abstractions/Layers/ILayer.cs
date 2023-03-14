@@ -9,5 +9,5 @@ public interface ILayer
     /// Layer order. Bigger number -> on top
     /// It's good to use sparse numbers, like 1000, 2000, 3000 and so on
     /// </summary>
-    int Order { get; set; }
+    int Order { get; }
 }

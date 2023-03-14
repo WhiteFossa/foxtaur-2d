@@ -19,10 +19,12 @@ public class GeoTiffLayer : IRasterLayer
     public int Width { get; private set; }
     public int Height { get; private set; }
 
-    public int Order { get; set; }
+    public int Order { get; private set; }
     
-    public GeoTiffLayer(string path, ITextDrawer textDrawer)
+    public GeoTiffLayer(string path, ITextDrawer textDrawer, int layerOrder)
     {
+        Order = layerOrder;
+        
         _textDrawer = textDrawer;
         
         _geoTiffReader = new GeoTiffReader();
@@ -31,8 +33,10 @@ public class GeoTiffLayer : IRasterLayer
         InitLayer();
     }
 
-    public GeoTiffLayer(Stream imageData, ITextDrawer textDrawer)
+    public GeoTiffLayer(Stream imageData, ITextDrawer textDrawer, int layerOrder)
     {
+        Order = layerOrder;
+        
         _textDrawer = textDrawer;
         
         _geoTiffReader = new GeoTiffReader();

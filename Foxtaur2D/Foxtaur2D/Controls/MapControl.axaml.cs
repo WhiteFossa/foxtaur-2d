@@ -200,13 +200,8 @@ public partial class MapControl : UserControl
         _backingArray = null; // It will remain null till the first resize
 
         // Layers creation
-        var basemapLayer = new FlatImageLayer(@"Resources/HYP_50M_SR_W.jpeg");
-        basemapLayer.Order = BasemapLayerOrder; // Basemap is lowest layer
-        _layers.Add(basemapLayer);
-
-        var huntersLayer = new HuntersLayer();
-        huntersLayer.Order = HuntersLayerOrder;
-        _layers.Add(huntersLayer);
+        _layers.Add(new FlatImageLayer(@"Resources/HYP_50M_SR_W.jpeg", BasemapLayerOrder));
+        _layers.Add(new HuntersLayer(HuntersLayerOrder));
         
         OrderLayers();
 
@@ -795,9 +790,7 @@ public partial class MapControl : UserControl
 
     private void AddDistanceLayer()
     {
-        _distanceLayer = new DistanceLayer(_activeDistance, OnDistanceLoadedHandler, _textDrawer);
-        _distanceLayer.Order = DistanceLayerOrder;
-        _layers.Add(_distanceLayer);
+        _layers.Add(new DistanceLayer(_activeDistance, OnDistanceLoadedHandler, _textDrawer, DistanceLayerOrder));
         
         OrderLayers();
     }
