@@ -388,7 +388,13 @@ public partial class MapControl : UserControl
         // Rendering backing image
         fixed (byte* pixels = _backingArray)
         {
-            _displayBitmap = new Bitmap(PixelFormat.Rgba8888, (nint)pixels, new PixelSize(_viewportWidth, _viewportHeight), new Vector(RendererConstants.DefaultDPI / _scaling, RendererConstants.DefaultDPI / _scaling), _viewportWidth * 4);
+            _displayBitmap = new Bitmap(
+                PixelFormat.Rgba8888,
+                AlphaFormat.Opaque,
+                (nint)pixels,
+                new PixelSize(_viewportWidth, _viewportHeight),
+                new Vector(RendererConstants.DefaultDPI / _scaling, RendererConstants.DefaultDPI / _scaling),
+                _viewportWidth * 4);
         }
     }
 
