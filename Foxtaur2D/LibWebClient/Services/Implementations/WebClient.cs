@@ -162,6 +162,7 @@ public class WebClient : IWebClient
         var teamsIds = hunters
             .Where(h => h.TeamId.HasValue)
             .Select(h => h.TeamId.Value)
+            .Distinct()
             .ToList();
         var teams = await MassGetTeamsAsync(new TeamsMassGetRequest(teamsIds)).ConfigureAwait(false);
 
