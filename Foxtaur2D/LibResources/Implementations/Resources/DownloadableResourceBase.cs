@@ -97,6 +97,7 @@ public abstract class DownloadableResourceBase
             try
             {
                 var httpClient = new HttpClient();
+                httpClient.Timeout = new TimeSpan(0, 0, ResourcesConstants.HttpClientTimeout);
                 using (var webRequest = new HttpRequestMessage(HttpMethod.Get, uriResult))
                 {
                     using (var downloadStream = httpClient.Send(webRequest).Content.ReadAsStream())

@@ -3,6 +3,7 @@ using System.Text.Json;
 using LibAuxiliary.Abstract;
 using LibAuxiliary.Constants;
 using LibGeo.Implementations.Helpers;
+using LibWebClient.Constants;
 using LibWebClient.Enums;
 using LibWebClient.Models.Abstract;
 using LibWebClient.Models.DTOs;
@@ -27,6 +28,7 @@ public class WebClientRaw : IWebClientRaw
     {
         _configurationService = configurationService;
         _httpClient = httpClient;
+        _httpClient.Timeout = new TimeSpan(0, 0, WebClientConstants.HttpClientTimeout);
         
         _configurationService = configurationService;
 
