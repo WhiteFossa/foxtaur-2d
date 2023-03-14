@@ -62,7 +62,9 @@ public class DistanceLayer : IVectorLayer, IRasterLayer
         
         context.DrawRectangle(new SolidColorBrush(Colors.Transparent), // Always transparent, no need for a constant
             new Pen(new SolidColorBrush(RendererConstants.DistanceBorderColor), RendererConstants.DistanceBorderThickness),
-            new Rect(new Point(leftX, topY), new Point(rightX, bottomY)));
+            new Rect(new Point(leftX, topY), new Point(rightX, bottomY)),
+            RendererConstants.DistanceBorderCornersRadius,
+            RendererConstants.DistanceBorderCornersRadius);
         
         // Distance name
         var formattedDistanceName = new FormattedText(_distance.Name,

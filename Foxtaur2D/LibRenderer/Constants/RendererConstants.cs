@@ -82,6 +82,11 @@ public static class RendererConstants
     public const double DistanceBorderThickness = 2.0;
 
     /// <summary>
+    /// Distance border corners radius
+    /// </summary>
+    public const double DistanceBorderCornersRadius = 10.0;
+
+    /// <summary>
     /// Distance name font size
     /// </summary>
     public const double DistanceNameFontSize = 32;
