@@ -30,7 +30,9 @@ public class DistanceLayer : IVectorLayer, IRasterLayer
     private Mutex _isReadyLock = new Mutex();
 
     private OnDistanceLoaded _onDistanceLoadedEvent;
-
+    
+    public int Order { get; set; }
+    
     /// <summary>
     /// OnDistanceLoadedEvent is called on separate thread!
     /// </summary>

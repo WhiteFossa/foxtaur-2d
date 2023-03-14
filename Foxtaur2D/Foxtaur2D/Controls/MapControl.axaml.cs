@@ -40,6 +40,29 @@ public delegate void SetHunterDataStateInfoDelegate(HuntersDataState state);
 
 public partial class MapControl : UserControl
 {
+    #region Constants
+
+    #region  Layers order
+
+    /// <summary>
+    /// Basemap layer order
+    /// </summary>
+    private const int BasemapLayerOrder = 0;
+    
+    /// <summary>
+    /// Distance layer order
+    /// </summary>
+    private const int DistanceLayerOrder = 1000;
+    
+    /// <summary>
+    /// Hunters layer order
+    /// </summary>
+    private const int HuntersLayerOrder = 2000;
+
+    #endregion
+    
+    #endregion
+    
     #region Control sizes
 
     /// <summary>
@@ -176,8 +199,16 @@ public partial class MapControl : UserControl
 
         _backingArray = null; // It will remain null till the first resize
 
-        _layers.Add(new FlatImageLayer(@"Resources/HYP_50M_SR_W.jpeg"));
-        _layers.Add(new HuntersLayer());
+        // Layers creation
+        var basemapLayer = new FlatImageLayer(@"Resources/HYP_50M_SR_W.jpeg");
+        basemapLayer.Order = BasemapLayerOrder; // Basemap is lowest layer
+        _layers.Add(basemapLayer);
+
+        var huntersLayer = new HuntersLayer();
+        huntersLayer.Order = HuntersLayerOrder;
+        _layers.Add(huntersLayer);
+        
+        OrderLayers();
 
         // Listening for properties changes to process resize
         PropertyChanged += OnPropertyChangedListener;
@@ -473,8 +504,7 @@ public partial class MapControl : UserControl
 
         if (_activeDistance != null)
         {
-            _distanceLayer = new DistanceLayer(_activeDistance, OnDistanceLoadedHandler, _textDrawer);
-            _layers.Add(_distanceLayer);
+            AddDistanceLayer();
 
             ApplyHuntersFilter();
         }
@@ -758,8 +788,24 @@ public partial class MapControl : UserControl
     }
 
 
-public void SetHuntersDataReloadInterval(double interval)
+    public void SetHuntersDataReloadInterval(double interval)
     {
         _huntersDataReloadTimer.Interval = interval;
+    }
+
+    private void AddDistanceLayer()
+    {
+        _distanceLayer = new DistanceLayer(_activeDistance, OnDistanceLoadedHandler, _textDrawer);
+        _distanceLayer.Order = DistanceLayerOrder;
+        _layers.Add(_distanceLayer);
+        
+        OrderLayers();
+    }
+
+    private void OrderLayers()
+    {
+        _layers = _layers
+            .OrderBy(l => l.Order)
+            .ToList();
     }
 }

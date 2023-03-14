@@ -17,6 +17,8 @@ public class FlatImageLayer : IRasterLayer
     public int Width { get; private set; }
     public int Height { get; private set; }
     
+    public int Order { get; set; }
+    
     public FlatImageLayer(string path)
     {
         _image = new MagickImage(path);

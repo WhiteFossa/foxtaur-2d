@@ -20,6 +20,8 @@ public class HuntersLayer : IHuntersVectorLayer
     /// </summary>
     private readonly Bitmap _hunterMarker;
 
+    public int Order { get; set; }
+    
     public HuntersLayer()
     {
         _hunterMarker = new Bitmap(@"Resources/Sprites/hunter_marker.png");

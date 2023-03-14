@@ -19,6 +19,8 @@ public class GeoTiffLayer : IRasterLayer
     public int Width { get; private set; }
     public int Height { get; private set; }
 
+    public int Order { get; set; }
+    
     public GeoTiffLayer(string path, ITextDrawer textDrawer)
     {
         _textDrawer = textDrawer;
