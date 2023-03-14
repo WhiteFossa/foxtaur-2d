@@ -496,7 +496,7 @@ public partial class MapControl : UserControl
         _activeDistance = distance;
 
         _layers.Remove(_distanceLayer);
-
+        
         if (_activeDistance != null)
         {
             AddDistanceLayer();
@@ -790,7 +790,8 @@ public partial class MapControl : UserControl
 
     private void AddDistanceLayer()
     {
-        _layers.Add(new DistanceLayer(_activeDistance, OnDistanceLoadedHandler, _textDrawer, DistanceLayerOrder));
+        _distanceLayer = new DistanceLayer(_activeDistance, OnDistanceLoadedHandler, _textDrawer, DistanceLayerOrder); 
+        _layers.Add(_distanceLayer);
         
         OrderLayers();
     }
