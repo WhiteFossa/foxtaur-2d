@@ -2,7 +2,6 @@ using Avalonia.Media;
 using LibWebClient.Constants;
 using LibWebClient.Enums;
 using LibWebClient.Models;
-using LibWebClient.Models.DTOs;
 using LibWebClient.Models.Requests;
 using LibWebClient.Services.Abstract;
 using NLog;

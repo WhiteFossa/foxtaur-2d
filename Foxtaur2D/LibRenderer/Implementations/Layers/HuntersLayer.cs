@@ -6,7 +6,6 @@ using LibGeo.Abstractions;
 using LibRenderer.Abstractions.Layers;
 using LibRenderer.Constants;
 using LibWebClient.Models;
-using NLog;
 
 namespace LibRenderer.Implementations.Layers;
 
