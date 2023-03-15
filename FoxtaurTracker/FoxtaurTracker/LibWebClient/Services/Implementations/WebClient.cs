@@ -1,5 +1,6 @@
 ﻿using LibWebClient.Constants;
 using LibWebClient.Models;
+using LibWebClient.Models.DTOs;
 using LibWebClient.Models.Requests;
 using LibWebClient.Services.Abstract;
 
@@ -43,6 +44,26 @@ public class WebClient : IWebClient
         CheckIfConnected();
 
         return await _client.RegisterOnServerAsync(request).ConfigureAwait(false);
+    }
+
+    public async Task<LoginResult> LoginAsync(LoginRequest request)
+    {
+        _ = request ?? throw new ArgumentNullException(nameof(request));
+
+        CheckIfConnected();
+
+        LoginResultDto result;
+
+        try
+        {
+            result = await _client.LogInAsync(request).ConfigureAwait(false);
+        }
+        catch (Exception)
+        {
+            return new LoginResult(false, string.Empty, DateTime.MinValue);
+        }
+
+        return new LoginResult(true, result.Token, result.ExpirationTime);
     }
 
     private void CheckIfConnected()

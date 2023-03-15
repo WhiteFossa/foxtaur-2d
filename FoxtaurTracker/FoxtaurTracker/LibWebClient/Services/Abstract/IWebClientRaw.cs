@@ -17,4 +17,9 @@ public interface IWebClientRaw
     /// Register user on server.
     /// </summary>
     Task<bool> RegisterOnServerAsync(RegistrationRequest request);
+
+    /// <summary>
+    /// Log in
+    /// </summary>
+    Task<LoginResultDto> LogInAsync(LoginRequest request);
 }

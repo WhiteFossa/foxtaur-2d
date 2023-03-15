@@ -44,4 +44,17 @@ public class WebClientRaw : IWebClientRaw
 
         return true;
     }
+
+    public async Task<LoginResultDto> LogInAsync(LoginRequest request)
+    {
+        _ = request ?? throw new ArgumentNullException(nameof(request));
+        
+        var response = await _httpClient.PostAsJsonAsync($"{_baseUrl}/Accounts/login", request).ConfigureAwait(false);
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new InvalidOperationException();
+        }
+
+        return JsonSerializer.Deserialize<LoginResultDto>(await response.Content.ReadAsStringAsync());
+    }
 }

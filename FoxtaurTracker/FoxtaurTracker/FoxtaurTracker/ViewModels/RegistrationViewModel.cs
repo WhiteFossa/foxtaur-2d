@@ -69,6 +69,7 @@ namespace FoxtaurTracker.ViewModels
             if (!Password.Equals(PasswordConfirmation))
             {
                 await App.PopupsService.ShowAlertAsync("Error", "Password and confirmation don't match.");
+                return;
             }
 
             var request = new RegistrationRequest(Login, Email, Password);

@@ -1,10 +1,14 @@
 ﻿using System.ComponentModel;
 using System.Windows.Input;
+using LibWebClient.Models.Requests;
+using LibWebClient.Services.Abstract;
 
 namespace FoxtaurTracker.ViewModels
 {
     public class LoginViewModel  : IQueryAttributable, INotifyPropertyChanged
     {
+        private IWebClient _webClient;
+        
         private bool _isFromRegistrationPage;
 
         private string _login;
@@ -24,6 +28,7 @@ namespace FoxtaurTracker.ViewModels
             set
             {
                 _login = value;
+                RaisePropertyChanged(nameof(Login));
                 RefreshCanExecutes();   
             }
         }
@@ -40,6 +45,7 @@ namespace FoxtaurTracker.ViewModels
             set
             {
                 _password = value;
+                RaisePropertyChanged(nameof(Password));
                 RefreshCanExecutes();
             }
         }
@@ -55,6 +61,8 @@ namespace FoxtaurTracker.ViewModels
 
         public LoginViewModel()
         {
+            _webClient = App.ServicesProvider.GetService<IWebClient>();
+            
             #region Commands binding
 
             LogInCommand = new Command(async () => await LogInAsync(),
@@ -68,7 +76,16 @@ namespace FoxtaurTracker.ViewModels
 
         private async Task LogInAsync()
         {
+            var request = new LoginRequest(Login, Password);
+            var result = await _webClient.LoginAsync(request);
+
+            if (!result.IsSuccessful)
+            {
+                await App.PopupsService.ShowAlertAsync("Error", "Login failed. Is credentials correct?");
+                return;
+            }
             
+            await App.PopupsService.ShowAlertAsync("Success", $"Token: { result.Token }, Expiration: { result.ExpirationTime }");
         }
         
         public void RaisePropertyChanged(string propertyName)

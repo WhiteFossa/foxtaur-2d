@@ -22,4 +22,9 @@ public interface IWebClient
     /// Register user on server
     /// </summary>
     Task<bool> RegisterUserAsync(RegistrationRequest request);
+
+    /// <summary>
+    /// Log in to server
+    /// </summary>
+    Task<LoginResult> LoginAsync(LoginRequest request);
 }
