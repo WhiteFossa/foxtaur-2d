@@ -66,7 +66,7 @@ public class AccountsController : ControllerBase
     /// </summary>
     [AllowAnonymous]
     [HttpPost]  
-    [Route("api/Accounts/login")]  
+    [Route("api/Accounts/Login")]  
     public async Task<IActionResult> Login([FromBody] LoginRequest request)  
     {
         if (request == null)
