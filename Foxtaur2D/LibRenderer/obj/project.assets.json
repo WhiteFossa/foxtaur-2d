@@ -159,25 +159,29 @@
           }
         }
       },
-      "Magick.NET-Q8-x64/12.3.0": {
+      "Magick.NET-Q8-AnyCPU/12.3.0": {
         "type": "package",
         "dependencies": {
           "Magick.NET.Core": "12.3.0"
         },
         "compile": {
-          "lib/netstandard21/Magick.NET-Q8-x64.dll": {
+          "lib/netstandard21/Magick.NET-Q8-AnyCPU.dll": {
             "related": ".xml"
           }
         },
         "runtime": {
-          "lib/netstandard21/Magick.NET-Q8-x64.dll": {
+          "lib/netstandard21/Magick.NET-Q8-AnyCPU.dll": {
             "related": ".xml"
           }
         },
         "build": {
-          "build/netstandard20/Magick.NET-Q8-x64.targets": {}
+          "build/netstandard20/Magick.NET-Q8-AnyCPU.targets": {}
         },
         "runtimeTargets": {
+          "runtimes/linux-arm64/native/Magick.Native-Q8-arm64.dll.so": {
+            "assetType": "native",
+            "rid": "linux-arm64"
+          },
           "runtimes/linux-musl-x64/native/Magick.Native-Q8-x64.dll.so": {
             "assetType": "native",
             "rid": "linux-musl-x64"
@@ -186,13 +190,25 @@
             "assetType": "native",
             "rid": "linux-x64"
           },
+          "runtimes/osx-arm64/native/Magick.Native-Q8-arm64.dll.dylib": {
+            "assetType": "native",
+            "rid": "osx-arm64"
+          },
           "runtimes/osx-x64/native/Magick.Native-Q8-x64.dll.dylib": {
             "assetType": "native",
             "rid": "osx-x64"
           },
+          "runtimes/win-arm64/native/Magick.Native-Q8-arm64.dll": {
+            "assetType": "native",
+            "rid": "win-arm64"
+          },
           "runtimes/win-x64/native/Magick.Native-Q8-x64.dll": {
             "assetType": "native",
             "rid": "win-x64"
+          },
+          "runtimes/win-x86/native/Magick.Native-Q8-x86.dll": {
+            "assetType": "native",
+            "rid": "win-x86"
           }
         }
       },
@@ -1379,10 +1395,10 @@
         "lib/portable-net4+sl5+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1/JetBrains.Annotations.xml"
       ]
     },
-    "Magick.NET-Q8-x64/12.3.0": {
-      "sha512": "EFvEyQPPXzNw3B8hjyLthtrEVUO7BKdkq383KmaNRF9FQ6SRDaqiAF5//mbxoG44LSQ57aBPj8ayPXL66zTLSg==",
+    "Magick.NET-Q8-AnyCPU/12.3.0": {
+      "sha512": "uZ37+QVc6H44eVgkIHBx2ZQABun4+aVq3Lx6F/UPzXp+E5jALbGBr+ii+ly5YnCKWR5hH3Cwfukum8Av8ngLlQ==",
       "type": "package",
-      "path": "magick.net-q8-x64/12.3.0",
+      "path": "magick.net-q8-anycpu/12.3.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -1391,18 +1407,22 @@
         "Notice.linux.txt",
         "Notice.osx.txt",
         "Notice.win.txt",
-        "build/netstandard20/Magick.NET-Q8-x64.targets",
+        "build/netstandard20/Magick.NET-Q8-AnyCPU.targets",
         "docs/Readme.md",
-        "lib/netstandard20/Magick.NET-Q8-x64.dll",
-        "lib/netstandard20/Magick.NET-Q8-x64.xml",
-        "lib/netstandard21/Magick.NET-Q8-x64.dll",
-        "lib/netstandard21/Magick.NET-Q8-x64.xml",
-        "magick.net-q8-x64.12.3.0.nupkg.sha512",
-        "magick.net-q8-x64.nuspec",
+        "lib/netstandard20/Magick.NET-Q8-AnyCPU.dll",
+        "lib/netstandard20/Magick.NET-Q8-AnyCPU.xml",
+        "lib/netstandard21/Magick.NET-Q8-AnyCPU.dll",
+        "lib/netstandard21/Magick.NET-Q8-AnyCPU.xml",
+        "magick.net-q8-anycpu.12.3.0.nupkg.sha512",
+        "magick.net-q8-anycpu.nuspec",
+        "runtimes/linux-arm64/native/Magick.Native-Q8-arm64.dll.so",
         "runtimes/linux-musl-x64/native/Magick.Native-Q8-x64.dll.so",
         "runtimes/linux-x64/native/Magick.Native-Q8-x64.dll.so",
+        "runtimes/osx-arm64/native/Magick.Native-Q8-arm64.dll.dylib",
         "runtimes/osx-x64/native/Magick.Native-Q8-x64.dll.dylib",
-        "runtimes/win-x64/native/Magick.Native-Q8-x64.dll"
+        "runtimes/win-arm64/native/Magick.Native-Q8-arm64.dll",
+        "runtimes/win-x64/native/Magick.Native-Q8-x64.dll",
+        "runtimes/win-x86/native/Magick.Native-Q8-x86.dll"
       ]
     },
     "Magick.NET.Core/12.3.0": {
@@ -2324,7 +2344,7 @@
       "LibGeo >= 1.0.0",
       "LibResources >= 1.0.0",
       "LibWebClient >= 1.0.0",
-      "Magick.NET-Q8-x64 >= 12.3.0"
+      "Magick.NET-Q8-AnyCPU >= 12.3.0"
     ]
   },
   "packageFolders": {
@@ -2381,7 +2401,7 @@
             "target": "Package",
             "version": "[0.10.18, )"
           },
-          "Magick.NET-Q8-x64": {
+          "Magick.NET-Q8-AnyCPU": {
             "target": "Package",
             "version": "[12.3.0, )"
           }

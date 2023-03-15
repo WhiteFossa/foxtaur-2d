@@ -2,7 +2,7 @@
 <Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
     <Import Project="$(NuGetPackageRoot)microsoft.extensions.logging.abstractions/7.0.0/buildTransitive/net6.0/Microsoft.Extensions.Logging.Abstractions.targets" Condition="Exists('$(NuGetPackageRoot)microsoft.extensions.logging.abstractions/7.0.0/buildTransitive/net6.0/Microsoft.Extensions.Logging.Abstractions.targets')" />
-    <Import Project="$(NuGetPackageRoot)magick.net-q8-x64/12.3.0/build/netstandard20/Magick.NET-Q8-x64.targets" Condition="Exists('$(NuGetPackageRoot)magick.net-q8-x64/12.3.0/build/netstandard20/Magick.NET-Q8-x64.targets')" />
+    <Import Project="$(NuGetPackageRoot)magick.net-q8-anycpu/12.3.0/build/netstandard20/Magick.NET-Q8-AnyCPU.targets" Condition="Exists('$(NuGetPackageRoot)magick.net-q8-anycpu/12.3.0/build/netstandard20/Magick.NET-Q8-AnyCPU.targets')" />
     <Import Project="$(NuGetPackageRoot)avalonia/0.10.18/buildTransitive/Avalonia.targets" Condition="Exists('$(NuGetPackageRoot)avalonia/0.10.18/buildTransitive/Avalonia.targets')" />
   </ImportGroup>
 </Project>
