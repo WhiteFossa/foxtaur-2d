@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31611.283
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FoxtaurTracker", "FoxtaurTracker\FoxtaurTracker.csproj", "{AB2B8DE3-D793-4A43-8027-673218BFC123}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibWebClient", "LibWebClient\LibWebClient.csproj", "{8727C75C-0EF3-47A3-9812-605477980D4A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,6 +19,10 @@ Global
 		{AB2B8DE3-D793-4A43-8027-673218BFC123}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AB2B8DE3-D793-4A43-8027-673218BFC123}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AB2B8DE3-D793-4A43-8027-673218BFC123}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{8727C75C-0EF3-47A3-9812-605477980D4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8727C75C-0EF3-47A3-9812-605477980D4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8727C75C-0EF3-47A3-9812-605477980D4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8727C75C-0EF3-47A3-9812-605477980D4A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

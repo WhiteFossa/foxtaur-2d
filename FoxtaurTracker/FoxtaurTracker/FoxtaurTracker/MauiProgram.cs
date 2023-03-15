@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using FoxtaurTracker.Services.Abstract;
+using FoxtaurTracker.Services.Implementations;
+using Microsoft.Extensions.Logging;
 
 namespace FoxtaurTracker;
 
@@ -14,6 +16,12 @@ public static class MauiProgram
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
 				fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
 			});
+
+		#region DI
+
+		builder.Services.AddSingleton<IPopupsService, PopupsService>();
+
+		#endregion
 
 #if DEBUG
 		builder.Logging.AddDebug();
