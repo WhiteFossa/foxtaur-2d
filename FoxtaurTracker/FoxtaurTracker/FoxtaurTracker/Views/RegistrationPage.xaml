@@ -55,7 +55,7 @@
                         Grid.Row="1"
                         Grid.Column="0"
                         Grid.ColumnSpan="2"
-                        StrokeShape="RoundRectangle 10">
+                        Style="{ StaticResource RoundedBorders }">
 
                         <Entry
                             Placeholder="Enter login" />
@@ -87,7 +87,7 @@
                         Grid.Row="1"
                         Grid.Column="0"
                         Grid.ColumnSpan="2"
-                        StrokeShape="RoundRectangle 10">
+                        Style="{ StaticResource RoundedBorders }">
 
                         <Entry
                             IsPassword="True"
@@ -120,7 +120,7 @@
                         Grid.Row="1"
                         Grid.Column="0"
                         Grid.ColumnSpan="2"
-                        StrokeShape="RoundRectangle 10">
+                        Style="{ StaticResource RoundedBorders }">
 
                         <Entry
                             IsPassword="True"
@@ -133,7 +133,7 @@
                     Grid.Row="3"
                     Grid.Column="0"
                     Text="Register"
-                    Command="{ Binding RegisterCommand }"/>
+                    Command="{ Binding SubmitRegistrationDataCommand }"/>
 
             </Grid>
 

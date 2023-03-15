@@ -32,18 +32,18 @@ namespace FoxtaurTracker.ViewModels
 
             #region Commands binding
 
-            LogInCommand = new AsyncRelayCommand(ShowLoginPage);
-            RegisterCommand = new AsyncRelayCommand(ShowRegistrationPage);
+            LogInCommand = new AsyncRelayCommand(ShowLoginPageAsync);
+            RegisterCommand = new AsyncRelayCommand(ShowRegistrationPageAsync);
 
             #endregion
         }
 
-        private async Task ShowLoginPage()
+        private async Task ShowLoginPageAsync()
         {
             await Shell.Current.GoToAsync("loginPage");
         }
 
-        private async Task ShowRegistrationPage()
+        private async Task ShowRegistrationPageAsync()
         {
             await Shell.Current.GoToAsync("registrationPage");
         }
