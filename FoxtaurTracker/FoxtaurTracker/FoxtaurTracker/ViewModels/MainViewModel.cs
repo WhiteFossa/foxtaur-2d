@@ -132,7 +132,13 @@ namespace FoxtaurTracker.ViewModels
         
         private async Task ShowLoginPageAsync()
         {
-            await Shell.Current.GoToAsync("loginPage");
+            var navigationParameter = new Dictionary<string, object>
+            {
+                { "IsFromRegistrationPage", false },
+                { "Login", string.Empty }
+            };
+            
+            await Shell.Current.GoToAsync("loginPage", navigationParameter);
         }
 
         private async Task ShowRegistrationPageAsync()

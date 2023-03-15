@@ -1,10 +1,17 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using System.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using System.Windows.Input;
+using LibWebClient.Models.Requests;
+using LibWebClient.Services.Abstract;
 
 namespace FoxtaurTracker.ViewModels
 {
-    public class RegistrationViewModel
+    public class RegistrationViewModel : IQueryAttributable, INotifyPropertyChanged
     {
+        private IWebClient _webClient;
+        
+        public event PropertyChangedEventHandler PropertyChanged;
+        
         #region Commands
 
         /// <summary>
@@ -38,11 +45,18 @@ namespace FoxtaurTracker.ViewModels
 
         #endregion
 
+        public void RaisePropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        
         public RegistrationViewModel()
         {
+            _webClient = App.ServicesProvider.GetService<IWebClient>();
+            
             #region Commands binding
 
-            SubmitRegistrationDataCommand = new AsyncRelayCommand(SubmitRegistrationDataAsync);
+            SubmitRegistrationDataCommand = new Command(async () => SubmitRegistrationDataAsync());
 
             #endregion
         }
@@ -56,6 +70,30 @@ namespace FoxtaurTracker.ViewModels
             {
                 await App.PopupsService.ShowAlertAsync("Error", "Password and confirmation don't match.");
             }
+
+            var request = new RegistrationRequest(Login, Email, Password);
+            var isSuccessful = await _webClient.RegisterUserAsync(request);
+
+            if (!isSuccessful)
+            {
+                await App.PopupsService.ShowAlertAsync("Error", "Failed to register.");
+                return;
+            }
+
+            await App.PopupsService.ShowAlertAsync("Success", "Registration successful, log in please.");
+            
+            var navigationParameter = new Dictionary<string, object>
+            {
+                { "IsFromRegistrationPage", true },
+                { "Login", Login }
+            };
+            
+            await Shell.Current.GoToAsync("loginPage", navigationParameter);
+        }
+
+        public void ApplyQueryAttributes(IDictionary<string, object> query)
+        {
+            // Put here parameters processing
         }
     }
 }
