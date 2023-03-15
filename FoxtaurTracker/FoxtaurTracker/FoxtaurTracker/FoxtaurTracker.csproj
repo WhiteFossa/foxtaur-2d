@@ -83,4 +83,8 @@
 	  <Folder Include="Resources\Images\" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\LibWebClient\LibWebClient.csproj" />
+	</ItemGroup>
+
 </Project>

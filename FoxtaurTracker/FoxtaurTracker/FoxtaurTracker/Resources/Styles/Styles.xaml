@@ -10,6 +10,13 @@
         <Setter Property="StrokeThickness" Value="1" />
         <Setter Property="StrokeShape" Value="RoundRectangle 10" />
     </Style>
+    
+    <!-- Spaced grids -->
+    <Style x:Key="SpacedGrids" TargetType="Grid">
+        <Setter Property="RowSpacing" Value="10" />
+        <Setter Property="ColumnSpacing" Value="10" />
+        <Setter Property="Padding" Value="10" />
+    </Style>
 
 
 </ResourceDictionary>

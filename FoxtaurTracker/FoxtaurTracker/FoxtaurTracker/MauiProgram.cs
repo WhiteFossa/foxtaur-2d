@@ -1,5 +1,7 @@
 ﻿using FoxtaurTracker.Services.Abstract;
 using FoxtaurTracker.Services.Implementations;
+using LibWebClient.Services.Abstract;
+using LibWebClient.Services.Implementations;
 using Microsoft.Extensions.Logging;
 
 namespace FoxtaurTracker;
@@ -19,7 +21,10 @@ public static class MauiProgram
 
 		#region DI
 
+		// Singletons
 		builder.Services.AddSingleton<IPopupsService, PopupsService>();
+		builder.Services.AddSingleton<IWebClientRaw, WebClientRaw>();
+		builder.Services.AddSingleton<IWebClient, WebClient>();
 
 		#endregion
 

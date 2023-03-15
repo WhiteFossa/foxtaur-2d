@@ -16,10 +16,10 @@
             VerticalOptions="Center">
 
             <Grid
-                RowSpacing="10"
-                Padding="10">
+                Style="{ StaticResource SpacedGrids }">
 
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
@@ -31,16 +31,69 @@
                     <Button
                         Grid.Row="0"
                         Grid.Column="0"
+                        Text="Connect"
+                        Command="{ Binding ConnectCommand }"/>
+
+                
+                    <Button
+                        Grid.Row="1"
+                        Grid.Column="0"
                         Text="Log in"
                         Command="{ Binding LogInCommand }"/>
 
                     <Button
-                        Grid.Row="1"
+                        Grid.Row="2"
                         Grid.Column="0"
                         Text="Register"
                         Command="{ Binding RegisterCommand }"/>
 
             </Grid>
+            
+            <Grid
+                Style="{ StaticResource SpacedGrids }">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                
+                <Label
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Text="Server URL:"/>
+                
+                <Label
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Text="{ Binding ServerUrl }"/>
+            
+                <Label
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Text="Server name:"/>
+                
+                <Label
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Text="{ Binding ServerName }"/>
+            
+                <Label
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    Text="Protocol version:"/>
+                
+                <Label
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    Text="{ Binding ServerProtocolVersion }"/>
+            </Grid>
+            
 
         </VerticalStackLayout>
     </ScrollView>
