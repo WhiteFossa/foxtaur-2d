@@ -1,4 +1,5 @@
-﻿using LibWebClient.Constants;
+﻿using System.Drawing;
+using LibWebClient.Constants;
 using LibWebClient.Models;
 using LibWebClient.Models.DTOs;
 using LibWebClient.Models.Requests;
@@ -64,6 +65,41 @@ public class WebClient : IWebClient
         }
 
         return new LoginResult(true, result.Token, result.ExpirationTime);
+    }
+
+    public async Task SetAuthentificationTokenAsync(string token)
+    {
+        CheckIfConnected();
+
+        await _client.SetAuthentificationTokenAsync(token).ConfigureAwait(false);
+    }
+
+    public async Task<IReadOnlyCollection<Profile>> MassGetProfilesAsync(ProfilesMassGetRequest request)
+    {
+        _ = request ?? throw new ArgumentNullException(nameof(request));
+        
+        CheckIfConnected();
+
+        var profiles = await _client.MassGetProfilesAsync(request).ConfigureAwait(false);
+
+        return profiles
+            .Select(p =>
+            {
+                return new Profile
+                (
+                    p.Id,
+                    p.FirstName,
+                    p.MiddleName,
+                    p.LastName,
+                    p.Sex,
+                    p.DateOfBirth,
+                    p.Phone,
+                    new Team(p.Team.Id, p.Team.Name, Color.FromArgb(p.Team.Color.A, p.Team.Color.R, p.Team.Color.G, p.Team.Color.B)),
+                    p.Category,
+                    Color.FromArgb(p.Color.A, p.Color.R, p.Color.G, p.Color.B)
+                );
+            })
+            .ToList();
     }
 
     private void CheckIfConnected()

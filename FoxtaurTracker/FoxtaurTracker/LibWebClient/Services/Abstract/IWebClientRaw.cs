@@ -22,4 +22,14 @@ public interface IWebClientRaw
     /// Log in
     /// </summary>
     Task<LoginResultDto> LogInAsync(LoginRequest request);
+    
+    /// <summary>
+    /// Set authentification token for all subsequent queries
+    /// </summary>
+    Task SetAuthentificationTokenAsync(string token);
+
+    /// <summary>
+    /// Mass get hunters profiles
+    /// </summary>
+    Task<IReadOnlyCollection<ProfileDto>> MassGetProfilesAsync(ProfilesMassGetRequest request);
 }

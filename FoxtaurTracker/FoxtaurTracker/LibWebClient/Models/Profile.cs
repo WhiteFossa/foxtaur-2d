@@ -1,84 +1,73 @@
-using System.Text.Json.Serialization;
-using FoxtaurServer.Dao.Models;
-using FoxtaurServer.Dao.Models.Enums;
+﻿using System.Drawing;
+using LibWebClient.Models.Enums;
 
-namespace FoxtaurServer.Models.Api;
+namespace LibWebClient.Models;
 
 /// <summary>
-/// Hunter profile
+/// User profile
 /// </summary>
-public class ProfileDto
+public class Profile
 {
     /// <summary>
     /// Hunter ID
     /// </summary>
-    [JsonPropertyName("id")]
     public Guid Id { get; }
     
     /// <summary>
     /// First name
     /// </summary>
-    [JsonPropertyName("firstName")]
-    public string FirstName { get; }
+    public string FirstName { get; set; }
 
     /// <summary>
     /// Middle name
     /// </summary>
-    [JsonPropertyName("middleName")]
-    public string MiddleName { get; }
+    public string MiddleName { get; set; }
 
     /// <summary>
     /// Last name
     /// </summary>
-    [JsonPropertyName("lastName")]
-    public string LastName { get; }
+    public string LastName { get; set; }
 
     /// <summary>
     /// Body sex
     /// </summary>
-    [JsonPropertyName("sex")]
-    public BodySex Sex { get; }
+    public BodySex Sex { get; set; }
 
     /// <summary>
     /// Date of birth
     /// </summary>
-    [JsonPropertyName("dateOfBirth")]
-    public DateTime DateOfBirth { get; }
+    public DateTime DateOfBirth { get; set; }
 
     /// <summary>
     /// Phone
     /// </summary>
-    [JsonPropertyName("phone")]
-    public string Phone { get; }
+    public string Phone { get; set; }
 
     /// <summary>
     /// Team (may be null)
     /// </summary>
-    [JsonPropertyName("team")]
-    public TeamDto Team { get; }
+    public Team Team { get; set; }
 
     /// <summary>
     /// Category
     /// </summary>
-    [JsonPropertyName("category")]
-    public Category Category { get; }
+    public Category Category { get; set; }
 
     /// <summary>
     /// Color
     /// </summary>
-    [JsonPropertyName("color")]
-    public ColorDto Color { get; }
+    public Color Color { get; set; }
 
-    public ProfileDto(Guid id,
+    public Profile(Guid id,
         string firstName,
         string middleName,
         string lastName,
         BodySex sex,
         DateTime dateOfBirth,
         string phone,
-        TeamDto team,
+        Team team,
         Category category,
-        ColorDto color)
+        Color color)
     {
         Id = id;
         FirstName = firstName;

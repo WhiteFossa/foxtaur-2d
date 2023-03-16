@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Json;
+﻿using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Text.Json;
 using LibWebClient.Constants;
 using LibWebClient.Models.DTOs;
@@ -49,12 +50,30 @@ public class WebClientRaw : IWebClientRaw
     {
         _ = request ?? throw new ArgumentNullException(nameof(request));
         
-        var response = await _httpClient.PostAsJsonAsync($"{_baseUrl}/Accounts/login", request).ConfigureAwait(false);
+        var response = await _httpClient.PostAsJsonAsync($"{_baseUrl}/Accounts/Login", request).ConfigureAwait(false);
         if (!response.IsSuccessStatusCode)
         {
             throw new InvalidOperationException();
         }
 
         return JsonSerializer.Deserialize<LoginResultDto>(await response.Content.ReadAsStringAsync());
+    }
+    
+    public async Task SetAuthentificationTokenAsync(string token)
+    {
+        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+    }
+
+    public async Task<IReadOnlyCollection<ProfileDto>> MassGetProfilesAsync(ProfilesMassGetRequest request)
+    {
+        _ = request ?? throw new ArgumentNullException(nameof(request));
+        
+        var response = await _httpClient.PostAsJsonAsync($"{_baseUrl}/Hunters/Profiles/MassGet", request).ConfigureAwait(false);
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new InvalidOperationException();
+        }
+
+        return JsonSerializer.Deserialize<IReadOnlyCollection<ProfileDto>>(await response.Content.ReadAsStringAsync());
     }
 }

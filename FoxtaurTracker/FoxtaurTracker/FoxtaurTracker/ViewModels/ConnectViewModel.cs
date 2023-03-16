@@ -10,7 +10,7 @@ namespace FoxtaurTracker.ViewModels
     {
         private MainModel _mainModel;
 
-        private IWebClient _webClient;
+        private readonly IWebClient _webClient;
 
         private bool _isConnected;
         

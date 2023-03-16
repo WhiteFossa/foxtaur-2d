@@ -27,4 +27,14 @@ public interface IWebClient
     /// Log in to server
     /// </summary>
     Task<LoginResult> LoginAsync(LoginRequest request);
+
+    /// <summary>
+    /// Set authentification token for all subsequent queries
+    /// </summary>
+    Task SetAuthentificationTokenAsync(string token);
+
+    /// <summary>
+    /// Mass get hunters profiles
+    /// </summary>
+    Task<IReadOnlyCollection<Profile>> MassGetProfilesAsync(ProfilesMassGetRequest request);
 }

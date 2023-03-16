@@ -8,7 +8,7 @@ namespace FoxtaurTracker.ViewModels
 {
     public class LoginViewModel : IQueryAttributable, INotifyPropertyChanged
     {
-        private IWebClient _webClient;
+        private readonly IWebClient _webClient;
         
         private bool _isFromRegistrationPage;
 
@@ -90,6 +90,9 @@ namespace FoxtaurTracker.ViewModels
 
             _userModel.Token = result.Token;
             _userModel.TokenExpirationTime = result.ExpirationTime;
+            
+            // Setting token to client
+            await _webClient.SetAuthentificationTokenAsync(_userModel.Token);
             
             var navigationParameter = new Dictionary<string, object>
             {

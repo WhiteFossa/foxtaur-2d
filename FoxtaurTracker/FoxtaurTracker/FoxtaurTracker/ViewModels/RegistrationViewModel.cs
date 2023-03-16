@@ -9,7 +9,7 @@ namespace FoxtaurTracker.ViewModels
 {
     public class RegistrationViewModel : IQueryAttributable, INotifyPropertyChanged
     {
-        private IWebClient _webClient;
+        private readonly IWebClient _webClient;
 
         private User _userModel;
         
