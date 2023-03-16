@@ -94,12 +94,23 @@ public class WebClient : IWebClient
                     p.Sex,
                     p.DateOfBirth,
                     p.Phone,
-                    new Team(p.Team.Id, p.Team.Name, Color.FromArgb(p.Team.Color.A, p.Team.Color.R, p.Team.Color.G, p.Team.Color.B)),
+                    p.Team != null
+                        ? new Team(p.Team.Id, p.Team.Name, Color.FromArgb(p.Team.Color.A, p.Team.Color.R, p.Team.Color.G, p.Team.Color.B))
+                        : null,
                     p.Category,
                     Color.FromArgb(p.Color.A, p.Color.R, p.Color.G, p.Color.B)
                 );
             })
             .ToList();
+    }
+
+    public async Task<UserInfo> GetCurrentUserInfoAsync()
+    {
+        CheckIfConnected();
+
+        var userInfo = await _client.GetCurrentUserInfoAsync().ConfigureAwait(false);
+
+        return new UserInfo(userInfo.Id, userInfo.Login, userInfo.Email);
     }
 
     private void CheckIfConnected()

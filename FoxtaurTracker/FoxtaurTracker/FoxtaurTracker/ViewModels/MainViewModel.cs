@@ -13,6 +13,7 @@ public class MainViewModel : IQueryAttributable, INotifyPropertyChanged
     private bool _isFromRegistrationPage;
 
     private User _userModel;
+    private UserInfo _userInfo;
     private Profile _profile;
 
     public MainViewModel()
@@ -25,11 +26,13 @@ public class MainViewModel : IQueryAttributable, INotifyPropertyChanged
     public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
         _isFromRegistrationPage = (bool)query["IsFromRegistrationPage"];
-            
         _userModel = (User)query["UserModel"];
         
+        // Getting current user info (TODO: Move to async code)
+        _userInfo = _webClient.GetCurrentUserInfoAsync().Result;
+            
         // Reading profile (TODO: Move to async code)
-        var profileRequest = new ProfilesMassGetRequest(new List<Guid>() { new Guid("2db1f009-2c72-4a38-be5e-3a52428a8eea") });
+        var profileRequest = new ProfilesMassGetRequest(new List<Guid>() { _userInfo.Id });
         _profile = _webClient.MassGetProfilesAsync(profileRequest)
             .Result
             .Single();

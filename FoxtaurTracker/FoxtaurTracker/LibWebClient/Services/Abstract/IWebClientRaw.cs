@@ -32,4 +32,10 @@ public interface IWebClientRaw
     /// Mass get hunters profiles
     /// </summary>
     Task<IReadOnlyCollection<ProfileDto>> MassGetProfilesAsync(ProfilesMassGetRequest request);
+    
+    /// <summary>
+    /// Get information about current user
+    /// </summary>
+    /// <returns></returns>
+    Task<UserInfoDto> GetCurrentUserInfoAsync();
 }

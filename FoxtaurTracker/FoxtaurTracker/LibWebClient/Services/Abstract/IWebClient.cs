@@ -37,4 +37,10 @@ public interface IWebClient
     /// Mass get hunters profiles
     /// </summary>
     Task<IReadOnlyCollection<Profile>> MassGetProfilesAsync(ProfilesMassGetRequest request);
+
+    /// <summary>
+    /// Get information about current user
+    /// </summary>
+    /// <returns></returns>
+    Task<UserInfo> GetCurrentUserInfoAsync();
 }

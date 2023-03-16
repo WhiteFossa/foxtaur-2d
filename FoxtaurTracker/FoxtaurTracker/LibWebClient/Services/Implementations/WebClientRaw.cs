@@ -76,4 +76,15 @@ public class WebClientRaw : IWebClientRaw
 
         return JsonSerializer.Deserialize<IReadOnlyCollection<ProfileDto>>(await response.Content.ReadAsStringAsync());
     }
+
+    public async Task<UserInfoDto> GetCurrentUserInfoAsync()
+    {
+        var response = await _httpClient.GetAsync($"{_baseUrl}/Accounts/GetCurrentUserInformation").ConfigureAwait(false);
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new InvalidOperationException();
+        }
+        
+        return JsonSerializer.Deserialize<UserInfoDto>(await response.Content.ReadAsStringAsync());
+    }
 }
