@@ -81,5 +81,21 @@ public class AccountsController : ControllerBase
         }
         
         return Ok(new LoginResultDto(result.Token, result.ExpirationTime));  
-    }  
+    }
+    
+    /// <summary>
+    /// Get current user information
+    /// </summary>
+    [Route("api/Accounts/GetCurrentUserInformation")]
+    [HttpGet]
+    public async Task<ActionResult<UserInfoDto>> GetCurrentUserInformation()
+    {
+        var result = await _accountsService.GetUserInfoAsync(User.Identity.Name);
+        if (result == null)
+        {
+            throw new InvalidOperationException("Current user not found. This is impossible, there is bug somewhere.");
+        }
+
+        return Ok(result);
+    }
 }

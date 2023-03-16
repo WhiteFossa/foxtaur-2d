@@ -11,6 +11,7 @@ using FoxtaurServer.Constants;
 using FoxtaurServer.Dao.Abstract;
 using FoxtaurServer.Dao.Models;
 using FoxtaurServer.Dao.Models.Enums;
+using FoxtaurServer.Models.Api;
 using Microsoft.IdentityModel.Tokens;
 using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
 
@@ -117,5 +118,17 @@ public class AccountsService : IAccountsService
         }  
         
         return new LoginResult(false, String.Empty, DateTime.MinValue);
+    }
+
+    public async Task<UserInfoDto> GetUserInfoAsync(string login)
+    {
+        var user = await _userManager.FindByNameAsync(login);
+
+        if (user == null)
+        {
+            return null;
+        }
+
+        return new UserInfoDto(Guid.Parse(user.Id), user.UserName, user.Email);
     }
 }

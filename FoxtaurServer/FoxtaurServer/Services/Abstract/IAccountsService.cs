@@ -1,4 +1,5 @@
 using FoxtaurServer.Dao.Models;
+using FoxtaurServer.Models.Api;
 using FoxtaurServer.Models.Api.Requests;
 using FoxtaurServer.Services.Abstract.Models;
 using FoxtaurServer.Services.Abstract.Models.Enums;
@@ -19,4 +20,9 @@ public interface IAccountsService
     /// Logs user in
     /// </summary>
     Task<LoginResult> LoginAsync(LoginRequest request);
+
+    /// <summary>
+    /// Get information about current user
+    /// </summary>
+    Task<UserInfoDto> GetUserInfoAsync(string login);
 }
