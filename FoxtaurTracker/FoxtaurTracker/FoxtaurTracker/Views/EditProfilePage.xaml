@@ -1,0 +1,208 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:FoxtaurTracker.ViewModels"
+             xmlns:controls="clr-namespace:Maui.ColorPicker;assembly=Maui.ColorPicker"
+             x:Class="FoxtaurTracker.Views.EditProfilePage"
+             Title="Edit profile">
+    
+    <!-- Model -->
+    <ContentPage.BindingContext>
+        <viewModels:EditProfileViewModel />
+    </ContentPage.BindingContext>
+    
+    <ContentPage.Content>
+        <ScrollView>
+            <VerticalStackLayout
+                VerticalOptions="Start">
+                
+                <Grid
+                    Style="{ StaticResource SpacedGrids }">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    
+                    <!-- First name -->
+                    <Label
+                        Grid.Column="0"
+                        Grid.Row="0"
+                        VerticalOptions="Center"
+                        Text="First name:"/>
+
+                    <Border
+                        Grid.Column="1"
+                        Grid.Row="0"
+                        VerticalOptions="Center"
+                        Style="{ StaticResource RoundedBorders }">
+                        
+                        <Entry
+                            Text="{ Binding FirstName }" />
+                    </Border>
+                    
+                    <!-- Middle name -->
+                    <Label
+                        Grid.Column="0"
+                        Grid.Row="1"
+                        VerticalOptions="Center"
+                        Text="Middle name:"/>
+
+                    <Border
+                        Grid.Column="1"
+                        Grid.Row="1"
+                        VerticalOptions="Center"
+                        Style="{ StaticResource RoundedBorders }">
+                        
+                        <Entry
+                            Text="{ Binding MiddleName }" />
+                    </Border>
+                    
+                    <!-- Last name -->
+                    <Label
+                        Grid.Column="0"
+                        Grid.Row="2"
+                        VerticalOptions="Center"
+                        Text="Last name:"/>
+
+                    <Border
+                        Grid.Column="1"
+                        Grid.Row="2"
+                        VerticalOptions="Center"
+                        Style="{ StaticResource RoundedBorders }">
+                        
+                        <Entry
+                            Text="{ Binding LastName }" />
+                    </Border>
+                    
+                    <!-- Sex -->
+                    <Label
+                        Grid.Column="0"
+                        Grid.Row="3"
+                        VerticalOptions="Center"
+                        Text="Sex:"/>
+
+                    <Border
+                        Grid.Column="1"
+                        Grid.Row="3"
+                        VerticalOptions="Center"
+                        Style="{ StaticResource RoundedBorders }">
+                        
+                        <Picker
+                            Title="Select body sex"
+                            ItemsSource="{ Binding Sexes }"
+                            SelectedIndex="{ Binding BodySexIndex }" />
+                    </Border>
+                    
+                    <!-- Date of birth -->
+                    <Label
+                        Grid.Column="0"
+                        Grid.Row="4"
+                        VerticalOptions="Center"
+                        Text="Date of birth:"/>
+
+                    <Border
+                        Grid.Column="1"
+                        Grid.Row="4"
+                        VerticalOptions="Center"
+                        Style="{ StaticResource RoundedBorders }">
+                        
+                        <DatePicker
+                            MinimumDate="01/01/1900"
+                            MaximumDate="{ Binding DateOfBirthMaxDate }"
+                            Date="{ Binding DateOfBirth }" />
+                    </Border>
+                    
+                    <!-- Phone -->
+                    <Label
+                        Grid.Column="0"
+                        Grid.Row="5"
+                        VerticalOptions="Center"
+                        Text="Phone:"/>
+
+                    <Border
+                        Grid.Column="1"
+                        Grid.Row="5"
+                        VerticalOptions="Center"
+                        Style="{ StaticResource RoundedBorders }">
+                        
+                        <Entry
+                            Text="{ Binding Phone }" />
+                    </Border>
+                    
+                    <!-- Team -->
+                    <Label
+                        Grid.Column="0"
+                        Grid.Row="6"
+                        VerticalOptions="Center"
+                        Text="Team:"/>
+
+                    <Border
+                        Grid.Column="1"
+                        Grid.Row="6"
+                        VerticalOptions="Center"
+                        Style="{ StaticResource RoundedBorders }">
+                        
+                        <Picker
+                            Title="Select team"
+                            ItemsSource="{ Binding Teams }"
+                            SelectedIndex="{ Binding TeamIndex }"/>
+                    </Border>
+                    
+                    <!-- Category -->
+                    <Label
+                        Grid.Column="0"
+                        Grid.Row="7"
+                        VerticalOptions="Center"
+                        Text="Category:"/>
+
+                    <Border
+                        Grid.Column="1"
+                        Grid.Row="7"
+                        VerticalOptions="Center"
+                        Style="{ StaticResource RoundedBorders }">
+                        
+                        <Picker
+                            Title="Select category"
+                            ItemsSource="{ Binding Categories }"
+                            SelectedIndex="{ Binding CategoryIndex }"/>
+                    </Border>
+                    
+                    <!-- Color -->
+                    <Label
+                        Grid.Column="0"
+                        Grid.Row="8"
+                        VerticalOptions="Center"
+                        Text="Color:"/>
+
+                    <Border
+                        Grid.Column="1"
+                        Grid.Row="8"
+                        VerticalOptions="Center"
+                        Style="{ StaticResource RoundedBorders }">
+                        
+                        <controls:ColorPicker
+                            HeightRequest="100"
+                            PickedColor="{ Binding HunterColor }" />
+                    </Border>
+                    
+                </Grid>
+                
+            </VerticalStackLayout>
+        </ScrollView>
+        
+    </ContentPage.Content>
+</ContentPage>

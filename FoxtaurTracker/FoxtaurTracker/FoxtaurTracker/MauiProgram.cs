@@ -3,6 +3,7 @@ using FoxtaurTracker.Services.Implementations;
 using LibWebClient.Services.Abstract;
 using LibWebClient.Services.Implementations;
 using Microsoft.Extensions.Logging;
+using SkiaSharp.Views.Maui.Controls.Hosting;
 
 namespace FoxtaurTracker;
 
@@ -27,6 +28,9 @@ public static class MauiProgram
 		builder.Services.AddSingleton<IWebClient, WebClient>();
 
 		#endregion
+
+		// For Color Picker
+		builder.UseSkiaSharp();
 
 #if DEBUG
 		builder.Logging.AddDebug();

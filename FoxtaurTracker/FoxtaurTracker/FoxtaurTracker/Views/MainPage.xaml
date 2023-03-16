@@ -17,14 +17,12 @@
                 VerticalOptions="Start">
             
                 <Grid
-                    Padding="10"
-                    RowSpacing="10">
+                    Style="{ StaticResource SpacedGrids }">
 
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
-                    
                     </Grid.RowDefinitions>
 
                     <Grid.ColumnDefinitions>

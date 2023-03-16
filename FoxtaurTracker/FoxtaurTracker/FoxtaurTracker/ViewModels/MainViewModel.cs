@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Windows.Input;
 using FoxtaurTracker.Models;
 using LibWebClient.Models;
 using LibWebClient.Models.Requests;
@@ -34,9 +35,24 @@ public class MainViewModel : IQueryAttributable, INotifyPropertyChanged
         }
     }
 
+    #region Commands
+
+    /// <summary>
+    /// Log in
+    /// </summary>
+    public ICommand EditProfileCommand { get; private set; }
+
+    #endregion
+    
     public MainViewModel()
     {
         _webClient = App.ServicesProvider.GetService<IWebClient>();
+        
+        #region Commands binding
+
+        EditProfileCommand = new Command(async () => await EditProfileAsync());
+
+        #endregion
     }
     
     public event PropertyChangedEventHandler PropertyChanged;
@@ -56,6 +72,11 @@ public class MainViewModel : IQueryAttributable, INotifyPropertyChanged
             .Single();
         
         FormatUsernameToDisplay();
+
+        if (_isFromRegistrationPage)
+        {
+            EditProfileAsync().RunSynchronously();
+        }
     }
 
     private void FormatUsernameToDisplay()
@@ -66,5 +87,15 @@ public class MainViewModel : IQueryAttributable, INotifyPropertyChanged
     public void RaisePropertyChanged(string propertyName)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+
+    private async Task EditProfileAsync()
+    {
+        var navigationParameter = new Dictionary<string, object>
+        {
+            { "Profile", _profile }
+        };
+
+        await Shell.Current.GoToAsync("editProfilePage", navigationParameter);
     }
 }
