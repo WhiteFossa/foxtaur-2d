@@ -14,10 +14,53 @@
     <ContentPage.Content>
         <ScrollView>
             <VerticalStackLayout
-                VerticalOptions="Center">
+                VerticalOptions="Start">
             
-                <Label 
-                    Text="Main page!"/>
+                <Grid
+                    Padding="10"
+                    RowSpacing="10">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    
+                    <!-- Username -->
+                    <HorizontalStackLayout
+                        Grid.Column="0"
+                        Grid.Row="0"
+                        HorizontalOptions="End">
+                    
+                        <Label
+                            Text="Welcome, "/>
+                        
+                        <Label
+                            Text="{ Binding UsernameToDisplay }" />
+                        
+                        <Label
+                            Text="!"/>
+                        
+                    </HorizontalStackLayout>
+                    
+                    <!-- Profile edit -->
+                    <HorizontalStackLayout
+                        Grid.Column="0"
+                        Grid.Row="1"
+                        HorizontalOptions="End">
+                        
+                        <Button
+                            Text="Edit profile"
+                            Command="{ Binding EditProfileCommand }"/>
+                        
+                    </HorizontalStackLayout>
+                    
+                </Grid>
             
             </VerticalStackLayout>
         </ScrollView>

@@ -13,7 +13,7 @@
     <ScrollView>
 
         <VerticalStackLayout
-            VerticalOptions="Center">
+            VerticalOptions="Start">
 
             <Grid
                 Style="{ StaticResource SpacedGrids }">

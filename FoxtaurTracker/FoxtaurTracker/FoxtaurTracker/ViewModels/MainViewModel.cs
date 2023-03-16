@@ -15,6 +15,24 @@ public class MainViewModel : IQueryAttributable, INotifyPropertyChanged
     private User _userModel;
     private UserInfo _userInfo;
     private Profile _profile;
+    
+    private string _usernameToDisplay;
+
+    /// <summary>
+    ///  Username to display
+    /// </summary>
+    public string UsernameToDisplay
+    {
+        get
+        {
+            return _usernameToDisplay;
+        }
+        set
+        {
+            _usernameToDisplay = value;
+            RaisePropertyChanged(nameof(UsernameToDisplay));
+        }
+    }
 
     public MainViewModel()
     {
@@ -36,7 +54,17 @@ public class MainViewModel : IQueryAttributable, INotifyPropertyChanged
         _profile = _webClient.MassGetProfilesAsync(profileRequest)
             .Result
             .Single();
+        
+        FormatUsernameToDisplay();
     }
 
+    private void FormatUsernameToDisplay()
+    {
+        UsernameToDisplay = $"{ _profile.FirstName } { _profile.MiddleName } { _profile.LastName }";
+    }
     
+    public void RaisePropertyChanged(string propertyName)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
 }
