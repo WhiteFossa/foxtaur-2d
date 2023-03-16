@@ -1,11 +1,12 @@
 ﻿using System.ComponentModel;
 using System.Windows.Input;
+using FoxtaurTracker.Models;
 using LibWebClient.Models.Requests;
 using LibWebClient.Services.Abstract;
 
 namespace FoxtaurTracker.ViewModels
 {
-    public class LoginViewModel  : IQueryAttributable, INotifyPropertyChanged
+    public class LoginViewModel : IQueryAttributable, INotifyPropertyChanged
     {
         private IWebClient _webClient;
         
@@ -13,6 +14,8 @@ namespace FoxtaurTracker.ViewModels
 
         private string _login;
         private string _password;
+
+        private User _userModel;
         
         public event PropertyChangedEventHandler PropertyChanged;
         
@@ -81,11 +84,20 @@ namespace FoxtaurTracker.ViewModels
 
             if (!result.IsSuccessful)
             {
-                await App.PopupsService.ShowAlertAsync("Error", "Login failed. Is credentials correct?");
+                await App.PopupsService.ShowAlertAsync("Error", "Login failed. Are credentials correct?");
                 return;
             }
+
+            _userModel.Token = result.Token;
+            _userModel.TokenExpirationTime = result.ExpirationTime;
             
-            await App.PopupsService.ShowAlertAsync("Success", $"Token: { result.Token }, Expiration: { result.ExpirationTime }");
+            var navigationParameter = new Dictionary<string, object>
+            {
+                { "IsFromRegistrationPage", _isFromRegistrationPage },
+                { "UserModel", _userModel }
+            };
+
+            await Shell.Current.GoToAsync("mainPage", navigationParameter);
         }
         
         public void RaisePropertyChanged(string propertyName)
@@ -95,8 +107,10 @@ namespace FoxtaurTracker.ViewModels
         
         public void ApplyQueryAttributes(IDictionary<string, object> query)
         {
-            Login = (string)query["Login"];
             _isFromRegistrationPage = (bool)query["IsFromRegistrationPage"];
+            
+            _userModel = (User)query["UserModel"];
+            Login = _userModel.Login;
         }
         
         private void RefreshCanExecutes()

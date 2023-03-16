@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Windows.Input;
+using FoxtaurTracker.Models;
 using LibWebClient.Models.Requests;
 using LibWebClient.Services.Abstract;
 
@@ -9,6 +10,8 @@ namespace FoxtaurTracker.ViewModels
     public class RegistrationViewModel : IQueryAttributable, INotifyPropertyChanged
     {
         private IWebClient _webClient;
+
+        private User _userModel;
         
         public event PropertyChangedEventHandler PropertyChanged;
         
@@ -82,11 +85,13 @@ namespace FoxtaurTracker.ViewModels
             }
 
             await App.PopupsService.ShowAlertAsync("Success", "Registration successful, log in please.");
+
+            _userModel.Login = Login;
             
             var navigationParameter = new Dictionary<string, object>
             {
                 { "IsFromRegistrationPage", true },
-                { "Login", Login }
+                { "UserModel", _userModel }
             };
             
             await Shell.Current.GoToAsync("loginPage", navigationParameter);
@@ -94,7 +99,7 @@ namespace FoxtaurTracker.ViewModels
 
         public void ApplyQueryAttributes(IDictionary<string, object> query)
         {
-            // Put here parameters processing
+            _userModel = (User)query["UserModel"];
         }
     }
 }
