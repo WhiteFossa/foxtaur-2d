@@ -62,7 +62,7 @@ public class HuntersService : IHuntersService
             Sex = request.Sex,
             DateOfBirth = request.DateOfBirth,
             Phone = request.Phone,
-            Team = new Team() { Id = request.TeamId },
+            Team = request.TeamId.HasValue ? new Team() { Id = request.TeamId.Value } : null,
             Category = request.Category,
             ColorR = request.Color.R,
             ColorG = request.Color.G,

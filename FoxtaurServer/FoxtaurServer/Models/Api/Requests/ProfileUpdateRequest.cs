@@ -48,7 +48,7 @@ public class ProfileUpdateRequest
     /// Team (may be null)
     /// </summary>
     [JsonPropertyName("teamId")]
-    public Guid TeamId { get; set; }
+    public Guid? TeamId { get; set; }
 
     /// <summary>
     /// Category

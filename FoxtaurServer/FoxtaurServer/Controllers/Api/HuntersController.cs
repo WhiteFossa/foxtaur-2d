@@ -88,7 +88,7 @@ public class HuntersController : ControllerBase
     /// </summary>
     [Route("api/Hunters/RegisterOnDistance")]
     [HttpPost]
-    public async Task<ActionResult<ProfileDto>> UpdateProfile([FromBody]RegisterOnDistanceRequest request)
+    public async Task<ActionResult<RegistrationOnDistanceResponseDto>> RegisterOnDistance([FromBody]RegisterOnDistanceRequest request)
     {
         if (request == null)
         {
