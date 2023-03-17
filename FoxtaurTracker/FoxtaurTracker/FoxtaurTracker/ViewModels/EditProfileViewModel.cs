@@ -2,17 +2,22 @@
 using FoxtaurTracker.Models;
 using LibWebClient.Models;
 using LibWebClient.Models.Enums;
+using LibWebClient.Services.Abstract;
 
 namespace FoxtaurTracker.ViewModels;
 
 public class EditProfileViewModel : IQueryAttributable, INotifyPropertyChanged
 {
-    private Profile _profile;
+    private readonly IWebClient _webClient;
     
+    private Profile _profile;
+    private IReadOnlyCollection<Team> _teams;
+
     private DateTime _dateOfBirthMaxDate { get; set; }
 
-    private List<BodySexItem> _bodySexes = new List<BodySexItem>();
-    private List<CategoryItem> _categories = new List<CategoryItem>();
+    private List<BodySexItem> _bodySex = new List<BodySexItem>();
+    private List<CategoryItem> _categoryItems = new List<CategoryItem>();
+    private List<TeamItem> _teamItems = new List<TeamItem>();
     
     #region Profile fields
 
@@ -24,6 +29,7 @@ public class EditProfileViewModel : IQueryAttributable, INotifyPropertyChanged
     private Color _hunterColor { get; set; }
     private int _bodySexIndex { get; set; }
     private int _categoryIndex { get; set; }
+    private int _teamIndex { get; set; }
 
     /// <summary>
     /// First name
@@ -152,6 +158,22 @@ public class EditProfileViewModel : IQueryAttributable, INotifyPropertyChanged
             RaisePropertyChanged(nameof(CategoryIndex));
         }
     }
+    
+    /// <summary>
+    /// Team index
+    /// </summary>
+    public int TeamIndex
+    {
+        get
+        {
+            return _teamIndex;
+        }
+        set
+        {
+            _teamIndex = value;
+            RaisePropertyChanged(nameof(TeamIndex));
+        }
+    }
 
     #endregion
     
@@ -178,11 +200,11 @@ public class EditProfileViewModel : IQueryAttributable, INotifyPropertyChanged
     {
         get
         {
-            return _bodySexes;
+            return _bodySex;
         }
         set
         {
-            _bodySexes = value;
+            _bodySex = value;
             RaisePropertyChanged(nameof(BodySexItems));
         }
     }
@@ -190,16 +212,32 @@ public class EditProfileViewModel : IQueryAttributable, INotifyPropertyChanged
     /// <summary>
     /// Categories
     /// </summary>
-    public List<CategoryItem> Categories
+    public List<CategoryItem> CategoryItems
     {
         get
         {
-            return _categories;
+            return _categoryItems;
         }
         set
         {
-            _categories = value;
-            RaisePropertyChanged(nameof(Categories));
+            _categoryItems = value;
+            RaisePropertyChanged(nameof(CategoryItems));
+        }
+    }
+    
+    /// <summary>
+    /// Teams
+    /// </summary>
+    public List<TeamItem> TeamItems
+    {
+        get
+        {
+            return _teamItems;
+        }
+        set
+        {
+            _teamItems = value;
+            RaisePropertyChanged(nameof(TeamItems));
         }
     }
     
@@ -207,33 +245,35 @@ public class EditProfileViewModel : IQueryAttributable, INotifyPropertyChanged
 
     public EditProfileViewModel()
     {
+        _webClient = App.ServicesProvider.GetService<IWebClient>();
+        
         DateOfBirthMaxDate = DateTime.UtcNow;
         
         #region Body sexes
         
-        _bodySexes.Add(new BodySexItem(BodySex.Male, "Male", (int)BodySex.Male));
-        _bodySexes.Add(new BodySexItem(BodySex.FtM, "FtM", (int)BodySex.FtM));
-        _bodySexes.Add(new BodySexItem(BodySex.MtF, "MtF", (int)BodySex.MtF));
-        _bodySexes.Add(new BodySexItem(BodySex.Female, "Female", (int)BodySex.Female));
-        _bodySexes.Add(new BodySexItem(BodySex.Intersex, "Intersex", (int)BodySex.Intersex));
-        _bodySexes.Add(new BodySexItem(BodySex.NotSpecified, "Not specified", (int)BodySex.NotSpecified));
+        BodySexItems.Add(new BodySexItem(BodySex.Male, "Male", (int)BodySex.Male));
+        BodySexItems.Add(new BodySexItem(BodySex.FtM, "FtM", (int)BodySex.FtM));
+        BodySexItems.Add(new BodySexItem(BodySex.MtF, "MtF", (int)BodySex.MtF));
+        BodySexItems.Add(new BodySexItem(BodySex.Female, "Female", (int)BodySex.Female));
+        BodySexItems.Add(new BodySexItem(BodySex.Intersex, "Intersex", (int)BodySex.Intersex));
+        BodySexItems.Add(new BodySexItem(BodySex.NotSpecified, "Not specified", (int)BodySex.NotSpecified));
         
         #endregion
 
         #region Categories
 
-        _categories.Add(new CategoryItem(Category.NoCategory, "No category", (int)Category.NoCategory));
-        _categories.Add(new CategoryItem(Category.Junior3, "3rd Junior", (int)Category.Junior3));
-        _categories.Add(new CategoryItem(Category.Junior2, "2nd Junior", (int)Category.Junior2));
-        _categories.Add(new CategoryItem(Category.Junior1, "1st Junior", (int)Category.Junior1));
-        _categories.Add(new CategoryItem(Category.Third, "3rd", (int)Category.Third));
-        _categories.Add(new CategoryItem(Category.Second, "2nd", (int)Category.Second));
-        _categories.Add(new CategoryItem(Category.First, "1st", (int)Category.First));
-        _categories.Add(new CategoryItem(Category.CandidateToMaster, "Candidate", (int)Category.CandidateToMaster));
-        _categories.Add(new CategoryItem(Category.Master, "Master", (int)Category.Master));
-        _categories.Add(new CategoryItem(Category.InternationalMaster, "International Master", (int)Category.InternationalMaster));
-        _categories.Add(new CategoryItem(Category.HonoredMaster, "Honored Master", (int)Category.HonoredMaster));
-        _categories.Add(new CategoryItem(Category.NotSpecified, "Not specified", (int)Category.NotSpecified));
+        CategoryItems.Add(new CategoryItem(Category.NoCategory, "No category", (int)Category.NoCategory));
+        CategoryItems.Add(new CategoryItem(Category.Junior3, "3rd Junior", (int)Category.Junior3));
+        CategoryItems.Add(new CategoryItem(Category.Junior2, "2nd Junior", (int)Category.Junior2));
+        CategoryItems.Add(new CategoryItem(Category.Junior1, "1st Junior", (int)Category.Junior1));
+        CategoryItems.Add(new CategoryItem(Category.Third, "3rd", (int)Category.Third));
+        CategoryItems.Add(new CategoryItem(Category.Second, "2nd", (int)Category.Second));
+        CategoryItems.Add(new CategoryItem(Category.First, "1st", (int)Category.First));
+        CategoryItems.Add(new CategoryItem(Category.CandidateToMaster, "Candidate", (int)Category.CandidateToMaster));
+        CategoryItems.Add(new CategoryItem(Category.Master, "Master", (int)Category.Master));
+        CategoryItems.Add(new CategoryItem(Category.InternationalMaster, "International Master", (int)Category.InternationalMaster));
+        CategoryItems.Add(new CategoryItem(Category.HonoredMaster, "Honored Master", (int)Category.HonoredMaster));
+        CategoryItems.Add(new CategoryItem(Category.NotSpecified, "Not specified", (int)Category.NotSpecified));
 
         #endregion
     }
@@ -241,6 +281,9 @@ public class EditProfileViewModel : IQueryAttributable, INotifyPropertyChanged
     public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
         _profile = (Profile)query["Profile"];
+        
+        // Loading teams (TODO: Move to asynchronous code)
+        _teams = _webClient.GetAllTeamsAsync().Result;
         
         ShowProfileFields();
     }
@@ -258,7 +301,27 @@ public class EditProfileViewModel : IQueryAttributable, INotifyPropertyChanged
         Phone = _profile.Phone;
         DateOfBirth = _profile.DateOfBirth;
         HunterColor = new Microsoft.Maui.Graphics.Color(_profile.Color.R, _profile.Color.G, _profile.Color.B, _profile.Color.A);
-        BodySexIndex = _bodySexes.Single(s => s.Id == _profile.Sex).Index;
-        CategoryIndex = _categories.Single(c => c.Id == _profile.Category).Index;
+        BodySexIndex = _bodySex.Single(s => s.Id == _profile.Sex).Index;
+        CategoryIndex = _categoryItems.Single(c => c.Id == _profile.Category).Index;
+
+        #region Teams
+
+        TeamItems = new List<TeamItem>();
+        
+        TeamItems.Add(new TeamItem(new Team(Guid.Empty, "No team", System.Drawing.Color.White), 0));
+
+        var teamsAsList = _teams.ToList();
+        for (int index = 0; index < _teams.Count; index++)
+        {
+            TeamItems.Add(new TeamItem(teamsAsList[index], index + 1));
+        }
+
+        TeamItems = new List<TeamItem>(TeamItems); // Dirty way to force picket to update
+
+        TeamIndex = _profile.Team != null
+            ? TeamItems.Single(t => t.Team.Id == _profile.Team.Id).Index
+            : 0;
+
+        #endregion
     }
 }

@@ -87,4 +87,15 @@ public class WebClientRaw : IWebClientRaw
         
         return JsonSerializer.Deserialize<UserInfoDto>(await response.Content.ReadAsStringAsync());
     }
+
+    public async Task<IReadOnlyCollection<TeamDto>> GetAllTeamsAsync()
+    {
+        var response = await _httpClient.GetAsync($"{_baseUrl}/Teams/GetAll").ConfigureAwait(false);
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new InvalidOperationException();
+        }
+        
+        return JsonSerializer.Deserialize<IReadOnlyCollection<TeamDto>>(await response.Content.ReadAsStringAsync());
+    }
 }

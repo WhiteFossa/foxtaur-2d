@@ -38,4 +38,9 @@ public interface IWebClientRaw
     /// </summary>
     /// <returns></returns>
     Task<UserInfoDto> GetCurrentUserInfoAsync();
+
+    /// <summary>
+    /// Get all existing teams
+    /// </summary>
+    Task<IReadOnlyCollection<TeamDto>> GetAllTeamsAsync();
 }

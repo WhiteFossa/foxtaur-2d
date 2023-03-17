@@ -43,4 +43,9 @@ public interface IWebClient
     /// </summary>
     /// <returns></returns>
     Task<UserInfo> GetCurrentUserInfoAsync();
+    
+    /// <summary>
+    /// Get all existing teams
+    /// </summary>
+    Task<IReadOnlyCollection<Team>> GetAllTeamsAsync();
 }

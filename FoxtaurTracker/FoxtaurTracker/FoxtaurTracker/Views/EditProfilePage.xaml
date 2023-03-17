@@ -160,7 +160,8 @@
                         
                         <Picker
                             Title="Select team"
-                            ItemsSource="{ Binding Teams }"
+                            ItemsSource="{ Binding TeamItems }"
+                            ItemDisplayBinding="{ Binding Team.Name }"
                             SelectedIndex="{ Binding TeamIndex }"/>
                     </Border>
                     
@@ -179,7 +180,7 @@
                         
                         <Picker
                             Title="Select category"
-                            ItemsSource="{ Binding Categories }"
+                            ItemsSource="{ Binding CategoryItems }"
                             ItemDisplayBinding="{ Binding Description }"
                             SelectedIndex="{ Binding CategoryIndex }"/>
                     </Border>

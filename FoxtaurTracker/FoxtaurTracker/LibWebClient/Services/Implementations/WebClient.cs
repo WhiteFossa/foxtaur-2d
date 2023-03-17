@@ -113,6 +113,17 @@ public class WebClient : IWebClient
         return new UserInfo(userInfo.Id, userInfo.Login, userInfo.Email);
     }
 
+    public async Task<IReadOnlyCollection<Team>> GetAllTeamsAsync()
+    {
+        CheckIfConnected();
+
+        var teams = await _client.GetAllTeamsAsync().ConfigureAwait(false);
+
+        return teams
+            .Select(t => new Team(t.Id, t.Name, Color.FromArgb(t.Color.A, t.Color.R, t.Color.G, t.Color.B)))
+            .ToList();
+    }
+
     private void CheckIfConnected()
     {
         if (!_isConnected)
