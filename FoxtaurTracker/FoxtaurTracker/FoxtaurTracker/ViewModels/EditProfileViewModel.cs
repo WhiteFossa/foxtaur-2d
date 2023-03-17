@@ -317,7 +317,7 @@ public class EditProfileViewModel : IQueryAttributable, INotifyPropertyChanged
         MiddleName = _profile.MiddleName;
         LastName = _profile.LastName;
         Phone = _profile.Phone;
-        DateOfBirth = _profile.DateOfBirth;
+        DateOfBirth = _profile.DateOfBirth.ToLocalTime();
         HunterColor = new Microsoft.Maui.Graphics.Color(_profile.Color.R, _profile.Color.G, _profile.Color.B, _profile.Color.A);
         BodySexIndex = _bodySex.Single(s => s.Id == _profile.Sex).Index;
         CategoryIndex = _categoryItems.Single(c => c.Id == _profile.Category).Index;
@@ -345,11 +345,7 @@ public class EditProfileViewModel : IQueryAttributable, INotifyPropertyChanged
     
     private async Task UpdateProfileAsync()
     {
-        byte hunterColorR;
-        byte hunterColorG;
-        byte hunterColorB;
-        byte hunterColorA;
-        HunterColor.ToRgba(out hunterColorR, out hunterColorG, out hunterColorB, out hunterColorA);
+        HunterColor.ToRgba(out var hunterColorR, out var hunterColorG, out var hunterColorB, out var hunterColorA);
         
         var request = new ProfileUpdateRequest
         (
@@ -357,9 +353,9 @@ public class EditProfileViewModel : IQueryAttributable, INotifyPropertyChanged
             MiddleName,
             LastName,
             BodySexItems.Single(s => s.Index == BodySexIndex).Id,
-            DateOfBirth,
+            DateOfBirth.ToUniversalTime(),
             Phone,
-            TeamItems.Single(t => t.Index == TeamIndex).Team.Id,
+            TeamIndex != 0 ? TeamItems.Single(t => t.Index == TeamIndex).Team.Id : null,
             CategoryItems.Single(c => c.Index == CategoryIndex).Id,
             new ColorDto() { R = hunterColorR, G = hunterColorG, B = hunterColorB, A = hunterColorA }
         );

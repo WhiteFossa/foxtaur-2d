@@ -103,8 +103,6 @@ public class WebClientRaw : IWebClientRaw
     {
         _ = request ?? throw new ArgumentNullException(nameof(request));
 
-        var jsonRequest = JsonSerializer.Serialize(request);
-        
         var response = await _httpClient.PostAsJsonAsync($"{_baseUrl}/Hunters/Profiles/Update", request).ConfigureAwait(false);
         if (!response.IsSuccessStatusCode)
         {
