@@ -1,7 +1,10 @@
 ﻿using System.ComponentModel;
+using System.Windows.Input;
 using FoxtaurTracker.Models;
 using LibWebClient.Models;
+using LibWebClient.Models.DTOs;
 using LibWebClient.Models.Enums;
+using LibWebClient.Models.Requests;
 using LibWebClient.Services.Abstract;
 
 namespace FoxtaurTracker.ViewModels;
@@ -18,6 +21,15 @@ public class EditProfileViewModel : IQueryAttributable, INotifyPropertyChanged
     private List<BodySexItem> _bodySex = new List<BodySexItem>();
     private List<CategoryItem> _categoryItems = new List<CategoryItem>();
     private List<TeamItem> _teamItems = new List<TeamItem>();
+    
+    #region Commands
+
+    /// <summary>
+    /// Log in
+    /// </summary>
+    public ICommand UpdateProfileCommand { get; private set; }
+
+    #endregion
     
     #region Profile fields
 
@@ -276,6 +288,12 @@ public class EditProfileViewModel : IQueryAttributable, INotifyPropertyChanged
         CategoryItems.Add(new CategoryItem(Category.NotSpecified, "Not specified", (int)Category.NotSpecified));
 
         #endregion
+        
+        #region Commands binding
+
+        UpdateProfileCommand = new Command(async () => await UpdateProfileAsync());
+
+        #endregion
     }
 
     public void ApplyQueryAttributes(IDictionary<string, object> query)
@@ -323,5 +341,31 @@ public class EditProfileViewModel : IQueryAttributable, INotifyPropertyChanged
             : 0;
 
         #endregion
+    }
+    
+    private async Task UpdateProfileAsync()
+    {
+        byte hunterColorR;
+        byte hunterColorG;
+        byte hunterColorB;
+        byte hunterColorA;
+        HunterColor.ToRgba(out hunterColorR, out hunterColorG, out hunterColorB, out hunterColorA);
+        
+        var request = new ProfileUpdateRequest
+        (
+            FirstName,
+            MiddleName,
+            LastName,
+            BodySexItems.Single(s => s.Index == BodySexIndex).Id,
+            DateOfBirth,
+            Phone,
+            TeamItems.Single(t => t.Index == TeamIndex).Team.Id,
+            CategoryItems.Single(c => c.Index == CategoryIndex).Id,
+            new ColorDto() { R = hunterColorR, G = hunterColorG, B = hunterColorB, A = hunterColorA }
+        );
+
+        _profile = await _webClient.UpdateProfileAsync(request);
+        
+        ShowProfileFields();
     }
 }

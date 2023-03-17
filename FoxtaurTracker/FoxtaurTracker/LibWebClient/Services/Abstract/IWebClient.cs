@@ -48,4 +48,9 @@ public interface IWebClient
     /// Get all existing teams
     /// </summary>
     Task<IReadOnlyCollection<Team>> GetAllTeamsAsync();
+    
+    /// <summary>
+    /// Update current user profile
+    /// </summary>
+    Task<Profile> UpdateProfileAsync(ProfileUpdateRequest request);
 }

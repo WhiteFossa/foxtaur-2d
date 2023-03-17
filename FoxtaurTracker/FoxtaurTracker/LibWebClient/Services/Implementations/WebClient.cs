@@ -124,6 +124,27 @@ public class WebClient : IWebClient
             .ToList();
     }
 
+    public async Task<Profile> UpdateProfileAsync(ProfileUpdateRequest request)
+    {
+        CheckIfConnected();
+
+        var updatedProfile = await _client.UpdateProfileAsync(request).ConfigureAwait(false);
+
+        return new Profile(
+            updatedProfile.Id,
+            updatedProfile.FirstName,
+            updatedProfile.MiddleName,
+            updatedProfile.LastName,
+            updatedProfile.Sex,
+            updatedProfile.DateOfBirth,
+            updatedProfile.Phone,
+            updatedProfile.Team != null
+                ? new Team(updatedProfile.Team.Id, updatedProfile.Team.Name, Color.FromArgb(updatedProfile.Team.Color.A, updatedProfile.Team.Color.R, updatedProfile.Team.Color.G, updatedProfile.Team.Color.B))
+                : null,
+            updatedProfile.Category,
+            Color.FromArgb(updatedProfile.Color.A, updatedProfile.Color.R, updatedProfile.Color.G, updatedProfile.Color.B));
+    }
+
     private void CheckIfConnected()
     {
         if (!_isConnected)

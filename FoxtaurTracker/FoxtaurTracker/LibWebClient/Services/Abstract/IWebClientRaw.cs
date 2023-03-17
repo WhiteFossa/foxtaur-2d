@@ -43,4 +43,9 @@ public interface IWebClientRaw
     /// Get all existing teams
     /// </summary>
     Task<IReadOnlyCollection<TeamDto>> GetAllTeamsAsync();
+
+    /// <summary>
+    /// Update current user profile
+    /// </summary>
+    Task<ProfileDto> UpdateProfileAsync(ProfileUpdateRequest request);
 }

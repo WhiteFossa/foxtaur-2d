@@ -98,4 +98,19 @@ public class WebClientRaw : IWebClientRaw
         
         return JsonSerializer.Deserialize<IReadOnlyCollection<TeamDto>>(await response.Content.ReadAsStringAsync());
     }
+
+    public async Task<ProfileDto> UpdateProfileAsync(ProfileUpdateRequest request)
+    {
+        _ = request ?? throw new ArgumentNullException(nameof(request));
+
+        var jsonRequest = JsonSerializer.Serialize(request);
+        
+        var response = await _httpClient.PostAsJsonAsync($"{_baseUrl}/Hunters/Profiles/Update", request).ConfigureAwait(false);
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new InvalidOperationException();
+        }
+
+        return JsonSerializer.Deserialize<ProfileDto>(await response.Content.ReadAsStringAsync());
+    }
 }
