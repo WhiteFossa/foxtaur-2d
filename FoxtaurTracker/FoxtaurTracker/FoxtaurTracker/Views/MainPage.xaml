@@ -59,6 +59,13 @@
                         
                     </HorizontalStackLayout>
                     
+                    <!-- Create a team -->
+                    <Button
+                        Grid.Column="0"
+                        Grid.Row="2"
+                        Text="Create a team"
+                        Command="{ Binding CreateTeamCommand }"/>
+                    
                 </Grid>
             
             </VerticalStackLayout>
