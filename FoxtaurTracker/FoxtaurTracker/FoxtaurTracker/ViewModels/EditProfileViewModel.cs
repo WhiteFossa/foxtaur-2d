@@ -13,7 +13,8 @@ namespace FoxtaurTracker.ViewModels;
 public class EditProfileViewModel : IQueryAttributable, INotifyPropertyChanged
 {
     private readonly IWebClient _webClient;
-    
+
+    private User _userModel;
     private Profile _profile;
     private IReadOnlyCollection<Team> _teams;
 
@@ -22,8 +23,7 @@ public class EditProfileViewModel : IQueryAttributable, INotifyPropertyChanged
     private List<BodySexItem> _bodySex = new List<BodySexItem>();
     private List<CategoryItem> _categoryItems = new List<CategoryItem>();
     private List<TeamItem> _teamItems = new List<TeamItem>();
-    //private EventHandler<PickedColorChangedEventArgs> _hunterColorChanged;
-    
+
     #region Commands
 
     /// <summary>
@@ -255,19 +255,6 @@ public class EditProfileViewModel : IQueryAttributable, INotifyPropertyChanged
         }
     }
 
-    /*public EventHandler<PickedColorChangedEventArgs>? HunterColorChanged
-    {
-        get
-        {
-            return _hunterColorChanged;
-        }
-        set
-        {
-            _hunterColorChanged = value;
-            RaisePropertyChanged(nameof(HunterColorChanged));
-        }
-    }*/
-
     public event PropertyChangedEventHandler PropertyChanged;
 
     public EditProfileViewModel()
@@ -304,8 +291,6 @@ public class EditProfileViewModel : IQueryAttributable, INotifyPropertyChanged
 
         #endregion
 
-//        HunterColorChanged += OnHunterColorChanged;
-        
         #region Commands binding
 
         UpdateProfileCommand = new Command(async () => await UpdateProfileAsync());
@@ -315,20 +300,51 @@ public class EditProfileViewModel : IQueryAttributable, INotifyPropertyChanged
 
     public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
+        _userModel = (User)query["UserModel"];
         _profile = (Profile)query["Profile"];
-        
-        // Loading teams (TODO: Move to asynchronous code)
-        _teams = _webClient.GetAllTeamsAsync().Result;
-        
-        ShowProfileFields();
     }
 
     public void RaisePropertyChanged(string propertyName)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
+    
+    private async Task UpdateProfileAsync()
+    {
+        HunterColor.ToRgba(out var hunterColorR, out var hunterColorG, out var hunterColorB, out var hunterColorA);
+        
+        var request = new ProfileUpdateRequest
+        (
+            FirstName,
+            MiddleName,
+            LastName,
+            BodySexItems.Single(s => s.Index == BodySexIndex).Id,
+            DateOfBirth.ToUniversalTime(),
+            Phone,
+            TeamIndex != 0 ? TeamItems.Single(t => t.Index == TeamIndex).Team.Id : null,
+            CategoryItems.Single(c => c.Index == CategoryIndex).Id,
+            new ColorDto() { R = hunterColorR, G = hunterColorG, B = hunterColorB, A = hunterColorA }
+        );
 
-    private void ShowProfileFields()
+        _profile = await _webClient.UpdateProfileAsync(request);
+        
+        var navigationParameter = new Dictionary<string, object>
+        {
+            { "IsFromRegistrationPage", false },
+            { "UserModel", _userModel }
+        };
+
+        await Shell.Current.GoToAsync("mainPage", navigationParameter);
+    }
+
+    public async Task OnPageLoadedAsync(Object source, EventArgs args)
+    {
+        _teams = _webClient.GetAllTeamsAsync().Result;
+        
+        await ShowProfileFieldsAsync();
+    }
+    
+    private async Task ShowProfileFieldsAsync()
     {
         FirstName = _profile.FirstName;
         MiddleName = _profile.MiddleName;
@@ -359,31 +375,4 @@ public class EditProfileViewModel : IQueryAttributable, INotifyPropertyChanged
 
         #endregion
     }
-    
-    private async Task UpdateProfileAsync()
-    {
-        HunterColor.ToRgba(out var hunterColorR, out var hunterColorG, out var hunterColorB, out var hunterColorA);
-        
-        var request = new ProfileUpdateRequest
-        (
-            FirstName,
-            MiddleName,
-            LastName,
-            BodySexItems.Single(s => s.Index == BodySexIndex).Id,
-            DateOfBirth.ToUniversalTime(),
-            Phone,
-            TeamIndex != 0 ? TeamItems.Single(t => t.Index == TeamIndex).Team.Id : null,
-            CategoryItems.Single(c => c.Index == CategoryIndex).Id,
-            new ColorDto() { R = hunterColorR, G = hunterColorG, B = hunterColorB, A = hunterColorA }
-        );
-
-        _profile = await _webClient.UpdateProfileAsync(request);
-        
-        ShowProfileFields();
-    }
-
-    /*public void HunterColorChanged(object sender, PickedColorChangedEventArgs args)
-    {
-        int a = 10;
-    }*/
 }

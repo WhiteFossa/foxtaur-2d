@@ -61,22 +61,6 @@ public class MainViewModel : IQueryAttributable, INotifyPropertyChanged
     {
         _isFromRegistrationPage = (bool)query["IsFromRegistrationPage"];
         _userModel = (User)query["UserModel"];
-        
-        // Getting current user info (TODO: Move to async code)
-        _userInfo = _webClient.GetCurrentUserInfoAsync().Result;
-            
-        // Reading profile (TODO: Move to async code)
-        var profileRequest = new ProfilesMassGetRequest(new List<Guid>() { _userInfo.Id });
-        _profile = _webClient.MassGetProfilesAsync(profileRequest)
-            .Result
-            .Single();
-        
-        FormatUsernameToDisplay();
-
-        if (_isFromRegistrationPage)
-        {
-            EditProfileAsync().RunSynchronously();
-        }
     }
 
     private void FormatUsernameToDisplay()
@@ -93,9 +77,28 @@ public class MainViewModel : IQueryAttributable, INotifyPropertyChanged
     {
         var navigationParameter = new Dictionary<string, object>
         {
+            { "UserModel", _userModel },
             { "Profile", _profile }
         };
 
         await Shell.Current.GoToAsync("editProfilePage", navigationParameter);
+    }
+
+    public async Task OnPageLoadedAsync(Object source, EventArgs args)
+    {
+        // Getting current user info
+        _userInfo = await _webClient.GetCurrentUserInfoAsync();
+            
+        // Reading profile
+        var profileRequest = new ProfilesMassGetRequest(new List<Guid>() { _userInfo.Id });
+        _profile = (await _webClient.MassGetProfilesAsync(profileRequest))
+            .Single();
+        
+        FormatUsernameToDisplay();
+
+        if (_isFromRegistrationPage)
+        {
+            await EditProfileAsync();
+        }
     }
 }

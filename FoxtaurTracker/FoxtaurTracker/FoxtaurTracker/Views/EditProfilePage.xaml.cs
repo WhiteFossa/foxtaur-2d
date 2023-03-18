@@ -22,4 +22,12 @@ public partial class EditProfilePage : ContentPage
     {
         (BindingContext as EditProfileViewModel).HunterColor = args.NewPickedColorValue;
     }
+    
+    /// <summary>
+    /// Page loaded handler
+    /// </summary>
+    private async void EditProfilePageLoaded(object sender, EventArgs e)
+    {
+        await (BindingContext as EditProfileViewModel).OnPageLoadedAsync(sender, e);
+    }
 }

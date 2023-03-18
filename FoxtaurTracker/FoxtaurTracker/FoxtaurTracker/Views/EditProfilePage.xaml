@@ -5,7 +5,8 @@
              xmlns:viewModels="clr-namespace:FoxtaurTracker.ViewModels"
              xmlns:colorPicker="clr-namespace:ColorPicker.Maui;assembly=ColorPicker.Maui"
              x:Class="FoxtaurTracker.Views.EditProfilePage"
-             Title="Edit profile">
+             Title="Edit profile"
+             Loaded="EditProfilePageLoaded">
     
     <!-- Model -->
     <ContentPage.BindingContext>
