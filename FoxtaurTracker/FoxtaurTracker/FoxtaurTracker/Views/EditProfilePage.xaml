@@ -200,6 +200,7 @@
                         
                         <colorPicker:ColorPicker
                             HeightRequest="100"
+                            PickedColorChanged="HunterColorChanged"
                             PickedColor="{ Binding HunterColor }" />
                     </Border>
                 

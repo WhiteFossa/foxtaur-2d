@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Windows.Input;
+using ColorPicker.Maui;
 using FoxtaurTracker.Models;
 using LibWebClient.Models;
 using LibWebClient.Models.DTOs;
@@ -21,6 +22,7 @@ public class EditProfileViewModel : IQueryAttributable, INotifyPropertyChanged
     private List<BodySexItem> _bodySex = new List<BodySexItem>();
     private List<CategoryItem> _categoryItems = new List<CategoryItem>();
     private List<TeamItem> _teamItems = new List<TeamItem>();
+    //private EventHandler<PickedColorChangedEventArgs> _hunterColorChanged;
     
     #region Commands
 
@@ -252,7 +254,20 @@ public class EditProfileViewModel : IQueryAttributable, INotifyPropertyChanged
             RaisePropertyChanged(nameof(TeamItems));
         }
     }
-    
+
+    /*public EventHandler<PickedColorChangedEventArgs>? HunterColorChanged
+    {
+        get
+        {
+            return _hunterColorChanged;
+        }
+        set
+        {
+            _hunterColorChanged = value;
+            RaisePropertyChanged(nameof(HunterColorChanged));
+        }
+    }*/
+
     public event PropertyChangedEventHandler PropertyChanged;
 
     public EditProfileViewModel()
@@ -288,6 +303,8 @@ public class EditProfileViewModel : IQueryAttributable, INotifyPropertyChanged
         CategoryItems.Add(new CategoryItem(Category.NotSpecified, "Not specified", (int)Category.NotSpecified));
 
         #endregion
+
+//        HunterColorChanged += OnHunterColorChanged;
         
         #region Commands binding
 
@@ -364,4 +381,9 @@ public class EditProfileViewModel : IQueryAttributable, INotifyPropertyChanged
         
         ShowProfileFields();
     }
+
+    /*public void HunterColorChanged(object sender, PickedColorChangedEventArgs args)
+    {
+        int a = 10;
+    }*/
 }
