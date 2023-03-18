@@ -53,4 +53,9 @@ public interface IWebClient
     /// Update current user profile
     /// </summary>
     Task<Profile> UpdateProfileAsync(ProfileUpdateRequest request);
+    
+    /// <summary>
+    /// Create new team
+    /// </summary>
+    Task<Team> CreateTeamAsync(CreateTeamRequest request);
 }

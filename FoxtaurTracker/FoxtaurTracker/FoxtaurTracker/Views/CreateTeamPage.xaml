@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:FoxtaurTracker.ViewModels"
+             xmlns:colorPicker="clr-namespace:ColorPicker.Maui;assembly=ColorPicker.Maui"
+             x:Class="FoxtaurTracker.Views.CreateTeamPage"
+             Title="Create a team"
+             Loaded="CreateTeamPageLoaded">
+    
+    <!-- Model -->
+    <ContentPage.BindingContext>
+        <viewModels:CreateTeamViewModel />
+    </ContentPage.BindingContext>
+    
+    <ContentPage.Content>
+        <ScrollView>
+            <VerticalStackLayout
+                VerticalOptions="Start">
+                
+                <Grid
+                    Style="{ StaticResource SpacedGrids }">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    
+                    <!-- Team name -->
+                    <Label
+                        Grid.Column="0"
+                        Grid.Row="0"
+                        VerticalOptions="Center"
+                        Text="Name:"/>
+
+                    <Border
+                        Grid.Column="1"
+                        Grid.Row="0"
+                        VerticalOptions="Center"
+                        Style="{ StaticResource RoundedBorders }">
+                        
+                        <Entry
+                            Text="{ Binding Name }" />
+                    </Border>
+                    
+                    <!-- Color -->
+                    <Label
+                        Grid.Column="0"
+                        Grid.Row="1"
+                        VerticalOptions="Center"
+                        Text="Color:"/>
+
+                    <Border
+                        Grid.Column="1"
+                        Grid.Row="1"
+                        VerticalOptions="Center"
+                        Style="{ StaticResource RoundedBorders }">
+                        
+                        <colorPicker:ColorPicker
+                            HeightRequest="100"
+                            PickedColorChanged="TeamColorChanged"
+                            PickedColor="{ Binding Color }" />
+                    </Border>
+                    
+                    <!-- Create button -->
+                    <Button
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        Grid.Row="2"
+                        Text="Create"
+                        Command="{ Binding CreateTeamCommand }"/>
+                    
+                </Grid>
+                
+            </VerticalStackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

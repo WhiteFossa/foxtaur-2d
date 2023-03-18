@@ -48,4 +48,9 @@ public interface IWebClientRaw
     /// Update current user profile
     /// </summary>
     Task<ProfileDto> UpdateProfileAsync(ProfileUpdateRequest request);
+    
+    /// <summary>
+    /// Create new team
+    /// </summary>
+    Task<TeamDto> CreateTeamAsync(CreateTeamRequest request);
 }

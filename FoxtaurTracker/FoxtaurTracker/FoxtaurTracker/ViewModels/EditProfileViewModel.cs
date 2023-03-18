@@ -27,7 +27,7 @@ public class EditProfileViewModel : IQueryAttributable, INotifyPropertyChanged
     #region Commands
 
     /// <summary>
-    /// Log in
+    /// Update profile
     /// </summary>
     public ICommand UpdateProfileCommand { get; private set; }
 

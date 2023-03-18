@@ -145,6 +145,18 @@ public class WebClient : IWebClient
             Color.FromArgb(updatedProfile.Color.A, updatedProfile.Color.R, updatedProfile.Color.G, updatedProfile.Color.B));
     }
 
+    public async Task<Team> CreateTeamAsync(CreateTeamRequest request)
+    {
+        CheckIfConnected();
+
+        var createdTeam = await _client.CreateTeamAsync(request).ConfigureAwait(false);
+
+        return new Team(
+            createdTeam.Id,
+            createdTeam.Name,
+            Color.FromArgb(createdTeam.Color.A, createdTeam.Color.R, createdTeam.Color.G, createdTeam.Color.B));
+    }
+
     private void CheckIfConnected()
     {
         if (!_isConnected)

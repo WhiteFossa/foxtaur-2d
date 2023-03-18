@@ -111,4 +111,17 @@ public class WebClientRaw : IWebClientRaw
 
         return JsonSerializer.Deserialize<ProfileDto>(await response.Content.ReadAsStringAsync());
     }
+
+    public async Task<TeamDto> CreateTeamAsync(CreateTeamRequest request)
+    {
+        _ = request ?? throw new ArgumentNullException(nameof(request));
+
+        var response = await _httpClient.PostAsJsonAsync($"{_baseUrl}/Teams/Create", request).ConfigureAwait(false);
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new InvalidOperationException();
+        }
+
+        return JsonSerializer.Deserialize<TeamDto>(await response.Content.ReadAsStringAsync());
+    }
 }

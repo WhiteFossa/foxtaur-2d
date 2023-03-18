@@ -42,6 +42,11 @@ public class MainViewModel : IQueryAttributable, INotifyPropertyChanged
     /// </summary>
     public ICommand EditProfileCommand { get; private set; }
 
+    /// <summary>
+    /// Log in
+    /// </summary>
+    public ICommand CreateTeamCommand { get; private set; }
+    
     #endregion
     
     public MainViewModel()
@@ -50,11 +55,12 @@ public class MainViewModel : IQueryAttributable, INotifyPropertyChanged
         
         #region Commands binding
 
-        EditProfileCommand = new Command(async () => await EditProfileAsync());
+        EditProfileCommand = new Command(async() => await EditProfileAsync());
+        CreateTeamCommand = new Command(async () => await CreateTeamAsync());
 
         #endregion
     }
-    
+
     public event PropertyChangedEventHandler PropertyChanged;
     
     public void ApplyQueryAttributes(IDictionary<string, object> query)
@@ -100,5 +106,15 @@ public class MainViewModel : IQueryAttributable, INotifyPropertyChanged
         {
             await EditProfileAsync();
         }
+    }
+    
+    private async Task CreateTeamAsync()
+    {
+        var navigationParameter = new Dictionary<string, object>
+        {
+            { "UserModel", _userModel },
+        };
+
+        await Shell.Current.GoToAsync("createTeamPage", navigationParameter);
     }
 }
