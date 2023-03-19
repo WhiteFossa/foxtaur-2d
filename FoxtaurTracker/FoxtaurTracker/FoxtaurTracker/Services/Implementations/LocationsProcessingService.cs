@@ -49,13 +49,22 @@ public class LocationsProcessingService : ILocationsProcessingService
     
     public async Task StartTrackingAsync()
     {
+#if ANDROID
+        Android.Content.Intent intent = new Android.Content.Intent(Android.App.Application.Context, typeof(TrackerForegroundService));
+        Android.App.Application.Context.StartForegroundService(intent);
+#endif
+        
         _locationFetchTimer.Start();
-        _locationsQueue.Clear();
     }
 
     public async Task StopTrackingAsync()
     {
         _locationFetchTimer.Stop();
+        
+#if ANDROID
+        Android.Content.Intent intent = new Android.Content.Intent(Android.App.Application.Context, typeof(TrackerForegroundService));
+        Android.App.Application.Context.StopService(intent);
+#endif
     }
 
     private void OnLocationFetchTimer(object sender, ElapsedEventArgs e)
@@ -121,10 +130,15 @@ public class LocationsProcessingService : ILocationsProcessingService
         }
         catch (Exception)
         {
-            // Swallowing excetion
+            // Swallowing exception
             // TODO: Add logging
             return;
         }
+        
+#if ANDROID
+        var trackerForegroundService = App.ServicesProvider.GetService<TrackerForegroundService>();
+        trackerForegroundService.SendNewNotification("Yiff!");
+#endif
 
         // Regenerating queue
         var newLocationsQueue = new ConcurrentQueue<HunterLocation>();

@@ -76,7 +76,7 @@ public class HuntersLayer : IHuntersVectorLayer
             new Size(double.MaxValue, double.MaxValue));
         
         // Team
-        var formattedTeamName = new FormattedText(hunter.Team.Name,
+        var formattedTeamName = new FormattedText(hunter.Team?.Name ?? RendererConstants.NoTeamTeamName,
             Typeface.Default,
             RendererConstants.HunterTeamNameFontSize,
             TextAlignment.Left,
@@ -87,7 +87,7 @@ public class HuntersLayer : IHuntersVectorLayer
             new Point(hunterX - formattedName.Bounds.Width / 2.0, markerPosition.Y - formattedName.Bounds.Height - formattedTeamName.Bounds.Height + RendererConstants.HunterNameShiftDown),
             formattedName);
         
-        context.DrawText(new SolidColorBrush(hunter.Team.Color),
+        context.DrawText(new SolidColorBrush(hunter.Team?.Color ?? RendererConstants.NoTeamTeamColor),
             new Point(hunterX - formattedTeamName.Bounds.Width / 2.0, markerPosition.Y - formattedTeamName.Bounds.Height),
             formattedTeamName);
         

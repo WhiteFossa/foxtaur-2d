@@ -13,7 +13,7 @@ public static class GlobalConstants
     /// <summary>
     /// Get new location each this number of seconds
     /// </summary>
-    public const int LocationFetchInterval = 5;
+    public const int LocationFetchInterval = 2;
     
     /// <summary>
     /// Try to send locations each this number of seconds

@@ -250,6 +250,20 @@ public static class RendererConstants
     
     #endregion
 
+    #region Teams
+
+    /// <summary>
+    /// Team name for hunters without team
+    /// </summary>
+    public const string NoTeamTeamName = "No team";
+    
+    /// <summary>
+    /// Team color for hunters without team
+    /// </summary>
+    public static readonly Color NoTeamTeamColor = new Color(255, 255, 0, 0);
+
+    #endregion
+
     #endregion
     
     #region Data transmission
