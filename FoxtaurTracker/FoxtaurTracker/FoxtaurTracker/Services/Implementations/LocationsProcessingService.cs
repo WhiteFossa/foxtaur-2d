@@ -1,5 +1,10 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Timers;
+using Android.Content.Res;
 using FoxtaurTracker.Constants;
 using FoxtaurTracker.Services.Abstract;
 using FoxtaurTracker.Services.Abstract.Enums;
@@ -8,6 +13,8 @@ using LibWebClient.Models;
 using LibWebClient.Models.DTOs;
 using LibWebClient.Models.Requests;
 using LibWebClient.Services.Abstract;
+using Microsoft.Maui.ApplicationModel;
+using Plugin.LocalNotification;
 using Timer = System.Timers.Timer;
 
 namespace FoxtaurTracker.Services.Implementations;
@@ -128,17 +135,14 @@ public class LocationsProcessingService : ILocationsProcessingService
         {
             createdLocations = _webClient.CreateHunterLocationsAsync(request).Result;
         }
-        catch (Exception)
+        catch (Exception ex)
         {
             // Swallowing exception
             // TODO: Add logging
             return;
         }
         
-#if ANDROID
-        var trackerForegroundService = App.ServicesProvider.GetService<TrackerForegroundService>();
-        trackerForegroundService.SendNewNotification("Yiff!");
-#endif
+        CreateNotification();
 
         // Regenerating queue
         var newLocationsQueue = new ConcurrentQueue<HunterLocation>();
@@ -161,5 +165,18 @@ public class LocationsProcessingService : ILocationsProcessingService
         {
             _locationsQueue.Enqueue(location);
         }
+    }
+
+    private void CreateNotification()
+    {
+        var request = new NotificationRequest {
+            NotificationId = 40578,
+            Title = "Subscribe for me",
+            Subtitle = "Hello Friends",
+            Description = "Stay Tuned",
+            BadgeNumber = 42
+        };
+        
+        LocalNotificationCenter.Current.Show(request);
     }
 }

@@ -175,7 +175,9 @@ public class WebClientRaw : IWebClientRaw
             throw new InvalidOperationException();
         }
 
-        var result = JsonSerializer.Deserialize<IReadOnlyCollection<HunterLocationDto>>(await response.Content.ReadAsStringAsync());
+        var responseStr = await response.Content.ReadAsStringAsync();
+
+        var result = JsonSerializer.Deserialize<IReadOnlyCollection<HunterLocationDto>>(responseStr);
         return ReorderResult(result, request.HunterLocations.Select(hl => hl.Id).ToList());
     }
 

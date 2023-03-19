@@ -7,7 +7,7 @@ using FoxtaurTracker.Services.Abstract;
 namespace FoxtaurTracker;
 
 [Service]
-public class TrackerForegroundService : Service, ITrackerForegroundService
+public class TrackerForegroundService : Service
 {
     private const string NotificationChannelId = "me.foxtaur.tracker";
     private const int NotificationId = 40578;
