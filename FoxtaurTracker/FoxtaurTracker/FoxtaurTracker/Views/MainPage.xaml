@@ -55,6 +55,7 @@
                         HorizontalOptions="End">
                         
                         <Button
+                            Style="{ StaticResource OrdinaryButtons }"
                             Text="Edit profile"
                             Command="{ Binding EditProfileCommand }"/>
                         
@@ -64,6 +65,7 @@
                     <Button
                         Grid.Column="0"
                         Grid.Row="2"
+                        Style="{ StaticResource OrdinaryButtons }"
                         Text="Create a team"
                         Command="{ Binding CreateTeamCommand }"/>
                     
@@ -71,6 +73,7 @@
                     <Button
                         Grid.Column="0"
                         Grid.Row="3"
+                        Style="{ StaticResource OrdinaryButtons }"
                         Text="Register on a distance"
                         Command="{ Binding RegisterOnDistanceCommand }"/>
                     

@@ -31,6 +31,7 @@
                     <Button
                         Grid.Row="0"
                         Grid.Column="0"
+                        Style="{ StaticResource OrdinaryButtons }"
                         Text="Connect"
                         Command="{ Binding ConnectCommand }"/>
 
@@ -38,12 +39,14 @@
                     <Button
                         Grid.Row="1"
                         Grid.Column="0"
+                        Style="{ StaticResource OrdinaryButtons }"
                         Text="Log in"
                         Command="{ Binding LogInCommand }"/>
 
                     <Button
                         Grid.Row="2"
                         Grid.Column="0"
+                        Style="{ StaticResource OrdinaryButtons }"
                         Text="Register"
                         Command="{ Binding RegisterCommand }"/>
 

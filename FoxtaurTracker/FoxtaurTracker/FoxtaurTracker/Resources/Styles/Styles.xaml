@@ -18,5 +18,9 @@
         <Setter Property="Padding" Value="10" />
     </Style>
 
+    <!-- Ordinary buttons -->
+    <Style x:Key="OrdinaryButtons" TargetType="Button">
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={ StaticResource LightButtonsText }, Dark={ StaticResource DarkButtonsText } }" />
+    </Style>
 
 </ResourceDictionary>
