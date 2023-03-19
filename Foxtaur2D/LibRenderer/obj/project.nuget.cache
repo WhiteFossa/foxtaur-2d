@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "vLbJjT/qJTZa+7yoEyadOVrjs/RQo4l8PPf0E1V3lMdox1PsG4AV7yP1IqAe+uOzhnCRBbgA9COd6qsphn73WA==",
+  "dgSpecHash": "scK+mnJsRB/U0UN0yrMXQVZ9yYnV4CftSlyysXJ1cU5EGVAoyBzKcVT2K/uEPFTmRW8C9ap20fhyDdgKOP9w7g==",
   "success": true,
   "projectFilePath": "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibRenderer/LibRenderer.csproj",
   "expectedPackageFiles": [
@@ -24,10 +24,8 @@
     "/home/fossa/.nuget/packages/microsoft.netcore.platforms/1.0.1/microsoft.netcore.platforms.1.0.1.nupkg.sha512",
     "/home/fossa/.nuget/packages/microsoft.netcore.targets/1.0.1/microsoft.netcore.targets.1.0.1.nupkg.sha512",
     "/home/fossa/.nuget/packages/nlog/5.1.2/nlog.5.1.2.nupkg.sha512",
-    "/home/fossa/.nuget/packages/runtime.any.system.runtime/4.1.0/runtime.any.system.runtime.4.1.0.nupkg.sha512",
     "/home/fossa/.nuget/packages/system.componentmodel.annotations/4.5.0/system.componentmodel.annotations.4.5.0.nupkg.sha512",
     "/home/fossa/.nuget/packages/system.memory/4.5.3/system.memory.4.5.3.nupkg.sha512",
-    "/home/fossa/.nuget/packages/system.private.uri/4.0.1/system.private.uri.4.0.1.nupkg.sha512",
     "/home/fossa/.nuget/packages/system.reactive/5.0.0/system.reactive.5.0.0.nupkg.sha512",
     "/home/fossa/.nuget/packages/system.runtime/4.1.0/system.runtime.4.1.0.nupkg.sha512",
     "/home/fossa/.nuget/packages/system.runtime.compilerservices.unsafe/4.6.0/system.runtime.compilerservices.unsafe.4.6.0.nupkg.sha512",

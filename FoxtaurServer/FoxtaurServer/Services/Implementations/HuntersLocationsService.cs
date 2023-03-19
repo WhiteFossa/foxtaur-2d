@@ -27,11 +27,11 @@ public class HuntersLocationsService : IHuntersLocationsService
             .ToDictionary(g => Guid.Parse(g.Key), g => _huntersLocationsMapper.Map(g.ToList()));
     }
 
-    public async Task<IReadOnlyCollection<HunterLocationDto>> MassCreateHuntersLocationsAsync(IReadOnlyCollection<HunterLocationDto> huntersLocations, Guid hunterId)
+    public async Task<IReadOnlyCollection<Guid>> MassCreateHuntersLocationsAsync(IReadOnlyCollection<HunterLocationDto> huntersLocations, Guid hunterId)
     {
         _ = huntersLocations ?? throw new ArgumentNullException(nameof(huntersLocations));
 
-        var incomingHunterLocations = huntersLocations
+        var incomingHunterLocationsIds = huntersLocations
             .Select(hl => hl.Id)
             .ToList();
         
@@ -56,6 +56,7 @@ public class HuntersLocationsService : IHuntersLocationsService
         await _huntersLocationsDao.MassCreateAsync(toInsert);
         await _huntersLocationsDao.MassUpdateAsync(toUpdate);
 
-        return _huntersLocationsMapper.Map(await _huntersLocationsDao.GetHuntersLocationsByIdsAsync(incomingHunterLocations, DateTime.MinValue));
+        // TODO: Maybe it will be good to check if locations are actually saved?
+        return incomingHunterLocationsIds;
     }
 }

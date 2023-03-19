@@ -44,11 +44,11 @@ public class HuntersLocationsController : ControllerBase
     }
     
     /// <summary>
-    /// Create new hunter locations. Returns created locations
+    /// Create new hunter locations. Returns created locations IDs
     /// </summary>
     [Route("api/HuntersLocations/MassCreate")]
     [HttpPost]
-    public async Task<ActionResult<IReadOnlyCollection<HunterLocationDto>>> CreateHunterLocations([FromBody]CreateHunterLocationsRequest request)
+    public async Task<ActionResult<IReadOnlyCollection<Guid>>> CreateHunterLocations([FromBody]CreateHunterLocationsRequest request)
     {
         if (request == null || request.HunterLocations == null)
         {
