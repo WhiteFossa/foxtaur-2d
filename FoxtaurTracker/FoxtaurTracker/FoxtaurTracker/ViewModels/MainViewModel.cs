@@ -38,14 +38,19 @@ public class MainViewModel : IQueryAttributable, INotifyPropertyChanged
     #region Commands
 
     /// <summary>
-    /// Log in
+    /// Edit profile
     /// </summary>
     public ICommand EditProfileCommand { get; private set; }
 
     /// <summary>
-    /// Log in
+    /// Create a team
     /// </summary>
     public ICommand CreateTeamCommand { get; private set; }
+    
+    /// <summary>
+    /// Register on distance
+    /// </summary>
+    public ICommand RegisterOnDistanceCommand { get; private set; }
     
     #endregion
     
@@ -55,8 +60,9 @@ public class MainViewModel : IQueryAttributable, INotifyPropertyChanged
         
         #region Commands binding
 
-        EditProfileCommand = new Command(async() => await EditProfileAsync());
+        EditProfileCommand = new Command(async () => await EditProfileAsync());
         CreateTeamCommand = new Command(async () => await CreateTeamAsync());
+        RegisterOnDistanceCommand = new Command(async () => await RegisterOnDistanceAsync());
 
         #endregion
     }
@@ -116,5 +122,15 @@ public class MainViewModel : IQueryAttributable, INotifyPropertyChanged
         };
 
         await Shell.Current.GoToAsync("createTeamPage", navigationParameter);
+    }
+
+    private async Task RegisterOnDistanceAsync()
+    {
+        var navigationParameter = new Dictionary<string, object>
+        {
+            { "UserModel", _userModel },
+        };
+
+        await Shell.Current.GoToAsync("registerOnDistancePage", navigationParameter);
     }
 }

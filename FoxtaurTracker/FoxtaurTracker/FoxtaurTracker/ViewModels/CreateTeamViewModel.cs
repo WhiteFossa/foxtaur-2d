@@ -87,11 +87,7 @@ public class CreateTeamViewModel : IQueryAttributable, INotifyPropertyChanged
     {
         _userModel = (User)query["UserModel"];
     }
-    
-    public async Task OnPageLoadedAsync(Object source, EventArgs args)
-    {
-    }
-    
+
     private async Task CreateTeamAsync()
     {
         Color.ToRgba(out var teamColorR, out var teamColorG, out var teamColorB, out var teamColorA);
@@ -104,7 +100,7 @@ public class CreateTeamViewModel : IQueryAttributable, INotifyPropertyChanged
         }
         catch (Exception)
         {
-            await App.PopupsService.ShowAlertAsync("Error", "Failed to create team.");
+            await App.PopupsService.ShowAlertAsync("Error", "Failed to create the team.");
             return;
         }
 

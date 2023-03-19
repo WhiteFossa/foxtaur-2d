@@ -58,4 +58,14 @@ public interface IWebClient
     /// Create new team
     /// </summary>
     Task<Team> CreateTeamAsync(CreateTeamRequest request);
+    
+    /// <summary>
+    /// Get list of all distances (without including data on hunters, foxes and so on)
+    /// </summary>
+    Task<IReadOnlyCollection<Distance>> GetDistancesWithoutIncludeAsync();
+    
+    /// <summary>
+    /// Register on a distance
+    /// </summary>
+    Task<RegisterOnDistanceResponse> RegisterOnDistanceAsync(RegisterOnDistanceRequest request);
 }

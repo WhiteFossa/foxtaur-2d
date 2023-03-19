@@ -1,4 +1,4 @@
-namespace LibWebClient.Models;
+﻿namespace LibWebClient.Models;
 
 /// <summary>
 /// Hunter location

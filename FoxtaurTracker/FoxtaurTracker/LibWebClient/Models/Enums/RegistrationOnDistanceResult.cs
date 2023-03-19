@@ -1,4 +1,4 @@
-namespace FoxtaurServer.Models.Api.Enums;
+﻿namespace LibWebClient.Models.Enums;
 
 /// <summary>
 /// Result for registration on a distance

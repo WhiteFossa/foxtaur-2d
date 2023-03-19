@@ -2,6 +2,7 @@
 using LibWebClient.Constants;
 using LibWebClient.Models;
 using LibWebClient.Models.DTOs;
+using LibWebClient.Models.Enums;
 using LibWebClient.Models.Requests;
 using LibWebClient.Services.Abstract;
 
@@ -126,6 +127,7 @@ public class WebClient : IWebClient
 
     public async Task<Profile> UpdateProfileAsync(ProfileUpdateRequest request)
     {
+        _ = request ?? throw new ArgumentNullException(nameof(request));
         CheckIfConnected();
 
         var updatedProfile = await _client.UpdateProfileAsync(request).ConfigureAwait(false);
@@ -147,6 +149,7 @@ public class WebClient : IWebClient
 
     public async Task<Team> CreateTeamAsync(CreateTeamRequest request)
     {
+        _ = request ?? throw new ArgumentNullException(nameof(request));
         CheckIfConnected();
 
         var createdTeam = await _client.CreateTeamAsync(request).ConfigureAwait(false);
@@ -155,6 +158,46 @@ public class WebClient : IWebClient
             createdTeam.Id,
             createdTeam.Name,
             Color.FromArgb(createdTeam.Color.A, createdTeam.Color.R, createdTeam.Color.G, createdTeam.Color.B));
+    }
+
+    public async Task<IReadOnlyCollection<Distance>> GetDistancesWithoutIncludeAsync()
+    {
+        var distances = await _client.GetAllDistancesAsync().ConfigureAwait(false);
+
+        var mapsIds = distances
+            .Select(d => d.MapId)
+            .ToList();
+        var maps = await _client.MassGetMapsAsync(new MapsMassGetRequest(mapsIds)).ConfigureAwait(false);
+        
+        return distances
+            .Select(d =>
+            {
+                var mapDto = maps.Single(m => m.Id == d.MapId);
+                
+                return new Distance(
+                    d.Id,
+                    d.Name,
+                    new Map(mapDto.Id, mapDto.Name, mapDto.NorthLat, mapDto.SouthLat, mapDto.EastLon, mapDto.WestLon, mapDto.Url),
+                    d.IsActive,
+                    new Location(Guid.NewGuid(), "Invalid start location", LocationType.Start, 0, 0, null),
+                    new Location(Guid.NewGuid(), "Invalid finish corridor entrance location", LocationType.FinishCorridorEntrance, 0, 0, null),
+                    new Location(Guid.NewGuid(), "Invalid finish location", LocationType.Start, 0, 0, null),
+                    new List<Location>(),
+                    new List<Hunter>(),
+                    d.FirstHunterStartTime
+                );
+            })
+            .ToList();
+    }
+
+    public async Task<RegisterOnDistanceResponse> RegisterOnDistanceAsync(RegisterOnDistanceRequest request)
+    {
+        _ = request ?? throw new ArgumentNullException(nameof(request));
+        CheckIfConnected();
+        
+        var registrationResponse = await _client.RegisterOnDistanceAsync(request).ConfigureAwait(false);
+
+        return new RegisterOnDistanceResponse(registrationResponse.Result);
     }
 
     private void CheckIfConnected()

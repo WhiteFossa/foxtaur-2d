@@ -362,12 +362,12 @@ public class EditProfileViewModel : IQueryAttributable, INotifyPropertyChanged
         TeamItems.Add(new TeamItem(new Team(Guid.Empty, "No team", System.Drawing.Color.White), 0));
 
         var teamsAsList = _teams.ToList();
-        for (int index = 0; index < _teams.Count; index++)
+        for (int index = 0; index < teamsAsList.Count; index++)
         {
             TeamItems.Add(new TeamItem(teamsAsList[index], index + 1));
         }
 
-        TeamItems = new List<TeamItem>(TeamItems); // Dirty way to force picket to update
+        TeamItems = new List<TeamItem>(TeamItems); // Dirty way to force picker to update
 
         TeamIndex = _profile.Team != null
             ? TeamItems.Single(t => t.Team.Id == _profile.Team.Id).Index

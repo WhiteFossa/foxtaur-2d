@@ -24,6 +24,7 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
                     <Grid.ColumnDefinitions>
@@ -65,6 +66,13 @@
                         Grid.Row="2"
                         Text="Create a team"
                         Command="{ Binding CreateTeamCommand }"/>
+                    
+                    <!-- Register on a distance -->
+                    <Button
+                        Grid.Column="0"
+                        Grid.Row="3"
+                        Text="Register on a distance"
+                        Command="{ Binding RegisterOnDistanceCommand }"/>
                     
                 </Grid>
             

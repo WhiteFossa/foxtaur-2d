@@ -1,11 +1,12 @@
 ﻿using System.Text.Json.Serialization;
+using LibWebClient.Models.Abstract;
 
 namespace LibWebClient.Models.DTOs;
 
 /// <summary>
 /// Information about current user
 /// </summary>
-public class UserInfoDto
+public class UserInfoDto : IIdedDto
 {
     /// <summary>
     /// Distance ID

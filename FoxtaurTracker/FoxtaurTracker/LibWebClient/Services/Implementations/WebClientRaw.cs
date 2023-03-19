@@ -2,6 +2,7 @@
 using System.Net.Http.Json;
 using System.Text.Json;
 using LibWebClient.Constants;
+using LibWebClient.Models.Abstract;
 using LibWebClient.Models.DTOs;
 using LibWebClient.Models.Requests;
 using LibWebClient.Services.Abstract;
@@ -74,7 +75,8 @@ public class WebClientRaw : IWebClientRaw
             throw new InvalidOperationException();
         }
 
-        return JsonSerializer.Deserialize<IReadOnlyCollection<ProfileDto>>(await response.Content.ReadAsStringAsync());
+        var result = JsonSerializer.Deserialize<IReadOnlyCollection<ProfileDto>>(await response.Content.ReadAsStringAsync());
+        return ReorderResult(result, request.HuntersIds);
     }
 
     public async Task<UserInfoDto> GetCurrentUserInfoAsync()
@@ -123,5 +125,56 @@ public class WebClientRaw : IWebClientRaw
         }
 
         return JsonSerializer.Deserialize<TeamDto>(await response.Content.ReadAsStringAsync());
+    }
+
+    public async Task<IReadOnlyCollection<DistanceDto>> GetAllDistancesAsync()
+    {
+        var response = await _httpClient.GetAsync($"{_baseUrl}/Distances/Index").ConfigureAwait(false);
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new InvalidOperationException();
+        }
+        
+        return JsonSerializer.Deserialize<IReadOnlyCollection<DistanceDto>>(await response.Content.ReadAsStringAsync());
+    }
+
+    public async Task<IReadOnlyCollection<MapDto>> MassGetMapsAsync(MapsMassGetRequest request)
+    {
+        _ = request ?? throw new ArgumentNullException(nameof(request));
+
+        var response = await _httpClient.PostAsJsonAsync($"{_baseUrl}/Maps/MassGet", request).ConfigureAwait(false);
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new InvalidOperationException();
+        }
+
+        var result = JsonSerializer.Deserialize<IReadOnlyCollection<MapDto>>(await response.Content.ReadAsStringAsync());
+        return ReorderResult(result, request.MapsIds);
+    }
+
+    public async Task<RegistrationOnDistanceResponseDto> RegisterOnDistanceAsync(RegisterOnDistanceRequest request)
+    {
+        _ = request ?? throw new ArgumentNullException(nameof(request));
+
+        var response = await _httpClient.PostAsJsonAsync($"{_baseUrl}/Hunters/RegisterOnDistance", request).ConfigureAwait(false);
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new InvalidOperationException();
+        }
+
+        return JsonSerializer.Deserialize<RegistrationOnDistanceResponseDto>(await response.Content.ReadAsStringAsync());
+    }
+
+    /// <summary>
+    /// Reorder request result such way, that result items are orderer as request IDs
+    /// </summary>
+    private IReadOnlyCollection<T> ReorderResult<T>(IReadOnlyCollection<T> result, IReadOnlyCollection<Guid> requestOrder) where T : IIdedDto
+    {
+        var resultAsList = result
+            .ToList();
+        
+        return requestOrder
+            .Select(x => resultAsList.Single(r => r.Id == x))
+            .ToList();
     }
 }

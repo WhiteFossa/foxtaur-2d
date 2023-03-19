@@ -3,13 +3,13 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewModels="clr-namespace:FoxtaurTracker.ViewModels"
-             xmlns:colorPicker="clr-namespace:ColorPicker.Maui;assembly=ColorPicker.Maui"
-             x:Class="FoxtaurTracker.Views.CreateTeamPage"
-             Title="Create a team">
+             x:Class="FoxtaurTracker.Views.RegisterOnDistancePage"
+             Title="Register on distance"
+             Loaded="RegisterOnDistancePageLoaded">
     
     <!-- Model -->
     <ContentPage.BindingContext>
-        <viewModels:CreateTeamViewModel />
+        <viewModels:RegisterOnDistanceViewModel />
     </ContentPage.BindingContext>
     
     <ContentPage.Content>
@@ -23,7 +23,6 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
                     <Grid.ColumnDefinitions>
@@ -31,12 +30,12 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     
-                    <!-- Team name -->
+                    <!-- Distance -->
                     <Label
                         Grid.Column="0"
                         Grid.Row="0"
                         VerticalOptions="Center"
-                        Text="Name:"/>
+                        Text="Distance:"/>
 
                     <Border
                         Grid.Column="1"
@@ -44,37 +43,21 @@
                         VerticalOptions="Center"
                         Style="{ StaticResource RoundedBorders }">
                         
-                        <Entry
-                            Text="{ Binding Name }" />
+                        <Picker
+                            Title="Select distance"
+                            ItemsSource="{ Binding DistanceItems }"
+                            ItemDisplayBinding="{ Binding Distance.Name }"
+                            SelectedIndex="{ Binding DistanceIndex }" />
                     </Border>
                     
-                    <!-- Color -->
-                    <Label
-                        Grid.Column="0"
-                        Grid.Row="1"
-                        VerticalOptions="Center"
-                        Text="Color:"/>
-
-                    <Border
-                        Grid.Column="1"
-                        Grid.Row="1"
-                        VerticalOptions="Center"
-                        Style="{ StaticResource RoundedBorders }">
-                        
-                        <colorPicker:ColorPicker
-                            HeightRequest="100"
-                            PickedColorChanged="TeamColorChanged"
-                            PickedColor="{ Binding Color }" />
-                    </Border>
                     
-                    <!-- Create button -->
+                    <!-- Save button -->
                     <Button
                         Grid.Column="0"
                         Grid.ColumnSpan="2"
-                        Grid.Row="2"
-                        Text="Create"
-                        Command="{ Binding CreateTeamCommand }"/>
-                    
+                        Grid.Row="1"
+                        Text="Register"
+                        Command="{ Binding RegisterOnDistanceCommand }"/>
                 </Grid>
                 
             </VerticalStackLayout>

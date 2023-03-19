@@ -14,15 +14,7 @@ public partial class CreateTeamPage : ContentPage
     {
         InitializeComponent();
     }
-    
-    /// <summary>
-    /// Page loaded handler
-    /// </summary>
-    private async void CreateTeamPageLoaded(object sender, EventArgs e)
-    {
-        await (BindingContext as CreateTeamViewModel).OnPageLoadedAsync(sender, e);
-    }
-    
+
     /// <summary>
     /// Dirty hack to process team color changes
     /// </summary>

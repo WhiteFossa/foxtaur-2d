@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using LibWebClient.Models.Abstract;
 using LibWebClient.Models.Enums;
 
 namespace LibWebClient.Models.DTOs;
@@ -6,7 +7,7 @@ namespace LibWebClient.Models.DTOs;
 /// <summary>
 /// Hunter profile
 /// </summary>
-public class ProfileDto
+public class ProfileDto : IIdedDto
 {
     /// <summary>
     /// Hunter ID

@@ -53,4 +53,19 @@ public interface IWebClientRaw
     /// Create new team
     /// </summary>
     Task<TeamDto> CreateTeamAsync(CreateTeamRequest request);
+
+    /// <summary>
+    /// Get all distances
+    /// </summary>
+    Task<IReadOnlyCollection<DistanceDto>> GetAllDistancesAsync();
+    
+    /// <summary>
+    /// Mass get maps
+    /// </summary>
+    Task<IReadOnlyCollection<MapDto>> MassGetMapsAsync(MapsMassGetRequest request);
+
+    /// <summary>
+    /// Register on a distance
+    /// </summary>
+    Task<RegistrationOnDistanceResponseDto> RegisterOnDistanceAsync(RegisterOnDistanceRequest request);
 }
