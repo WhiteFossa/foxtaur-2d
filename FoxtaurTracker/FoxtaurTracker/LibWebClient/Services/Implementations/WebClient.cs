@@ -200,16 +200,12 @@ public class WebClient : IWebClient
         return new RegisterOnDistanceResponse(registrationResponse.Result);
     }
 
-    public async Task<IReadOnlyCollection<HunterLocation>> CreateHunterLocationsAsync(CreateHunterLocationsRequest request)
+    public async Task<IReadOnlyCollection<Guid>> CreateHunterLocationsAsync(CreateHunterLocationsRequest request)
     {
         _ = request ?? throw new ArgumentNullException(nameof(request));
         CheckIfConnected();
 
-        var creationResponse = await _client.CreateHunterLocationsAsync(request).ConfigureAwait(false);
-
-        return creationResponse
-            .Select(hl => new HunterLocation(hl.Id, hl.Timestamp, hl.Lat, hl.Lon, hl.Alt))
-            .ToList();
+        return await _client.CreateHunterLocationsAsync(request).ConfigureAwait(false);
     }
 
     private void CheckIfConnected()

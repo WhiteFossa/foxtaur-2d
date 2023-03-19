@@ -15,6 +15,7 @@ using LibWebClient.Models.Requests;
 using LibWebClient.Services.Abstract;
 using Microsoft.Maui.ApplicationModel;
 using Plugin.LocalNotification;
+using Plugin.LocalNotification.AndroidOption;
 using Timer = System.Timers.Timer;
 
 namespace FoxtaurTracker.Services.Implementations;
@@ -130,18 +131,19 @@ public class LocationsProcessingService : ILocationsProcessingService
                 })
             .ToList());
 
-        IReadOnlyCollection<HunterLocation> createdLocations = null;
+        IReadOnlyCollection<Guid> createdLocationsIds = null;
         try
         {
-            createdLocations = _webClient.CreateHunterLocationsAsync(request).Result;
+            createdLocationsIds = _webClient.CreateHunterLocationsAsync(request).Result;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             // Swallowing exception
             // TODO: Add logging
             return;
         }
         
+        // TODO: Fix notifications
         CreateNotification();
 
         // Regenerating queue
@@ -151,7 +153,7 @@ public class LocationsProcessingService : ILocationsProcessingService
         {
             _locationsQueue.TryDequeue(out var location);
             
-            if (createdLocations.Any(cl => cl.Id == location.Id))
+            if (createdLocationsIds.Any(clid => clid == location.Id))
             {
                 // Newly-created location
                 continue;
@@ -171,10 +173,11 @@ public class LocationsProcessingService : ILocationsProcessingService
     {
         var request = new NotificationRequest {
             NotificationId = 40578,
-            Title = "Subscribe for me",
-            Subtitle = "Hello Friends",
-            Description = "Stay Tuned",
-            BadgeNumber = 42
+            Title = "Foxtaur Tracker",
+            Description = $"Location sent: { DateTime.Now }",
+            BadgeNumber = 42,
+            Android = new AndroidOptions() { Priority = AndroidPriority.Low },
+            Silent = true
         };
         
         LocalNotificationCenter.Current.Show(request);

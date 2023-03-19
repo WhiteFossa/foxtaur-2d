@@ -165,7 +165,7 @@ public class WebClientRaw : IWebClientRaw
         return JsonSerializer.Deserialize<RegistrationOnDistanceResponseDto>(await response.Content.ReadAsStringAsync());
     }
 
-    public async Task<IReadOnlyCollection<HunterLocationDto>> CreateHunterLocationsAsync(CreateHunterLocationsRequest request)
+    public async Task<IReadOnlyCollection<Guid>> CreateHunterLocationsAsync(CreateHunterLocationsRequest request)
     {
         _ = request ?? throw new ArgumentNullException(nameof(request));
 
@@ -175,10 +175,7 @@ public class WebClientRaw : IWebClientRaw
             throw new InvalidOperationException();
         }
 
-        var responseStr = await response.Content.ReadAsStringAsync();
-
-        var result = JsonSerializer.Deserialize<IReadOnlyCollection<HunterLocationDto>>(responseStr);
-        return ReorderResult(result, request.HunterLocations.Select(hl => hl.Id).ToList());
+        return JsonSerializer.Deserialize<IReadOnlyCollection<Guid>>(await response.Content.ReadAsStringAsync());
     }
 
     /// <summary>
