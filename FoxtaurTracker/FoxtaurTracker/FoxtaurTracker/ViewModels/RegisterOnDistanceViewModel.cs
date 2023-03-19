@@ -31,6 +31,7 @@ public class RegisterOnDistanceViewModel : IQueryAttributable, INotifyPropertyCh
         {
             _distanceIndex = value;
             RaisePropertyChanged(nameof(DistanceIndex));
+            RefreshCanExecutes();
         }
     }
     
@@ -147,5 +148,10 @@ public class RegisterOnDistanceViewModel : IQueryAttributable, INotifyPropertyCh
         };
 
         await Shell.Current.GoToAsync("mainPage", navigationParameter);
+    }
+    
+    private void RefreshCanExecutes()
+    {
+        (RegisterOnDistanceCommand as Command).ChangeCanExecute();
     }
 }
