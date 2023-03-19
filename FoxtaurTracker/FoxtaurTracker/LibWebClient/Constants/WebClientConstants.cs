@@ -3,7 +3,7 @@
 /// <summary>
 /// Constants, related to web client
 /// </summary>
-public class WebClientConstants
+public static class WebClientConstants
 {
     /// <summary>
     /// Client able to work with this protocol version

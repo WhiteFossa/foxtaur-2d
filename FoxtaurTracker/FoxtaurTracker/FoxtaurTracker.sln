@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FoxtaurTracker", "FoxtaurTr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibWebClient", "LibWebClient\LibWebClient.csproj", "{8727C75C-0EF3-47A3-9812-605477980D4A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibAuxiliary", "LibAuxiliary\LibAuxiliary.csproj", "{74D17C8D-FD00-4DDA-874C-82E3857E6422}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +25,10 @@ Global
 		{8727C75C-0EF3-47A3-9812-605477980D4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8727C75C-0EF3-47A3-9812-605477980D4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8727C75C-0EF3-47A3-9812-605477980D4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74D17C8D-FD00-4DDA-874C-82E3857E6422}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74D17C8D-FD00-4DDA-874C-82E3857E6422}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74D17C8D-FD00-4DDA-874C-82E3857E6422}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74D17C8D-FD00-4DDA-874C-82E3857E6422}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -26,6 +26,8 @@ public static class MauiProgram
 		builder.Services.AddSingleton<IPopupsService, PopupsService>();
 		builder.Services.AddSingleton<IWebClientRaw, WebClientRaw>();
 		builder.Services.AddSingleton<IWebClient, WebClient>();
+		builder.Services.AddSingleton<ILocationService, LocationService>();
+		builder.Services.AddSingleton<ILocationsProcessingService, LocationsProcessingService>();
 
 		#endregion
 

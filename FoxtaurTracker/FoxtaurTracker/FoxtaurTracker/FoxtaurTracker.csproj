@@ -86,6 +86,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\LibAuxiliary\LibAuxiliary.csproj" />
 	  <ProjectReference Include="..\LibWebClient\LibWebClient.csproj" />
 	</ItemGroup>
 

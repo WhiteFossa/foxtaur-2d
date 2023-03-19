@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel;
 using System.Windows.Input;
 using FoxtaurTracker.Models;
+using FoxtaurTracker.Services.Abstract;
+using FoxtaurTracker.Services.Abstract.Models;
 using LibWebClient.Models;
 using LibWebClient.Models.Requests;
 using LibWebClient.Services.Abstract;
@@ -10,6 +12,7 @@ namespace FoxtaurTracker.ViewModels;
 public class MainViewModel : IQueryAttributable, INotifyPropertyChanged
 {
     private readonly IWebClient _webClient;
+    private readonly ILocationsProcessingService _locationsProcessingService;
     
     private bool _isFromRegistrationPage;
 
@@ -52,17 +55,30 @@ public class MainViewModel : IQueryAttributable, INotifyPropertyChanged
     /// </summary>
     public ICommand RegisterOnDistanceCommand { get; private set; }
     
+    /// <summary>
+    /// Start tracking
+    /// </summary>
+    public ICommand StartTrackingCommand { get; private set; }
+    
+    /// <summary>
+    /// Stop tracking
+    /// </summary>
+    public ICommand StopTrackingCommand { get; private set; }
+    
     #endregion
     
     public MainViewModel()
     {
         _webClient = App.ServicesProvider.GetService<IWebClient>();
+        _locationsProcessingService = App.ServicesProvider.GetService<ILocationsProcessingService>();
         
         #region Commands binding
 
         EditProfileCommand = new Command(async () => await EditProfileAsync());
         CreateTeamCommand = new Command(async () => await CreateTeamAsync());
         RegisterOnDistanceCommand = new Command(async () => await RegisterOnDistanceAsync());
+        StartTrackingCommand = new Command(async () => await StartTrackingAsync());
+        StopTrackingCommand = new Command(async () => await StopTrackingAsync());
 
         #endregion
     }
@@ -132,5 +148,15 @@ public class MainViewModel : IQueryAttributable, INotifyPropertyChanged
         };
 
         await Shell.Current.GoToAsync("registerOnDistancePage", navigationParameter);
+    }
+
+    private async Task StartTrackingAsync()
+    {
+        await _locationsProcessingService.StartTrackingAsync();
+    }
+
+    private async Task StopTrackingAsync()
+    {
+        await _locationsProcessingService.StopTrackingAsync();
     }
 }
