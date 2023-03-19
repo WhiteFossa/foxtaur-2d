@@ -48,7 +48,7 @@ public class HuntersLocationsController : ControllerBase
     /// </summary>
     [Route("api/HuntersLocations/MassCreate")]
     [HttpPost]
-    public async Task<ActionResult<IReadOnlyCollection<HunterLocationDto>>> CreateHunterLocations([FromBody]CreateHunterLocationRequest request)
+    public async Task<ActionResult<IReadOnlyCollection<HunterLocationDto>>> CreateHunterLocations([FromBody]CreateHunterLocationsRequest request)
     {
         if (request == null || request.HunterLocations == null)
         {

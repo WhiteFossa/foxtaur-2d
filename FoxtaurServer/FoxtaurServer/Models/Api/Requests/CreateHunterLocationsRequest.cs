@@ -3,9 +3,9 @@ using System.Text.Json.Serialization;
 namespace FoxtaurServer.Models.Api.Requests;
 
 /// <summary>
-/// Request to create hunter location
+/// Request to create hunter locations
 /// </summary>
-public class CreateHunterLocationRequest
+public class CreateHunterLocationsRequest
 {
     /// <summary>
     /// Hunter locations
