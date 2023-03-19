@@ -165,6 +165,20 @@ public class WebClientRaw : IWebClientRaw
         return JsonSerializer.Deserialize<RegistrationOnDistanceResponseDto>(await response.Content.ReadAsStringAsync());
     }
 
+    public async Task<IReadOnlyCollection<HunterLocationDto>> CreateHunterLocationsAsync(CreateHunterLocationsRequest request)
+    {
+        _ = request ?? throw new ArgumentNullException(nameof(request));
+
+        var response = await _httpClient.PostAsJsonAsync($"{_baseUrl}/HuntersLocations/MassCreate", request).ConfigureAwait(false);
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new InvalidOperationException();
+        }
+
+        var result = JsonSerializer.Deserialize<IReadOnlyCollection<HunterLocationDto>>(await response.Content.ReadAsStringAsync());
+        return ReorderResult(result, request.HunterLocations.Select(hl => hl.Id).ToList());
+    }
+
     /// <summary>
     /// Reorder request result such way, that result items are orderer as request IDs
     /// </summary>

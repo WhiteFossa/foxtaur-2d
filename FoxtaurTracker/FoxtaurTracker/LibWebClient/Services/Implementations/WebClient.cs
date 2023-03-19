@@ -204,10 +204,10 @@ public class WebClient : IWebClient
     {
         _ = request ?? throw new ArgumentNullException(nameof(request));
         CheckIfConnected();
-        
-        // TODO: Implement me
-        return request
-            .HunterLocations
+
+        var creationResponse = await _client.CreateHunterLocationsAsync(request).ConfigureAwait(false);
+
+        return creationResponse
             .Select(hl => new HunterLocation(hl.Id, hl.Timestamp, hl.Lat, hl.Lon, hl.Alt))
             .ToList();
     }

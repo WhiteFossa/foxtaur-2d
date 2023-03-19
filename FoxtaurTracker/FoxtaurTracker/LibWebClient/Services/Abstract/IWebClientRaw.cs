@@ -68,4 +68,9 @@ public interface IWebClientRaw
     /// Register on a distance
     /// </summary>
     Task<RegistrationOnDistanceResponseDto> RegisterOnDistanceAsync(RegisterOnDistanceRequest request);
+    
+    /// <summary>
+    /// Create hunter locations
+    /// </summary>
+    Task<IReadOnlyCollection<HunterLocationDto>> CreateHunterLocationsAsync(CreateHunterLocationsRequest request);
 }
