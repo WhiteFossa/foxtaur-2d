@@ -44,7 +44,7 @@ public class HuntersLocationsController : ControllerBase
     }
     
     /// <summary>
-    /// Create new hunter locations
+    /// Create new hunter locations. Returns created locations
     /// </summary>
     [Route("api/HuntersLocations/MassCreate")]
     [HttpPost]
@@ -56,9 +56,10 @@ public class HuntersLocationsController : ControllerBase
         }
 
         var currentUser = await _userManager.FindByNameAsync(User.Identity.Name);
-
-        var newLocations = await _huntersLocationsService.MassCreateHuntersLocationsAsync(request.HunterLocations, Guid.Parse(currentUser.Id));
+        var currentUserId = Guid.Parse(currentUser.Id);
         
-        return Ok(newLocations);
+        var result = await _huntersLocationsService.MassCreateHuntersLocationsAsync(request.HunterLocations, currentUserId);
+        
+        return Ok(result);
     }
 }

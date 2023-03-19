@@ -13,7 +13,7 @@ public interface IHuntersLocationsService
     Task<Dictionary<Guid, IReadOnlyCollection<HunterLocationDto>>> MassGetHuntersLocationsAsync(IReadOnlyCollection<Guid> huntersIds, DateTime fromTime);
     
     /// <summary>
-    /// Mass add locations to given hunter
+    /// Mass add locations to given hunter. Returns successfully created (or updated) locations
     /// </summary>
-    Task<Dictionary<Guid, IReadOnlyCollection<HunterLocationDto>>> MassCreateHuntersLocationsAsync(IReadOnlyCollection<HunterLocationDto> huntersLocations, Guid hunterId);
+    Task<IReadOnlyCollection<HunterLocationDto>> MassCreateHuntersLocationsAsync(IReadOnlyCollection<HunterLocationDto> huntersLocations, Guid hunterId);
 }

@@ -29,6 +29,18 @@ public class HuntersLocationsDao : IHuntersLocationsDao
             .ToList();
     }
 
+    public async Task<IReadOnlyCollection<HunterLocation>> GetHuntersLocationsByIdsAsync(IReadOnlyCollection<Guid> ids, DateTime fromTime)
+    {
+        _ = ids ?? throw new ArgumentNullException(nameof(ids));
+        
+        return _dbContext
+            .HuntersLocations
+            .Include(hl => hl.Hunter)
+            .Where(hl => hl.Timestamp >= fromTime)
+            .Where(hl => ids.Contains(hl.Id))
+            .ToList();
+    }
+
     public async Task MassCreateAsync(IReadOnlyCollection<HunterLocation> huntersLocations)
     {
         _ = huntersLocations ?? throw new ArgumentNullException(nameof(huntersLocations));
