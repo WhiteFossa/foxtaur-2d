@@ -67,20 +67,20 @@ public class LocationsProcessingService : ILocationsProcessingService
     {
         if (args.Status == GetLocationStatus.NotSupported)
         {
-            await MainThread.InvokeOnMainThreadAsync(async () => await App.PopupsService.ShowAlertAsync("Error", "This device have no GPS receiver."));
             await StopTrackingAsync();
+            await MainThread.InvokeOnMainThreadAsync(async () => await App.PopupsService.ShowAlertAsync("Error", "This device have no GPS receiver."));
             return;
         }
         else if (args.Status == GetLocationStatus.NotEnabled)
         {
-            await MainThread.InvokeOnMainThreadAsync(async () => await App.PopupsService.ShowAlertAsync("Error", "Please enable location."));
             await StopTrackingAsync();
+            await MainThread.InvokeOnMainThreadAsync(async () => await App.PopupsService.ShowAlertAsync("Error", "Please enable location."));
             return;
         }
         else if (args.Status == GetLocationStatus.NotPermitted)
         {
-            await MainThread.InvokeOnMainThreadAsync(async () => await App.PopupsService.ShowAlertAsync("Error", "Please give this application location permission."));
             await StopTrackingAsync();
+            await MainThread.InvokeOnMainThreadAsync(async () => await App.PopupsService.ShowAlertAsync("Error", "Please give this application location permission."));
             return;
         }
         else if (args.Status == GetLocationStatus.TimedOut)
