@@ -39,6 +39,7 @@ public class WebClient : IWebClient
 
         var mapsIds = distances
             .Select(d => d.MapId)
+            .Distinct()
             .ToList();
         var maps = await _client.MassGetMapsAsync(new MapsMassGetRequest(mapsIds)).ConfigureAwait(false);
         
