@@ -2,7 +2,6 @@
 using Android.Content;
 using Android.OS;
 using AndroidX.Core.App;
-using FoxtaurTracker.Services.Abstract;
 
 namespace FoxtaurTracker;
 
@@ -15,7 +14,7 @@ public class TrackerForegroundService : Service
 
     private void StartForegroundService()
     {
-        var notifcationManager = GetSystemService(Context.NotificationService) as NotificationManager;
+        var notifcationManager = GetSystemService(NotificationService) as NotificationManager;
 
         if (Build.VERSION.SdkInt >= BuildVersionCodes.O)
         {
@@ -49,10 +48,5 @@ public class TrackerForegroundService : Service
     {
         StartForegroundService();
         return StartCommandResult.NotSticky;
-    }
-
-    public void SendNewNotification(string content)
-    {
-        int a = 10;
     }
 }
