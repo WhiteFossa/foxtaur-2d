@@ -9,6 +9,9 @@ using FoxtaurTracker.Constants;
 using FoxtaurTracker.Services.Abstract;
 using FoxtaurTracker.Services.Abstract.Enums;
 using FoxtaurTracker.Services.Abstract.Models;
+using GeolocatorPlugin;
+using GeolocatorPlugin.Abstractions;
+using LibAuxiliary.Helpers;
 using LibWebClient.Models;
 using LibWebClient.Models.DTOs;
 using LibWebClient.Models.Requests;
@@ -26,11 +29,6 @@ public class LocationsProcessingService : ILocationsProcessingService
     private readonly IWebClient _webClient;
     
     /// <summary>
-    /// New coordinates are requested by this timer
-    /// </summary>
-    private Timer _locationFetchTimer;
-    
-    /// <summary>
     /// Coordinates queue is being checked by this timer
     /// </summary>
     private Timer _locationsSendTimer;
@@ -42,12 +40,7 @@ public class LocationsProcessingService : ILocationsProcessingService
     {
         _locationService = locationService;
         _webClient = webClient;
-        
-        // Setting up location fetch timer
-        _locationFetchTimer = new Timer(TimeSpan.FromSeconds(GlobalConstants.LocationFetchInterval));
-        _locationFetchTimer.Elapsed += OnLocationFetchTimer;
-        _locationFetchTimer.AutoReset = true;
-        
+
         // Setting up locations send timer
         _locationsSendTimer = new Timer(TimeSpan.FromSeconds(GlobalConstants.LocationsSendInterval));
         _locationsSendTimer.Elapsed += OnLocationSendTimer;
@@ -57,58 +50,87 @@ public class LocationsProcessingService : ILocationsProcessingService
     
     public async Task StartTrackingAsync()
     {
+        if (!await CrossGeolocator.Current.StartListeningAsync
+            (
+                TimeSpan.FromSeconds(GlobalConstants.LocationFetchInterval),
+                GlobalConstants.LocationFetchMinimalDistance,
+    true,
+                new ListenerSettings
+                {
+                    ActivityType = ActivityType.AutomotiveNavigation,
+                    AllowBackgroundUpdates = true,
+                    DeferLocationUpdates = false,
+                    ListenForSignificantChanges = false,
+                    PauseLocationUpdatesAutomatically = false,
+                })
+           )
+        {
+            // Failed to enable GPS
+            await MainThread.InvokeOnMainThreadAsync(async () => await App.PopupsService.ShowAlertAsync("Error", "Failed to start GPS tracking."));
+            return;
+        }
+
 #if ANDROID
+        // Starting foreground service to avoid to be killed
         Android.Content.Intent intent = new Android.Content.Intent(Android.App.Application.Context, typeof(TrackerForegroundService));
         Android.App.Application.Context.StartForegroundService(intent);
 #endif
         
-        _locationFetchTimer.Start();
+        CrossGeolocator.Current.PositionChanged += OnPositionChanged;
+        CrossGeolocator.Current.PositionError += OnPositionError;
+    }
+
+    private void OnPositionChanged(object sender, PositionEventArgs e)
+    {
+        Task.WaitAll(OnPositionChangedAsync(sender, e));
+    }
+
+    private async Task OnPositionChangedAsync(object sender, PositionEventArgs e)
+    {
+        var hunterLocation = new HunterLocation
+        (
+            Guid.NewGuid(),
+            e.Position.Timestamp.UtcDateTime,
+            e.Position.Latitude.ToRadians(),
+            e.Position.Longitude.ToRadians(),
+            e.Position.Altitude.ToRadians()
+        );
+        _locationsQueue.Enqueue(hunterLocation);
+    }
+    
+    private void OnPositionError(object sender, PositionErrorEventArgs e)
+    {
+        Task.WaitAll(OnPositionErrorAsync(sender, e));
+    }
+    
+    private async Task OnPositionErrorAsync(object sender, PositionErrorEventArgs e)
+    {
+        if (e.Error == GeolocationError.Unauthorized)
+        {
+            await StopTrackingAsync();
+            await MainThread.InvokeOnMainThreadAsync(async () => await App.PopupsService.ShowAlertAsync("Error", "Please give this application location permission."));
+        }
+        
+        // Swallowing "Position unavailable" error 
     }
 
     public async Task StopTrackingAsync()
     {
-        _locationFetchTimer.Stop();
-        
 #if ANDROID
         Android.Content.Intent intent = new Android.Content.Intent(Android.App.Application.Context, typeof(TrackerForegroundService));
         Android.App.Application.Context.StopService(intent);
 #endif
-    }
+        
+        if (!await CrossGeolocator.Current.StopListeningAsync())
+        {
+            await MainThread.InvokeOnMainThreadAsync(async () => await App.PopupsService.ShowAlertAsync("Error", "Failed to stop GPS tracking."));
+            return;
+        }
 
-    private void OnLocationFetchTimer(object sender, ElapsedEventArgs e)
-    {
-        _locationService.GetCurrentLocationAsync(OnLocationObtainedAsync); // INTENTIONALLY run without async
+        CrossGeolocator.Current.PositionChanged -= OnPositionChanged;
+        CrossGeolocator.Current.PositionError -= OnPositionError;
     }
     
-    private async Task OnLocationObtainedAsync(GetLocationArgs args)
-    {
-        if (args.Status == GetLocationStatus.NotSupported)
-        {
-            await StopTrackingAsync();
-            await MainThread.InvokeOnMainThreadAsync(async () => await App.PopupsService.ShowAlertAsync("Error", "This device have no GPS receiver."));
-            return;
-        }
-        else if (args.Status == GetLocationStatus.NotEnabled)
-        {
-            await StopTrackingAsync();
-            await MainThread.InvokeOnMainThreadAsync(async () => await App.PopupsService.ShowAlertAsync("Error", "Please enable location."));
-            return;
-        }
-        else if (args.Status == GetLocationStatus.NotPermitted)
-        {
-            await StopTrackingAsync();
-            await MainThread.InvokeOnMainThreadAsync(async () => await App.PopupsService.ShowAlertAsync("Error", "Please give this application location permission."));
-            return;
-        }
-        else if (args.Status == GetLocationStatus.TimedOut)
-        {
-            return; // Giving another attempt
-        }
-
-        var hunterLocation = new HunterLocation(Guid.NewGuid(), args.Timestamp, args.Lat, args.Lon, args.Alt);
-        _locationsQueue.Enqueue(hunterLocation);
-    }
-
     private void OnLocationSendTimer(object sender, ElapsedEventArgs e)
     {
         if (!_locationsQueue.Any())

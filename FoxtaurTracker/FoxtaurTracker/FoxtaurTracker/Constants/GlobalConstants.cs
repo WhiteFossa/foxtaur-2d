@@ -16,6 +16,11 @@ public static class GlobalConstants
     public const int LocationFetchInterval = 2;
     
     /// <summary>
+    /// Minimal shift for what new location event will be generated
+    /// </summary>
+    public const double LocationFetchMinimalDistance = 5.0;
+    
+    /// <summary>
     /// Try to send locations each this number of seconds
     /// </summary>
     public const int LocationsSendInterval = 1;
