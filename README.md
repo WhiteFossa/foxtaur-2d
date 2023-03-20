@@ -58,3 +58,7 @@ Configure reverse proxy in a such way (example for Apache):
 	SSLCertificateKeyFile "/etc/letsencrypt/live/api.foxtaur.me/privkey.pem"
 	SSLCertificateChainFile "/etc/letsencrypt/live/api.foxtaur.me/fullchain.pem"
 </VirtualHost>
+
+# Notes
+
+How to georeference maps: https://www.qgistutorials.com/en/docs/3/georeferencing_basics.html
