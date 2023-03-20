@@ -31,23 +31,27 @@
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-maccatalyst|AnyCPU'">
 	  <ApplicationTitle>Foxtaur</ApplicationTitle>
-	  <ApplicationDisplayVersion>1.0.2</ApplicationDisplayVersion>
+	  <ApplicationDisplayVersion>1.0.3</ApplicationDisplayVersion>
+	  <ApplicationVersion>3</ApplicationVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-maccatalyst|AnyCPU'">
 	  <ApplicationTitle>Foxtaur</ApplicationTitle>
-	  <ApplicationDisplayVersion>1.0.2</ApplicationDisplayVersion>
+	  <ApplicationDisplayVersion>1.0.3</ApplicationDisplayVersion>
+	  <ApplicationVersion>3</ApplicationVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-android33.0|AnyCPU'">
 	  <ApplicationTitle>Foxtaur</ApplicationTitle>
-	  <ApplicationDisplayVersion>1.0.2</ApplicationDisplayVersion>
+	  <ApplicationDisplayVersion>1.0.3</ApplicationDisplayVersion>
+	  <ApplicationVersion>3</ApplicationVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-android33.0|AnyCPU'">
 	  <ApplicationTitle>Foxtaur</ApplicationTitle>
 	  <AndroidPackageFormat>apk</AndroidPackageFormat>
-	  <ApplicationDisplayVersion>1.0.2</ApplicationDisplayVersion>
+	  <ApplicationDisplayVersion>1.0.3</ApplicationDisplayVersion>
+	  <ApplicationVersion>3</ApplicationVersion>
 	</PropertyGroup>
 
 	<ItemGroup>
