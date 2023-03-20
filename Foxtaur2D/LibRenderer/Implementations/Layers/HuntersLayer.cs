@@ -61,6 +61,13 @@ public class HuntersLayer : IHuntersVectorLayer
         var hunterX = displayGeoProvider.LonToX(lastKnownLocation.Lon) / scalingFactor;
         var hunterY = displayGeoProvider.LatToY(lastKnownLocation.Lat) / scalingFactor;
         
+        // Movements history
+        var locationsHistoryAsList = hunter.LocationsHistory.ToList();
+        for (var mhi = 0; mhi < locationsHistoryAsList.Count() - 1; mhi++)
+        {
+            DrawLinkerLine(locationsHistoryAsList[mhi], locationsHistoryAsList[mhi + 1], hunter.Color, context, scalingFactor, displayGeoProvider);
+        }
+        
         // Marker position
         var markerPosition = new Point(hunterX, hunterY) - RendererConstants.HunterMarkerActivePoint;
         
@@ -90,13 +97,6 @@ public class HuntersLayer : IHuntersVectorLayer
         context.DrawText(new SolidColorBrush(hunter.Team?.Color ?? RendererConstants.NoTeamTeamColor),
             new Point(hunterX - formattedTeamName.Bounds.Width / 2.0, markerPosition.Y - formattedTeamName.Bounds.Height),
             formattedTeamName);
-        
-        // Movements history
-        var locationsHistoryAsList = hunter.LocationsHistory.ToList();
-        for (var mhi = 0; mhi < locationsHistoryAsList.Count() - 1; mhi++)
-        {
-            DrawLinkerLine(locationsHistoryAsList[mhi], locationsHistoryAsList[mhi + 1], hunter.Color, context, scalingFactor, displayGeoProvider);
-        }
     }
     
     /// <summary>
