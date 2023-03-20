@@ -12,6 +12,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibWebClient", "LibWebClien
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibAuxiliary", "LibAuxiliary\LibAuxiliary.csproj", "{517FF4D7-CE7D-4F7A-ABF0-7D91EDA16EB7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibGpsFilter", "LibGpsFilter\LibGpsFilter.csproj", "{BD62C0DF-BE7D-4F2E-8BA8-FFB06D2DA821}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +44,9 @@ Global
 		{517FF4D7-CE7D-4F7A-ABF0-7D91EDA16EB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{517FF4D7-CE7D-4F7A-ABF0-7D91EDA16EB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{517FF4D7-CE7D-4F7A-ABF0-7D91EDA16EB7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD62C0DF-BE7D-4F2E-8BA8-FFB06D2DA821}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD62C0DF-BE7D-4F2E-8BA8-FFB06D2DA821}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD62C0DF-BE7D-4F2E-8BA8-FFB06D2DA821}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD62C0DF-BE7D-4F2E-8BA8-FFB06D2DA821}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

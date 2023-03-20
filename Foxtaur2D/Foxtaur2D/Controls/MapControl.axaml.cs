@@ -14,6 +14,7 @@ using Avalonia.Platform;
 using Avalonia.Threading;
 using LibGeo.Abstractions;
 using LibGeo.Implementations;
+using LibGpsFilter.Abstractions;
 using LibRenderer.Abstractions.Drawers;
 using LibRenderer.Abstractions.Layers;
 using LibRenderer.Constants;
@@ -164,6 +165,7 @@ public partial class MapControl : UserControl
 
     private readonly ITextDrawer _textDrawer;
     private readonly IWebClient _webClient;
+    private readonly IGpsFilter _gpsFilter;
 
     #endregion
 
@@ -194,6 +196,7 @@ public partial class MapControl : UserControl
     {
         _textDrawer = Program.Di.GetService<ITextDrawer>();
         _webClient = Program.Di.GetService<IWebClient>();
+        _gpsFilter = Program.Di.GetService<IGpsFilter>();
 
         InitializeComponent();
 
@@ -761,6 +764,23 @@ public partial class MapControl : UserControl
         {
             _huntersDataReloadMutex.ReleaseMutex();
         }
+        
+        // Filtering GPS noise (!locations IDs and altitudes are lost!)
+        _filteredHunters = _filteredHunters
+            .Select(fh => new Hunter
+                (
+                    fh.Id,
+                    fh.Name,
+                    fh.IsRunning,
+                    fh.Team,
+                    _gpsFilter.FilterLocations(fh.LocationsHistory
+                        .Select(l => new GpsLocation(l.Timestamp, l.Lat, l.Lon))
+                        .ToList())
+                        .Select(fl => new HunterLocation(Guid.Empty, fl.Timestamp.UtcDateTime, fl.Lat, fl.Lon, 0))
+                        .ToList(),
+                    fh.Color
+                ))
+            .ToList();
 
         Dispatcher.UIThread.InvokeAsync(() =>
         {

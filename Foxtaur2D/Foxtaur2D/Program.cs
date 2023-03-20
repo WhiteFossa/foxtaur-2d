@@ -7,6 +7,8 @@ using Avalonia.ReactiveUI;
 using Foxtaur2D.Logging;
 using LibAuxiliary.Abstract;
 using LibAuxiliary.Implementations;
+using LibGpsFilter.Abstractions;
+using LibGpsFilter.Implementations;
 using LibRenderer.Abstractions.Drawers;
 using LibRenderer.Implementations.Drawers;
 using LibWebClient.Services.Abstract;
@@ -76,6 +78,7 @@ public class Program
         services.AddSingleton<IWebClient, WebClient>();
         services.AddSingleton<ITextDrawer, TextDrawer>();
         services.AddSingleton<IConfigurationService, ConfigurationService>();
+        services.AddSingleton<IGpsFilter, GpsFilter>();
         
         // HTTP clients
         services.AddHttpClient<IWebClientRaw, WebClientRaw>();
