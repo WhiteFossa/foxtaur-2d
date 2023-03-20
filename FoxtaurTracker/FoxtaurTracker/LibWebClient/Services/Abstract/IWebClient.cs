@@ -70,7 +70,7 @@ public interface IWebClient
     Task<RegisterOnDistanceResponse> RegisterOnDistanceAsync(RegisterOnDistanceRequest request);
 
     /// <summary>
-    /// Create hunter locations
+    /// Create hunter locations. Returns IDs of locations, which were successfully stored
     /// </summary>
-    Task<IReadOnlyCollection<HunterLocation>> CreateHunterLocationsAsync(CreateHunterLocationsRequest request);
+    Task<IReadOnlyCollection<Guid>> CreateHunterLocationsAsync(CreateHunterLocationsRequest request);
 }
