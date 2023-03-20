@@ -116,6 +116,7 @@ public class WebClient : IWebClient
             .Select(l => new KeyValuePair<Guid, IReadOnlyCollection<HunterLocation>>(l.Key, l
                 .Value
                 .Select(hl => new HunterLocation(hl.Id, hl.Timestamp, hl.Lat, hl.Lon, hl.Alt))
+                .OrderBy(hl => hl.Timestamp)
                 .ToList())));
     }
 
