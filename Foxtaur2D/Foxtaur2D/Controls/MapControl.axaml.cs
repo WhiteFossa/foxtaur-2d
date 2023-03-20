@@ -774,6 +774,7 @@ public partial class MapControl : UserControl
                     fh.IsRunning,
                     fh.Team,
                     _gpsFilter.FilterLocations(fh.LocationsHistory
+                        .Where((x, i) => i % 2 == 0) // TODO: Move to settings
                         .Select(l => new GpsLocation(l.Timestamp, l.Lat, l.Lon))
                         .ToList())
                         .Select(fl => new HunterLocation(Guid.Empty, fl.Timestamp.UtcDateTime, fl.Lat, fl.Lon, 0))
