@@ -643,6 +643,9 @@ public partial class MapControl : UserControl
                     throw new InvalidOperationException("Unknown hunters filtering mode!");
             }
 
+            // Filtering GPS noise (!locations IDs and altitudes are lost!)
+            _filteredHunters = FilterHuntersLocations(_filteredHunters);
+            
             InvalidateVisual();
         }
         finally
@@ -759,28 +762,14 @@ public partial class MapControl : UserControl
                     h.Color
                 ))
                 .ToList();
+            
+            // Filtering GPS noise (!locations IDs and altitudes are lost!)
+            _filteredHunters = FilterHuntersLocations(_filteredHunters);
         }
         finally
         {
             _huntersDataReloadMutex.ReleaseMutex();
         }
-        
-        // Filtering GPS noise (!locations IDs and altitudes are lost!)
-        _filteredHunters = _filteredHunters
-            .Select(fh => new Hunter
-                (
-                    fh.Id,
-                    fh.Name,
-                    fh.IsRunning,
-                    fh.Team,
-                    _gpsFilter.FilterLocations(fh.LocationsHistory
-                        .Select(l => new GpsLocation(l.Timestamp, l.Lat, l.Lon))
-                        .ToList())
-                        .Select(fl => new HunterLocation(Guid.Empty, fl.Timestamp.UtcDateTime, fl.Lat, fl.Lon, 0))
-                        .ToList(),
-                    fh.Color
-                ))
-            .ToList();
 
         Dispatcher.UIThread.InvokeAsync(() =>
         {
@@ -826,6 +815,25 @@ public partial class MapControl : UserControl
     {
         _layers = _layers
             .OrderBy(l => l.Order)
+            .ToList();
+    }
+
+    private IReadOnlyCollection<Hunter> FilterHuntersLocations(IReadOnlyCollection<Hunter> hunters)
+    {
+        return hunters
+            .Select(fh => new Hunter
+            (
+                fh.Id,
+                fh.Name,
+                fh.IsRunning,
+                fh.Team,
+                _gpsFilter.FilterLocations(fh.LocationsHistory
+                        .Select(l => new GpsLocation(l.Timestamp, l.Lat, l.Lon))
+                        .ToList())
+                    .Select(fl => new HunterLocation(Guid.Empty, fl.Timestamp.UtcDateTime, fl.Lat, fl.Lon, 0))
+                    .ToList(),
+                fh.Color
+            ))
             .ToList();
     }
 }
