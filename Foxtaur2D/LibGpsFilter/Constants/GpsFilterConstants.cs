@@ -18,5 +18,5 @@ public static class GpsFilterConstants
     /// <summary>
     /// Process no more than this number of coordinates per pass
     /// </summary>
-    public const int BatchSize = 1000;
+    public const int BatchSize = 500;
 }
