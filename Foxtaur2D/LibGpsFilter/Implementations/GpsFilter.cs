@@ -1,6 +1,7 @@
 using Binateq.GpsTrackFilter;
 using LibGeo.Implementations.Helpers;
 using LibGpsFilter.Abstractions;
+using LibGpsFilter.Constants;
 using LibWebClient.Models;
 
 namespace LibGpsFilter.Implementations;
@@ -14,8 +15,9 @@ public class GpsFilter : IGpsFilter
     public GpsFilter()
     {
         _filter = new GpsTrackFilter();
-        _filter.ZeroSpeedDrift = 1.0; // Minimal hunter speed
-        _filter.OutlineSpeed = 20.0; // Maximal hunter speed
+        
+        _filter.ZeroSpeedDrift = GpsFilterConstants.MinHunterSpeed; // Minimal hunter speed
+        _filter.OutlineSpeed = GpsFilterConstants.MaxHunterSpeed; // Maximal hunter speed
     }
     
     public IReadOnlyCollection<GpsLocation> FilterLocations(IReadOnlyCollection<GpsLocation> locations)
@@ -32,9 +34,25 @@ public class GpsFilter : IGpsFilter
                     l.Timestamp
                 ))
                 .ToList();
-        
-            var filteredTrack = _filter.Filter(rawTrack);
-        
+
+            List<Tuple<double, double, DateTimeOffset>> filteredTrack = new List<Tuple<double, double, DateTimeOffset>>();
+
+            // Batch processing
+            while (rawTrack.Any())
+            {
+                var thisBatchSize = Math.Min(GpsFilterConstants.BatchSize, rawTrack.Count);
+                
+                var rawTrackPortion = rawTrack
+                    .Take(thisBatchSize)
+                    .ToList();
+                
+                rawTrack.RemoveRange(0, thisBatchSize);
+                
+                var filteredTrackPortion = _filter.Filter(rawTrackPortion);
+                
+                filteredTrack.AddRange(filteredTrackPortion);
+            }
+            
             return filteredTrack
                 .Select(ftl => new GpsLocation(ftl.Item3, ftl.Item1.ToRadians(), ftl.Item2.ToRadians()))
                 .ToList();
