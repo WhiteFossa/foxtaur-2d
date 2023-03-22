@@ -39,7 +39,8 @@ public class DistancesMapper : IDistancesMapper
             distance.FinishLocation.Id,
             orderedFoxesLocationsIds,
             distance.Hunters.Select(h => Guid.Parse(h.Id)).ToList(),
-            distance.FirstHunterStartTime);
+            distance.FirstHunterStartTime,
+            distance.CloseTime);
     }
 
     public Distance Map(DistanceDto distance)
@@ -60,7 +61,8 @@ public class DistancesMapper : IDistancesMapper
             FinishLocation = new Location() { Id = distance.FinishLocationId },
             FoxesLocations = new List<DistanceToFoxLocationLinker>(), // !! MAP LINKERS OUTSIDE !!
             Hunters = distance.HuntersIds.Select(hid => new Profile() { Id = hid.ToString() }).ToList(),
-            FirstHunterStartTime = distance.FirstHunterStartTime
+            FirstHunterStartTime = distance.FirstHunterStartTime,
+            CloseTime = distance.CloseTime
         };
     }
 

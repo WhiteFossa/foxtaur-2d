@@ -76,7 +76,8 @@ public class DistancesController : ControllerBase
             request.FinishLocationId,
             request.FoxesLocationsIds,
             new List<Guid>(), // Hunters will be added after distance creation
-            request.FirstHunterStartTime));
+            request.FirstHunterStartTime,
+            request.CloseTime));
         
         if (newDistance == null)
         {

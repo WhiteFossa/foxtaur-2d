@@ -75,6 +75,7 @@ public class DistancesService : IDistancesService
             distance.FinishLocationId,
             distance.FoxesLocationsIds,
             distance.HuntersIds,
-            distance.FirstHunterStartTime);
+            distance.FirstHunterStartTime,
+            distance.CloseTime);
     }
 }

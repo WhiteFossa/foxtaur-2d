@@ -63,6 +63,7 @@ public class DistancesDao : IDistancesDao
         oldDistance.FoxesLocations = distance.FoxesLocations;
         oldDistance.Hunters = distance.Hunters;
         oldDistance.FirstHunterStartTime = distance.FirstHunterStartTime;
+        oldDistance.CloseTime = distance.CloseTime;
         
         await _dbContext.SaveChangesAsync();
     }

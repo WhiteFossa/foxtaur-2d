@@ -66,6 +66,12 @@ public class DistanceDto
     /// </summary>
     [JsonPropertyName("firstHunterStartTime")]
     public DateTime FirstHunterStartTime { get; }
+    
+    /// <summary>
+    /// Distance close time (client will load hunters histories till this this)
+    /// </summary>
+    [JsonPropertyName("closeTime")]
+    public DateTime CloseTime { get; }
 
     public DistanceDto(
         Guid id,
@@ -77,7 +83,8 @@ public class DistanceDto
         Guid finishLocationId,
         IReadOnlyCollection<Guid> foxesLocationsIds,
         IReadOnlyCollection<Guid> huntersIds,
-        DateTime firstHunterStartTime)
+        DateTime firstHunterStartTime,
+        DateTime closeTime)
     {
         if (string.IsNullOrWhiteSpace(name))
         {
@@ -87,6 +94,11 @@ public class DistanceDto
         FoxesLocationsIds = foxesLocationsIds ?? throw new ArgumentNullException(nameof(foxesLocationsIds));
         HuntersIds = huntersIds ?? throw new ArgumentNullException(nameof(huntersIds));
 
+        if (closeTime <= firstHunterStartTime)
+        {
+            throw new ArgumentOutOfRangeException(nameof(closeTime), "Close time must be greater than first hunter start time.");
+        }
+
         Id = id;
         Name = name;
         MapId = mapId;
@@ -95,5 +107,6 @@ public class DistanceDto
         FinishCorridorEntranceLocationId = finishCorridorEntranceLocationId;
         FinishLocationId = finishLocationId;
         FirstHunterStartTime = firstHunterStartTime;
+        CloseTime = closeTime;
     }
 }
