@@ -13,7 +13,7 @@ public class GlobalConstants
     /// <summary>
     /// Protocol version
     /// </summary>
-    public const int ProtocolVersion = 7;
+    public const int ProtocolVersion = 8;
     
     #endregion
 
