@@ -185,7 +185,8 @@ public class WebClient : IWebClient
                     new Location(Guid.NewGuid(), "Invalid finish location", LocationType.Start, 0, 0, null),
                     new List<Location>(),
                     new List<Hunter>(),
-                    d.FirstHunterStartTime
+                    d.FirstHunterStartTime,
+                    d.CloseTime
                 );
             })
             .ToList();

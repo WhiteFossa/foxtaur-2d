@@ -50,24 +50,43 @@ public class LocationsProcessingService : ILocationsProcessingService
     
     public async Task StartTrackingAsync()
     {
-        if (!await CrossGeolocator.Current.StartListeningAsync
-            (
-                TimeSpan.FromSeconds(GlobalConstants.LocationFetchInterval),
-                GlobalConstants.LocationFetchMinimalDistance,
-    true,
-                new ListenerSettings
-                {
-                    ActivityType = ActivityType.AutomotiveNavigation,
-                    AllowBackgroundUpdates = true,
-                    DeferLocationUpdates = false,
-                    ListenForSignificantChanges = false,
-                    PauseLocationUpdatesAutomatically = false,
-                })
-           )
+        try
         {
-            // Failed to enable GPS
-            await MainThread.InvokeOnMainThreadAsync(async () => await App.PopupsService.ShowAlertAsync("Error", "Failed to start GPS tracking."));
-            return;
+            if (!await CrossGeolocator.Current.StartListeningAsync
+                (
+                    TimeSpan.FromSeconds(GlobalConstants.LocationFetchInterval),
+                    GlobalConstants.LocationFetchMinimalDistance,
+                    true,
+                    new ListenerSettings
+                    {
+                        ActivityType = ActivityType.AutomotiveNavigation,
+                        AllowBackgroundUpdates = true,
+                        DeferLocationUpdates = false,
+                        ListenForSignificantChanges = false,
+                        PauseLocationUpdatesAutomatically = false,
+                    })
+               )
+            {
+                // Failed to enable GPS
+                await MainThread.InvokeOnMainThreadAsync(async () => await App.PopupsService.ShowAlertAsync("Error", "Failed to start GPS tracking."));
+                return;
+            }
+        }
+        catch (GeolocationException ex)
+        {
+            if (ex.Error == GeolocationError.Unauthorized)
+            {
+                await MainThread.InvokeOnMainThreadAsync(async () => await App.PopupsService.ShowAlertAsync("Error", "Please give this application location permission."));
+                return;
+            }
+            else if (ex.Error == GeolocationError.PositionUnavailable)
+            {
+                // Swallowing the error
+            }
+            else
+            {
+                throw;
+            }
         }
 
 #if ANDROID
@@ -109,6 +128,7 @@ public class LocationsProcessingService : ILocationsProcessingService
         {
             await StopTrackingAsync();
             await MainThread.InvokeOnMainThreadAsync(async () => await App.PopupsService.ShowAlertAsync("Error", "Please give this application location permission."));
+            return;
         }
         
         // Swallowing "Position unavailable" error 

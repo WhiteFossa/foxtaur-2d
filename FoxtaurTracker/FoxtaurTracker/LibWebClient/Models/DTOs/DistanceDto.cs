@@ -67,4 +67,10 @@ public class DistanceDto : IIdedDto
     /// </summary>
     [JsonPropertyName("firstHunterStartTime")]
     public DateTime FirstHunterStartTime { get; set; }
+    
+    /// <summary>
+    /// Distance close time (client will load hunters histories till this this)
+    /// </summary>
+    [JsonPropertyName("closeTime")]
+    public DateTime CloseTime { get; set; }
 }
