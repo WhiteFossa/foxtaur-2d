@@ -18,11 +18,11 @@ public class HuntersLocationsService : IHuntersLocationsService
         _huntersLocationsMapper = huntersLocationsMapper;
     }
     
-    public async Task<Dictionary<Guid, IReadOnlyCollection<HunterLocationDto>>> MassGetHuntersLocationsAsync(IReadOnlyCollection<Guid> huntersIds, DateTime fromTime)
+    public async Task<Dictionary<Guid, IReadOnlyCollection<HunterLocationDto>>> MassGetHuntersLocationsAsync(IReadOnlyCollection<Guid> huntersIds, DateTime fromTime, DateTime toTime)
     {
         _ = huntersIds ?? throw new ArgumentNullException(nameof(huntersIds));
         
-        return (await _huntersLocationsDao.GetHuntersLocationsByHuntersIdsAsync(huntersIds, fromTime))
+        return (await _huntersLocationsDao.GetHuntersLocationsByHuntersIdsAsync(huntersIds, fromTime, toTime))
             .GroupBy(hl => hl.Hunter.Id)
             .ToDictionary(g => Guid.Parse(g.Key), g => _huntersLocationsMapper.Map(g.ToList()));
     }
@@ -35,7 +35,7 @@ public class HuntersLocationsService : IHuntersLocationsService
             .Select(hl => hl.Id)
             .ToList();
         
-        var existingHunterLocationsIds = (await _huntersLocationsDao.GetHuntersLocationsByHuntersIdsAsync(new List<Guid>() { hunterId }, DateTime.MinValue))
+        var existingHunterLocationsIds = (await _huntersLocationsDao.GetHuntersLocationsByHuntersIdsAsync(new List<Guid>() { hunterId }, DateTime.MinValue, DateTime.MaxValue))
             .Select(hl => hl.Id)
             .ToList();
 

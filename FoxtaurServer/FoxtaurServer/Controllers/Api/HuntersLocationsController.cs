@@ -38,7 +38,7 @@ public class HuntersLocationsController : ControllerBase
             return BadRequest();
         }
         
-        var result = await _huntersLocationsService.MassGetHuntersLocationsAsync(request.HuntersIds, request.FromTime);
+        var result = await _huntersLocationsService.MassGetHuntersLocationsAsync(request.HuntersIds, request.FromTime, request.ToTime);
 
         return Ok(new HuntersLocationsDictionaryDto(result));
     }

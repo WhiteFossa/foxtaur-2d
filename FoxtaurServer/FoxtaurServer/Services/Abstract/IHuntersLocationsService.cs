@@ -10,7 +10,9 @@ public interface IHuntersLocationsService
     /// <summary>
     /// Get hunters locations dictionary, where key is hunter id from huntersIds, and value is locations history (ordered) starting from fromTime
     /// </summary>
-    Task<Dictionary<Guid, IReadOnlyCollection<HunterLocationDto>>> MassGetHuntersLocationsAsync(IReadOnlyCollection<Guid> huntersIds, DateTime fromTime);
+    Task<Dictionary<Guid, IReadOnlyCollection<HunterLocationDto>>> MassGetHuntersLocationsAsync(IReadOnlyCollection<Guid> huntersIds,
+        DateTime fromTime,
+        DateTime toTime);
     
     /// <summary>
     /// Mass add locations to given hunter. Returns successfully created (or updated) locations IDs

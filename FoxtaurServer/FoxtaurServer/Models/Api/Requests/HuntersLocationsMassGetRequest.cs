@@ -18,4 +18,10 @@ public class HuntersLocationsMassGetRequest
     /// </summary>
     [JsonPropertyName("fromTime")]
     public DateTime FromTime { get; set; }
+    
+    /// <summary>
+    /// Get hunters history to this time
+    /// </summary>
+    [JsonPropertyName("toTime")]
+    public DateTime ToTime { get; set; }
 }

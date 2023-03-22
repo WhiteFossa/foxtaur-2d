@@ -13,7 +13,7 @@ public class HuntersLocationsDao : IHuntersLocationsDao
         _dbContext = dbContext;
     }
     
-    public async Task<IReadOnlyCollection<HunterLocation>> GetHuntersLocationsByHuntersIdsAsync(IReadOnlyCollection<Guid> huntersIds, DateTime fromTime)
+    public async Task<IReadOnlyCollection<HunterLocation>> GetHuntersLocationsByHuntersIdsAsync(IReadOnlyCollection<Guid> huntersIds, DateTime fromTime, DateTime toTime)
     {
         _ = huntersIds ?? throw new ArgumentNullException(nameof(huntersIds));
 
@@ -25,11 +25,12 @@ public class HuntersLocationsDao : IHuntersLocationsDao
             .HuntersLocations
             .Include(hl => hl.Hunter)
             .Where(hl => hl.Timestamp >= fromTime)
+            .Where(hl => hl.Timestamp <= toTime)
             .Where(hl => stringedHuntersIds.Contains(hl.Hunter.Id))
             .ToList();
     }
 
-    public async Task<IReadOnlyCollection<HunterLocation>> GetHuntersLocationsByIdsAsync(IReadOnlyCollection<Guid> ids, DateTime fromTime)
+    public async Task<IReadOnlyCollection<HunterLocation>> GetHuntersLocationsByIdsAsync(IReadOnlyCollection<Guid> ids, DateTime fromTime, DateTime toTime)
     {
         _ = ids ?? throw new ArgumentNullException(nameof(ids));
         
@@ -37,6 +38,7 @@ public class HuntersLocationsDao : IHuntersLocationsDao
             .HuntersLocations
             .Include(hl => hl.Hunter)
             .Where(hl => hl.Timestamp >= fromTime)
+            .Where(hl => hl.Timestamp <= toTime)
             .Where(hl => ids.Contains(hl.Id))
             .ToList();
     }

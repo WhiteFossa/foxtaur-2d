@@ -54,6 +54,11 @@ public class Distance
     /// First hunter start time (we will load hunters histories since this time)
     /// </summary>
     public DateTime FirstHunterStartTime { get; }
+    
+    /// <summary>
+    /// Distance close time (we will load hunters histories till this this)
+    /// </summary>
+    public DateTime CloseTime { get; }
 
     public Distance(
         Guid id,
@@ -64,13 +69,20 @@ public class Distance
         Location finishCorridorEntranceLocation,
         Location finishLocation,
         IReadOnlyCollection<Location> foxes,
-        IReadOnlyCollection<Hunter> hunters,DateTime firstHunterStartTime)
+        IReadOnlyCollection<Hunter> hunters,
+        DateTime firstHunterStartTime,
+        DateTime closeTime)
     {
         if (string.IsNullOrWhiteSpace(name))
         {
             throw new ArgumentException(nameof(name));
         }
 
+        if (closeTime <= firstHunterStartTime)
+        {
+            throw new ArgumentOutOfRangeException(nameof(closeTime), "Close time must be greater than first hunter start time.");
+        }
+        
         Id = id;
         Name = name;
         Map = map ?? throw new ArgumentNullException(nameof(map));
@@ -81,5 +93,6 @@ public class Distance
         Foxes = foxes ?? throw new ArgumentNullException(nameof(foxes));
         Hunters = hunters ?? throw new ArgumentNullException(nameof(hunters));
         FirstHunterStartTime = firstHunterStartTime;
+        CloseTime = closeTime;
     }
 }

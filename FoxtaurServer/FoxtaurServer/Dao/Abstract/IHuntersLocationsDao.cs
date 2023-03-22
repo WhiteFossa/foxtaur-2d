@@ -12,12 +12,12 @@ public interface IHuntersLocationsDao
     /// <summary>
     /// Get hunters locations list by hunter IDs
     /// </summary>
-    Task<IReadOnlyCollection<HunterLocation>> GetHuntersLocationsByHuntersIdsAsync(IReadOnlyCollection<Guid> huntersIds, DateTime fromTime);
+    Task<IReadOnlyCollection<HunterLocation>> GetHuntersLocationsByHuntersIdsAsync(IReadOnlyCollection<Guid> huntersIds, DateTime fromTime, DateTime toTime);
     
     /// <summary>
     /// Get hunters locations list by hunters locations IDs
     /// </summary>
-    Task<IReadOnlyCollection<HunterLocation>> GetHuntersLocationsByIdsAsync(IReadOnlyCollection<Guid> ids, DateTime fromTime);
+    Task<IReadOnlyCollection<HunterLocation>> GetHuntersLocationsByIdsAsync(IReadOnlyCollection<Guid> ids, DateTime fromTime, DateTime toTime);
 
     #endregion
     
