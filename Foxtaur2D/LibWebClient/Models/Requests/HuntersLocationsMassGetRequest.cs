@@ -18,10 +18,23 @@ public class HuntersLocationsMassGetRequest
     /// </summary>
     [JsonPropertyName("fromTime")]
     public DateTime FromTime { get; }
+    
+    /// <summary>
+    /// Get hunters history to this time
+    /// </summary>
+    [JsonPropertyName("toTime")]
+    public DateTime ToTime { get; }
 
-    public HuntersLocationsMassGetRequest(IReadOnlyCollection<Guid> huntersIds, DateTime fromTime)
+    public HuntersLocationsMassGetRequest(IReadOnlyCollection<Guid> huntersIds, DateTime fromTime, DateTime toTime)
     {
         HuntersIds = huntersIds ?? throw new ArgumentNullException(nameof(huntersIds));
+
+        if (toTime <= fromTime)
+        {
+            throw new ArgumentOutOfRangeException(nameof(toTime), "To time must be greater than from time.");
+        }
+        
         FromTime = fromTime;
+        ToTime = toTime;
     }
 }

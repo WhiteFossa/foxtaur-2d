@@ -736,7 +736,7 @@ public partial class MapControl : UserControl
         var newHuntersLocationsData = new Dictionary<Guid, IReadOnlyCollection<HunterLocation>>();
         try
         {
-            newHuntersLocationsData = _webClient.MassGetHuntersLocationsAsync(new HuntersLocationsMassGetRequest(huntersIdsToReload, _activeDistance.FirstHunterStartTime)).Result;
+            newHuntersLocationsData = _webClient.MassGetHuntersLocationsAsync(new HuntersLocationsMassGetRequest(huntersIdsToReload, _activeDistance.FirstHunterStartTime, _activeDistance.CloseTime)).Result;
         }
         catch (Exception)
         {

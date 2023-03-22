@@ -8,7 +8,7 @@ public class WebClientConstants
     /// <summary>
     /// Client able to work with this protocol version
     /// </summary>
-    public const int ProtocolVersion = 7;
+    public const int ProtocolVersion = 8;
 
     /// <summary>
     /// HTTP Client timeout (in seconds)

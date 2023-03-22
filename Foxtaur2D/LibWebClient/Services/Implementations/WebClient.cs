@@ -58,7 +58,8 @@ public class WebClient : IWebClient
                     new Location(Guid.NewGuid(), "Invalid finish location", LocationType.Start, 0, 0, null),
                     new List<Location>(),
                     new List<Hunter>(),
-                    d.FirstHunterStartTime
+                    d.FirstHunterStartTime,
+                    d.CloseTime
                 );
             })
             .ToList();
@@ -92,7 +93,7 @@ public class WebClient : IWebClient
         // Hunters
         var huntersIds = distanceDto
             .HuntersIds;
-        var hunters = await MassGetHuntersAsync(new HuntersMassGetRequest(huntersIds), distanceDto.FirstHunterStartTime).ConfigureAwait(false);
+        var hunters = await MassGetHuntersAsync(new HuntersMassGetRequest(huntersIds), distanceDto.FirstHunterStartTime, distanceDto.CloseTime).ConfigureAwait(false);
         
         return new Distance(
             distanceDto.Id,
@@ -104,7 +105,8 @@ public class WebClient : IWebClient
             finish,
             foxesLocations,
             hunters,
-            distanceDto.FirstHunterStartTime);
+            distanceDto.FirstHunterStartTime,
+            distanceDto.CloseTime);
     }
 
     public async Task<Dictionary<Guid, IReadOnlyCollection<HunterLocation>>> MassGetHuntersLocationsAsync(HuntersLocationsMassGetRequest request)
@@ -154,7 +156,7 @@ public class WebClient : IWebClient
             .ToList();
     }
 
-    public async Task<IReadOnlyCollection<Hunter>> MassGetHuntersAsync(HuntersMassGetRequest request, DateTime locationsHistoriesFromTime)
+    public async Task<IReadOnlyCollection<Hunter>> MassGetHuntersAsync(HuntersMassGetRequest request, DateTime locationsHistoriesFromTime, DateTime locationsHistoriesToTime)
     {
         _ = request ?? throw new ArgumentNullException(nameof(request));
 
@@ -167,7 +169,12 @@ public class WebClient : IWebClient
             .ToList();
         var teams = await MassGetTeamsAsync(new TeamsMassGetRequest(teamsIds)).ConfigureAwait(false);
 
-        var locationsHistories = await MassGetHuntersLocationsAsync(new HuntersLocationsMassGetRequest(request.HuntersIds, locationsHistoriesFromTime)).ConfigureAwait(false);
+        var locationsHistories = await MassGetHuntersLocationsAsync(new HuntersLocationsMassGetRequest
+            (
+                request.HuntersIds,
+                locationsHistoriesFromTime,
+                locationsHistoriesToTime
+            )).ConfigureAwait(false);
 
         return hunters
             .Select(h => new Hunter(
