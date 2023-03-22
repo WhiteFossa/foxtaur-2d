@@ -54,4 +54,9 @@ public class Distance
     /// First hunter start time (client will load hunters histories since this time)
     /// </summary>
     public DateTime FirstHunterStartTime { get; set; }
+    
+    /// <summary>
+    /// Distance close time (client will load hunters histories till this this)
+    /// </summary>
+    public DateTime CloseTime { get; set; }
 }
