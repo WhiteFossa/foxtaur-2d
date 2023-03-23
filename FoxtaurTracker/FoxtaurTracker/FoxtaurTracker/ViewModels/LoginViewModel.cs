@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Windows.Input;
 using FoxtaurTracker.Models;
+using FoxtaurTracker.Services.Abstract;
 using LibWebClient.Models.Requests;
 using LibWebClient.Services.Abstract;
 
@@ -9,6 +10,7 @@ namespace FoxtaurTracker.ViewModels
     public class LoginViewModel : IQueryAttributable, INotifyPropertyChanged
     {
         private readonly IWebClient _webClient;
+        private readonly ISettingsService _settingsService;
         
         private bool _isFromRegistrationPage;
 
@@ -65,6 +67,7 @@ namespace FoxtaurTracker.ViewModels
         public LoginViewModel()
         {
             _webClient = App.ServicesProvider.GetService<IWebClient>();
+            _settingsService = App.ServicesProvider.GetService<ISettingsService>();
             
             #region Commands binding
 
@@ -87,6 +90,10 @@ namespace FoxtaurTracker.ViewModels
                 await App.PopupsService.ShowAlertAsync("Error", "Login failed. Are credentials correct?");
                 return;
             }
+            
+            // Saving login and password for autologin
+            _settingsService.SaveLogin(Login);
+            await _settingsService.SavePasswordAsync(Password);
 
             _userModel.Token = result.Token;
             _userModel.TokenExpirationTime = result.ExpirationTime;

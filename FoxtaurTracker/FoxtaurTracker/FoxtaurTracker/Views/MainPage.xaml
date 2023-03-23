@@ -14,80 +14,87 @@
     
     <ContentPage.Content>
         <ScrollView>
-            <VerticalStackLayout
-                VerticalOptions="Start">
             
-                <Grid
-                    Style="{ StaticResource SpacedGrids }">
+            <Grid
+                Style="{ StaticResource SpacedGrids }">
 
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
 
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                
+                <!-- Username -->
+                <HorizontalStackLayout
+                    Grid.Column="0"
+                    Grid.Row="0"
+                    HorizontalOptions="End">
+                
+                    <Label
+                        Text="Welcome, "/>
                     
-                    <!-- Username -->
-                    <HorizontalStackLayout
-                        Grid.Column="0"
-                        Grid.Row="0"
-                        HorizontalOptions="End">
+                    <Label
+                        Text="{ Binding UsernameToDisplay }" />
                     
-                        <Label
-                            Text="Welcome, "/>
-                        
-                        <Label
-                            Text="{ Binding UsernameToDisplay }" />
-                        
-                        <Label
-                            Text="!"/>
-                        
-                    </HorizontalStackLayout>
+                    <Label
+                        Text="!"/>
                     
-                    <!-- Profile edit -->
-                    <HorizontalStackLayout
-                        Grid.Column="0"
-                        Grid.Row="1"
-                        HorizontalOptions="End">
-                        
-                        <Button
-                            Style="{ StaticResource OrdinaryButtons }"
-                            Text="Edit profile"
-                            Command="{ Binding EditProfileCommand }"/>
-                        
-                    </HorizontalStackLayout>
+                </HorizontalStackLayout>
+                
+                <!-- Profile edit -->
+                <HorizontalStackLayout
+                    Grid.Column="0"
+                    Grid.Row="1"
+                    HorizontalOptions="End">
                     
-                    <!-- Create a team -->
                     <Button
-                        Grid.Column="0"
-                        Grid.Row="2"
                         Style="{ StaticResource OrdinaryButtons }"
-                        Text="Create a team"
-                        Command="{ Binding CreateTeamCommand }"/>
+                        Text="Edit profile"
+                        Command="{ Binding EditProfileCommand }"/>
                     
-                    <!-- Register on a distance -->
-                    <Button
-                        Grid.Column="0"
-                        Grid.Row="3"
-                        Style="{ StaticResource OrdinaryButtons }"
-                        Text="Register on a distance"
-                        Command="{ Binding RegisterOnDistanceCommand }"/>
-                    
-                    <!-- Run -->
-                    <Button
-                        Grid.Column="0"
-                        Grid.Row="4"
-                        Style="{ StaticResource OrdinaryButtons }"
-                        Text="Run!"
-                        Command="{ Binding RunCommand }"/>
-                </Grid>
+                </HorizontalStackLayout>
+                
+                <!-- Create a team -->
+                <Button
+                    Grid.Column="0"
+                    Grid.Row="2"
+                    Style="{ StaticResource OrdinaryButtons }"
+                    Text="Create a team"
+                    Command="{ Binding CreateTeamCommand }"/>
+                
+                <!-- Register on a distance -->
+                <Button
+                    Grid.Column="0"
+                    Grid.Row="3"
+                    Style="{ StaticResource OrdinaryButtons }"
+                    Text="Register on a distance"
+                    Command="{ Binding RegisterOnDistanceCommand }"/>
+                
+                <!-- Run -->
+                <Button
+                    Grid.Column="0"
+                    Grid.Row="4"
+                    Style="{ StaticResource OrdinaryButtons }"
+                    Text="Run!"
+                    Command="{ Binding RunCommand }"/>
+                
+                <!-- Log out -->
+                <Button
+                    Grid.Column="0"
+                    Grid.Row="6"
+                    Style="{ StaticResource OrdinaryButtons }"
+                    Text="Log out"
+                    Command="{ Binding LogOutCommand }"/>
+            </Grid>
             
-            </VerticalStackLayout>
         </ScrollView>
     </ContentPage.Content>
 </ContentPage>
