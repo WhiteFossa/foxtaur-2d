@@ -68,6 +68,21 @@ public class LocationsProcessingService : ILocationsProcessingService
     
     public async Task StartTrackingAsync()
     {
+        // Do we have the permission?
+        var isPermitted = await CheckForLocationAlwaysPermissionAsync();
+        if (!isPermitted)
+        {
+            await App.PopupsService.ShowAlertAsync("Warning", "Please set location permission to Always.");
+            
+            // Requesting
+            var locationPermission = await Permissions.RequestAsync<Permissions.LocationAlways>();
+            if (locationPermission != PermissionStatus.Granted)
+            {
+                await App.PopupsService.ShowAlertAsync("Error", "You didn't set location permission to Always, tracking can't be started.");
+                return;
+            }
+        }
+        
         _lastFixTime = null;
         _lastSendTime = null;
         
@@ -180,7 +195,14 @@ public class LocationsProcessingService : ILocationsProcessingService
         CrossGeolocator.Current.PositionChanged -= OnPositionChanged;
         CrossGeolocator.Current.PositionError -= OnPositionError;
     }
-    
+
+    public async Task<bool> CheckForLocationAlwaysPermissionAsync()
+    {
+        var status = await Permissions.CheckStatusAsync<Permissions.LocationAlways>();
+
+        return status == PermissionStatus.Granted;
+    }
+
     private void OnLocationSendTimer(object sender, ElapsedEventArgs e)
     {
         if (!_locationsQueue.Any())

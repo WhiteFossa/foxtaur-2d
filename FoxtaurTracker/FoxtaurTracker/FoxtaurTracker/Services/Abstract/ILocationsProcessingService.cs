@@ -14,4 +14,9 @@ public interface ILocationsProcessingService
     /// Stop tracking
     /// </summary>
     Task StopTrackingAsync();
+
+    /// <summary>
+    /// Return true if "access location always" permission is granted
+    /// </summary>
+    Task<bool> CheckForLocationAlwaysPermissionAsync();
 }
