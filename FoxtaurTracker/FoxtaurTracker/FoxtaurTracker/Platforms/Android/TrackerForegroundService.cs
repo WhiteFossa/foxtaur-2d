@@ -2,16 +2,13 @@
 using Android.Content;
 using Android.OS;
 using AndroidX.Core.App;
+using FoxtaurTracker.Constants;
 
 namespace FoxtaurTracker;
 
 [Service]
 public class TrackerForegroundService : Service
 {
-    private const string NotificationChannelId = "me.foxtaur.tracker";
-    private const int NotificationId = 40578;
-    private const string NotificationChannelName = "me.foxtaur.tracker_notifications";
-
     private void StartForegroundService()
     {
         var notifcationManager = GetSystemService(NotificationService) as NotificationManager;
@@ -21,21 +18,21 @@ public class TrackerForegroundService : Service
             CreateNotificationChannel(notifcationManager);
         }
 
-        var notification = new NotificationCompat.Builder(this, NotificationChannelId);
+        var notification = new NotificationCompat.Builder(this, GlobalConstants.NotificationChannelId);
         
         notification.SetAutoCancel(false);
         notification.SetOngoing(true);
         
         notification.SetSmallIcon(Resource.Mipmap.appicon);
-        notification.SetContentTitle("Foxtaur Tracker");
-        notification.SetContentText("Tracking is ON");
+        notification.SetContentTitle(GlobalConstants.TrackingIsOnNotificationTitle);
+        notification.SetContentText("Starting up..."); // TODO: Localize me
         
-        StartForeground(NotificationId, notification.Build());
+        StartForeground(GlobalConstants.NotificationId, notification.Build());
     }
 
     private void CreateNotificationChannel(NotificationManager notificationMnaManager)
     {
-        var channel = new NotificationChannel(NotificationChannelId, NotificationChannelName, NotificationImportance.Low);
+        var channel = new NotificationChannel(GlobalConstants.NotificationChannelId, GlobalConstants.NotificationChannelName, NotificationImportance.Low);
         notificationMnaManager.CreateNotificationChannel(channel);
     }
 

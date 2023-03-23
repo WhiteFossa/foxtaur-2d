@@ -29,4 +29,33 @@ public static class GlobalConstants
     /// Send no more than this amount of locations at once
     /// </summary>
     public const int MaxSendLocationsCount = 10;
+
+    #region Notifications
+    
+    /// <summary>
+    /// Unique notification ID
+    /// </summary>
+    public const int NotificationId = 40578;
+    
+    /// <summary>
+    /// Notification channel ID
+    /// </summary>
+    public const string NotificationChannelId = "me.foxtaur.tracker";
+    
+    /// <summary>
+    /// Notification channel name
+    /// </summary>
+    public const string NotificationChannelName = "me.foxtaur.tracker_notifications";
+
+    /// <summary>
+    /// Title for "tracking is on" notification
+    /// </summary>
+    public const string TrackingIsOnNotificationTitle = "Tracking is ON";
+
+    /// <summary>
+    /// Update tracking notification each this number of seconds
+    /// </summary>
+    public const int NotificationUpdateInterval = 1;
+
+    #endregion
 }

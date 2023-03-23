@@ -1,14 +1,6 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Timers;
-using Android.Content.Res;
+﻿using Android.Content;
 using FoxtaurTracker.Constants;
 using FoxtaurTracker.Services.Abstract;
-using FoxtaurTracker.Services.Abstract.Enums;
-using FoxtaurTracker.Services.Abstract.Models;
 using GeolocatorPlugin;
 using GeolocatorPlugin.Abstractions;
 using LibAuxiliary.Helpers;
@@ -16,40 +8,69 @@ using LibWebClient.Models;
 using LibWebClient.Models.DTOs;
 using LibWebClient.Models.Requests;
 using LibWebClient.Services.Abstract;
-using Microsoft.Maui.ApplicationModel;
-using Plugin.LocalNotification;
-using Plugin.LocalNotification.AndroidOption;
+using System.Collections.Concurrent;
+using System.Timers;
+using Application = Android.App.Application;
 using Timer = System.Timers.Timer;
 
 namespace FoxtaurTracker.Services.Implementations;
 
 public class LocationsProcessingService : ILocationsProcessingService
 {
-    private ILocationService _locationService;
     private readonly IWebClient _webClient;
+    private readonly INotificationsService _notificationsService;
+
+    private bool _isTrackingOn;
+    
+    /// <summary>
+    /// Last get coordinates event time
+    /// </summary>
+    private DateTime? _lastFixTime;
+
+    /// <summary>
+    /// Last sent coordinates event time
+    /// </summary>
+    private DateTime? _lastSendTime;
     
     /// <summary>
     /// Coordinates queue is being checked by this timer
     /// </summary>
     private Timer _locationsSendTimer;
 
+    /// <summary>
+    /// Notification is updated by this timer
+    /// </summary>
+    private Timer _notificationUpdateTimer;
+
     private ConcurrentQueue<HunterLocation> _locationsQueue = new ConcurrentQueue<HunterLocation>();
 
-    public LocationsProcessingService(ILocationService locationService,
-        IWebClient webClient)
+    public LocationsProcessingService
+    (
+        IWebClient webClient,
+        INotificationsService notificationsService
+    )
     {
-        _locationService = locationService;
         _webClient = webClient;
+        _notificationsService = notificationsService;
 
         // Setting up locations send timer
         _locationsSendTimer = new Timer(TimeSpan.FromSeconds(GlobalConstants.LocationsSendInterval));
         _locationsSendTimer.Elapsed += OnLocationSendTimer;
         _locationsSendTimer.AutoReset = true;
         _locationsSendTimer.Enabled = true;
+        
+        // Setting up notification update timer
+        _notificationUpdateTimer = new Timer(TimeSpan.FromSeconds(GlobalConstants.NotificationUpdateInterval));
+        _notificationUpdateTimer.Elapsed += OnNotificationUpdateTimer;
+        _notificationUpdateTimer.AutoReset = true;
+        _notificationUpdateTimer.Enabled = true;
     }
     
     public async Task StartTrackingAsync()
     {
+        _lastFixTime = null;
+        _lastSendTime = null;
+        
         try
         {
             if (!await CrossGeolocator.Current.StartListeningAsync
@@ -63,7 +84,7 @@ public class LocationsProcessingService : ILocationsProcessingService
                         AllowBackgroundUpdates = true,
                         DeferLocationUpdates = false,
                         ListenForSignificantChanges = false,
-                        PauseLocationUpdatesAutomatically = false,
+                        PauseLocationUpdatesAutomatically = false
                     })
                )
             {
@@ -76,10 +97,12 @@ public class LocationsProcessingService : ILocationsProcessingService
         {
             if (ex.Error == GeolocationError.Unauthorized)
             {
-                await MainThread.InvokeOnMainThreadAsync(async () => await App.PopupsService.ShowAlertAsync("Error", "Please give this application location permission."));
+                await MainThread.InvokeOnMainThreadAsync(async () =>
+                    await App.PopupsService.ShowAlertAsync("Error", "Please give this application location permission."));
                 return;
             }
-            else if (ex.Error == GeolocationError.PositionUnavailable)
+
+            if (ex.Error == GeolocationError.PositionUnavailable)
             {
                 // Swallowing the error
             }
@@ -91,12 +114,14 @@ public class LocationsProcessingService : ILocationsProcessingService
 
 #if ANDROID
         // Starting foreground service to avoid to be killed
-        Android.Content.Intent intent = new Android.Content.Intent(Android.App.Application.Context, typeof(TrackerForegroundService));
-        Android.App.Application.Context.StartForegroundService(intent);
+        var intent = new Intent(Application.Context, typeof(TrackerForegroundService));
+        Application.Context.StartForegroundService(intent);
 #endif
-        
+
         CrossGeolocator.Current.PositionChanged += OnPositionChanged;
         CrossGeolocator.Current.PositionError += OnPositionError;
+
+        _isTrackingOn = true;
     }
 
     private void OnPositionChanged(object sender, PositionEventArgs e)
@@ -106,6 +131,8 @@ public class LocationsProcessingService : ILocationsProcessingService
 
     private async Task OnPositionChangedAsync(object sender, PositionEventArgs e)
     {
+        _lastFixTime = DateTime.UtcNow;
+
         var hunterLocation = new HunterLocation
         (
             Guid.NewGuid(),
@@ -114,6 +141,7 @@ public class LocationsProcessingService : ILocationsProcessingService
             e.Position.Longitude.ToRadians(),
             e.Position.Altitude.ToRadians()
         );
+        
         _locationsQueue.Enqueue(hunterLocation);
     }
     
@@ -136,11 +164,13 @@ public class LocationsProcessingService : ILocationsProcessingService
 
     public async Task StopTrackingAsync()
     {
-#if ANDROID
-        Android.Content.Intent intent = new Android.Content.Intent(Android.App.Application.Context, typeof(TrackerForegroundService));
-        Android.App.Application.Context.StopService(intent);
-#endif
+        _isTrackingOn = false;
         
+#if ANDROID
+        var intent = new Intent(Application.Context, typeof(TrackerForegroundService));
+        Application.Context.StopService(intent);
+#endif
+
         if (!await CrossGeolocator.Current.StopListeningAsync())
         {
             await MainThread.InvokeOnMainThreadAsync(async () => await App.PopupsService.ShowAlertAsync("Error", "Failed to stop GPS tracking."));
@@ -177,6 +207,7 @@ public class LocationsProcessingService : ILocationsProcessingService
         try
         {
             createdLocationsIds = _webClient.CreateHunterLocationsAsync(request).Result;
+            _lastSendTime = DateTime.UtcNow;
         }
         catch (Exception)
         {
@@ -185,9 +216,6 @@ public class LocationsProcessingService : ILocationsProcessingService
             return;
         }
         
-        // TODO: Fix notifications
-        CreateNotification();
-
         // Regenerating queue
         var newLocationsQueue = new ConcurrentQueue<HunterLocation>();
 
@@ -205,23 +233,29 @@ public class LocationsProcessingService : ILocationsProcessingService
         }
         
         _locationsQueue.Clear();
+        
         foreach (var location in newLocationsQueue)
         {
             _locationsQueue.Enqueue(location);
         }
     }
-
-    private void CreateNotification()
+    
+    private void OnNotificationUpdateTimer(object sender, ElapsedEventArgs e)
     {
-        var request = new NotificationRequest {
-            NotificationId = 40578,
-            Title = "Foxtaur Tracker",
-            Description = $"Location sent: { DateTime.Now }",
-            BadgeNumber = 42,
-            Android = new AndroidOptions() { Priority = AndroidPriority.Low },
-            Silent = true
-        };
+        if (!_isTrackingOn)
+        {
+            return;
+        }
         
-        LocalNotificationCenter.Current.Show(request);
+        var lastFixTimeString = _lastFixTime.HasValue
+            ? _lastFixTime.Value.ToLocalTime().ToLongTimeString()
+            : "N/A"; // TODO: Localize me
+        
+        var lastSendTimeString = _lastSendTime.HasValue
+            ? _lastSendTime.Value.ToLocalTime().ToLongTimeString()
+            : "N/A"; // TODO: Localize me
+        
+        var message = $"Last GPS fix time: { lastFixTimeString }\nLast data send time: { lastSendTimeString }";
+        _notificationsService.ShowNotification(GlobalConstants.TrackingIsOnNotificationTitle, message, 0, true);
     }
 }
