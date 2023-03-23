@@ -19,8 +19,6 @@ public class LocationsProcessingService : ILocationsProcessingService
 {
     private readonly IWebClient _webClient;
     private readonly INotificationsService _notificationsService;
-
-    private bool _isTrackingOn;
     
     /// <summary>
     /// Last get coordinates event time
@@ -31,12 +29,17 @@ public class LocationsProcessingService : ILocationsProcessingService
     /// Last sent coordinates event time
     /// </summary>
     private DateTime? _lastSendTime;
+
+    /// <summary>
+    /// Amount of positions, already sent to server
+    /// </summary>
+    private int _positionsSent;
     
     /// <summary>
     /// Coordinates queue is being checked by this timer
     /// </summary>
     private Timer _locationsSendTimer;
-
+    
     /// <summary>
     /// Notification is updated by this timer
     /// </summary>
@@ -65,7 +68,7 @@ public class LocationsProcessingService : ILocationsProcessingService
         _notificationUpdateTimer.AutoReset = true;
         _notificationUpdateTimer.Enabled = true;
     }
-    
+
     public async Task StartTrackingAsync()
     {
         // Do we have the permission?
@@ -85,6 +88,8 @@ public class LocationsProcessingService : ILocationsProcessingService
         
         _lastFixTime = null;
         _lastSendTime = null;
+        _positionsSent = 0;
+        
         
         try
         {
@@ -135,8 +140,6 @@ public class LocationsProcessingService : ILocationsProcessingService
 
         CrossGeolocator.Current.PositionChanged += OnPositionChanged;
         CrossGeolocator.Current.PositionError += OnPositionError;
-
-        _isTrackingOn = true;
     }
 
     private void OnPositionChanged(object sender, PositionEventArgs e)
@@ -179,8 +182,6 @@ public class LocationsProcessingService : ILocationsProcessingService
 
     public async Task StopTrackingAsync()
     {
-        _isTrackingOn = false;
-        
 #if ANDROID
         var intent = new Intent(Application.Context, typeof(TrackerForegroundService));
         Application.Context.StopService(intent);
@@ -229,7 +230,6 @@ public class LocationsProcessingService : ILocationsProcessingService
         try
         {
             createdLocationsIds = _webClient.CreateHunterLocationsAsync(request).Result;
-            _lastSendTime = DateTime.UtcNow;
         }
         catch (Exception)
         {
@@ -260,24 +260,35 @@ public class LocationsProcessingService : ILocationsProcessingService
         {
             _locationsQueue.Enqueue(location);
         }
+        
+        _lastSendTime = DateTime.UtcNow;
+        _positionsSent += createdLocationsIds.Count;
     }
     
     private void OnNotificationUpdateTimer(object sender, ElapsedEventArgs e)
     {
-        if (!_isTrackingOn)
-        {
-            return;
-        }
+        SendStatisticsNotification();
+    }
+    
+    private void SendStatisticsNotification()
+    {
+        var currentTime = DateTime.UtcNow;
         
         var lastFixTimeString = _lastFixTime.HasValue
-            ? _lastFixTime.Value.ToLocalTime().ToLongTimeString()
+            ? $"{(currentTime - _lastFixTime.Value):hh\\:mm\\:ss} ago"
             : "N/A"; // TODO: Localize me
         
         var lastSendTimeString = _lastSendTime.HasValue
-            ? _lastSendTime.Value.ToLocalTime().ToLongTimeString()
+            ? $"{(currentTime - _lastSendTime.Value):hh\\:mm\\:ss} ago"
             : "N/A"; // TODO: Localize me
+
+        var remainingQueueSize = _locationsQueue.Count;
         
-        var message = $"Last GPS fix time: { lastFixTimeString }\nLast data send time: { lastSendTimeString }";
+        var message = @$"Last GPS fix { lastFixTimeString }
+Last data submission { lastSendTimeString }
+Positions sent: { _positionsSent }
+Positions to send: { remainingQueueSize }";
+        
         _notificationsService.ShowNotification(GlobalConstants.TrackingIsOnNotificationTitle, message, 0, true);
     }
 }
