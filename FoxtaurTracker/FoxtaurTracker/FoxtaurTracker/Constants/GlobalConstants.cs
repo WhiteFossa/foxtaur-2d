@@ -53,9 +53,9 @@ public static class GlobalConstants
     public const string TrackingIsOnNotificationTitle = "Tracking is ON";
 
     /// <summary>
-    /// Update tracking notification each this number of seconds
+    /// Update tracking statistics (including notification) each this number of seconds
     /// </summary>
-    public const int NotificationUpdateInterval = 1;
+    public const int StatisticsUpdateInterval = 1;
 
     #endregion
 }

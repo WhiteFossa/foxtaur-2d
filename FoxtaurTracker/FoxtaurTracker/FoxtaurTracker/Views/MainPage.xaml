@@ -26,7 +26,6 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
                     <Grid.ColumnDefinitions>
@@ -79,22 +78,13 @@
                         Text="Register on a distance"
                         Command="{ Binding RegisterOnDistanceCommand }"/>
                     
-                    <!-- Start tracking -->
+                    <!-- Run -->
                     <Button
                         Grid.Column="0"
                         Grid.Row="4"
                         Style="{ StaticResource OrdinaryButtons }"
-                        Text="Start tracking"
-                        Command="{ Binding StartTrackingCommand }"/>
-                    
-                    <!-- Stop tracking -->
-                    <Button
-                        Grid.Column="0"
-                        Grid.Row="5"
-                        Style="{ StaticResource OrdinaryButtons }"
-                        Text="Stop tracking"
-                        Command="{ Binding StopTrackingCommand }"/>
-                    
+                        Text="Run!"
+                        Command="{ Binding RunCommand }"/>
                 </Grid>
             
             </VerticalStackLayout>

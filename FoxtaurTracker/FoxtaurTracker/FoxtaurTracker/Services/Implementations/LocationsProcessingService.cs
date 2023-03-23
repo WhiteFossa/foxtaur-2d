@@ -10,9 +10,10 @@ using LibWebClient.Models.Requests;
 using LibWebClient.Services.Abstract;
 using System.Collections.Concurrent;
 using System.Timers;
+using FoxtaurTracker.Services.Abstract.Models;
 using Plugin.LocalNotification.AndroidOption;
-using Application = Android.App.Application;
 using Timer = System.Timers.Timer;
+using Application = Android.App.Application;
 
 namespace FoxtaurTracker.Services.Implementations;
 
@@ -42,9 +43,13 @@ public class LocationsProcessingService : ILocationsProcessingService
     private Timer _locationsSendTimer;
     
     /// <summary>
-    /// Notification is updated by this timer
+    /// Statistics is updated by this timer
     /// </summary>
     private Timer _notificationUpdateTimer;
+
+    private bool _isTrackingOn;
+
+    private OnStatisticsUpdate _statisticsCallback;
 
     private ConcurrentQueue<HunterLocation> _locationsQueue = new ConcurrentQueue<HunterLocation>();
 
@@ -64,14 +69,21 @@ public class LocationsProcessingService : ILocationsProcessingService
         _locationsSendTimer.Enabled = true;
         
         // Setting up notification update timer
-        _notificationUpdateTimer = new Timer(TimeSpan.FromSeconds(GlobalConstants.NotificationUpdateInterval));
+        _notificationUpdateTimer = new Timer(TimeSpan.FromSeconds(GlobalConstants.StatisticsUpdateInterval));
         _notificationUpdateTimer.Elapsed += OnNotificationUpdateTimer;
         _notificationUpdateTimer.AutoReset = true;
         _notificationUpdateTimer.Enabled = true;
     }
 
-    public async Task StartTrackingAsync()
+    public async Task StartTrackingAsync(OnStatisticsUpdate statisticsCallback)
     {
+        _statisticsCallback = statisticsCallback ?? throw new ArgumentNullException(nameof(statisticsCallback));
+        
+        _lastFixTime = null;
+        _lastSendTime = null;
+        _positionsSent = 0;
+        _isTrackingOn = false;
+        
         // Do we have the permission?
         var isPermitted = await CheckForLocationAlwaysPermissionAsync();
         if (!isPermitted)
@@ -86,11 +98,6 @@ public class LocationsProcessingService : ILocationsProcessingService
                 return;
             }
         }
-        
-        _lastFixTime = null;
-        _lastSendTime = null;
-        _positionsSent = 0;
-        
         
         try
         {
@@ -141,6 +148,8 @@ public class LocationsProcessingService : ILocationsProcessingService
 
         CrossGeolocator.Current.PositionChanged += OnPositionChanged;
         CrossGeolocator.Current.PositionError += OnPositionError;
+
+        _isTrackingOn = true;
     }
 
     private void OnPositionChanged(object sender, PositionEventArgs e)
@@ -183,6 +192,8 @@ public class LocationsProcessingService : ILocationsProcessingService
 
     public async Task StopTrackingAsync()
     {
+        _isTrackingOn = false;
+        
 #if ANDROID
         var intent = new Intent(Application.Context, typeof(TrackerForegroundService));
         Application.Context.StopService(intent);
@@ -203,6 +214,11 @@ public class LocationsProcessingService : ILocationsProcessingService
         var status = await Permissions.CheckStatusAsync<Permissions.LocationAlways>();
 
         return status == PermissionStatus.Granted;
+    }
+
+    public bool IsTrackingOn()
+    {
+        return _isTrackingOn;
     }
 
     private void OnLocationSendTimer(object sender, ElapsedEventArgs e)
@@ -268,6 +284,20 @@ public class LocationsProcessingService : ILocationsProcessingService
     
     private void OnNotificationUpdateTimer(object sender, ElapsedEventArgs e)
     {
+        if (!_isTrackingOn)
+        {
+            return;
+        }
+
+        var currentTime = DateTime.UtcNow;
+        _statisticsCallback(new LocationsServiceStatistics
+        (
+            _lastFixTime.HasValue ? currentTime - _lastFixTime.Value : null,
+            _lastSendTime.HasValue ? currentTime - _lastSendTime.Value : null,
+            _positionsSent,
+            _locationsQueue.Count
+        ));
+        
         SendStatisticsNotification();
     }
     
