@@ -3,6 +3,7 @@ using System.Windows.Input;
 using FoxtaurTracker.Models;
 using FoxtaurTracker.Services.Abstract;
 using FoxtaurTracker.Services.Abstract.Models;
+using LibAuxiliary.Helpers;
 using LibWebClient.Models;
 
 namespace FoxtaurTracker.ViewModels;
@@ -177,8 +178,8 @@ public class RunViewModel : IQueryAttributable, INotifyPropertyChanged
 
     private void OnStatisticsUpdate(LocationsServiceStatistics statistics)
     {
-        LastGpxFixString = statistics.LastGpsFix.HasValue ? $"{statistics.LastGpsFix:hh\\:mm\\:ss} ago" : "N/A";
-        LastDataSubmissionString = statistics.LastDataSendTime.HasValue ? $"{statistics.LastDataSendTime:hh\\:mm\\:ss} ago" : "N/A";
+        LastGpxFixString = statistics.LastGpsFix.AsTimeAgo();
+        LastDataSubmissionString = statistics.LastDataSendTime.AsTimeAgo();
         PositionsSent = statistics.LocationsSent;
         PositionsToSend = statistics.LocationsToSend;
     }

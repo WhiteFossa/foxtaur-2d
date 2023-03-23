@@ -305,18 +305,13 @@ public class LocationsProcessingService : ILocationsProcessingService
     {
         var currentTime = DateTime.UtcNow;
         
-        var lastFixTimeString = _lastFixTime.HasValue
-            ? $"{(currentTime - _lastFixTime.Value):hh\\:mm\\:ss} ago"
-            : "N/A"; // TODO: Localize me
+        TimeSpan? lastFixTimeTimespan = _lastFixTime.HasValue ? currentTime - _lastFixTime.Value : null;
+        TimeSpan? lastSendTimeTimespan = _lastSendTime.HasValue ? currentTime - _lastSendTime.Value : null;
         
-        var lastSendTimeString = _lastSendTime.HasValue
-            ? $"{(currentTime - _lastSendTime.Value):hh\\:mm\\:ss} ago"
-            : "N/A"; // TODO: Localize me
-
         var remainingQueueSize = _locationsQueue.Count;
         
-        var message = @$"Last GPS fix { lastFixTimeString }
-Last data submission { lastSendTimeString }
+        var message = @$"Last GPS fix { lastFixTimeTimespan.AsTimeAgo() }
+Last data submission { lastSendTimeTimespan.AsTimeAgo() }
 Positions sent: { _positionsSent }
 Positions to send: { remainingQueueSize }";
         
