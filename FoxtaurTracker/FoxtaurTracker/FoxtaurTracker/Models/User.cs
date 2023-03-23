@@ -6,11 +6,6 @@
     public class User
     {
         /// <summary>
-        /// Is user logged in?
-        /// </summary>
-        public bool IsLoggedIn { get; set; }
-
-        /// <summary>
         /// User login
         /// </summary>
         public string Login { get; set; }

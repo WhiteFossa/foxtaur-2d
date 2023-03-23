@@ -29,6 +29,7 @@ public static class MauiProgram
 		builder.Services.AddSingleton<ILocationsProcessingService, LocationsProcessingService>();
 		builder.Services.AddSingleton<INotificationsService, NotificationsService>();
 		builder.Services.AddSingleton<ISettingsService, SettingsService>();
+		builder.Services.AddSingleton<ILoginService, LoginService>();
 
 		#endregion
 

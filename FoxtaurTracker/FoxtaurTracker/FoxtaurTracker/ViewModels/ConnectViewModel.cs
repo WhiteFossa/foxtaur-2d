@@ -13,7 +13,7 @@ namespace FoxtaurTracker.ViewModels
         private MainModel _mainModel;
 
         private readonly IWebClient _webClient;
-        private readonly ISettingsService _settingsService;
+        private readonly ILoginService _loginService;
 
         private bool _isConnected;
         
@@ -98,7 +98,7 @@ namespace FoxtaurTracker.ViewModels
         public ConnectViewModel()
         {
             _webClient = App.ServicesProvider.GetService<IWebClient>();
-            _settingsService = App.ServicesProvider.GetService<ISettingsService>();
+            _loginService = App.ServicesProvider.GetService<ILoginService>();
             
             _mainModel = new MainModel();
 
@@ -133,46 +133,22 @@ namespace FoxtaurTracker.ViewModels
             _isConnected = true;
             RefreshCanExecutes();
 
-            await PreformAutologin();
+            await TryToPerformAutologinAsync();
         }
 
-        private async Task PreformAutologin()
+        private async Task TryToPerformAutologinAsync()
         {
-            // Do we have stored credentials for auto-login?
-            string login;
-            if (!_settingsService.GetLogin(out login))
+            var autologinResult = await _loginService.TryPerformAutologinAsync();
+
+            if (!autologinResult.Item1)
             {
                 return;
             }
-
-            var password = await _settingsService.GetPasswordAsync();
-            if (password == null)
-            {
-                return;
-            }
-            
-            var request = new LoginRequest(login, password);
-            var result = await _webClient.LoginAsync(request);
-
-            if (!result.IsSuccessful)
-            {
-                // Removing stored credenitals
-                _settingsService.RemoveLoginIfExist();
-                await _settingsService.RemovePasswordIfExistAsync();
-            }
-            
-            // We are successfully logged in
-            var user = new User();
-            user.Token = result.Token;
-            user.TokenExpirationTime = result.ExpirationTime;
-            
-            // Setting token to client
-            await _webClient.SetAuthentificationTokenAsync(user.Token);
             
             var navigationParameter = new Dictionary<string, object>
             {
                 { "IsFromRegistrationPage", false },
-                { "UserModel", user }
+                { "UserModel", autologinResult.Item2 }
             };
 
             await Shell.Current.GoToAsync("mainPage", navigationParameter);
@@ -180,7 +156,7 @@ namespace FoxtaurTracker.ViewModels
         
         private async Task ShowLoginPageAsync()
         {
-            _mainModel.User.Login = String.Empty; // TODO: Pre-load saved login from DB
+            _mainModel.User.Login = String.Empty;
 
             var navigationParameter = new Dictionary<string, object>
             {

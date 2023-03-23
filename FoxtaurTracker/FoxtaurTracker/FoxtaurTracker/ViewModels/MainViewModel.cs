@@ -11,7 +11,7 @@ namespace FoxtaurTracker.ViewModels;
 public class MainViewModel : IQueryAttributable, INotifyPropertyChanged
 {
     private readonly IWebClient _webClient;
-    private readonly ISettingsService _settingsService;
+    private readonly ILoginService _loginService;
 
     private bool _isFromRegistrationPage;
 
@@ -69,7 +69,7 @@ public class MainViewModel : IQueryAttributable, INotifyPropertyChanged
     public MainViewModel()
     {
         _webClient = App.ServicesProvider.GetService<IWebClient>();
-        _settingsService = App.ServicesProvider.GetService<ISettingsService>();
+        _loginService = App.ServicesProvider.GetService<ILoginService>();
 
         #region Commands binding
 
@@ -161,10 +161,8 @@ public class MainViewModel : IQueryAttributable, INotifyPropertyChanged
 
     private async Task LogOutAsync()
     {
-        await _webClient.SetAuthentificationTokenAsync("");
-
-        await _settingsService.RemovePasswordIfExistAsync();
-        _settingsService.RemoveLoginIfExist();
+        await _loginService.LogOutAsync();
+        
         await Shell.Current.GoToAsync("connectPage");
     }
 }
