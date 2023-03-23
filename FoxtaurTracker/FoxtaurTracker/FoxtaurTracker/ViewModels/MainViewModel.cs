@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Windows.Input;
 using FoxtaurTracker.Models;
+using FoxtaurTracker.Services.Abstract;
 using LibWebClient.Models;
 using LibWebClient.Models.Requests;
 using LibWebClient.Services.Abstract;
@@ -10,6 +11,7 @@ namespace FoxtaurTracker.ViewModels;
 public class MainViewModel : IQueryAttributable, INotifyPropertyChanged
 {
     private readonly IWebClient _webClient;
+    private readonly ISettingsService _settingsService;
 
     private bool _isFromRegistrationPage;
 
@@ -57,11 +59,17 @@ public class MainViewModel : IQueryAttributable, INotifyPropertyChanged
     /// </summary>
     public ICommand RunCommand { get; private set; }
 
+    /// <summary>
+    /// Log out
+    /// </summary>
+    public ICommand LogOutCommand { get; private set; }
+
     #endregion
     
     public MainViewModel()
     {
         _webClient = App.ServicesProvider.GetService<IWebClient>();
+        _settingsService = App.ServicesProvider.GetService<ISettingsService>();
 
         #region Commands binding
 
@@ -69,6 +77,7 @@ public class MainViewModel : IQueryAttributable, INotifyPropertyChanged
         CreateTeamCommand = new Command(async () => await CreateTeamAsync());
         RegisterOnDistanceCommand = new Command(async () => await RegisterOnDistanceAsync());
         RunCommand = new Command(async () => await RunAsync());
+        LogOutCommand = new Command(async() => await LogOutAsync());
 
         #endregion
     }
@@ -148,5 +157,14 @@ public class MainViewModel : IQueryAttributable, INotifyPropertyChanged
         };
         
         await Shell.Current.GoToAsync("runPage", navigationParameter);
+    }
+
+    private async Task LogOutAsync()
+    {
+        await _webClient.SetAuthentificationTokenAsync("");
+
+        await _settingsService.RemovePasswordIfExistAsync();
+        _settingsService.RemoveLoginIfExist();
+        await Shell.Current.GoToAsync("connectPage");
     }
 }
