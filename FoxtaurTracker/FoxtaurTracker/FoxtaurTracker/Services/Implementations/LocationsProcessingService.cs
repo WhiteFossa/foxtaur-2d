@@ -10,6 +10,7 @@ using LibWebClient.Models.Requests;
 using LibWebClient.Services.Abstract;
 using System.Collections.Concurrent;
 using System.Timers;
+using Plugin.LocalNotification.AndroidOption;
 using Application = Android.App.Application;
 using Timer = System.Timers.Timer;
 
@@ -289,6 +290,6 @@ Last data submission { lastSendTimeString }
 Positions sent: { _positionsSent }
 Positions to send: { remainingQueueSize }";
         
-        _notificationsService.ShowNotification(GlobalConstants.TrackingIsOnNotificationTitle, message, 0, true);
+        _notificationsService.ShowNotification(GlobalConstants.TrackingIsOnNotificationTitle, message, 0, true, AndroidPriority.Default, true);
     }
 }

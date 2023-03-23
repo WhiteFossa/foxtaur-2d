@@ -16,6 +16,7 @@ public interface INotificationsService
         string text,
         int badgeCount,
         bool isSilent = false,
-        AndroidPriority priority = AndroidPriority.Default
+        AndroidPriority priority = AndroidPriority.Default,
+        bool isOngoing = false
     );
 }

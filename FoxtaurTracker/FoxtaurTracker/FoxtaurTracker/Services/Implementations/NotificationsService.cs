@@ -13,7 +13,8 @@ public class NotificationsService : INotificationsService
         string text,
         int badgeCount,
         bool isSilent = false,
-        AndroidPriority priority = AndroidPriority.Default
+        AndroidPriority priority = AndroidPriority.Default,
+        bool isOngoing = false
     )
     {
         var request = new NotificationRequest
@@ -23,7 +24,11 @@ public class NotificationsService : INotificationsService
             Description = text,
             BadgeNumber = badgeCount,
             Silent = isSilent,
-            Android = new AndroidOptions() { Priority = priority }
+            Android = new AndroidOptions()
+            {
+                Priority = priority,
+                Ongoing = isOngoing
+            }
         };
         
         LocalNotificationCenter.Current.Show(request);
