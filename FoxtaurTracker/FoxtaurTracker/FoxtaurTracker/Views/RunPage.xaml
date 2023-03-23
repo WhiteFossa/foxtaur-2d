@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:FoxtaurTracker.ViewModels"
+             x:Class="FoxtaurTracker.Views.RunPage"
+             Title="Run"
+             Loaded="RunPageLoaded">
+    
+    <!-- Model -->
+    <ContentPage.BindingContext>
+        <viewModels:RunViewModel />
+    </ContentPage.BindingContext>
+    
+    <ContentPage.Content>
+        <ScrollView>
+            <VerticalStackLayout
+                VerticalOptions="Start">
+                
+                <Grid
+                    Style="{ StaticResource SpacedGrids }">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    
+                    <!-- Start tracking -->
+                    <Button
+                        Grid.Column="0"
+                        Grid.Row="0"
+                        Style="{ StaticResource OrdinaryButtons }"
+                        Text="Start tracking"
+                        Command="{ Binding StartTrackingCommand }"/>
+                    
+                    <!-- Stop tracking -->
+                    <Button
+                        Grid.Column="0"
+                        Grid.Row="1"
+                        Style="{ StaticResource OrdinaryButtons }"
+                        Text="Stop tracking"
+                        Command="{ Binding StopTrackingCommand }"/>
+                    
+                    <!-- Exit -->
+                    <Button
+                        Grid.Column="0"
+                        Grid.Row="2"
+                        Style="{ StaticResource OrdinaryButtons }"
+                        Text="Exit"
+                        Command="{ Binding ExitCommand }"/>
+                    
+                    <Border
+                        Grid.Column="0"
+                        Grid.Row="3"
+                        Style="{ StaticResource RoundedBorders }">
+
+                        <Grid
+                            Style="{ StaticResource SpacedGrids }">
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                
+                            <Label
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                Text="Last GPS fix:"/>
+                
+                            <Label
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                Text="{ Binding LastGpxFixString }"/>
+            
+                            <Label
+                                Grid.Row="1"
+                                Grid.Column="0"
+                                Text="Last data submission:"/>
+                
+                            <Label
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Text="{ Binding LastDataSubmissionString }"/>
+            
+                            <Label
+                                Grid.Row="2"
+                                Grid.Column="0"
+                                Text="Positions sent:"/>
+                
+                            <Label
+                                Grid.Row="2"
+                                Grid.Column="1"
+                                Text="{ Binding PositionsSent }"/>
+                            
+                            <Label
+                                Grid.Row="3"
+                                Grid.Column="0"
+                                Text="Positions to send:"/>
+                
+                            <Label
+                                Grid.Row="3"
+                                Grid.Column="1"
+                                Text="{ Binding PositionsToSend }"/>
+                        </Grid>
+
+                    </Border>
+                </Grid>
+                
+            </VerticalStackLayout>
+        </ScrollView>
+        
+    </ContentPage.Content>
+</ContentPage>
