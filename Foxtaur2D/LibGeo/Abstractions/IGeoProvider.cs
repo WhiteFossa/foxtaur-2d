@@ -36,4 +36,9 @@ public interface IGeoProvider
     /// Planar coordinates to geo coordinates
     /// </summary>
     GeoPoint PlanarToGeo(PlanarPoint planar);
+
+    /// <summary>
+    /// Get distance by pixels count
+    /// </summary>
+    double GetDistanceByPixelsCount(double pixelsCount);
 }

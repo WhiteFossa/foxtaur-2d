@@ -1,4 +1,5 @@
 using LibGeo.Abstractions;
+using LibGeo.Constants;
 using LibGeo.Models;
 
 namespace LibGeo.Implementations;
@@ -107,6 +108,11 @@ public class DisplayGeoProvider : IGeoProvider
     public GeoPoint PlanarToGeo(PlanarPoint planar)
     {
         return new GeoPoint(YToLat(planar.Y), XToLon(planar.X));
+    }
+
+    public double GetDistanceByPixelsCount(double pixelsCount)
+    {
+        return pixelsCount * Resolution * GeoConstants.MetersPerRadian;
     }
 
     /// <summary>
