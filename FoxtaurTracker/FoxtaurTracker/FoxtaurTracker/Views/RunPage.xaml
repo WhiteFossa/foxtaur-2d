@@ -12,6 +12,11 @@
         <viewModels:RunViewModel />
     </ContentPage.BindingContext>
     
+    <!-- Hide back button -->
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior IsEnabled="False" IsVisible="False"/>
+    </Shell.BackButtonBehavior>
+    
     <ContentPage.Content>
         <ScrollView>
             <VerticalStackLayout

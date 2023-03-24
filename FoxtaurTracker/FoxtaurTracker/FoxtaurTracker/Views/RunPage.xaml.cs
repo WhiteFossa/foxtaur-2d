@@ -21,4 +21,12 @@ public partial class RunPage : ContentPage
     {
         await (BindingContext as RunViewModel).OnPageLoadedAsync(sender, e);
     }
+    
+    /// <summary>
+    /// Disabling hardware back button
+    /// </summary>
+    protected override bool OnBackButtonPressed()
+    {
+        return true;
+    }
 }

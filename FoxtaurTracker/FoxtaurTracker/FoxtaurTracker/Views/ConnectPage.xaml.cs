@@ -6,4 +6,12 @@ public partial class ConnectPage : ContentPage
 	{
 		InitializeComponent();
 	}
+	
+	/// <summary>
+	/// Disabling hardware back button
+	/// </summary>
+	protected override bool OnBackButtonPressed()
+	{
+		return true;
+	}
 }
