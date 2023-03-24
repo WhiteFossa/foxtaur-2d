@@ -16,6 +16,7 @@ namespace FoxtaurTracker.ViewModels
 
         private string _login;
         private string _password;
+        private bool _isRememberMe;
 
         private User _userModel;
         
@@ -54,6 +55,19 @@ namespace FoxtaurTracker.ViewModels
                 RefreshCanExecutes();
             }
         }
+
+        public bool IsRememberMe
+        {
+            get
+            {
+                return _isRememberMe;
+            }
+            set
+            {
+                _isRememberMe = value;
+                RaisePropertyChanged(nameof(IsRememberMe));
+            }
+        }
         
         #region Commands
 
@@ -78,11 +92,13 @@ namespace FoxtaurTracker.ViewModels
                 });
 
             #endregion
+
+            IsRememberMe = true;
         }
 
         private async Task LogInAsync()
         {
-            var loginResult = await _loginService.LogInAsync(Login, Password, true); // TODO: Add "Remember me"
+            var loginResult = await _loginService.LogInAsync(Login, Password, IsRememberMe);
             if (!loginResult.Item1)
             {
                 await App.PopupsService.ShowAlertAsync("Error", "Failed to log in. Are credentials correct?");

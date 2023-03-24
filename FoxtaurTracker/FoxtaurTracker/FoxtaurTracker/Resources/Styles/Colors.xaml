@@ -9,6 +9,7 @@
     <Color x:Key="LightSecondary">#DFD8F7</Color>
     <Color x:Key="LightTertiary">#2B0B98</Color>
     <Color x:Key="LightButtonsText">#FFFFFF</Color>
+    <Color x:Key="LightCheckboxes">#000000</Color>
 
     <SolidColorBrush x:Key="LightPrimaryBrush" Color="{StaticResource LightPrimary}"/>
     <SolidColorBrush x:Key="LightSecondaryBrush" Color="{StaticResource LightSecondary}"/>
@@ -23,5 +24,6 @@
     <SolidColorBrush x:Key="DarkSecondaryBrush" Color="{StaticResource DarkSecondary}"/>
     <SolidColorBrush x:Key="DarkTertiaryBrush" Color="{StaticResource DarkTertiary}"/>
     <Color x:Key="DarkButtonsText">#FFFFFF</Color>
+    <Color x:Key="DarkCheckboxes">#FFFFFF</Color>
 
 </ResourceDictionary>
