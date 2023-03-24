@@ -13,6 +13,12 @@ public class WebClient : IWebClient
     private readonly IWebClientRaw _client;
 
     private bool _isConnected;
+
+    private string _login;
+    private string _password;
+    
+    private string _token;
+    private DateTime _tokenExpiration;
     
     public WebClient(IWebClientRaw webClientRaw)
     {
@@ -44,6 +50,7 @@ public class WebClient : IWebClient
         _ = request ?? throw new ArgumentNullException(nameof(request));
 
         CheckIfConnected();
+        await RenewSessionAsync();
 
         return await _client.RegisterOnServerAsync(request).ConfigureAwait(false);
     }
@@ -53,6 +60,10 @@ public class WebClient : IWebClient
         _ = request ?? throw new ArgumentNullException(nameof(request));
 
         CheckIfConnected();
+        // DO NOT call RenewSessionAsync here because of recursion
+
+        _login = request.Login;
+        _password = request.Password;
 
         LoginResultDto result;
 
@@ -62,17 +73,26 @@ public class WebClient : IWebClient
         }
         catch (Exception)
         {
+            await LogoutAsync();
+            
             return new LoginResult(false, string.Empty, DateTime.MinValue);
         }
 
+        _token = result.Token;
+        _tokenExpiration = result.ExpirationTime;
+        
+        await _client.SetAuthentificationTokenAsync(_token).ConfigureAwait(false);
+        
         return new LoginResult(true, result.Token, result.ExpirationTime);
     }
 
-    public async Task SetAuthentificationTokenAsync(string token)
+    public async Task LogoutAsync()
     {
-        CheckIfConnected();
-
-        await _client.SetAuthentificationTokenAsync(token).ConfigureAwait(false);
+        _login = String.Empty;
+        _password = string.Empty;
+        _token = string.Empty;
+        _tokenExpiration = DateTime.MinValue;
+        await _client.SetAuthentificationTokenAsync(_token).ConfigureAwait(false);
     }
 
     public async Task<IReadOnlyCollection<Profile>> MassGetProfilesAsync(ProfilesMassGetRequest request)
@@ -80,6 +100,7 @@ public class WebClient : IWebClient
         _ = request ?? throw new ArgumentNullException(nameof(request));
         
         CheckIfConnected();
+        await RenewSessionAsync();
 
         var profiles = await _client.MassGetProfilesAsync(request).ConfigureAwait(false);
 
@@ -108,6 +129,7 @@ public class WebClient : IWebClient
     public async Task<UserInfo> GetCurrentUserInfoAsync()
     {
         CheckIfConnected();
+        await RenewSessionAsync();
 
         var userInfo = await _client.GetCurrentUserInfoAsync().ConfigureAwait(false);
 
@@ -117,6 +139,7 @@ public class WebClient : IWebClient
     public async Task<IReadOnlyCollection<Team>> GetAllTeamsAsync()
     {
         CheckIfConnected();
+        await RenewSessionAsync();
 
         var teams = await _client.GetAllTeamsAsync().ConfigureAwait(false);
 
@@ -129,6 +152,7 @@ public class WebClient : IWebClient
     {
         _ = request ?? throw new ArgumentNullException(nameof(request));
         CheckIfConnected();
+        await RenewSessionAsync();
 
         var updatedProfile = await _client.UpdateProfileAsync(request).ConfigureAwait(false);
 
@@ -151,6 +175,7 @@ public class WebClient : IWebClient
     {
         _ = request ?? throw new ArgumentNullException(nameof(request));
         CheckIfConnected();
+        await RenewSessionAsync();
 
         var createdTeam = await _client.CreateTeamAsync(request).ConfigureAwait(false);
 
@@ -162,6 +187,9 @@ public class WebClient : IWebClient
 
     public async Task<IReadOnlyCollection<Distance>> GetDistancesWithoutIncludeAsync()
     {
+        CheckIfConnected();
+        await RenewSessionAsync();
+        
         var distances = await _client.GetAllDistancesAsync().ConfigureAwait(false);
 
         var mapsIds = distances
@@ -196,6 +224,7 @@ public class WebClient : IWebClient
     {
         _ = request ?? throw new ArgumentNullException(nameof(request));
         CheckIfConnected();
+        await RenewSessionAsync();
         
         var registrationResponse = await _client.RegisterOnDistanceAsync(request).ConfigureAwait(false);
 
@@ -206,6 +235,7 @@ public class WebClient : IWebClient
     {
         _ = request ?? throw new ArgumentNullException(nameof(request));
         CheckIfConnected();
+        await RenewSessionAsync();
 
         return await _client.CreateHunterLocationsAsync(request).ConfigureAwait(false);
     }
@@ -216,5 +246,22 @@ public class WebClient : IWebClient
         {
             throw new InvalidOperationException("Not connected to server.");
         }
+    }
+
+    private async Task RenewSessionAsync()
+    {
+        if (string.IsNullOrWhiteSpace(_token))
+        {
+            // We aren't logged in
+            return;
+        }
+
+        var remaining = _tokenExpiration - DateTime.UtcNow;
+        if (remaining > WebClientConstants.ReauthentificateBefore)
+        {
+            return;
+        }
+
+        await LoginAsync(new LoginRequest(_login, _password));
     }
 }

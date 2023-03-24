@@ -81,7 +81,7 @@ public class RegisterOnDistanceViewModel : IQueryAttributable, INotifyPropertyCh
     {
         DistanceIndex = -1;
         
-        _distances = await _webClient.GetDistancesWithoutIncludeAsync();
+        _distances = await _webClient.GetDistancesWithoutIncludeAsync().ConfigureAwait(false);
 
         var distancesAsList = _distances.ToList();
         
@@ -111,7 +111,7 @@ public class RegisterOnDistanceViewModel : IQueryAttributable, INotifyPropertyCh
         
         try
         {
-            var result = await _webClient.RegisterOnDistanceAsync(request);
+            var result = await _webClient.RegisterOnDistanceAsync(request).ConfigureAwait(false);
 
             switch (result.Result)
             {
@@ -147,11 +147,14 @@ public class RegisterOnDistanceViewModel : IQueryAttributable, INotifyPropertyCh
             { "UserModel", _userModel }
         };
 
-        await Shell.Current.GoToAsync("mainPage", navigationParameter);
+        await MainThread.InvokeOnMainThreadAsync(async () => await Shell.Current.GoToAsync("mainPage", navigationParameter));
     }
     
     private void RefreshCanExecutes()
     {
-        (RegisterOnDistanceCommand as Command).ChangeCanExecute();
+        MainThread.BeginInvokeOnMainThread(() =>
+        {
+            (RegisterOnDistanceCommand as Command).ChangeCanExecute();
+        });
     }
 }

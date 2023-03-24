@@ -153,7 +153,7 @@ public class RunViewModel : IQueryAttributable, INotifyPropertyChanged
             { "UserModel", _userModel }
         };
 
-        await Shell.Current.GoToAsync("mainPage", navigationParameter);
+        await MainThread.InvokeOnMainThreadAsync(async () => await Shell.Current.GoToAsync("mainPage", navigationParameter));
     }
 
     public void ApplyQueryAttributes(IDictionary<string, object> query)
@@ -171,9 +171,12 @@ public class RunViewModel : IQueryAttributable, INotifyPropertyChanged
     
     private void RefreshCanExecutes()
     {
-        (StartTrackingCommand as Command).ChangeCanExecute();
-        (StopTrackingCommand as Command).ChangeCanExecute();
-        (ExitCommand as Command).ChangeCanExecute();
+        MainThread.BeginInvokeOnMainThread(() =>
+        {
+            (StartTrackingCommand as Command).ChangeCanExecute();
+            (StopTrackingCommand as Command).ChangeCanExecute();
+            (ExitCommand as Command).ChangeCanExecute();
+        });
     }
 
     private void OnStatisticsUpdate(LocationsServiceStatistics statistics)

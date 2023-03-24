@@ -96,7 +96,7 @@ public class CreateTeamViewModel : IQueryAttributable, INotifyPropertyChanged
 
         try
         {
-            await _webClient.CreateTeamAsync(request);
+            await _webClient.CreateTeamAsync(request).ConfigureAwait(false);
         }
         catch (Exception)
         {
@@ -112,11 +112,14 @@ public class CreateTeamViewModel : IQueryAttributable, INotifyPropertyChanged
             { "UserModel", _userModel }
         };
 
-        await Shell.Current.GoToAsync("mainPage", navigationParameter);
+        await MainThread.InvokeOnMainThreadAsync(async () => await Shell.Current.GoToAsync("mainPage", navigationParameter));
     }
     
     private void RefreshCanExecutes()
     {
-        (CreateTeamCommand as Command).ChangeCanExecute();
+        MainThread.BeginInvokeOnMainThread(() =>
+        {
+            (CreateTeamCommand as Command).ChangeCanExecute();
+        });
     }
 }

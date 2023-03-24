@@ -76,7 +76,7 @@ namespace FoxtaurTracker.ViewModels
             }
 
             var request = new RegistrationRequest(Login, Email, Password);
-            var isSuccessful = await _webClient.RegisterUserAsync(request);
+            var isSuccessful = await _webClient.RegisterUserAsync(request).ConfigureAwait(false);
 
             if (!isSuccessful)
             {
@@ -94,7 +94,7 @@ namespace FoxtaurTracker.ViewModels
                 { "UserModel", _userModel }
             };
             
-            await Shell.Current.GoToAsync("loginPage", navigationParameter);
+            await MainThread.InvokeOnMainThreadAsync(async () => await Shell.Current.GoToAsync("loginPage", navigationParameter));
         }
 
         public void ApplyQueryAttributes(IDictionary<string, object> query)

@@ -108,17 +108,17 @@ public class MainViewModel : IQueryAttributable, INotifyPropertyChanged
             { "Profile", _profile }
         };
 
-        await Shell.Current.GoToAsync("editProfilePage", navigationParameter);
+        await MainThread.InvokeOnMainThreadAsync(async () => await Shell.Current.GoToAsync("editProfilePage", navigationParameter));
     }
 
     public async Task OnPageLoadedAsync(Object source, EventArgs args)
     {
         // Getting current user info
-        _userInfo = await _webClient.GetCurrentUserInfoAsync();
+        _userInfo = await _webClient.GetCurrentUserInfoAsync().ConfigureAwait(false);
             
         // Reading profile
         var profileRequest = new ProfilesMassGetRequest(new List<Guid>() { _userInfo.Id });
-        _profile = (await _webClient.MassGetProfilesAsync(profileRequest))
+        _profile = (await _webClient.MassGetProfilesAsync(profileRequest).ConfigureAwait(false))
             .Single();
         
         FormatUsernameToDisplay();
@@ -136,7 +136,7 @@ public class MainViewModel : IQueryAttributable, INotifyPropertyChanged
             { "UserModel", _userModel },
         };
 
-        await Shell.Current.GoToAsync("createTeamPage", navigationParameter);
+        await MainThread.InvokeOnMainThreadAsync(async () => await Shell.Current.GoToAsync("createTeamPage", navigationParameter));
     }
 
     private async Task RegisterOnDistanceAsync()
@@ -146,7 +146,7 @@ public class MainViewModel : IQueryAttributable, INotifyPropertyChanged
             { "UserModel", _userModel },
         };
 
-        await Shell.Current.GoToAsync("registerOnDistancePage", navigationParameter);
+        await MainThread.InvokeOnMainThreadAsync(async () => await Shell.Current.GoToAsync("registerOnDistancePage", navigationParameter));
     }
 
     private async Task RunAsync()
@@ -156,7 +156,7 @@ public class MainViewModel : IQueryAttributable, INotifyPropertyChanged
             { "UserModel", _userModel }
         };
         
-        await Shell.Current.GoToAsync("runPage", navigationParameter);
+        await MainThread.InvokeOnMainThreadAsync(async () => await MainThread.InvokeOnMainThreadAsync(async () => await Shell.Current.GoToAsync("runPage", navigationParameter)));
     }
 
     private async Task LogOutAsync()

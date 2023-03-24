@@ -326,7 +326,7 @@ public class EditProfileViewModel : IQueryAttributable, INotifyPropertyChanged
             new ColorDto() { R = hunterColorR, G = hunterColorG, B = hunterColorB, A = hunterColorA }
         );
 
-        _profile = await _webClient.UpdateProfileAsync(request);
+        _profile = await _webClient.UpdateProfileAsync(request).ConfigureAwait(false);
         
         var navigationParameter = new Dictionary<string, object>
         {
@@ -334,12 +334,12 @@ public class EditProfileViewModel : IQueryAttributable, INotifyPropertyChanged
             { "UserModel", _userModel }
         };
 
-        await Shell.Current.GoToAsync("mainPage", navigationParameter);
+        await MainThread.InvokeOnMainThreadAsync(async () => await Shell.Current.GoToAsync("mainPage", navigationParameter));
     }
 
     public async Task OnPageLoadedAsync(Object source, EventArgs args)
     {
-        _teams = _webClient.GetAllTeamsAsync().Result;
+        _teams = await _webClient.GetAllTeamsAsync().ConfigureAwait(false);
         
         await ShowProfileFieldsAsync();
     }

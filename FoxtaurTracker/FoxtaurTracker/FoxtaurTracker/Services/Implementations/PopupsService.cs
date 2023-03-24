@@ -4,8 +4,8 @@ namespace FoxtaurTracker.Services.Implementations;
 
 public class PopupsService : IPopupsService
 {
-    public Task ShowAlertAsync(string title, string message, string cancel = "OK")
+    public async Task ShowAlertAsync(string title, string message, string cancel = "OK")
     {
-        return Application.Current.MainPage.DisplayAlert(title, message, cancel);
+        await MainThread.InvokeOnMainThreadAsync(async () => Application.Current.MainPage.DisplayAlert(title, message, cancel));
     }
 }

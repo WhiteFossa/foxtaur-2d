@@ -24,15 +24,15 @@ public interface IWebClient
     Task<bool> RegisterUserAsync(RegistrationRequest request);
 
     /// <summary>
-    /// Log in to server
+    /// Log in to server. Stores login and password inside and uses it for session expiration reauthentification
     /// </summary>
     Task<LoginResult> LoginAsync(LoginRequest request);
 
     /// <summary>
-    /// Set authentification token for all subsequent queries
+    /// Destroy the session and forget login and password
     /// </summary>
-    Task SetAuthentificationTokenAsync(string token);
-
+    Task LogoutAsync();
+    
     /// <summary>
     /// Mass get hunters profiles
     /// </summary>

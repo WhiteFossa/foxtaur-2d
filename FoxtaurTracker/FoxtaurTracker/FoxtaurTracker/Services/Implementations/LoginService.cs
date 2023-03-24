@@ -27,9 +27,7 @@ public class LoginService : ILoginService
 
             return new Tuple<bool, User>(false, new User()
             {
-                Login = login,
-                Token = string.Empty,
-                TokenExpirationTime = DateTime.MinValue
+                Login = login
             });
         }
             
@@ -41,10 +39,6 @@ public class LoginService : ILoginService
         }
         
         var user = new User();
-        user.Token = result.Token;
-        user.TokenExpirationTime = result.ExpirationTime;
-        
-        await _webClient.SetAuthentificationTokenAsync(user.Token);
 
         return new Tuple<bool, User>(true, user);
     }
@@ -52,14 +46,11 @@ public class LoginService : ILoginService
     public async Task<Tuple<bool, User>> TryPerformAutologinAsync()
     {
         // Do we have stored credentials for auto-login?
-        string login;
-        if (!_settingsService.GetLogin(out login))
+        if (!_settingsService.GetLogin(out var login))
         {
             return new Tuple<bool, User>(false, new User()
             {
-                Login = login,
-                Token = string.Empty,
-                TokenExpirationTime = DateTime.MinValue
+                Login = login
             });
         }
 
@@ -68,9 +59,7 @@ public class LoginService : ILoginService
         {
             return new Tuple<bool, User>(false, new User()
             {
-                Login = login,
-                Token = string.Empty,
-                TokenExpirationTime = DateTime.MinValue
+                Login = login
             });
         }
 
@@ -88,9 +77,8 @@ public class LoginService : ILoginService
 
     public async Task LogOutAsync()
     {
-        await _webClient.SetAuthentificationTokenAsync("");
-
         await RemoveStoredCredentialsAsync();
+        await _webClient.LogoutAsync();
     }
 
     private async Task RemoveStoredCredentialsAsync()

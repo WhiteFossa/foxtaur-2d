@@ -9,7 +9,6 @@ namespace FoxtaurTracker.ViewModels
 {
     public class LoginViewModel : IQueryAttributable, INotifyPropertyChanged
     {
-        private readonly IWebClient _webClient;
         private readonly ILoginService _loginService;
         
         private bool _isFromRegistrationPage;
@@ -80,7 +79,6 @@ namespace FoxtaurTracker.ViewModels
 
         public LoginViewModel()
         {
-            _webClient = App.ServicesProvider.GetService<IWebClient>();
             _loginService = App.ServicesProvider.GetService<ILoginService>();
             
             #region Commands binding
@@ -113,7 +111,7 @@ namespace FoxtaurTracker.ViewModels
                 { "UserModel", _userModel }
             };
 
-            await Shell.Current.GoToAsync("mainPage", navigationParameter);
+            await MainThread.InvokeOnMainThreadAsync(async () => await Shell.Current.GoToAsync("mainPage", navigationParameter));
         }
         
         public void RaisePropertyChanged(string propertyName)
@@ -131,7 +129,10 @@ namespace FoxtaurTracker.ViewModels
         
         private void RefreshCanExecutes()
         {
-            (LogInCommand as Command).ChangeCanExecute();
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                (LogInCommand as Command).ChangeCanExecute();
+            });
         }
     }
 }

@@ -124,9 +124,9 @@ namespace FoxtaurTracker.ViewModels
             // Setting up server (TODO: Move URL to config)
             ServerUrl = @"https://api.foxtaur.me";
 
-            await _webClient.ConnectAsync();
+            await _webClient.ConnectAsync().ConfigureAwait(false);
             
-            var serverInfo = await _webClient.GetServerInfoAsync();
+            var serverInfo = await _webClient.GetServerInfoAsync().ConfigureAwait(false);
             ServerName = serverInfo.Name;
             ServerProtocolVersion = serverInfo.ProtocolVersion.ToString();
 
@@ -151,7 +151,7 @@ namespace FoxtaurTracker.ViewModels
                 { "UserModel", autologinResult.Item2 }
             };
 
-            await Shell.Current.GoToAsync("mainPage", navigationParameter);
+            await MainThread.InvokeOnMainThreadAsync(async () => await Shell.Current.GoToAsync("mainPage", navigationParameter));
         }
         
         private async Task ShowLoginPageAsync()
@@ -164,7 +164,7 @@ namespace FoxtaurTracker.ViewModels
                 { "UserModel", _mainModel.User }
             };
             
-            await Shell.Current.GoToAsync("loginPage", navigationParameter);
+            await MainThread.InvokeOnMainThreadAsync(async () => await Shell.Current.GoToAsync("loginPage", navigationParameter));
         }
 
         private async Task ShowRegistrationPageAsync()
@@ -175,7 +175,7 @@ namespace FoxtaurTracker.ViewModels
                 { "UserModel", _mainModel.User }
             };
             
-            await Shell.Current.GoToAsync("registrationPage", navigationParameter);
+            await MainThread.InvokeOnMainThreadAsync(async () => await Shell.Current.GoToAsync("registrationPage", navigationParameter));
         }
 
         public void RaisePropertyChanged(string propertyName)
@@ -185,9 +185,13 @@ namespace FoxtaurTracker.ViewModels
         
         private void RefreshCanExecutes()
         {
-            (ConnectCommand as Command).ChangeCanExecute();
-            (LogInCommand as Command).ChangeCanExecute();
-            (RegisterCommand as Command).ChangeCanExecute();
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                (ConnectCommand as Command).ChangeCanExecute();
+                (LogInCommand as Command).ChangeCanExecute();
+                (RegisterCommand as Command).ChangeCanExecute();    
+            });
+            
         }
     }
 }
