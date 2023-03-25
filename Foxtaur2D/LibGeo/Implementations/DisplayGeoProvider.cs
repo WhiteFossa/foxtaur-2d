@@ -115,6 +115,11 @@ public class DisplayGeoProvider : IGeoProvider
         return pixelsCount * Resolution * GeoConstants.MetersPerRadian;
     }
 
+    public double GetPixelsCountByDistance(double distance)
+    {
+        return distance / (Resolution * GeoConstants.MetersPerRadian);
+    }
+
     /// <summary>
     /// Move display on mouse move. Old coordinates are where mouse was pressed, new coordinates are current mouse coordinates
     /// </summary>

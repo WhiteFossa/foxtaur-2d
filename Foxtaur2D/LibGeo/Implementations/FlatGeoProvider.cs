@@ -62,4 +62,9 @@ public class FlatGeoProvider : IGeoProvider
     {
         return (pixelsCount * GeoConstants.MetersPerRadian) / _dx;
     }
+
+    public double GetPixelsCountByDistance(double distance)
+    {
+        return (distance * _dx) / GeoConstants.MetersPerRadian;
+    }
 }

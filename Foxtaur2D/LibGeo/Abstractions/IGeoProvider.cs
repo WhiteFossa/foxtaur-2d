@@ -41,4 +41,9 @@ public interface IGeoProvider
     /// Get distance by pixels count
     /// </summary>
     double GetDistanceByPixelsCount(double pixelsCount);
+
+    /// <summary>
+    /// Get pixels count by distance
+    /// </summary>
+    double GetPixelsCountByDistance(double distance);
 }

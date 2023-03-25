@@ -60,6 +60,11 @@ public partial class MapControl : UserControl
     /// </summary>
     private const int HuntersLayerOrder = 2000;
 
+    /// <summary>
+    /// Scale layer order
+    /// </summary>
+    private const int ScaleRulerLayerOrder = 3000;
+
     #endregion
     
     #endregion
@@ -205,6 +210,7 @@ public partial class MapControl : UserControl
         // Layers creation
         _layers.Add(new FlatImageLayer(@"Resources/HYP_50M_SR_W.jpeg", BasemapLayerOrder));
         _layers.Add(new HuntersLayer(HuntersLayerOrder));
+        _layers.Add(new ScaleRulerLayer(ScaleRulerLayerOrder));
         
         OrderLayers();
 

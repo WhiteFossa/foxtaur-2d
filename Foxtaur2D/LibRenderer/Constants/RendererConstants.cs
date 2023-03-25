@@ -284,4 +284,43 @@ public static class RendererConstants
     public static Color HuntersDataDownloadFailureColor = Colors.Red;
     
     #endregion
+    
+    #region Scale ruler
+    
+    /// <summary>
+    /// Scale ruler color
+    /// </summary>
+    public static readonly Color ScaleRulerColor = Colors.White;
+    
+    /// <summary>
+    /// Scale ruler lines thickness
+    /// </summary>
+    public const double ScaleRulerLinesThickness = 2.0;
+
+    /// <summary>
+    /// Move ruler to this amount of pixels over the bottom of control
+    /// </summary>
+    public const double ScaleRulerYShiftFromBottom = 100.0;
+    
+    /// <summary>
+    /// Move ruler to this amount of pixels left over the right border of control
+    /// </summary>
+    public const double ScaleRulerXShiftFromRight = 50.0;
+
+    /// <summary>
+    /// Ruler sides half height
+    /// </summary>
+    public const double ScaleRulerSidesHalfHeight = 10.0;
+
+    /// <summary>
+    /// Ruler text font size
+    /// </summary>
+    public const double ScaleRulerTextFontSize = 16;
+
+    /// <summary>
+    /// Ruler text shift down
+    /// </summary>
+    public const double ScaleRulerTextYShift = 20;
+
+    #endregion
 }
