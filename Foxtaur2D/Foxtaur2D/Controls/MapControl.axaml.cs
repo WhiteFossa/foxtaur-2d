@@ -14,6 +14,7 @@ using Avalonia.Platform;
 using Avalonia.Threading;
 using LibGeo.Abstractions;
 using LibGeo.Implementations;
+using LibGeo.Models;
 using LibGpsFilter.Abstractions;
 using LibRenderer.Abstractions.Drawers;
 using LibRenderer.Abstractions.Layers;
@@ -537,7 +538,14 @@ public partial class MapControl : UserControl
         var latCenter = (_activeDistance.Map.NorthLat + _activeDistance.Map.SouthLat) / 2.0;
         var lonCenter = (_activeDistance.Map.EastLon + _activeDistance.Map.WestLon) / 2.0;
 
-        (_backingImageGeoProvider as DisplayGeoProvider).CenterDisplay(latCenter, lonCenter);
+        var geoProvider = (_backingImageGeoProvider as DisplayGeoProvider); 
+        
+        geoProvider.ZoomTo(
+            new GeoPoint(_activeDistance.Map.NorthLat, _activeDistance.Map.WestLon),
+            new GeoPoint(_activeDistance.Map.SouthLat, _activeDistance.Map.EastLon));
+        
+        geoProvider.CenterDisplay(latCenter, lonCenter);
+        
         _displayBitmap = null;
 
         InvalidateVisual();

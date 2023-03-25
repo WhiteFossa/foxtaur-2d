@@ -77,7 +77,7 @@ public class DisplayGeoProvider : IGeoProvider
         _screenWidth = screenWidth;
         _screenHeight = screenHeight;
 
-        PixelSize = CalculateMaxResolution();
+        PixelSize = CalculateMinPixelSize();
     }
     
     public double LonToX(double lon)
@@ -132,14 +132,14 @@ public class DisplayGeoProvider : IGeoProvider
     /// <summary>
     /// Zoom display to a new resolution (mouse is in x, y position)
     /// </summary>
-    public void Zoom(double newResolution, double x, double y)
+    public void Zoom(double newPixelSize, double x, double y)
     {
-        var oldResolution = PixelSize;
+        var oldPixelSize = PixelSize;
 
-        PixelSize = newResolution;
+        PixelSize = newPixelSize;
         
         // Limiting resolution
-        var maxResolution = CalculateMaxResolution();
+        var maxResolution = CalculateMinPixelSize();
         
         if (PixelSize > maxResolution)
         {
@@ -152,8 +152,21 @@ public class DisplayGeoProvider : IGeoProvider
         }
         
         // Correcting base coordinates
-        BaseLat -= y * (oldResolution - PixelSize);
-        BaseLon += x * (oldResolution - PixelSize);
+        BaseLat -= y * (oldPixelSize - PixelSize);
+        BaseLon += x * (oldPixelSize - PixelSize);
+    }
+
+    /// <summary>
+    /// Zoom provider such way, that rectangle area, limited by given points, will fill the whole screen
+    /// </summary>
+    public void ZoomTo(GeoPoint northWest, GeoPoint southEast)
+    {
+        var deltaLat = northWest.Lat - southEast.Lat;
+        var deltaLon = southEast.Lon - northWest.Lon;
+
+        var pixelSizeX = deltaLon / _screenWidth;
+        var pixelSizeY = deltaLat / _screenHeight;
+        Zoom(Math.Max(pixelSizeX, pixelSizeY), 0, 0);
     }
 
     /// <summary>
@@ -165,10 +178,10 @@ public class DisplayGeoProvider : IGeoProvider
         BaseLon = centerLon - PixelSize * _screenWidth / 2.0;
     }
     
-    private double CalculateMaxResolution()
+    private double CalculateMinPixelSize()
     {
-        var maxResolutionLat = (BaseLat + Math.PI / 2.0) / _screenHeight;
-        var maxResolutionLon = (Math.PI - BaseLon) / _screenWidth;
-        return Math.Min(maxResolutionLat, maxResolutionLon);
+        var minPixelSizeLat = (BaseLat + Math.PI / 2.0) / _screenHeight;
+        var minPixelSizeLon = (Math.PI - BaseLon) / _screenWidth;
+        return Math.Min(minPixelSizeLat, minPixelSizeLon);
     }
 }
