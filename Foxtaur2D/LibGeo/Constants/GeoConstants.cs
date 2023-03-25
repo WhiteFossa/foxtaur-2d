@@ -14,4 +14,9 @@ public static class GeoConstants
     /// Meters per radian (longitudinal direction, at equator)
     /// </summary>
     public const double MetersPerRadian = BigCircleLength / (2.0 * Math.PI);
+
+    /// <summary>
+    /// Minimal pixel size (defines max zoom)
+    /// </summary>
+    public const double MinPixelSize = (0.1 / BigCircleLength) * 2.0 * Math.PI; // 10cm per pixel
 }

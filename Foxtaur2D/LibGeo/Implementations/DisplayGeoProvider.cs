@@ -33,9 +33,9 @@ public class DisplayGeoProvider : IGeoProvider
                 _baseLat = Math.PI / 2.0;
             }
 
-            if (_baseLat - Resolution * _screenHeight < -1.0 * Math.PI / 2.0)
+            if (_baseLat - PixelSize * _screenHeight < -1.0 * Math.PI / 2.0)
             {
-                _baseLat = -1.0 * Math.PI / 2.0 + Resolution * _screenHeight;
+                _baseLat = -1.0 * Math.PI / 2.0 + PixelSize * _screenHeight;
             }
         }
     }
@@ -58,9 +58,9 @@ public class DisplayGeoProvider : IGeoProvider
                 _baseLon = -1 * Math.PI;
             }
 
-            if (_baseLon + Resolution * _screenWidth > Math.PI)
+            if (_baseLon + PixelSize * _screenWidth > Math.PI)
             {
-                _baseLon = Math.PI - Resolution * _screenWidth;
+                _baseLon = Math.PI - PixelSize * _screenWidth;
             }
         }
     }
@@ -68,7 +68,7 @@ public class DisplayGeoProvider : IGeoProvider
     /// <summary>
     /// Radians per pixel
     /// </summary>
-    public double Resolution { get; private set; } = 0.0005;
+    public double PixelSize { get; private set; }
 
     public DisplayGeoProvider(double screenWidth, double screenHeight)
     {
@@ -77,17 +77,17 @@ public class DisplayGeoProvider : IGeoProvider
         _screenWidth = screenWidth;
         _screenHeight = screenHeight;
 
-        Resolution = CalculateMaxResolution();
+        PixelSize = CalculateMaxResolution();
     }
     
     public double LonToX(double lon)
     {
-        return (lon - _baseLon) / Resolution;
+        return (lon - _baseLon) / PixelSize;
     }
 
     public double LatToY(double lat)
     {
-        return (_baseLat - lat) / Resolution;
+        return (_baseLat - lat) / PixelSize;
     }
 
     public PlanarPoint GeoToPlanar(GeoPoint geo)
@@ -97,12 +97,12 @@ public class DisplayGeoProvider : IGeoProvider
 
     public double YToLat(double y)
     {
-        return _baseLat - Resolution * y;
+        return _baseLat - PixelSize * y;
     }
 
     public double XToLon(double x)
     {
-        return _baseLon + Resolution * x;
+        return _baseLon + PixelSize * x;
     }
 
     public GeoPoint PlanarToGeo(PlanarPoint planar)
@@ -112,12 +112,12 @@ public class DisplayGeoProvider : IGeoProvider
 
     public double GetDistanceByPixelsCount(double pixelsCount)
     {
-        return pixelsCount * Resolution * GeoConstants.MetersPerRadian;
+        return pixelsCount * PixelSize * GeoConstants.MetersPerRadian;
     }
 
     public double GetPixelsCountByDistance(double distance)
     {
-        return distance / (Resolution * GeoConstants.MetersPerRadian);
+        return distance / (PixelSize * GeoConstants.MetersPerRadian);
     }
 
     /// <summary>
@@ -125,8 +125,8 @@ public class DisplayGeoProvider : IGeoProvider
     /// </summary>
     public void MoveDisplay(double oldX, double oldY, double newX, double newY)
     {
-        BaseLat -= Resolution * (oldY - newY);
-        BaseLon += Resolution * (oldX - newX);
+        BaseLat -= PixelSize * (oldY - newY);
+        BaseLon += PixelSize * (oldX - newX);
     }
 
     /// <summary>
@@ -134,21 +134,26 @@ public class DisplayGeoProvider : IGeoProvider
     /// </summary>
     public void Zoom(double newResolution, double x, double y)
     {
-        var oldResolution = Resolution;
+        var oldResolution = PixelSize;
 
-        Resolution = newResolution;
+        PixelSize = newResolution;
         
         // Limiting resolution
         var maxResolution = CalculateMaxResolution();
         
-        if (Resolution > maxResolution)
+        if (PixelSize > maxResolution)
         {
-            Resolution = maxResolution;
+            PixelSize = maxResolution;
+        }
+
+        if (PixelSize < GeoConstants.MinPixelSize)
+        {
+            PixelSize = GeoConstants.MinPixelSize;
         }
         
         // Correcting base coordinates
-        BaseLat -= y * (oldResolution - Resolution);
-        BaseLon += x * (oldResolution - Resolution);
+        BaseLat -= y * (oldResolution - PixelSize);
+        BaseLon += x * (oldResolution - PixelSize);
     }
 
     /// <summary>
@@ -156,8 +161,8 @@ public class DisplayGeoProvider : IGeoProvider
     /// </summary>
     public void CenterDisplay(double centerLat, double centerLon)
     {
-        BaseLat = centerLat + Resolution * _screenHeight / 2.0;
-        BaseLon = centerLon - Resolution * _screenWidth / 2.0;
+        BaseLat = centerLat + PixelSize * _screenHeight / 2.0;
+        BaseLon = centerLon - PixelSize * _screenWidth / 2.0;
     }
     
     private double CalculateMaxResolution()

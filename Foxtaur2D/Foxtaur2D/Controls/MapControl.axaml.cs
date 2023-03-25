@@ -284,7 +284,7 @@ public partial class MapControl : UserControl
             zoomFactor = RendererConstants.ZoomOutStep;
         }
 
-        (_backingImageGeoProvider as DisplayGeoProvider).Zoom((_backingImageGeoProvider as DisplayGeoProvider).Resolution * zoomFactor, _oldMouseX, _oldMouseY);
+        (_backingImageGeoProvider as DisplayGeoProvider).Zoom((_backingImageGeoProvider as DisplayGeoProvider).PixelSize * zoomFactor, _oldMouseX, _oldMouseY);
 
         _displayBitmap = null;
 

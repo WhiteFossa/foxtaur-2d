@@ -290,7 +290,7 @@ public static class RendererConstants
     /// <summary>
     /// Scale ruler color
     /// </summary>
-    public static readonly Color ScaleRulerColor = Colors.White;
+    public static readonly Color ScaleRulerColor = new Color(255, 0, 0, 255);
     
     /// <summary>
     /// Scale ruler lines thickness
@@ -300,12 +300,12 @@ public static class RendererConstants
     /// <summary>
     /// Move ruler to this amount of pixels over the bottom of control
     /// </summary>
-    public const double ScaleRulerYShiftFromBottom = 100.0;
+    public const double ScaleRulerYShiftFromBottom = 80.0;
     
     /// <summary>
     /// Move ruler to this amount of pixels left over the right border of control
     /// </summary>
-    public const double ScaleRulerXShiftFromRight = 50.0;
+    public const double ScaleRulerXShiftFromRight = 30.0;
 
     /// <summary>
     /// Ruler sides half height
@@ -321,6 +321,16 @@ public static class RendererConstants
     /// Ruler text shift down
     /// </summary>
     public const double ScaleRulerTextYShift = 20;
+
+    /// <summary>
+    /// Ruler targeted half width
+    /// </summary>
+    public const double ScaleRulerTargetHalfWidth = 200.0;
+
+    /// <summary>
+    /// How much real half width may differ from targeted
+    /// </summary>
+    public const double ScaleRulerAcceptableError = 100.0;
 
     #endregion
 }
