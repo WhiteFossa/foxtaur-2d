@@ -22,8 +22,7 @@ public class GpsFilter : IGpsFilter
     
     public IReadOnlyCollection<GpsLocation> FilterLocations(IReadOnlyCollection<GpsLocation> locations)
     {
-        return locations;
-        /*try
+        try
         {
             _filteringMutex.WaitOne();
             
@@ -61,6 +60,6 @@ public class GpsFilter : IGpsFilter
         finally
         {
             _filteringMutex.ReleaseMutex();
-        }*/
+        }
     }
 }
