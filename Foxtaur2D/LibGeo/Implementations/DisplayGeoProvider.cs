@@ -130,6 +130,33 @@ public class DisplayGeoProvider : IGeoProvider
     }
 
     /// <summary>
+    /// Call this if control size changed
+    /// </summary>
+    public void OnResize(double newScreenWidth, double newScreenHeight)
+    {
+        var centerLat = YToLat(_screenHeight / 2.0);
+        var centerLon = XToLon(_screenWidth / 2.0);
+        
+        _screenWidth = newScreenWidth;
+        _screenHeight = newScreenHeight;
+
+        // Limiting resolution
+        var maxResolution = CalculateMinPixelSize();
+        
+        if (PixelSize > maxResolution)
+        {
+            PixelSize = maxResolution;
+        }
+
+        if (PixelSize < GeoConstants.MinPixelSize)
+        {
+            PixelSize = GeoConstants.MinPixelSize;
+        }
+        
+        CenterDisplay(centerLat, centerLon);
+    }
+    
+    /// <summary>
     /// Zoom display to a new resolution (mouse is in x, y position)
     /// </summary>
     public void Zoom(double newPixelSize, double x, double y)

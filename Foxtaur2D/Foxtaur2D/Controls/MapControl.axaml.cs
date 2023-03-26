@@ -323,7 +323,16 @@ public partial class MapControl : UserControl
         _backingArray = new byte[_viewportWidth * _viewportHeight * 4];
 
         // Re-setup backing image geoprovider
-        _backingImageGeoProvider = new DisplayGeoProvider(_viewportWidth, _viewportHeight);
+        if (_backingImageGeoProvider == null)
+        {
+            // First resize
+            _backingImageGeoProvider = new DisplayGeoProvider(_viewportWidth, _viewportHeight);
+        }
+        else
+        {
+            (_backingImageGeoProvider as DisplayGeoProvider).OnResize(_viewportWidth, _viewportHeight);
+        }
+        
 
         _displayBitmap = null;
     }
