@@ -80,7 +80,7 @@
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.1.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
 		<PackageReference Include="Plugin.LocalNotification" Version="10.1.4" />
-		<PackageReference Include="whitefossa.geolocator.plugin" Version="0.0.2" />
+		<PackageReference Include="Whitefossa.Geolocator.Plugin" Version="0.0.2" />
 	</ItemGroup>
 
 	<ItemGroup>

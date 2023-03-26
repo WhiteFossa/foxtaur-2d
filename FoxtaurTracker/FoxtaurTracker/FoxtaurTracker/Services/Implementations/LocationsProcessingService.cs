@@ -1,6 +1,6 @@
-﻿using Android.Content;
-using FoxtaurTracker.Constants;
+﻿using FoxtaurTracker.Constants;
 using FoxtaurTracker.Services.Abstract;
+using FoxtaurTracker.Services.Abstract.Models;
 using GeolocatorPlugin;
 using GeolocatorPlugin.Abstractions;
 using LibAuxiliary.Helpers;
@@ -8,10 +8,10 @@ using LibWebClient.Models;
 using LibWebClient.Models.DTOs;
 using LibWebClient.Models.Requests;
 using LibWebClient.Services.Abstract;
+using Plugin.LocalNotification.AndroidOption;
 using System.Collections.Concurrent;
 using System.Timers;
-using FoxtaurTracker.Services.Abstract.Models;
-using Plugin.LocalNotification.AndroidOption;
+using Android.Content;
 using Timer = System.Timers.Timer;
 using Application = Android.App.Application;
 
@@ -113,7 +113,8 @@ public class LocationsProcessingService : ILocationsProcessingService
                         DeferLocationUpdates = false,
                         ListenForSignificantChanges = false,
                         PauseLocationUpdatesAutomatically = false,
-                        LocationProvidersToUse = new [] { "gps" }
+                        RequireLocationAlwaysPermission = true,
+                        LocationProvidersToUse = new[] { "gps" } // Use GPS-only to avoid noise
                     })
                )
             {
