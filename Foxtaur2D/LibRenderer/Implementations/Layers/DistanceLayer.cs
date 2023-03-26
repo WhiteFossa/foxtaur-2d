@@ -36,9 +36,9 @@ public class DistanceLayer : IVectorLayer, IRasterLayer
     /// <summary>
     /// OnDistanceLoadedEvent is called on separate thread!
     /// </summary>
-    public DistanceLayer(Distance distanceModel, OnDistanceLoaded onDistanceLoadedEvent, ITextDrawer textDrawer, int orderLayer)
+    public DistanceLayer(Distance distanceModel, OnDistanceLoaded onDistanceLoadedEvent, ITextDrawer textDrawer, int layerOrder)
     {
-        Order = orderLayer;
+        Order = layerOrder;
         
         _textDrawer = textDrawer ?? throw new ArgumentNullException(nameof(textDrawer));
         _distance = distanceModel ?? throw new ArgumentNullException(nameof(distanceModel));

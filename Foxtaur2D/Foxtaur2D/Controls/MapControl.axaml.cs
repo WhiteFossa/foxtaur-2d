@@ -14,6 +14,7 @@ using Avalonia.Platform;
 using Avalonia.Threading;
 using LibGeo.Abstractions;
 using LibGeo.Implementations;
+using LibGeo.Models;
 using LibGpsFilter.Abstractions;
 using LibRenderer.Abstractions.Drawers;
 using LibRenderer.Abstractions.Layers;
@@ -59,6 +60,11 @@ public partial class MapControl : UserControl
     /// Hunters layer order
     /// </summary>
     private const int HuntersLayerOrder = 2000;
+
+    /// <summary>
+    /// Scale layer order
+    /// </summary>
+    private const int ScaleRulerLayerOrder = 3000;
 
     #endregion
     
@@ -205,6 +211,7 @@ public partial class MapControl : UserControl
         // Layers creation
         _layers.Add(new FlatImageLayer(@"Resources/HYP_50M_SR_W.jpeg", BasemapLayerOrder));
         _layers.Add(new HuntersLayer(HuntersLayerOrder));
+        _layers.Add(new ScaleRulerLayer(ScaleRulerLayerOrder));
         
         OrderLayers();
 
@@ -278,7 +285,7 @@ public partial class MapControl : UserControl
             zoomFactor = RendererConstants.ZoomOutStep;
         }
 
-        (_backingImageGeoProvider as DisplayGeoProvider).Zoom((_backingImageGeoProvider as DisplayGeoProvider).Resolution * zoomFactor, _oldMouseX, _oldMouseY);
+        (_backingImageGeoProvider as DisplayGeoProvider).Zoom((_backingImageGeoProvider as DisplayGeoProvider).PixelSize * zoomFactor, _oldMouseX, _oldMouseY);
 
         _displayBitmap = null;
 
@@ -316,7 +323,16 @@ public partial class MapControl : UserControl
         _backingArray = new byte[_viewportWidth * _viewportHeight * 4];
 
         // Re-setup backing image geoprovider
-        _backingImageGeoProvider = new DisplayGeoProvider(_viewportWidth, _viewportHeight);
+        if (_backingImageGeoProvider == null)
+        {
+            // First resize
+            _backingImageGeoProvider = new DisplayGeoProvider(_viewportWidth, _viewportHeight);
+        }
+        else
+        {
+            (_backingImageGeoProvider as DisplayGeoProvider).OnResize(_viewportWidth, _viewportHeight);
+        }
+        
 
         _displayBitmap = null;
     }
@@ -531,7 +547,14 @@ public partial class MapControl : UserControl
         var latCenter = (_activeDistance.Map.NorthLat + _activeDistance.Map.SouthLat) / 2.0;
         var lonCenter = (_activeDistance.Map.EastLon + _activeDistance.Map.WestLon) / 2.0;
 
-        (_backingImageGeoProvider as DisplayGeoProvider).CenterDisplay(latCenter, lonCenter);
+        var geoProvider = (_backingImageGeoProvider as DisplayGeoProvider); 
+        
+        geoProvider.ZoomTo(
+            new GeoPoint(_activeDistance.Map.NorthLat, _activeDistance.Map.WestLon),
+            new GeoPoint(_activeDistance.Map.SouthLat, _activeDistance.Map.EastLon));
+        
+        geoProvider.CenterDisplay(latCenter, lonCenter);
+        
         _displayBitmap = null;
 
         InvalidateVisual();

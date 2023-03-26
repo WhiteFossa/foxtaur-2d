@@ -4,7 +4,6 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.ReactiveUI;
-using Foxtaur2D.Logging;
 using LibAuxiliary.Abstract;
 using LibAuxiliary.Implementations;
 using LibGpsFilter.Abstractions;
@@ -48,11 +47,6 @@ public class Program
             .BuildServiceProvider();
         
         // Setting-up NLog
-        ConfigurationItemFactory
-            .Default
-            .Targets
-            .RegisterDefinition("ControlLogging", typeof(ControlLoggingTarget));
-        
         LogManager.Configuration = new NLogLoggingConfiguration(_configuration.GetSection("NLog"));
         
         BuildAvaloniaApp()
