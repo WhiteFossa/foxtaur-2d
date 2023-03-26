@@ -68,8 +68,7 @@
             Classes="VisibleBorders"
             Grid.Column="2"
             Grid.Row="0"
-            Grid.RowSpan="3"
-            Width="300">
+            Grid.RowSpan="3">
             
             <!-- Put side controls here -->
             <StackPanel
