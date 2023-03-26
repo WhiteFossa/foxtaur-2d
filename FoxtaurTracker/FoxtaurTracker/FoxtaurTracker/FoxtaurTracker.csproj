@@ -31,30 +31,30 @@
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-maccatalyst|AnyCPU'">
 	  <ApplicationTitle>Foxtaur</ApplicationTitle>
-	  <ApplicationDisplayVersion>1.0.10</ApplicationDisplayVersion>
-	  <ApplicationVersion>10</ApplicationVersion>
+	  <ApplicationDisplayVersion>1.0.11</ApplicationDisplayVersion>
+	  <ApplicationVersion>11</ApplicationVersion>
 	  <ApplicationId>me.foxtaur.tracker</ApplicationId>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-maccatalyst|AnyCPU'">
 	  <ApplicationTitle>Foxtaur</ApplicationTitle>
-	  <ApplicationDisplayVersion>1.0.10</ApplicationDisplayVersion>
-	  <ApplicationVersion>10</ApplicationVersion>
+	  <ApplicationDisplayVersion>1.0.11</ApplicationDisplayVersion>
+	  <ApplicationVersion>11</ApplicationVersion>
 	  <ApplicationId>me.foxtaur.tracker</ApplicationId>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-android33.0|AnyCPU'">
 	  <ApplicationTitle>Foxtaur</ApplicationTitle>
-	  <ApplicationDisplayVersion>1.0.10</ApplicationDisplayVersion>
-	  <ApplicationVersion>10</ApplicationVersion>
+	  <ApplicationDisplayVersion>1.0.11</ApplicationDisplayVersion>
+	  <ApplicationVersion>11</ApplicationVersion>
 	  <ApplicationId>me.foxtaur.tracker</ApplicationId>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-android33.0|AnyCPU'">
 	  <ApplicationTitle>Foxtaur</ApplicationTitle>
 	  <AndroidPackageFormat>apk</AndroidPackageFormat>
-	  <ApplicationDisplayVersion>1.0.10</ApplicationDisplayVersion>
-	  <ApplicationVersion>10</ApplicationVersion>
+	  <ApplicationDisplayVersion>1.0.11</ApplicationDisplayVersion>
+	  <ApplicationVersion>11</ApplicationVersion>
 	  <ApplicationId>me.foxtaur.tracker</ApplicationId>
 	</PropertyGroup>
 
@@ -78,9 +78,9 @@
 	<ItemGroup>
 		<PackageReference Include="ColorPicker.Maui" Version="1.0.0" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.1.0" />
-		<PackageReference Include="Geolocator.Plugin" Version="1.0.2" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
 		<PackageReference Include="Plugin.LocalNotification" Version="10.1.4" />
+		<PackageReference Include="whitefossa.geolocator.plugin" Version="0.0.2" />
 	</ItemGroup>
 
 	<ItemGroup>

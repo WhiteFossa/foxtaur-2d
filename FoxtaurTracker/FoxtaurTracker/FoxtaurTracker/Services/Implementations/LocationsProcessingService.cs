@@ -98,7 +98,7 @@ public class LocationsProcessingService : ILocationsProcessingService
                 return;
             }
         }
-        
+
         try
         {
             if (!await CrossGeolocator.Current.StartListeningAsync
@@ -108,11 +108,12 @@ public class LocationsProcessingService : ILocationsProcessingService
                     true,
                     new ListenerSettings
                     {
-                        ActivityType = ActivityType.AutomotiveNavigation,
+                        ActivityType = ActivityType.Fitness,
                         AllowBackgroundUpdates = true,
                         DeferLocationUpdates = false,
                         ListenForSignificantChanges = false,
-                        PauseLocationUpdatesAutomatically = false
+                        PauseLocationUpdatesAutomatically = false,
+                        LocationProvidersToUse = new [] { "gps" }
                     })
                )
             {
