@@ -16,9 +16,6 @@ namespace Foxtaur2D.ViewModels;
 
 public class MainWindowViewModel : ViewModelBase
 {
-    private string _consoleText;
-    private int _consoleCaretIndex;
-    
     private int _selectedDistanceIndex;
     private IList<Distance> _distances = new List<Distance>();
 
@@ -44,24 +41,6 @@ public class MainWindowViewModel : ViewModelBase
     private readonly IWebClient _webClient = Program.Di.GetService<IWebClient>();
 
     #endregion
-    
-    /// <summary>
-    /// Text in console
-    /// </summary>
-    public string ConsoleText
-    {
-        get => _consoleText;
-        set => this.RaiseAndSetIfChanged(ref _consoleText, value);
-    }
-
-    /// <summary>
-    /// Consone caret index (to scroll programmatically)
-    /// </summary>
-    public int ConsoleCaretIndex
-    {
-        get => _consoleCaretIndex;
-        set => this.RaiseAndSetIfChanged(ref _consoleCaretIndex, value);
-    }
 
     /// <summary>
     /// Distances
@@ -411,18 +390,4 @@ public class MainWindowViewModel : ViewModelBase
     {
         HuntersDataReloadIntervalText = $"{(HuntersDataReloadInterval/1000.0):.0}s";
     }
-    
-    #region Logging
-
-    /// <summary>
-    /// Adds a new text line to console. Feed it to logger
-    /// </summary>
-    public void AddLineToConsole(string line)
-    {
-        ConsoleText += $"{line}{Environment.NewLine}";
-
-        ConsoleCaretIndex = ConsoleText.Length;
-    }
-
-    #endregion
 }
