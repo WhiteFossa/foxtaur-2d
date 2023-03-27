@@ -36,6 +36,18 @@ public class MainWindowViewModel : ViewModelBase
     private double _huntersDataReloadInterval;
     private string _huntersDataReloadIntervalText;
 
+    private bool _isTimelineEnabled;
+    private double _timelineValueRaw;
+    private double _timelineEndValueRaw;
+
+    private string _timelineBeginTimeText;
+    private string _timelineCurrentTimeText;
+    private string _timelineEndTimeText;
+
+    private DateTime _timelineBeginTime;
+    private DateTime _timelineCurrentTime;
+    private DateTime _timelineEndTime;
+
     #region DI
     
     private readonly IWebClient _webClient = Program.Di.GetService<IWebClient>();
@@ -73,7 +85,7 @@ public class MainWindowViewModel : ViewModelBase
             {
                 _mainModel.Distance = _webClient.GetDistanceByIdAsync(_distances[value].Id).Result;
             }
-            
+
             // Updating hunters list
             Hunters = _mainModel.Distance != null ? _mainModel.Distance.Hunters.ToList() : new List<Hunter>();
             
@@ -91,6 +103,8 @@ public class MainWindowViewModel : ViewModelBase
             _mainModel.HuntersFilteringMode = HuntersFilteringMode.Everyone;
             SelectedHunterIndex = -1;
             SelectedTeamIndex = -1;
+            
+            ProcessTimelineTimes();
             
             if (Renderer != null)
             {
@@ -295,6 +309,77 @@ public class MainWindowViewModel : ViewModelBase
 
         set => this.RaiseAndSetIfChanged(ref _huntersDataReloadIntervalText, value);
     }
+
+    /// <summary>
+    /// Is timeline enabled?
+    /// </summary>
+    public bool IsTimelineEnabled
+    {
+        get => _isTimelineEnabled;
+
+        set => this.RaiseAndSetIfChanged(ref _isTimelineEnabled, value);
+    }
+    
+    /// <summary>
+    /// Timeline raw value (i.e. seconds since first hunter start)
+    /// </summary>
+    public double TimelineValueRaw
+    {
+        get => _timelineValueRaw;
+
+        set
+        {
+            this.RaiseAndSetIfChanged(ref _timelineValueRaw, value);
+
+            _timelineCurrentTime = _timelineBeginTime.AddSeconds(value);
+            TimelineCurrentTimeText = _timelineCurrentTime.ToLocalTime().ToLongTimeString();
+
+            if (Renderer != null)
+            {
+                Renderer.SetHuntersLocationsInterval(_timelineBeginTime, _timelineCurrentTime);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Timeline end raw value
+    /// </summary>
+    public double TimelineEndValueRaw
+    {
+        get => _timelineEndValueRaw;
+
+        set => this.RaiseAndSetIfChanged(ref _timelineEndValueRaw, value);
+    }
+
+    /// <summary>
+    /// Timeline begin time as text
+    /// </summary>
+    public string TimelineBeginTimeText
+    {
+        get => _timelineBeginTimeText;
+
+        set => this.RaiseAndSetIfChanged(ref _timelineBeginTimeText, value);
+    }
+    
+    /// <summary>
+    /// Timeline current time as text
+    /// </summary>
+    public string TimelineCurrentTimeText
+    {
+        get => _timelineCurrentTimeText;
+
+        set => this.RaiseAndSetIfChanged(ref _timelineCurrentTimeText, value);
+    }
+    
+    /// <summary>
+    /// Timeline end time as text
+    /// </summary>
+    public string TimelineEndTimeText
+    {
+        get => _timelineEndTimeText;
+
+        set => this.RaiseAndSetIfChanged(ref _timelineEndTimeText, value);
+    }
     
     /// <summary>
     /// Focus on distance
@@ -326,6 +411,7 @@ public class MainWindowViewModel : ViewModelBase
         _mainModel.HuntersFilteringMode = HuntersFilteringMode.Everyone;
         SelectedHunterIndex = -1;
         SelectedTeamIndex = -1;
+        ProcessTimelineTimes();
         
         // Marking initial data state
         SetHuntersDataState(HuntersDataState.Downloaded);
@@ -389,5 +475,54 @@ public class MainWindowViewModel : ViewModelBase
     private void FormatHuntersDataReloadIntervalText()
     {
         HuntersDataReloadIntervalText = $"{(HuntersDataReloadInterval/1000.0):.0}s";
+    }
+
+    private void ProcessTimelineTimes()
+    {
+        if (_mainModel.Distance == null)
+        {
+            IsTimelineEnabled = false;
+            TimelineValueRaw = 0;
+            TimelineEndValueRaw = 0;
+            TimelineBeginTimeText = "N/A";
+            TimelineCurrentTimeText = "N/A";
+            TimelineEndTimeText = "N/A";
+            return;
+        }
+
+        _timelineBeginTime = _mainModel.Distance.FirstHunterStartTime;
+
+        var currentTime = DateTime.UtcNow;
+        if (currentTime < _mainModel.Distance.FirstHunterStartTime)
+        {
+            _timelineCurrentTime = _mainModel.Distance.FirstHunterStartTime;
+            _timelineEndTime = _mainModel.Distance.CloseTime;
+        }
+        else
+        {
+            if (currentTime < _mainModel.Distance.CloseTime)
+            {
+                _timelineCurrentTime = currentTime;
+                _timelineEndTime = currentTime;
+            }
+            else
+            {
+                _timelineCurrentTime = _mainModel.Distance.CloseTime;
+                _timelineEndTime = _mainModel.Distance.CloseTime;
+            }
+        }
+        
+        IsTimelineEnabled = true;
+        TimelineBeginTimeText = _timelineBeginTime.ToLocalTime().ToLongTimeString();
+        TimelineCurrentTimeText = _timelineCurrentTime.ToLocalTime().ToLongTimeString();
+        TimelineEndTimeText = _timelineEndTime.ToLocalTime().ToLongTimeString();
+
+        TimelineEndValueRaw = (_timelineEndTime - _timelineBeginTime).TotalSeconds;
+        TimelineValueRaw = (_timelineCurrentTime - _timelineBeginTime).TotalSeconds;
+        
+        if (Renderer != null)
+        {
+            Renderer.SetHuntersLocationsInterval(_timelineBeginTime, _timelineCurrentTime);
+        }
     }
 }

@@ -44,6 +44,56 @@
             
         </Border>
         
+        <!-- Time scroll -->
+        <Border
+            Grid.Column="0"
+            Grid.Row="1"
+            Classes="VisibleBorders">
+            
+            <StackPanel>
+                <Slider
+                    Minimum="0"
+                    Maximum="{ Binding TimelineEndValueRaw }"
+                    Ticks="1"
+                    IsEnabled="{ Binding IsTimelineEnabled }"
+                    Value="{ Binding TimelineValueRaw }">
+                </Slider>
+                
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+        
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    
+                    <!-- Begin time -->
+                    <Label
+                        Grid.Column="0"
+                        Grid.Row="0"
+                        HorizontalAlignment="Center"
+                        Content="{ Binding TimelineBeginTimeText}" />
+                    
+                    <!-- Current time -->
+                    <Label
+                        Grid.Column="1"
+                        Grid.Row="0"
+                        HorizontalAlignment="Center"
+                        Content="{ Binding TimelineCurrentTimeText }" />
+                    
+                    <!-- End time -->
+                    <Label
+                        Grid.Column="2"
+                        Grid.Row="0"
+                        HorizontalAlignment="Center"
+                        Content="{ Binding TimelineEndTimeText }" />
+                </Grid>
+            </StackPanel>
+        </Border>
+        
         <!-- Splitter between left and right parts of window -->
         <GridSplitter
             Grid.Column="1"
