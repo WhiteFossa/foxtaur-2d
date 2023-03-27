@@ -122,8 +122,8 @@ public class MainWindowViewModel : ViewModelBase
             _mainModel.HuntersFilteringMode = HuntersFilteringMode.Everyone;
             SelectedHunterIndex = -1;
             SelectedTeamIndex = -1;
-            
-            ProcessTimelineTimes();
+
+            Dispatcher.UIThread.InvokeAsync(ProcessTimelineTimes);
 
             if (Renderer != null)
             {
@@ -399,11 +399,7 @@ public class MainWindowViewModel : ViewModelBase
     {
         get => _timelineEndTimeText;
 
-        set
-        {
-            _logger.Info($"End time: {value}");
-            this.RaiseAndSetIfChanged(ref _timelineEndTimeText, value);
-        }
+        set => this.RaiseAndSetIfChanged(ref _timelineEndTimeText, value);
     }
 
     /// <summary>
