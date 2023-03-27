@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
+using System.Timers;
 using Avalonia.Media;
+using Avalonia.Threading;
 using Foxtaur2D.Controls;
 using Foxtaur2D.Models;
 using LibRenderer.Constants;
@@ -10,6 +12,7 @@ using LibRenderer.Enums;
 using LibWebClient.Models;
 using LibWebClient.Services.Abstract;
 using Microsoft.Extensions.DependencyInjection;
+using NLog;
 using ReactiveUI;
 
 namespace Foxtaur2D.ViewModels;
@@ -48,10 +51,26 @@ public class MainWindowViewModel : ViewModelBase
     private DateTime _timelineCurrentTime;
     private DateTime _timelineEndTime;
 
+    private bool _isRealtimeUpdateMode;
+
+    /// <summary>
+    /// Timer to move end side of timeline
+    /// </summary>
+    private Timer _timelineUpdateTimer;
+
     #region DI
     
     private readonly IWebClient _webClient = Program.Di.GetService<IWebClient>();
 
+    #endregion
+    
+    #region Logger
+    
+    /// <summary>
+    /// Logger
+    /// </summary>
+    private Logger _logger = LogManager.GetCurrentClassLogger();
+    
     #endregion
 
     /// <summary>
@@ -105,7 +124,7 @@ public class MainWindowViewModel : ViewModelBase
             SelectedTeamIndex = -1;
             
             ProcessTimelineTimes();
-            
+
             if (Renderer != null)
             {
                 Renderer.SetActiveDistance(_mainModel.Distance);
@@ -330,6 +349,8 @@ public class MainWindowViewModel : ViewModelBase
         set
         {
             this.RaiseAndSetIfChanged(ref _timelineValueRaw, value);
+            
+            _isRealtimeUpdateMode = _timelineValueRaw >= _timelineEndValueRaw - 1.0; // If value in the last second we need to enable realtime mode
 
             _timelineCurrentTime = _timelineBeginTime.AddSeconds(value);
             TimelineCurrentTimeText = _timelineCurrentTime.ToLocalTime().ToLongTimeString();
@@ -378,9 +399,13 @@ public class MainWindowViewModel : ViewModelBase
     {
         get => _timelineEndTimeText;
 
-        set => this.RaiseAndSetIfChanged(ref _timelineEndTimeText, value);
+        set
+        {
+            _logger.Info($"End time: {value}");
+            this.RaiseAndSetIfChanged(ref _timelineEndTimeText, value);
+        }
     }
-    
+
     /// <summary>
     /// Focus on distance
     /// </summary>
@@ -411,6 +436,7 @@ public class MainWindowViewModel : ViewModelBase
         _mainModel.HuntersFilteringMode = HuntersFilteringMode.Everyone;
         SelectedHunterIndex = -1;
         SelectedTeamIndex = -1;
+        _isRealtimeUpdateMode = true;
         ProcessTimelineTimes();
         
         // Marking initial data state
@@ -418,8 +444,14 @@ public class MainWindowViewModel : ViewModelBase
         
         // Initial interval
         HuntersDataReloadInterval = 1000; // TODO: Save/load it
+        
+        // Timeline update timer
+        _timelineUpdateTimer = new Timer(1000); // No need to move into constants, magical 1 second
+        _timelineUpdateTimer.Elapsed += OnTimelineUpdateTimer;
+        _timelineUpdateTimer.AutoReset = true;
+        _timelineUpdateTimer.Enabled = true;
     }
-
+    
     /// <summary>
     /// Reload distances
     /// </summary>
@@ -491,7 +523,7 @@ public class MainWindowViewModel : ViewModelBase
         }
 
         _timelineBeginTime = _mainModel.Distance.FirstHunterStartTime;
-
+        
         var currentTime = DateTime.UtcNow;
         if (currentTime < _mainModel.Distance.FirstHunterStartTime)
         {
@@ -500,7 +532,7 @@ public class MainWindowViewModel : ViewModelBase
         }
         else
         {
-            if (currentTime < _mainModel.Distance.CloseTime)
+            if (currentTime <= _mainModel.Distance.CloseTime)
             {
                 _timelineCurrentTime = currentTime;
                 _timelineEndTime = currentTime;
@@ -512,17 +544,63 @@ public class MainWindowViewModel : ViewModelBase
             }
         }
         
+        ProcessRealtimeMode();
+        
         IsTimelineEnabled = true;
         TimelineBeginTimeText = _timelineBeginTime.ToLocalTime().ToLongTimeString();
         TimelineCurrentTimeText = _timelineCurrentTime.ToLocalTime().ToLongTimeString();
         TimelineEndTimeText = _timelineEndTime.ToLocalTime().ToLongTimeString();
-
         TimelineEndValueRaw = (_timelineEndTime - _timelineBeginTime).TotalSeconds;
         TimelineValueRaw = (_timelineCurrentTime - _timelineBeginTime).TotalSeconds;
         
         if (Renderer != null)
         {
             Renderer.SetHuntersLocationsInterval(_timelineBeginTime, _timelineCurrentTime);
+        }
+    }
+
+    private void ProcessRealtimeMode()
+    {
+        var currentTime = DateTime.UtcNow;
+        if (_mainModel.Distance == null
+            || currentTime < _mainModel.Distance.FirstHunterStartTime
+            || currentTime > _mainModel.Distance.CloseTime)
+        {
+            return;
+        }
+
+        // If we are in realtime update mode we need to force currentTime = endTime
+        if (_isRealtimeUpdateMode)
+        {
+            _timelineEndTime = DateTime.UtcNow;
+            _timelineCurrentTime = _timelineEndTime;
+            
+            TimelineCurrentTimeText = _timelineCurrentTime.ToLocalTime().ToLongTimeString();
+            TimelineEndTimeText = _timelineEndTime.ToLocalTime().ToLongTimeString();
+
+            TimelineEndValueRaw = (_timelineEndTime - _timelineBeginTime).TotalSeconds;
+            TimelineValueRaw = (_timelineCurrentTime - _timelineBeginTime).TotalSeconds;
+        
+            if (Renderer != null)
+            {
+                Renderer.SetHuntersLocationsInterval(_timelineBeginTime, _timelineCurrentTime);
+            }
+        }
+    }
+    
+    private void OnTimelineUpdateTimer(object sender, ElapsedEventArgs e)
+    {
+        var currentTime = DateTime.UtcNow;
+        if (_mainModel.Distance != null
+            && currentTime >= _mainModel.Distance.FirstHunterStartTime
+            && currentTime <= _mainModel.Distance.CloseTime)
+        {
+            _timelineEndTime = currentTime;
+        
+            TimelineEndValueRaw = (_timelineEndTime - _timelineBeginTime).TotalSeconds;
+            TimelineEndTimeText = _timelineEndTime.ToLocalTime().ToLongTimeString();
+
+            ProcessRealtimeMode();
         }
     }
 }
