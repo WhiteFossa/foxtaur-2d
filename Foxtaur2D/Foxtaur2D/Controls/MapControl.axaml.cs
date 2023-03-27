@@ -44,18 +44,18 @@ public partial class MapControl : UserControl
 {
     #region Constants
 
-    #region  Layers order
+    #region Layers order
 
     /// <summary>
     /// Basemap layer order
     /// </summary>
     private const int BasemapLayerOrder = 0;
-    
+
     /// <summary>
     /// Distance layer order
     /// </summary>
     private const int DistanceLayerOrder = 1000;
-    
+
     /// <summary>
     /// Hunters layer order
     /// </summary>
@@ -67,9 +67,9 @@ public partial class MapControl : UserControl
     private const int ScaleRulerLayerOrder = 3000;
 
     #endregion
-    
+
     #endregion
-    
+
     #region Control sizes
 
     /// <summary>
@@ -156,9 +156,14 @@ public partial class MapControl : UserControl
     private HuntersFilteringMode _huntersFilteringMode;
 
     /// <summary>
-    /// Hunters after filtering, only they will be displayed
+    /// Hunters after preliminary filtering (team / individual, GPS denoising)
     /// </summary>
     private IReadOnlyCollection<Hunter> _filteredHunters;
+    
+    /// <summary>
+    /// Hunters, filtered by begin and end time
+    /// </summary>
+    private IReadOnlyCollection<Hunter> _filteredByIntervalHunters;
 
     #endregion
 
@@ -194,6 +199,14 @@ public partial class MapControl : UserControl
 
     #endregion
 
+    #region Hunters histories interval
+
+    private DateTime _huntersHistoriesBeginTime;
+
+    private DateTime _huntersHistoriesEndTime;
+    
+    #endregion
+
     #region Debug
 
     #endregion
@@ -212,7 +225,7 @@ public partial class MapControl : UserControl
         _layers.Add(new FlatImageLayer(@"Resources/HYP_50M_SR_W.jpeg", BasemapLayerOrder));
         _layers.Add(new HuntersLayer(HuntersLayerOrder));
         _layers.Add(new ScaleRulerLayer(ScaleRulerLayerOrder));
-        
+
         OrderLayers();
 
         // Listening for properties changes to process resize
@@ -332,7 +345,7 @@ public partial class MapControl : UserControl
         {
             (_backingImageGeoProvider as DisplayGeoProvider).OnResize(_viewportWidth, _viewportHeight);
         }
-        
+
 
         _displayBitmap = null;
     }
@@ -431,7 +444,7 @@ public partial class MapControl : UserControl
                 if (layer is IHuntersVectorLayer)
                 {
                     // Special case - hunters layer
-                    (vectorLayer as IHuntersVectorLayer).Draw(context, _viewportWidth, _viewportHeight, _scaling, _backingImageGeoProvider, _filteredHunters);
+                    (vectorLayer as IHuntersVectorLayer).Draw(context, _viewportWidth, _viewportHeight, _scaling, _backingImageGeoProvider, _filteredByIntervalHunters);
                 }
                 else
                 {
@@ -521,11 +534,14 @@ public partial class MapControl : UserControl
         _activeDistance = distance;
 
         _layers.Remove(_distanceLayer);
-        
+
         if (_activeDistance != null)
         {
             AddDistanceLayer();
 
+            _huntersHistoriesBeginTime = _activeDistance.FirstHunterStartTime;
+            _huntersHistoriesEndTime = _activeDistance.CloseTime;
+            
             ApplyHuntersFilter();
         }
 
@@ -547,14 +563,14 @@ public partial class MapControl : UserControl
         var latCenter = (_activeDistance.Map.NorthLat + _activeDistance.Map.SouthLat) / 2.0;
         var lonCenter = (_activeDistance.Map.EastLon + _activeDistance.Map.WestLon) / 2.0;
 
-        var geoProvider = (_backingImageGeoProvider as DisplayGeoProvider); 
-        
+        var geoProvider = (_backingImageGeoProvider as DisplayGeoProvider);
+
         geoProvider.ZoomTo(
             new GeoPoint(_activeDistance.Map.NorthLat, _activeDistance.Map.WestLon),
             new GeoPoint(_activeDistance.Map.SouthLat, _activeDistance.Map.EastLon));
-        
+
         geoProvider.CenterDisplay(latCenter, lonCenter);
-        
+
         _displayBitmap = null;
 
         InvalidateVisual();
@@ -666,8 +682,11 @@ public partial class MapControl : UserControl
                     throw new InvalidOperationException("Unknown hunters filtering mode!");
             }
 
+            // Filtering by times interval
+            _filteredByIntervalHunters = FilterHuntersLocationsByHistoriesInterval(_filteredHunters);
+            
             // Filtering GPS noise (!locations IDs and altitudes are lost!)
-            _filteredHunters = FilterHuntersLocations(_filteredHunters);
+            _filteredByIntervalHunters = GpsFilterHuntersLocations(_filteredByIntervalHunters);
             
             InvalidateVisual();
         }
@@ -786,8 +805,11 @@ public partial class MapControl : UserControl
                 ))
                 .ToList();
             
+            // Filtering by interval
+            _filteredByIntervalHunters = FilterHuntersLocationsByHistoriesInterval(_filteredHunters);
+            
             // Filtering GPS noise (!locations IDs and altitudes are lost!)
-            _filteredHunters = FilterHuntersLocations(_filteredHunters);
+            _filteredByIntervalHunters = GpsFilterHuntersLocations(_filteredByIntervalHunters);
         }
         finally
         {
@@ -811,11 +833,8 @@ public partial class MapControl : UserControl
         }
         else
         {
-            Dispatcher.UIThread.InvokeAsync(() =>
-            {
-                _logger.Warn($"Cant't find hunter with name { hunter.Name } ({ hunter.Id }) in hunters location dictionary!");
-            });
-            
+            Dispatcher.UIThread.InvokeAsync(() => { _logger.Warn($"Cant't find hunter with name {hunter.Name} ({hunter.Id}) in hunters location dictionary!"); });
+
             return hunter.LocationsHistory;
         }
     }
@@ -828,9 +847,9 @@ public partial class MapControl : UserControl
 
     private void AddDistanceLayer()
     {
-        _distanceLayer = new DistanceLayer(_activeDistance, OnDistanceLoadedHandler, _textDrawer, DistanceLayerOrder); 
+        _distanceLayer = new DistanceLayer(_activeDistance, OnDistanceLoadedHandler, _textDrawer, DistanceLayerOrder);
         _layers.Add(_distanceLayer);
-        
+
         OrderLayers();
     }
 
@@ -841,7 +860,7 @@ public partial class MapControl : UserControl
             .ToList();
     }
 
-    private IReadOnlyCollection<Hunter> FilterHuntersLocations(IReadOnlyCollection<Hunter> hunters)
+    private IReadOnlyCollection<Hunter> GpsFilterHuntersLocations(IReadOnlyCollection<Hunter> hunters)
     {
         return hunters
             .Select(fh => new Hunter
@@ -859,4 +878,36 @@ public partial class MapControl : UserControl
             ))
             .ToList();
     }
+
+    public void SetHuntersLocationsInterval(DateTime beginTime, DateTime endTime)
+    {
+        if (endTime < beginTime)
+        {
+            throw new ArgumentException(nameof(endTime), "End time must be no less than start time.");
+        }
+
+        _huntersHistoriesBeginTime = beginTime;
+        _huntersHistoriesEndTime = endTime;
+
+        _filteredByIntervalHunters = FilterHuntersLocationsByHistoriesInterval(_filteredHunters);
+        
+        InvalidateVisual();
+    }
+    
+    private IReadOnlyCollection<Hunter> FilterHuntersLocationsByHistoriesInterval(IReadOnlyCollection<Hunter> hunters)
+    {
+        return hunters
+            .Select(fh => new Hunter
+            (
+                fh.Id,
+                fh.Name,
+                fh.IsRunning,
+                fh.Team,
+                fh.LocationsHistory
+                    .Where(lh => (lh.Timestamp >= _huntersHistoriesBeginTime) && (lh.Timestamp <= _huntersHistoriesEndTime))
+                    .ToList(),
+                fh.Color
+            ))
+            .ToList();
+    } 
 }
