@@ -890,6 +890,7 @@ public partial class MapControl : UserControl
         _huntersHistoriesEndTime = endTime;
 
         _filteredByIntervalHunters = FilterHuntersLocationsByHistoriesInterval(_filteredHunters);
+        _filteredByIntervalHunters = GpsFilterHuntersLocations(_filteredByIntervalHunters);
         
         InvalidateVisual();
     }
