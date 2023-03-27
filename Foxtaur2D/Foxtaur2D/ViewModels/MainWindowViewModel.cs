@@ -536,25 +536,21 @@ public class MainWindowViewModel : ViewModelBase
         _timelineBeginTime = _mainModel.Distance.FirstHunterStartTime;
         
         var currentTime = DateTime.UtcNow;
-        if (currentTime < _mainModel.Distance.FirstHunterStartTime)
+        if (currentTime >= _mainModel.Distance.FirstHunterStartTime
+            && currentTime <= _mainModel.Distance.CloseTime)
         {
-            _timelineCurrentTime = _mainModel.Distance.FirstHunterStartTime;
-            _timelineEndTime = _mainModel.Distance.CloseTime;
+            // Distance opened
+            _timelineEndTime = currentTime;
         }
         else
         {
-            if (currentTime <= _mainModel.Distance.CloseTime)
-            {
-                _timelineCurrentTime = currentTime;
-                _timelineEndTime = currentTime;
-            }
-            else
-            {
-                _timelineCurrentTime = _mainModel.Distance.CloseTime;
-                _timelineEndTime = _mainModel.Distance.CloseTime;
-            }
+            // Distance closed
+            _timelineEndTime = _mainModel.Distance.CloseTime;
         }
-        
+
+        _timelineCurrentTime = _timelineEndTime;
+        _isRealtimeUpdateMode = true;
+
         ProcessRealtimeMode();
         
         IsTimelineEnabled = true;

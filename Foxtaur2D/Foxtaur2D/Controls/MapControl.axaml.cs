@@ -862,6 +862,11 @@ public partial class MapControl : UserControl
 
     private IReadOnlyCollection<Hunter> GpsFilterHuntersLocations(IReadOnlyCollection<Hunter> hunters)
     {
+        if (hunters == null)
+        {
+            return null;
+        }
+        
         return hunters
             .Select(fh => new Hunter
             (
@@ -897,6 +902,11 @@ public partial class MapControl : UserControl
     
     private IReadOnlyCollection<Hunter> FilterHuntersLocationsByHistoriesInterval(IReadOnlyCollection<Hunter> hunters)
     {
+        if (hunters == null)
+        {
+            return null;
+        }
+        
         return hunters
             .Select(fh => new Hunter
             (
