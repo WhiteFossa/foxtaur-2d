@@ -19,6 +19,21 @@ namespace Foxtaur2D.ViewModels;
 
 public class MainWindowViewModel : ViewModelBase
 {
+    /// <summary>
+    /// Update timeline each this milliseconds number
+    /// </summary>
+    private const int TimelineUpdateInterval = 100;
+
+    /// <summary>
+    /// Add this time to distance close time when updating timeline
+    /// </summary>
+    private static readonly TimeSpan TimelineDistanceCloseTimeAdd = TimeSpan.FromSeconds(1);
+
+    /// <summary>
+    /// If timeline position is within this number of seconds of the end time - enable realtime mode
+    /// </summary>
+    private const int TimelineRealtimeThreshold = 5;
+    
     private int _selectedDistanceIndex;
     private IList<Distance> _distances = new List<Distance>();
 
@@ -350,7 +365,7 @@ public class MainWindowViewModel : ViewModelBase
         {
             this.RaiseAndSetIfChanged(ref _timelineValueRaw, value);
             
-            _isRealtimeUpdateMode = _timelineValueRaw >= _timelineEndValueRaw - 1.0; // If value in the last second we need to enable realtime mode
+            _isRealtimeUpdateMode = _timelineValueRaw >= _timelineEndValueRaw - TimelineRealtimeThreshold;
 
             _timelineCurrentTime = _timelineBeginTime.AddSeconds(value);
             TimelineCurrentTimeText = _timelineCurrentTime.ToLocalTime().ToLongTimeString();
@@ -442,7 +457,7 @@ public class MainWindowViewModel : ViewModelBase
         HuntersDataReloadInterval = 1000; // TODO: Save/load it
         
         // Timeline update timer
-        _timelineUpdateTimer = new Timer(1000); // No need to move into constants, magical 1 second
+        _timelineUpdateTimer = new Timer(TimelineUpdateInterval); // No need to move into constants, magical 1 second
         _timelineUpdateTimer.Elapsed += OnTimelineUpdateTimer;
         _timelineUpdateTimer.AutoReset = true;
         _timelineUpdateTimer.Enabled = true;
@@ -560,7 +575,7 @@ public class MainWindowViewModel : ViewModelBase
         var currentTime = DateTime.UtcNow;
         if (_mainModel.Distance == null
             || currentTime < _mainModel.Distance.FirstHunterStartTime
-            || currentTime > _mainModel.Distance.CloseTime)
+            || currentTime > _mainModel.Distance.CloseTime + TimelineDistanceCloseTimeAdd)
         {
             return;
         }
@@ -568,7 +583,7 @@ public class MainWindowViewModel : ViewModelBase
         // If we are in realtime update mode we need to force currentTime = endTime
         if (_isRealtimeUpdateMode)
         {
-            _timelineEndTime = DateTime.UtcNow;
+            _timelineEndTime = currentTime;
             _timelineCurrentTime = _timelineEndTime;
             
             TimelineCurrentTimeText = _timelineCurrentTime.ToLocalTime().ToLongTimeString();
@@ -589,7 +604,7 @@ public class MainWindowViewModel : ViewModelBase
         var currentTime = DateTime.UtcNow;
         if (_mainModel.Distance != null
             && currentTime >= _mainModel.Distance.FirstHunterStartTime
-            && currentTime <= _mainModel.Distance.CloseTime)
+            && currentTime <= _mainModel.Distance.CloseTime + TimelineDistanceCloseTimeAdd)
         {
             _timelineEndTime = currentTime;
         
