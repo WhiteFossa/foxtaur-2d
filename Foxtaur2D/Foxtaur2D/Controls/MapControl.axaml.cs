@@ -162,9 +162,9 @@ public partial class MapControl : UserControl
     private IReadOnlyCollection<Hunter> _filteredHunters;
 
     /// <summary>
-    /// Hunters, filtered by begin and end time
+    /// Hunters, filtered by begin and end time with processed GPS tracks and so on
     /// </summary>
-    private IReadOnlyCollection<Hunter> _filteredByIntervalHunters;
+    private IReadOnlyCollection<Hunter> _huntersToDisplay;
 
     #endregion
 
@@ -460,7 +460,7 @@ public partial class MapControl : UserControl
                 {
                     // Special case - hunters layer
                     (vectorLayer as IHuntersVectorLayer).Draw(context, _viewportWidth, _viewportHeight, _scaling,
-                        _backingImageGeoProvider, _filteredByIntervalHunters);
+                        _backingImageGeoProvider, _huntersToDisplay);
                 }
                 else
                 {
@@ -561,8 +561,8 @@ public partial class MapControl : UserControl
 
             _filteredHunters = ApplyHuntersFilter(_activeDistance.Hunters);
 
-            _filteredByIntervalHunters = FilterHuntersLocationsByHistoriesInterval(_filteredHunters);
-            _filteredByIntervalHunters = GpsFilterHuntersLocations(_filteredByIntervalHunters);
+            var filteredByInterval = FilterHuntersLocationsByHistoriesInterval(_filteredHunters);
+            _huntersToDisplay = GpsFilterHuntersLocations(filteredByInterval);
         }
 
         _displayBitmap = null;
@@ -621,8 +621,8 @@ public partial class MapControl : UserControl
         {
             _filteredHunters = ApplyHuntersFilter(_activeDistance.Hunters);
 
-            _filteredByIntervalHunters = FilterHuntersLocationsByHistoriesInterval(_filteredHunters);
-            _filteredByIntervalHunters = GpsFilterHuntersLocations(_filteredByIntervalHunters);
+            var filteredByInterval = FilterHuntersLocationsByHistoriesInterval(_filteredHunters);
+            _huntersToDisplay = GpsFilterHuntersLocations(filteredByInterval);
 
             SynchronizedInvalidateVisual();
         }
@@ -639,8 +639,8 @@ public partial class MapControl : UserControl
         {
             _filteredHunters = ApplyHuntersFilter(_activeDistance.Hunters);
 
-            _filteredByIntervalHunters = FilterHuntersLocationsByHistoriesInterval(_filteredHunters);
-            _filteredByIntervalHunters = GpsFilterHuntersLocations(_filteredByIntervalHunters);
+            var filteredByInterval = FilterHuntersLocationsByHistoriesInterval(_filteredHunters);
+            _huntersToDisplay = GpsFilterHuntersLocations(filteredByInterval);
 
             SynchronizedInvalidateVisual();
         }
@@ -655,8 +655,8 @@ public partial class MapControl : UserControl
 
         _filteredHunters = ApplyHuntersFilter(_activeDistance?.Hunters);
 
-        _filteredByIntervalHunters = FilterHuntersLocationsByHistoriesInterval(_filteredHunters);
-        _filteredByIntervalHunters = GpsFilterHuntersLocations(_filteredByIntervalHunters);
+        var filteredByInterval = FilterHuntersLocationsByHistoriesInterval(_filteredHunters);
+        _huntersToDisplay = GpsFilterHuntersLocations(filteredByInterval);
 
         SynchronizedInvalidateVisual();
     }
@@ -721,14 +721,14 @@ public partial class MapControl : UserControl
         {
             _huntersDataReloadMutex.WaitOne();
 
-            if (_filteredHunters == null || !_filteredHunters.Any())
+            if (_activeDistance == null)
             {
                 Dispatcher.UIThread.InvokeAsync(() => { MarkHuntersDataAsActual(); });
                 return;
             }
 
-            var realodDataThread = new Thread(() => ReloadHuntersData());
-            realodDataThread.Start();
+            var reloadDataThread = new Thread(() => ReloadHuntersData());
+            reloadDataThread.Start();
         }
         finally
         {
@@ -841,11 +841,9 @@ public partial class MapControl : UserControl
         // Re-filtering hunters
         var newFilteredHunters = ApplyHuntersFilter(newHuntersWithLocations);
 
-        // Filtering by interval
-        var newFilteredByIntervalHunters = FilterHuntersLocationsByHistoriesInterval(newFilteredHunters);
-
-        // Filtering GPS noise (!locations IDs and altitudes are lost!)
-        newFilteredByIntervalHunters = GpsFilterHuntersLocations(newFilteredByIntervalHunters);
+        // New hunters to display
+        var newHuntersToDisplay = FilterHuntersLocationsByHistoriesInterval(newFilteredHunters); // By interval
+        newHuntersToDisplay = GpsFilterHuntersLocations(newHuntersToDisplay); // Filtering GPS noise (!locations IDs and altitudes are lost!)
 
         // Finally updating external data (if distance still the same)
         try
@@ -868,7 +866,7 @@ public partial class MapControl : UserControl
             
             _activeDistance.UpdateHunters(newHuntersWithLocations);
             _filteredHunters = newFilteredHunters;
-            _filteredByIntervalHunters = newFilteredByIntervalHunters;
+            _huntersToDisplay = newHuntersToDisplay;
             
             Dispatcher.UIThread.InvokeAsync(MarkHuntersDataAsActual);
             SynchronizedInvalidateVisual();
@@ -953,8 +951,8 @@ public partial class MapControl : UserControl
         _huntersHistoriesBeginTime = beginTime;
         _huntersHistoriesEndTime = endTime;
 
-        _filteredByIntervalHunters = FilterHuntersLocationsByHistoriesInterval(_filteredHunters);
-        _filteredByIntervalHunters = GpsFilterHuntersLocations(_filteredByIntervalHunters);
+        var filteredByInterval = FilterHuntersLocationsByHistoriesInterval(_filteredHunters);
+        _huntersToDisplay = GpsFilterHuntersLocations(filteredByInterval);
 
         SynchronizedInvalidateVisual();
     }
