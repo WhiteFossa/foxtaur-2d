@@ -1,6 +1,11 @@
 # foxtaur-2d
 An attempt to implement ARDF sportsment tracker (in 2D)
 
+# Running client on Linux
+
+You need to install next libraries prior to run:
+- libzstd-devel
+
 # Dependencies
 
 Create directories:
