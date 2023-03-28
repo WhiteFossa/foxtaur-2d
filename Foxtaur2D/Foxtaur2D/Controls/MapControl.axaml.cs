@@ -542,7 +542,10 @@ public partial class MapControl : UserControl
             _huntersHistoriesBeginTime = _activeDistance.FirstHunterStartTime;
             _huntersHistoriesEndTime = _activeDistance.CloseTime;
             
-            ApplyHuntersFilter();
+            _filteredHunters = ApplyHuntersFilter(_activeDistance.Hunters);
+            
+            _filteredByIntervalHunters = FilterHuntersLocationsByHistoriesInterval(_filteredHunters);
+            _filteredByIntervalHunters = GpsFilterHuntersLocations(_filteredByIntervalHunters);
         }
 
         _displayBitmap = null;
@@ -599,7 +602,12 @@ public partial class MapControl : UserControl
 
         if (_huntersFilteringMode == HuntersFilteringMode.OneHunter)
         {
-            ApplyHuntersFilter();
+            _filteredHunters = ApplyHuntersFilter(_activeDistance.Hunters);
+            
+            _filteredByIntervalHunters = FilterHuntersLocationsByHistoriesInterval(_filteredHunters);
+            _filteredByIntervalHunters = GpsFilterHuntersLocations(_filteredByIntervalHunters);
+            
+            InvalidateVisual();
         }
     }
 
@@ -612,7 +620,12 @@ public partial class MapControl : UserControl
 
         if (_huntersFilteringMode == HuntersFilteringMode.OneTeam)
         {
-            ApplyHuntersFilter();
+            _filteredHunters = ApplyHuntersFilter(_activeDistance.Hunters);
+            
+            _filteredByIntervalHunters = FilterHuntersLocationsByHistoriesInterval(_filteredHunters);
+            _filteredByIntervalHunters = GpsFilterHuntersLocations(_filteredByIntervalHunters);
+            
+            InvalidateVisual();
         }
     }
 
@@ -623,76 +636,60 @@ public partial class MapControl : UserControl
     {
         _huntersFilteringMode = filteringMode;
 
-        ApplyHuntersFilter();
+        _filteredHunters = ApplyHuntersFilter(_activeDistance?.Hunters);
+        
+        _filteredByIntervalHunters = FilterHuntersLocationsByHistoriesInterval(_filteredHunters);
+        _filteredByIntervalHunters = GpsFilterHuntersLocations(_filteredByIntervalHunters);
+        
+        InvalidateVisual();
     }
 
-    private void ApplyHuntersFilter()
+    private IReadOnlyCollection<Hunter> ApplyHuntersFilter(IReadOnlyCollection<Hunter> hunters)
     {
-        try
+        if (hunters == null)
         {
-            _huntersDataReloadMutex.WaitOne();
-
-            switch (_huntersFilteringMode)
-            {
-                case HuntersFilteringMode.OneHunter:
-                    if (_hunterToDisplay == null)
-                    {
-                        _filteredHunters = new List<Hunter>();
-                    }
-                    else
-                    {
-                        _filteredHunters = _activeDistance
-                            .Hunters
-                            .Where(h => h.Id == _hunterToDisplay.Id)
-                            .ToList();
-                    }
-
-                    break;
-
-                case HuntersFilteringMode.OneTeam:
-                    if (_teamToDisplay == null)
-                    {
-                        _filteredHunters = new List<Hunter>();
-                    }
-                    else
-                    {
-                        _filteredHunters = _activeDistance
-                            .Hunters
-                            .Where(h => h.Team.Id == _teamToDisplay.Id)
-                            .ToList();
-                    }
-
-                    break;
-
-                case HuntersFilteringMode.Everyone:
-                    if (_activeDistance == null)
-                    {
-                        _filteredHunters = new List<Hunter>();
-                    }
-                    else
-                    {
-                        _filteredHunters = _activeDistance
-                            .Hunters
-                            .ToList();
-                    }
-
-                    break;
-
-                default:
-                    throw new InvalidOperationException("Unknown hunters filtering mode!");
-            }
-
-            // Filtering by times interval
-            _filteredByIntervalHunters = FilterHuntersLocationsByHistoriesInterval(_filteredHunters);
-            
-            // Filtering GPS noise (!locations IDs and altitudes are lost!)
-            _filteredByIntervalHunters = GpsFilterHuntersLocations(_filteredByIntervalHunters);
-            
-            InvalidateVisual();
+            return new List<Hunter>();
         }
-        finally
+        
+        switch (_huntersFilteringMode)
         {
-            _huntersDataReloadMutex.ReleaseMutex();
+            case HuntersFilteringMode.OneHunter:
+                if (_hunterToDisplay == null)
+                {
+                    return new List<Hunter>();
+                }
+                else
+                {
+                    return hunters
+                        .Where(h => h.Id == _hunterToDisplay.Id)
+                        .ToList();
+                }
+
+            case HuntersFilteringMode.OneTeam:
+                if (_teamToDisplay == null)
+                {
+                    return new List<Hunter>();
+                }
+                else
+                {
+                    return hunters
+                        .Where(h => h.Team.Id == _teamToDisplay.Id)
+                        .ToList();
+                }
+
+            case HuntersFilteringMode.Everyone:
+                if (_activeDistance == null)
+                {
+                    return new List<Hunter>();
+                }
+                else
+                {
+                    return hunters
+                        .ToList();
+                }
+
+            default:
+                throw new InvalidOperationException("Unknown hunters filtering mode!");
         }
     }
 
@@ -760,21 +757,26 @@ public partial class MapControl : UserControl
     /// </summary>
     private void ReloadHuntersData()
     {
-        IReadOnlyCollection<Guid> huntersIdsToReload;
+        // Reloading hunters (some hunters may appear during the run, so we need to reload them)
+        IReadOnlyCollection<Hunter> newHunters = new List<Hunter>(); // They have no locations
 
         try
         {
-            _huntersDataReloadMutex.WaitOne();
-
-            huntersIdsToReload = _filteredHunters
-                .Select(fh => fh.Id)
-                .ToList();
+            newHunters = _webClient.MassGetHuntersByDistanceIdWithoutLocationsHistoriesAsync(_activeDistance.Id).Result;
         }
-        finally
+        catch (Exception)
         {
-            _huntersDataReloadMutex.ReleaseMutex();
+            Dispatcher.UIThread.InvokeAsync(() => { MarkHuntersDataReloadFailure(); });
+
+            return;
         }
 
+        // And locations for all of them (we can't reload locations for only filtered ones, because user can change filtering at any time)
+        var huntersIdsToReload = newHunters
+            .Select(h => h.Id)
+            .ToList()
+            .AsReadOnly();
+        
         var newHuntersLocationsData = new Dictionary<Guid, IReadOnlyCollection<HunterLocation>>();
         try
         {
@@ -786,36 +788,35 @@ public partial class MapControl : UserControl
 
             return;
         }
-
-        // Important: If distance was changed during data download, then we can find NEW, DIFFERENT _filteredHunters
-        try
-        {
-            _huntersDataReloadMutex.WaitOne();
-
-            _filteredHunters = _filteredHunters
-                .Select(h => new Hunter
+        
+        // Generating hunters with locations (to load into distance)
+        var newHuntersWithLocations = newHunters
+            .Select(h => new Hunter
                 (
                     h.Id,
                     h.Name,
                     h.IsRunning,
                     h.Team,
-                    GetHunterLocationFromDictionaryWithLogging(newHuntersLocationsData, h), // Skipping the update if hunters list changed and we can't find hunter data
-                    // or if hunter have no coordinates at all
+                    GetHunterLocationFromDictionaryWithLogging(newHuntersLocationsData, h),
                     h.Color
                 ))
-                .ToList();
-            
-            // Filtering by interval
-            _filteredByIntervalHunters = FilterHuntersLocationsByHistoriesInterval(_filteredHunters);
-            
-            // Filtering GPS noise (!locations IDs and altitudes are lost!)
-            _filteredByIntervalHunters = GpsFilterHuntersLocations(_filteredByIntervalHunters);
-        }
-        finally
-        {
-            _huntersDataReloadMutex.ReleaseMutex();
-        }
+            .ToList()
+            .AsReadOnly();
+        
+        // Re-filtering hunters
+        var newFilteredHunters = ApplyHuntersFilter(newHuntersWithLocations);
+        
+        // Filtering by interval
+        var newFilteredByIntervalHunters = FilterHuntersLocationsByHistoriesInterval(newFilteredHunters);
+        
+        // Filtering GPS noise (!locations IDs and altitudes are lost!)
+        newFilteredByIntervalHunters = GpsFilterHuntersLocations(newFilteredByIntervalHunters);
 
+        // Finally updating external data
+        _activeDistance.UpdateHunters(newHuntersWithLocations);
+        _filteredHunters = newFilteredHunters;
+        _filteredByIntervalHunters = newFilteredByIntervalHunters;
+        
         Dispatcher.UIThread.InvokeAsync(() =>
         {
             MarkHuntersDataAsActual();

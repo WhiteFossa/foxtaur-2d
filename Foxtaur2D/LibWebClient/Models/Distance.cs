@@ -48,7 +48,7 @@ public class Distance
     /// <summary>
     /// Hunters on distance
     /// </summary>
-    public IReadOnlyCollection<Hunter> Hunters { get; }
+    public IReadOnlyCollection<Hunter> Hunters { get; private set; }
     
     /// <summary>
     /// First hunter start time (we will load hunters histories since this time)
@@ -94,5 +94,10 @@ public class Distance
         Hunters = hunters ?? throw new ArgumentNullException(nameof(hunters));
         FirstHunterStartTime = firstHunterStartTime;
         CloseTime = closeTime;
+    }
+
+    public void UpdateHunters(IReadOnlyCollection<Hunter> hunters)
+    {
+        Hunters = hunters ?? throw new ArgumentNullException(nameof(hunters));
     }
 }
