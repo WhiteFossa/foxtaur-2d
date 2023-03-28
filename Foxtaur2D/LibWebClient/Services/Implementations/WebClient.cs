@@ -210,4 +210,37 @@ public class WebClient : IWebClient
             })
             .ToList();
     }
+
+    public async Task<IReadOnlyCollection<Hunter>> MassGetHuntersByDistanceIdWithoutLocationsHistoriesAsync(Guid distanceId)
+    {
+        var distanceDto = await _client.GetDistanceByIdAsync(distanceId).ConfigureAwait(false);
+        if (distanceDto == null)
+        {
+            throw new ArgumentException(nameof(distanceId));
+        }
+        
+        // Hunters
+        var huntersIds = distanceDto
+            .HuntersIds;
+        
+        var hunters = await _client.MassGetHuntersAsync(new HuntersMassGetRequest(huntersIds)).ConfigureAwait(false);
+        
+        // Teams
+        var teamsIds = hunters
+            .Where(h => h.TeamId.HasValue)
+            .Select(h => h.TeamId.Value)
+            .Distinct()
+            .ToList();
+        var teams = await MassGetTeamsAsync(new TeamsMassGetRequest(teamsIds)).ConfigureAwait(false);
+
+        return hunters
+            .Select(h => new Hunter(
+                h.Id,
+                h.Name,
+                h.IsRunning,
+                h.TeamId != null ? teams.Single(t => t.Id == h.TeamId.Value) : null,
+                new List<HunterLocation>(),
+                new Color(h.Color.A, h.Color.R, h.Color.G, h.Color.B)))
+            .ToList();
+    }
 }

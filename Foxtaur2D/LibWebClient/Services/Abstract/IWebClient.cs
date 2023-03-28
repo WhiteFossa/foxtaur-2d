@@ -17,9 +17,9 @@ public interface IWebClient
     /// Get distance by ID
     /// </summary>
     Task<Distance> GetDistanceByIdAsync(Guid distanceId);
-    
+
     /// <summary>
-    /// Mass get hunters locations
+    /// Mass get hunters locations (without including data on hunters, foxes and so on)
     /// </summary>
     Task<Dictionary<Guid, IReadOnlyCollection<HunterLocation>>> MassGetHuntersLocationsAsync(HuntersLocationsMassGetRequest request);
 
@@ -47,4 +47,9 @@ public interface IWebClient
     /// Mass get locations
     /// </summary>
     Task<IReadOnlyCollection<Location>> MassGetLocationsAsync(LocationsMassGetRequest request);
+
+    /// <summary>
+    /// Mass get hunters by distance ID async (locations histories is NOT included)
+    /// </summary>
+    Task<IReadOnlyCollection<Hunter>> MassGetHuntersByDistanceIdWithoutLocationsHistoriesAsync(Guid distanceId);
 }
