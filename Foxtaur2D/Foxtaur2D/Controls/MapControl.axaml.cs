@@ -850,12 +850,12 @@ public partial class MapControl : UserControl
         {
             _huntersDataReloadMutex.WaitOne();
 
-            if (_activeDistance.Id != distanceId)
+            if (_activeDistance == null || _activeDistance.Id != distanceId)
             {
-                // Distance was changed, discarding our data
+                // Distance was changed (or not exist), discarding our data
                 Dispatcher.UIThread.InvokeAsync(() =>
                 {
-                    _logger.Warn($"Distance was changed ({ distanceId } -> { _activeDistance.Id }), discarding reloaded data.");
+                    _logger.Warn($"Distance was changed ({ distanceId } -> { _activeDistance?.Id }), discarding reloaded data.");
                 });
                 
                 Dispatcher.UIThread.InvokeAsync(MarkHuntersDataAsActual);
