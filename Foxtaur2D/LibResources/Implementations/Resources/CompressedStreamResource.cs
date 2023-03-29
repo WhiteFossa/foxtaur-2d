@@ -2,6 +2,11 @@ using NLog;
 
 namespace LibResources.Implementations.Resources;
 
+/// <summary>
+/// Delegate for decompression progress. Progress value is [0; 1]
+/// </summary>
+public delegate void OnDecompressionProgressDelegate(double progress);
+
 public class CompressedStreamResource : DownloadableResourceBase
 {
     private Logger _logger = LogManager.GetCurrentClassLogger();
@@ -18,7 +23,7 @@ public class CompressedStreamResource : DownloadableResourceBase
     {
     }
 
-    public override void Download(OnResourceLoaded onLoad)
+    public void Download(OnResourceLoadedDelegate onLoad, OnDownloadProgressDelegate onDownloadProgress = null, OnDecompressionProgressDelegate onDecompressionProgress = null)
     {
         _downloadLock.WaitOne();
 
@@ -49,16 +54,27 @@ public class CompressedStreamResource : DownloadableResourceBase
                 var localPath = GetResourceLocalPath(ResourceName);
                 if (!File.Exists(localPath))
                 {
-                    LoadFromUrlToFile(ResourceName);    
+                    LoadFromUrlToFile(ResourceName, onDownloadProgress);    
                 }
             }
 
             // Decompressing
             _logger.Info($"Decompressing resource { ResourceName }...");
+
+            if (onDecompressionProgress != null)
+            {
+                onDecompressionProgress(0.0);
+            }
+            
             DecompressedStream = LoadZstdFile(GetLocalPath());
             
             // Done
             _logger.Info($"Decompression done: { ResourceName }...");
+            
+            if (onDecompressionProgress != null)
+            {
+                onDecompressionProgress(1.0);
+            }
 
             OnLoad(this);
         }
@@ -67,5 +83,10 @@ public class CompressedStreamResource : DownloadableResourceBase
             _logger.Error(e.Message);
             throw;
         }
+    }
+    
+    public override void Download(OnResourceLoadedDelegate onLoad, OnDownloadProgressDelegate onDownloadProgress = null)
+    {
+        throw new NotImplementedException("Call overloaded version.");
     }
 }

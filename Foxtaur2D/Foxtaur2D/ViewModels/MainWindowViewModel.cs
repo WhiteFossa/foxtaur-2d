@@ -68,6 +68,9 @@ public class MainWindowViewModel : ViewModelBase
 
     private bool _isRealtimeUpdateMode;
 
+    private string _mapStateText;
+    private double _mapProgress;
+
     /// <summary>
     /// Timer to move end side of timeline
     /// </summary>
@@ -144,8 +147,6 @@ public class MainWindowViewModel : ViewModelBase
             {
                 Renderer.SetActiveDistance(_mainModel.Distance);
                 Renderer.SetHuntersFilteringMode(_mainModel.HuntersFilteringMode);
-                Renderer.SetHuntersDataStateInfo = SetHuntersDataState;
-                Renderer.SetHuntersDataReloadInterval(HuntersDataReloadInterval);
             }
         }
     }
@@ -418,6 +419,26 @@ public class MainWindowViewModel : ViewModelBase
     }
 
     /// <summary>
+    /// Map state text
+    /// </summary>
+    public string MapStateText
+    {
+        get => _mapStateText;
+
+        set => this.RaiseAndSetIfChanged(ref _mapStateText, value);
+    }
+
+    /// <summary>
+    /// Map progress (download, processing)
+    /// </summary>
+    public double MapProgress
+    {
+        get => _mapProgress;
+
+        set => this.RaiseAndSetIfChanged(ref _mapProgress, value);
+    }
+    
+    /// <summary>
     /// Focus on distance
     /// </summary>
     public ReactiveCommand<Unit, Unit> FocusOnDistanceCommand { get; }
@@ -609,5 +630,65 @@ public class MainWindowViewModel : ViewModelBase
 
             ProcessRealtimeMode();
         }
+    }
+
+    /// <summary>
+    /// Set map state, call it from renderer control
+    /// </summary>
+    public void SetMapProgressState(MapState mapState, double progress)
+    {
+        if (progress < 0.0)
+        {
+            progress = 0.0;
+        }
+        else if (progress > 1.0)
+        {
+            progress = 1.0;
+        }
+
+        switch (mapState)
+        {
+            case MapState.NotRequested:
+                MapStateText = "Not requested";
+                MapProgress = 0.0;
+                break;
+            
+            case MapState.Downloading:
+                MapStateText = "Downloading";
+                MapProgress = progress;
+                break;
+            
+            case MapState.Decompressing:
+                MapStateText = "Decompressing";
+                MapProgress = progress;
+                break;
+            
+            case MapState.Processing:
+                MapStateText = "Processing";
+                MapProgress = progress;
+                break;
+            
+            case MapState.Ready:
+                MapStateText = "Ready";
+                MapProgress = 1.0;
+                break;
+            
+            default:
+                throw new ArgumentException("Unknown map state.", nameof(mapState));
+        }
+    }
+
+    /// <summary>
+    /// Called when window opened
+    /// </summary>
+    public void OnWindowOpened(object sender, System.EventArgs e)
+    {
+        // Initially we didn't start map processing yet
+        SetMapProgressState(MapState.NotRequested, 0.0);
+        
+        // Setting up renderer
+        Renderer.SetHuntersDataStateInfo = SetHuntersDataState;
+        Renderer.SetMapProgressState = SetMapProgressState;
+        Renderer.SetHuntersDataReloadInterval(HuntersDataReloadInterval);
     }
 }
