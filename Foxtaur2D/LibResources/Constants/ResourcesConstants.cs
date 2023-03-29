@@ -19,4 +19,9 @@ public static class ResourcesConstants
     /// HTTP client timeout in seconds
     /// </summary>
     public const int HttpClientTimeout = 3600;
+
+    /// <summary>
+    /// Download files using this download chunk size
+    /// </summary>
+    public const int DownloadChunkSize = 1000000;
 }

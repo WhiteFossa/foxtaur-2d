@@ -115,16 +115,14 @@ public abstract class DownloadableResourceBase
                     .Value;
 
                 long downloaded = 0;
-                var chunkSize = 1000000;
-
                 var resultStream = new MemoryStream();
                 
                 while (downloaded < downloadSize)
                 {
                     var currentChunkSize = downloadSize - downloaded;
-                    if (currentChunkSize > chunkSize)
+                    if (currentChunkSize > ResourcesConstants.DownloadChunkSize)
                     {
-                        currentChunkSize = chunkSize;
+                        currentChunkSize = ResourcesConstants.DownloadChunkSize;
                     }
 
                     var downloadedChunk = DownloadWithRange(uriResult, downloaded, downloaded + currentChunkSize);
@@ -185,7 +183,7 @@ public abstract class DownloadableResourceBase
         }
         
         var httpClient = new HttpClient();
-        httpClient.Timeout = new TimeSpan(0, 0, ResourcesConstants.HttpClientTimeout); // TODO: Reduce it
+        httpClient.Timeout = new TimeSpan(0, 0, ResourcesConstants.HttpClientTimeout);
         using var webRequest = new HttpRequestMessage(HttpMethod.Get, uri);
         webRequest.Headers.Range = new RangeHeaderValue(start, end);
 
