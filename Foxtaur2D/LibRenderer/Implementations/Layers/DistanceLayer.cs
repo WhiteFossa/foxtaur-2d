@@ -57,7 +57,7 @@ public class DistanceLayer : IVectorLayer, IRasterLayer
         _setMapProgressState(MapState.Downloading, 0.0);
         _mapImage = new CompressedStreamResource(_distance.Map.Url, false);
         
-        var downloadThread = new Thread(() => _mapImage.Download(OnMapImageLoaded));
+        var downloadThread = new Thread(() => _mapImage.Download(OnMapImageLoaded, OnMapDownloadProgress));
         downloadThread.Start();
     }
     
@@ -299,6 +299,11 @@ public class DistanceLayer : IVectorLayer, IRasterLayer
         _setMapProgressState(MapState.Processing, progress);
     }
 
+    private void OnMapDownloadProgress(double progress)
+    {
+        _setMapProgressState(MapState.Downloading, progress);
+    }
+    
     public int Width => _mapLayer.Width;
 
     public int Height => _mapLayer.Height;

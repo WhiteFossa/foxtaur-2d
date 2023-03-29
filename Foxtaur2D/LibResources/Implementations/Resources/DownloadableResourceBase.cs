@@ -1,3 +1,4 @@
+using System.Net.Http.Headers;
 using LibResources.Constants;
 using NLog;
 using ZstdNet;
@@ -71,12 +72,12 @@ public abstract class DownloadableResourceBase
     /// <summary>
     /// Download resource
     /// </summary>
-    public abstract void Download(OnResourceLoadedDelegate onLoad);
+    public abstract void Download(OnResourceLoadedDelegate onLoad, OnDownloadProgressDelegate onDownloadProgress = null);
 
     /// <summary>
     /// Load resource as a stream from URL
     /// </summary>
-    protected MemoryStream LoadFromUrl(string url)
+    protected MemoryStream LoadFromUrl(string url, OnDownloadProgressDelegate onDownloadProgress = null)
     {
         if (string.IsNullOrWhiteSpace(url))
         {
@@ -96,23 +97,59 @@ public abstract class DownloadableResourceBase
             DownloadThreadsLimiter.WaitOne();
 
             _logger.Info($"Downloading from {uriResult}");
+            if (onDownloadProgress != null)
+            {
+                onDownloadProgress(0.0);
+            }
 
             _downloadMutex.WaitOne();
 
             try
             {
-                var httpClient = new HttpClient();
-                httpClient.Timeout = new TimeSpan(0, 0, ResourcesConstants.HttpClientTimeout);
-                using (var webRequest = new HttpRequestMessage(HttpMethod.Get, uriResult))
-                {
-                    using (var downloadStream = httpClient.Send(webRequest).Content.ReadAsStream())
-                    {
-                        var resultStream = new MemoryStream();
-                        downloadStream.CopyTo(resultStream);
+                // Downloading piece-by-piece
+                var headersResponse = GetHeaders(uriResult);
+                var downloadSize = headersResponse
+                    .Content
+                    .Headers
+                    .ContentLength
+                    .Value;
 
-                        return resultStream;                        
+                long downloaded = 0;
+                var chunkSize = 1000000;
+
+                var resultStream = new MemoryStream();
+                
+                while (downloaded < downloadSize)
+                {
+                    var currentChunkSize = downloadSize - downloaded;
+                    if (currentChunkSize > chunkSize)
+                    {
+                        currentChunkSize = chunkSize;
+                    }
+
+                    var downloadedChunk = DownloadWithRange(uriResult, downloaded, downloaded + currentChunkSize);
+                    using (var downloadedChunkStream = downloadedChunk.Content.ReadAsStream())
+                    {
+                        using (var downloadedChunkMemoryStream = new MemoryStream())
+                        {
+                            downloadedChunkStream.CopyTo(downloadedChunkMemoryStream);
+                            downloadedChunkMemoryStream.WriteTo(resultStream);
+                        }
+                    }
+
+                    downloaded += downloadedChunk
+                        .Content
+                        .Headers
+                        .ContentLength
+                        .Value;
+                    
+                    if (onDownloadProgress != null)
+                    {
+                        onDownloadProgress(downloaded / (double)downloadSize);
                     }
                 }
+
+                return resultStream;
             }
             finally
             {
@@ -130,14 +167,49 @@ public abstract class DownloadableResourceBase
         }
     }
 
-    protected void LoadFromUrlToFile(string url)
+    /// <summary>
+    /// Download content from given URI from given range
+    /// </summary>
+    private HttpResponseMessage DownloadWithRange(Uri uri, long start, long end)
+    {
+        _ = uri ?? throw new ArgumentNullException(nameof(uri));
+
+        if (start < 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(start), "Start must be non-negative.");
+        }
+
+        if (end <= start)
+        {
+            throw new ArgumentOutOfRangeException(nameof(end), "End must be greater than start.");
+        }
+        
+        var httpClient = new HttpClient();
+        httpClient.Timeout = new TimeSpan(0, 0, ResourcesConstants.HttpClientTimeout); // TODO: Reduce it
+        using var webRequest = new HttpRequestMessage(HttpMethod.Get, uri);
+        webRequest.Headers.Range = new RangeHeaderValue(start, end);
+
+        return httpClient.Send(webRequest);
+    }
+
+    private HttpResponseMessage GetHeaders(Uri uri)
+    {
+        _ = uri ?? throw new ArgumentNullException(nameof(uri));
+        
+        var httpClient = new HttpClient();
+        using var webRequest = new HttpRequestMessage(HttpMethod.Head, uri);
+        
+        return httpClient.Send(webRequest);
+    }
+    
+    protected void LoadFromUrlToFile(string url, OnDownloadProgressDelegate onDownloadProgress = null)
     {
         if (string.IsNullOrWhiteSpace(url))
         {
             throw new ArgumentException(nameof(url));
         }
 
-        using (var downloadStream = LoadFromUrl(url))
+        using (var downloadStream = LoadFromUrl(url, onDownloadProgress))
         {
             var localPath = GetResourceLocalPath(url);
             

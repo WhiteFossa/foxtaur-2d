@@ -18,7 +18,7 @@ public class CompressedStreamResource : DownloadableResourceBase
     {
     }
 
-    public override void Download(OnResourceLoadedDelegate onLoad)
+    public override void Download(OnResourceLoadedDelegate onLoad, OnDownloadProgressDelegate onDownloadProgress = null)
     {
         _downloadLock.WaitOne();
 
@@ -49,7 +49,7 @@ public class CompressedStreamResource : DownloadableResourceBase
                 var localPath = GetResourceLocalPath(ResourceName);
                 if (!File.Exists(localPath))
                 {
-                    LoadFromUrlToFile(ResourceName);    
+                    LoadFromUrlToFile(ResourceName, onDownloadProgress);    
                 }
             }
 
