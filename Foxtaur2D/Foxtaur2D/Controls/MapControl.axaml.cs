@@ -217,6 +217,15 @@ public partial class MapControl : UserControl
 
     #endregion
 
+    #region Maps processing
+
+    /// <summary>
+    /// Call this to display map progress state
+    /// </summary>
+    public SetMapProgressStateDelegate SetMapProgressState;
+
+    #endregion
+
     #region Debug
 
     #endregion
@@ -904,7 +913,7 @@ public partial class MapControl : UserControl
 
     private void AddDistanceLayer()
     {
-        _distanceLayer = new DistanceLayer(_activeDistance, OnDistanceLoadedHandler, _textDrawer, DistanceLayerOrder);
+        _distanceLayer = new DistanceLayer(_activeDistance, OnDistanceLoadedHandler, SetMapProgressState, _textDrawer, DistanceLayerOrder);
         _layers.Add(_distanceLayer);
 
         OrderLayers();

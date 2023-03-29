@@ -6,6 +6,7 @@ using LibGeo.Implementations.Helpers;
 using LibRenderer.Abstractions.Drawers;
 using LibRenderer.Abstractions.Layers;
 using LibRenderer.Constants;
+using LibRenderer.Enums;
 using LibResources.Implementations.Resources;
 using LibWebClient.Models;
 
@@ -15,6 +16,11 @@ namespace LibRenderer.Implementations.Layers;
 /// Delegate for distance loaded event
 /// </summary>
 public delegate void OnDistanceLoaded();
+
+/// <summary>
+/// Delegate for setting information about map download / processing
+/// </summary>
+public delegate void SetMapProgressStateDelegate(MapState state, double progress);
 
 public class DistanceLayer : IVectorLayer, IRasterLayer
 {
@@ -30,22 +36,25 @@ public class DistanceLayer : IVectorLayer, IRasterLayer
     private Mutex _isReadyLock = new Mutex();
 
     private OnDistanceLoaded _onDistanceLoadedEvent;
+    private SetMapProgressStateDelegate _setMapProgressState;
     
     public int Order { get; private set; }
     
     /// <summary>
     /// OnDistanceLoadedEvent is called on separate thread!
     /// </summary>
-    public DistanceLayer(Distance distanceModel, OnDistanceLoaded onDistanceLoadedEvent, ITextDrawer textDrawer, int layerOrder)
+    public DistanceLayer(Distance distanceModel, OnDistanceLoaded onDistanceLoadedEvent, SetMapProgressStateDelegate setMapProgressState, ITextDrawer textDrawer, int layerOrder)
     {
         Order = layerOrder;
         
         _textDrawer = textDrawer ?? throw new ArgumentNullException(nameof(textDrawer));
         _distance = distanceModel ?? throw new ArgumentNullException(nameof(distanceModel));
         _onDistanceLoadedEvent = onDistanceLoadedEvent ?? throw new ArgumentNullException(nameof(onDistanceLoadedEvent));
+        _setMapProgressState = setMapProgressState ?? throw new ArgumentNullException(nameof(setMapProgressState));
 
         // Starting to download a map
         _isMapLoaded = false;
+        _setMapProgressState(MapState.Downloading, 0.0);
         _mapImage = new CompressedStreamResource(_distance.Map.Url, false);
         
         var downloadThread = new Thread(() => _mapImage.Download(OnMapImageLoaded));
@@ -262,13 +271,13 @@ public class DistanceLayer : IVectorLayer, IRasterLayer
             new Point(beginX, beginY),
             new Point(endX, endY));
     }
-    
+
     private void OnMapImageLoaded(DownloadableResourceBase resource)
     {
         var imageResource = resource as CompressedStreamResource;
         _mapLayer = new GeoTiffLayer(imageResource.DecompressedStream, _textDrawer, Order); // Inheriting order from distance because image is a part of distance
         _mapLayer.Load();
-        
+
         // Map is ready
         _isReadyLock.WaitOne();
         
@@ -281,6 +290,7 @@ public class DistanceLayer : IVectorLayer, IRasterLayer
             _isReadyLock.ReleaseMutex();
         }
 
+        _setMapProgressState(MapState.Ready, 100.0);
         _onDistanceLoadedEvent();
     }
 

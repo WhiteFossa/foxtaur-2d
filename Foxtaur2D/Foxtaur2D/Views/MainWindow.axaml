@@ -109,147 +109,180 @@
             Grid.RowSpan="2">
             
             <!-- Put side controls here -->
-            <StackPanel
-                Classes="PaddingAndMargin">
-                
-                <!-- Distances -->
-                <Border
-                    Classes="VisibleBorders">
-                    <StackPanel
-                        Classes="PaddingAndMargin">
-                        <Label>Distance:</Label>
-                       
-                        <Grid
-                            ColumnDefinitions="*, Auto"
-                            RowDefinitions="Auto">
+            <ScrollViewer>
+                <StackPanel
+                    Classes="PaddingAndMargin">
+                    
+                    <!-- Distances -->
+                    <Border
+                        Classes="VisibleBorders">
+                        <StackPanel
+                            Classes="PaddingAndMargin">
+                            <Label>Distance:</Label>
+                           
+                            <Grid
+                                ColumnDefinitions="*, Auto"
+                                RowDefinitions="Auto">
+                            
+                                <ComboBox
+                                    Grid.Column="0"
+                                    Grid.Row="0"
+                                    x:Name="Distances"
+                                    HorizontalAlignment="Stretch"
+                                    SelectedIndex="{ Binding SelectedDistanceIndex }"
+                                    Items="{ Binding Distances }">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Label Content="{ Binding Name }" />
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                            
+                                <Button
+                                    Grid.Column="1"
+                                    Grid.Row="0"
+                                    Content="Reload"
+                                    Command="{ Binding ReloadDistancesCommand }"/>
+                                
+                            </Grid>
+                            
+                            <Button
+                                Content="Focus"
+                                Command="{ Binding FocusOnDistanceCommand }"/>
+                            
+                        </StackPanel>
+                    </Border>
                         
+                    <!-- Distance focus button -->
+                    <Border
+                        Classes="VisibleBorders">
+                        
+                        <StackPanel
+                            Classes="PaddingAndMargin">
+
+                            <!-- Displayed hunters -->
+                            <Label>Display:</Label>
+                            
+                            <!-- Single hunter mode -->
+                            <RadioButton
+                                x:Name="HunterDisplayModeSingleHunter"
+                                GroupName="HuntersDisplayMode"
+                                IsChecked="{ Binding IsSingleHunterModeChecked }"
+                                Content="Hunter"/>
+                            
                             <ComboBox
-                                Grid.Column="0"
-                                Grid.Row="0"
-                                x:Name="Distances"
+                                x:Name="Hunter"
                                 HorizontalAlignment="Stretch"
-                                SelectedIndex="{ Binding SelectedDistanceIndex }"
-                                Items="{ Binding Distances }">
+                                SelectedIndex="{ Binding SelectedHunterIndex }"
+                                Items="{ Binding Hunters }">
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate>
                                         <Label Content="{ Binding Name }" />
                                     </DataTemplate>
                                 </ComboBox.ItemTemplate>
                             </ComboBox>
-                        
-                            <Button
-                                Grid.Column="1"
-                                Grid.Row="0"
-                                Content="Reload"
-                                Command="{ Binding ReloadDistancesCommand }"/>
                             
-                        </Grid>
-                        
-                        <Button
-                            Content="Focus"
-                            Command="{ Binding FocusOnDistanceCommand }"/>
-                        
-                    </StackPanel>
-                </Border>
-                    
-                <!-- Distance focus button -->
-                <Border
-                    Classes="VisibleBorders">
-                    
-                    <StackPanel
-                        Classes="PaddingAndMargin">
-
-                        <!-- Displayed hunters -->
-                        <Label>Display:</Label>
-                        
-                        <!-- Single hunter mode -->
-                        <RadioButton
-                            x:Name="HunterDisplayModeSingleHunter"
-                            GroupName="HuntersDisplayMode"
-                            IsChecked="{ Binding IsSingleHunterModeChecked }"
-                            Content="Hunter"/>
-                        
-                        <ComboBox
-                            x:Name="Hunter"
-                            HorizontalAlignment="Stretch"
-                            SelectedIndex="{ Binding SelectedHunterIndex }"
-                            Items="{ Binding Hunters }">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <Label Content="{ Binding Name }" />
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
-                        
-                        <RadioButton
-                            x:Name="HunterDisplayModeTeam"
-                            GroupName="HuntersDisplayMode"
-                            IsChecked="{ Binding IsSingleTeamModeChecked }"
-                            Content="Team"/>
-                        
-                        <ComboBox
-                            x:Name="Team"
-                            HorizontalAlignment="Stretch"
-                            SelectedIndex="{ Binding SelectedTeamIndex }"
-                            Items="{ Binding Teams }">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <Label Content="{ Binding Name }" />
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
-                        
-                        <RadioButton
-                            x:Name="HunterDisplayModeEveryone"
-                            GroupName="HuntersDisplayMode"
-                            IsChecked="{ Binding IsEveryoneModeChecked }"
-                            Content="Everyone"/>
-                        
-                    </StackPanel>
-                </Border>
-                
-                <!-- Hunters data -->
-                <Border
-                    Classes="VisibleBorders">
-                    
-                    <StackPanel
-                        Classes="PaddingAndMargin">
-                        
-                        <Label>Data connection:</Label>
-                        
-                        <!-- Hunters data reload interval -->
-                        <StackPanel
-                            Orientation="Horizontal">
+                            <RadioButton
+                                x:Name="HunterDisplayModeTeam"
+                                GroupName="HuntersDisplayMode"
+                                IsChecked="{ Binding IsSingleTeamModeChecked }"
+                                Content="Team"/>
                             
-                            <Label>Hunters data reload interval:</Label>
-                        
-                            <Label
-                                VerticalAlignment="Center"
-                                Content="{ Binding HuntersDataReloadIntervalText }">
-                            </Label>    
+                            <ComboBox
+                                x:Name="Team"
+                                HorizontalAlignment="Stretch"
+                                SelectedIndex="{ Binding SelectedTeamIndex }"
+                                Items="{ Binding Teams }">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Label Content="{ Binding Name }" />
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                            
+                            <RadioButton
+                                x:Name="HunterDisplayModeEveryone"
+                                GroupName="HuntersDisplayMode"
+                                IsChecked="{ Binding IsEveryoneModeChecked }"
+                                Content="Everyone"/>
+                            
                         </StackPanel>
-                        
-                        <Slider
-                            Minimum="1000"
-                            Maximum="30000"
-                            Ticks="100"
-                            Value="{ Binding HuntersDataReloadInterval }"
-                            VerticalAlignment="Center">
-                        </Slider>
-                        
-                        <!-- Hunters data update indicator -->
-                        <Label
-                            BorderBrush="Black"
-                            BorderThickness="1"
-                            Background="{ Binding HuntersDataBackground }"
-                            HorizontalContentAlignment="Center">
-                            Hunters data
-                        </Label>
-                        
-                    </StackPanel>
+                    </Border>
                     
-                </Border>
-            </StackPanel>
+                    <!-- Hunters data -->
+                    <Border
+                        Classes="VisibleBorders">
+                        
+                        <StackPanel
+                            Classes="PaddingAndMargin">
+                            
+                            <Label>Data connection:</Label>
+                            
+                            <!-- Hunters data reload interval -->
+                            <StackPanel
+                                Orientation="Horizontal">
+                                
+                                <Label>Hunters data reload interval:</Label>
+                            
+                                <Label
+                                    VerticalAlignment="Center"
+                                    Content="{ Binding HuntersDataReloadIntervalText }">
+                                </Label>    
+                            </StackPanel>
+                            
+                            <Slider
+                                Minimum="1000"
+                                Maximum="30000"
+                                Ticks="100"
+                                Value="{ Binding HuntersDataReloadInterval }"
+                                VerticalAlignment="Center">
+                            </Slider>
+                            
+                            <!-- Hunters data update indicator -->
+                            <Label
+                                BorderBrush="Black"
+                                BorderThickness="1"
+                                Background="{ Binding HuntersDataBackground }"
+                                HorizontalContentAlignment="Center">
+                                Hunters data
+                            </Label>
+                            
+                        </StackPanel>
+                    </Border>
+                    
+                    <!-- Distance info -->
+                    <Border
+                        Classes="VisibleBorders">
+                        
+                        <StackPanel
+                            Classes="PaddingAndMargin">
+                            
+                            <Label>Distance info:</Label>
+                            
+                            <!-- Map status -->
+                            <StackPanel
+                                Orientation="Horizontal">
+                                
+                                <Label>Map status:</Label>
+                            
+                                <Label
+                                    VerticalAlignment="Center"
+                                    Content="{ Binding MapStateText }">
+                                </Label>    
+                            </StackPanel>
+                            
+                            <!-- Map download / processing progress -->
+                            <ProgressBar
+                                IsIndeterminate="False"
+                                Minimum="0.0"
+                                Value="{ Binding MapProgress }"
+                                Maximum="100.0" />
+                            
+                        </StackPanel>
+                    </Border>
+                    
+                </StackPanel>
+            </ScrollViewer>
             
         </Border>
     </Grid>
