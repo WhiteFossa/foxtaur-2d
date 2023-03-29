@@ -9,6 +9,8 @@ public enum MapState
     
     Downloading,
     
+    Decompressing,
+    
     Processing,
     
     Ready

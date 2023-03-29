@@ -658,6 +658,11 @@ public class MainWindowViewModel : ViewModelBase
                 MapProgress = progress;
                 break;
             
+            case MapState.Decompressing:
+                MapStateText = "Decompressing";
+                MapProgress = progress;
+                break;
+            
             case MapState.Processing:
                 MapStateText = "Processing";
                 MapProgress = progress;
