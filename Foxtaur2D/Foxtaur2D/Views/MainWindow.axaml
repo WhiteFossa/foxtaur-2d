@@ -276,7 +276,7 @@
                                 IsIndeterminate="False"
                                 Minimum="0.0"
                                 Value="{ Binding MapProgress }"
-                                Maximum="100.0" />
+                                Maximum="1.0" />
                             
                         </StackPanel>
                     </Border>

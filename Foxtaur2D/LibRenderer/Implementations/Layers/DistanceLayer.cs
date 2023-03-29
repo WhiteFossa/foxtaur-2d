@@ -276,7 +276,7 @@ public class DistanceLayer : IVectorLayer, IRasterLayer
     {
         var imageResource = resource as CompressedStreamResource;
         _mapLayer = new GeoTiffLayer(imageResource.DecompressedStream, _textDrawer, Order); // Inheriting order from distance because image is a part of distance
-        _mapLayer.Load();
+        _mapLayer.Load(OnMapProcessingProgress);
 
         // Map is ready
         _isReadyLock.WaitOne();
@@ -292,6 +292,11 @@ public class DistanceLayer : IVectorLayer, IRasterLayer
 
         _setMapProgressState(MapState.Ready, 100.0);
         _onDistanceLoadedEvent();
+    }
+
+    private void OnMapProcessingProgress(double progress)
+    {
+        _setMapProgressState(MapState.Processing, progress);
     }
 
     public int Width => _mapLayer.Width;

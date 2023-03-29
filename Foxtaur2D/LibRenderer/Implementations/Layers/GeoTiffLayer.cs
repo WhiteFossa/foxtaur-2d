@@ -8,6 +8,11 @@ using LibResources.Implementations.Readers;
 
 namespace LibRenderer.Implementations.Layers;
 
+/// <summary>
+/// Delegate for reporting about image progress loading
+/// </summary>
+public delegate void OnGeoTiffImageLoadProgressDelegate(double progress);
+
 public class GeoTiffLayer : IRasterLayer
 {
     private readonly IGeoTiffReader _geoTiffReader;
@@ -15,6 +20,11 @@ public class GeoTiffLayer : IRasterLayer
     
     private MagickImage _image;
     private byte[] _pixels;
+
+    /// <summary>
+    /// Call this on load progress. This delegate MIGHT be null, in this case don't call it at all
+    /// </summary>
+    private OnGeoTiffImageLoadProgressDelegate _onGeoTiffImageLoadProgress;
     
     public int Width { get; private set; }
     public int Height { get; private set; }
@@ -69,8 +79,10 @@ public class GeoTiffLayer : IRasterLayer
     /// <summary>
     /// Load actual image
     /// </summary>
-    public void Load()
+    public void Load(OnGeoTiffImageLoadProgressDelegate onGeoTiffImageLoadProgress)
     {
+        _onGeoTiffImageLoadProgress = onGeoTiffImageLoadProgress;
+        
         _image.Dispose();
         
         _geoTiffReader.LoadRasterData();
@@ -78,6 +90,11 @@ public class GeoTiffLayer : IRasterLayer
         var pixels = new byte[Width * Height * 4];
         for (var y = 0; y < Height; y++)
         {
+            if (_onGeoTiffImageLoadProgress != null)
+            {
+                _onGeoTiffImageLoadProgress(y / (double)(Height - 1));
+            }
+            
             Parallel.For(0, Width,
                 x =>
                 {

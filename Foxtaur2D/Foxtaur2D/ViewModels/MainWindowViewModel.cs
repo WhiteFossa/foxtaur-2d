@@ -637,9 +637,13 @@ public class MainWindowViewModel : ViewModelBase
     /// </summary>
     public void SetMapProgressState(MapState mapState, double progress)
     {
-        if (progress < 0 || progress > 100)
+        if (progress < 0.0)
         {
-            throw new ArgumentOutOfRangeException(nameof(progress), progress, "Progress must be in [0; 100] range.");
+            progress = 0.0;
+        }
+        else if (progress > 1.0)
+        {
+            progress = 1.0;
         }
 
         switch (mapState)
@@ -661,7 +665,7 @@ public class MainWindowViewModel : ViewModelBase
             
             case MapState.Ready:
                 MapStateText = "Ready";
-                MapProgress = 100.0;
+                MapProgress = 1.0;
                 break;
             
             default:
