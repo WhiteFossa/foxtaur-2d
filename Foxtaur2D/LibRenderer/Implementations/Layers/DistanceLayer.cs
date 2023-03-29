@@ -38,6 +38,8 @@ public class DistanceLayer : IVectorLayer, IRasterLayer
 
     private OnDistanceLoaded _onDistanceLoadedEvent;
     private SetMapProgressStateDelegate _setMapProgressState;
+
+    private Thread _downloadThread;
     
     public int Order { get; private set; }
     
@@ -66,8 +68,8 @@ public class DistanceLayer : IVectorLayer, IRasterLayer
         _setMapProgressState(MapState.Downloading, 0.0);
         _mapImage = new CompressedStreamResource(_distance.Map.Url, false, webClient);
         
-        var downloadThread = new Thread(() => _mapImage.Download(OnMapImageLoaded, OnMapDownloadProgress, OnMapDecompressionProgress));
-        downloadThread.Start();
+        _downloadThread = new Thread(() => _mapImage.Download(OnMapImageLoaded, OnMapDownloadProgress, OnMapDecompressionProgress));
+        _downloadThread.Start();
     }
     
     public void Draw(DrawingContext context, int width, int height, double scalingFactor, IGeoProvider displayGeoProvider)
@@ -349,6 +351,16 @@ public class DistanceLayer : IVectorLayer, IRasterLayer
         {
             _isReadyLock.ReleaseMutex();
         }
-        
+    }
+
+    /// <summary>
+    /// Cleanup stuff before removing layer
+    /// </summary>
+    public void Cleanup()
+    {
+        if (_downloadThread != null && _downloadThread.IsAlive)
+        {
+            _downloadThread.Interrupt();
+        }
     }
 }
