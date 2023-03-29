@@ -18,7 +18,7 @@ public class CompressedStreamResource : DownloadableResourceBase
     {
     }
 
-    public override void Download(OnResourceLoaded onLoad)
+    public override void Download(OnResourceLoadedDelegate onLoad)
     {
         _downloadLock.WaitOne();
 

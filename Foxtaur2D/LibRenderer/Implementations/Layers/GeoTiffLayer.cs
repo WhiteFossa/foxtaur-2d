@@ -79,7 +79,7 @@ public class GeoTiffLayer : IRasterLayer
     /// <summary>
     /// Load actual image
     /// </summary>
-    public void Load(OnGeoTiffImageLoadProgressDelegate onGeoTiffImageLoadProgress)
+    public void Load(OnGeoTiffImageLoadProgressDelegate onGeoTiffImageLoadProgress = null)
     {
         _onGeoTiffImageLoadProgress = onGeoTiffImageLoadProgress;
         

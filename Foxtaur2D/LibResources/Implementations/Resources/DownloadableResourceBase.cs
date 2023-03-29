@@ -7,7 +7,12 @@ namespace LibResources.Implementations.Resources;
 /// <summary>
 /// Delegate for OnLoaded() event
 /// </summary>
-public delegate void OnResourceLoaded(DownloadableResourceBase resourceBase);
+public delegate void OnResourceLoadedDelegate(DownloadableResourceBase resourceBase);
+
+/// <summary>
+/// Delegate for download progress. Progress value is [0; 1]
+/// </summary>
+public delegate void OnDownloadProgressDelegate(double progress);
 
 /// <summary>
 /// Resource, downloadable from network
@@ -27,7 +32,7 @@ public abstract class DownloadableResourceBase
     /// <summary>
     /// Call this when resource load is completed
     /// </summary>
-    public OnResourceLoaded OnLoad;
+    public OnResourceLoadedDelegate OnLoad;
 
     /// <summary>
     /// Semaphore for limit the number of active downloading threads
@@ -66,7 +71,7 @@ public abstract class DownloadableResourceBase
     /// <summary>
     /// Download resource
     /// </summary>
-    public abstract void Download(OnResourceLoaded onLoad);
+    public abstract void Download(OnResourceLoadedDelegate onLoad);
 
     /// <summary>
     /// Load resource as a stream from URL
