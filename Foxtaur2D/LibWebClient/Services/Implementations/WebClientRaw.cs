@@ -1,3 +1,4 @@
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
 using LibAuxiliary.Abstract;
@@ -145,6 +146,51 @@ public class WebClientRaw : IWebClientRaw
 
         var result = JsonSerializer.Deserialize<IReadOnlyCollection<LocationDto>>(await response.Content.ReadAsStringAsync());
         return ReorderResult(result, request.LocationsIds);
+    }
+
+    public async Task<HttpResponseMessage> GetHeadersAsync(Uri uri)
+    {
+        _ = uri ?? throw new ArgumentNullException(nameof(uri));
+        
+        using var webRequest = new HttpRequestMessage(HttpMethod.Head, uri);
+        
+        var response = await _httpClient.SendAsync(webRequest);
+        if (!response.IsSuccessStatusCode)
+        {
+            _logger.Error($"GetHeadersAsync failed: { response.StatusCode }");
+            throw new InvalidOperationException();
+        }
+
+        return response;
+    }
+
+    public async Task<HttpResponseMessage> DownloadWithRangeAsync(Uri uri, long start, long end)
+    {
+        _ = uri ?? throw new ArgumentNullException(nameof(uri));
+        
+        if (start < 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(start), "Start must be non-negative.");
+        }
+
+        if (end <= start)
+        {
+            throw new ArgumentOutOfRangeException(nameof(end), "End must be greater than start.");
+        }
+        
+        var httpClient = new HttpClient();
+        httpClient.Timeout = new TimeSpan(0, 0, WebClientConstants.HttpClientDownloadTimeout);
+        using var webRequest = new HttpRequestMessage(HttpMethod.Get, uri);
+        webRequest.Headers.Range = new RangeHeaderValue(start, end);
+
+        var response = await httpClient.SendAsync(webRequest);
+        if (!response.IsSuccessStatusCode)
+        {
+            _logger.Error($"DownloadWithRangeAsync failed: { response.StatusCode }");
+            throw new InvalidOperationException();
+        }
+
+        return response;
     }
 
     /// <summary>

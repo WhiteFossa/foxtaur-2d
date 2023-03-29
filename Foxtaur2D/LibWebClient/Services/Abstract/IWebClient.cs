@@ -52,4 +52,14 @@ public interface IWebClient
     /// Mass get hunters by distance ID async (locations histories is NOT included)
     /// </summary>
     Task<IReadOnlyCollection<Hunter>> MassGetHuntersByDistanceIdWithoutLocationsHistoriesAsync(Guid distanceId);
+    
+    /// <summary>
+    /// Makes HEAD request to given URI
+    /// </summary>
+    Task<HttpResponseMessage> GetHeadersAsync(Uri uri);
+    
+    /// <summary>
+    /// Downloads part of file using GET with Range
+    /// </summary>
+    Task<HttpResponseMessage> DownloadWithRangeAsync(Uri uri, long start, long end);
 }

@@ -243,4 +243,14 @@ public class WebClient : IWebClient
                 new Color(h.Color.A, h.Color.R, h.Color.G, h.Color.B)))
             .ToList();
     }
+
+    public async Task<HttpResponseMessage> GetHeadersAsync(Uri uri)
+    {
+        return await _client.GetHeadersAsync(uri).ConfigureAwait(false);
+    }
+
+    public async Task<HttpResponseMessage> DownloadWithRangeAsync(Uri uri, long start, long end)
+    {
+        return await _client.DownloadWithRangeAsync(uri, start, end).ConfigureAwait(false);
+    }
 }

@@ -53,4 +53,14 @@ public interface IWebClientRaw
     /// Mass get locations
     /// </summary>
     Task<IReadOnlyCollection<LocationDto>> MassGetLocationsAsync(LocationsMassGetRequest request);
+
+    /// <summary>
+    /// Makes HEAD request to given URI
+    /// </summary>
+    Task<HttpResponseMessage> GetHeadersAsync(Uri uri);
+
+    /// <summary>
+    /// Downloads part of file using GET with Range
+    /// </summary>
+    Task<HttpResponseMessage> DownloadWithRangeAsync(Uri uri, long start, long end);
 }

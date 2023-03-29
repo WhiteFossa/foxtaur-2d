@@ -913,7 +913,7 @@ public partial class MapControl : UserControl
 
     private void AddDistanceLayer()
     {
-        _distanceLayer = new DistanceLayer(_activeDistance, OnDistanceLoadedHandler, SetMapProgressState, _textDrawer, DistanceLayerOrder);
+        _distanceLayer = new DistanceLayer(_activeDistance, OnDistanceLoadedHandler, SetMapProgressState, _textDrawer, _webClient, DistanceLayerOrder);
         _layers.Add(_distanceLayer);
 
         OrderLayers();

@@ -14,4 +14,9 @@ public class WebClientConstants
     /// HTTP Client timeout (in seconds)
     /// </summary>
     public const int HttpClientTimeout = 240;
+
+    /// <summary>
+    /// HTTP Client timeout for downloads (in seconds)
+    /// </summary>
+    public const int HttpClientDownloadTimeout = 3600;
 }
