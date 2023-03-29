@@ -9,6 +9,7 @@ using LibRenderer.Constants;
 using LibRenderer.Enums;
 using LibResources.Implementations.Resources;
 using LibWebClient.Models;
+using LibWebClient.Services.Abstract;
 
 namespace LibRenderer.Implementations.Layers;
 
@@ -43,7 +44,15 @@ public class DistanceLayer : IVectorLayer, IRasterLayer
     /// <summary>
     /// OnDistanceLoadedEvent is called on separate thread!
     /// </summary>
-    public DistanceLayer(Distance distanceModel, OnDistanceLoaded onDistanceLoadedEvent, SetMapProgressStateDelegate setMapProgressState, ITextDrawer textDrawer, int layerOrder)
+    public DistanceLayer
+    (
+        Distance distanceModel,
+        OnDistanceLoaded onDistanceLoadedEvent,
+        SetMapProgressStateDelegate setMapProgressState,
+        ITextDrawer textDrawer,
+        IWebClient webClient,
+        int layerOrder
+    )
     {
         Order = layerOrder;
         
@@ -55,7 +64,7 @@ public class DistanceLayer : IVectorLayer, IRasterLayer
         // Starting to download a map
         _isMapLoaded = false;
         _setMapProgressState(MapState.Downloading, 0.0);
-        _mapImage = new CompressedStreamResource(_distance.Map.Url, false);
+        _mapImage = new CompressedStreamResource(_distance.Map.Url, false, webClient);
         
         var downloadThread = new Thread(() => _mapImage.Download(OnMapImageLoaded, OnMapDownloadProgress, OnMapDecompressionProgress));
         downloadThread.Start();

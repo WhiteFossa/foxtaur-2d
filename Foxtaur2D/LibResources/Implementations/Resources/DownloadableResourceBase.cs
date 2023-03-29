@@ -1,5 +1,6 @@
 using System.Net.Http.Headers;
 using LibResources.Constants;
+using LibWebClient.Services.Abstract;
 using NLog;
 using ZstdNet;
 
@@ -20,6 +21,8 @@ public delegate void OnDownloadProgressDelegate(double progress);
 /// </summary>
 public abstract class DownloadableResourceBase
 {
+    protected IWebClient _webClient;
+    
     /// <summary>
     /// Unique resource name
     /// </summary>
@@ -44,9 +47,15 @@ public abstract class DownloadableResourceBase
 
     private static Mutex _downloadMutex = new Mutex();
 
-    public DownloadableResourceBase(string resourceName,
-        bool isLocal)
+    public DownloadableResourceBase
+    (
+        string resourceName,
+        bool isLocal,
+        IWebClient webClient
+    )
     {
+        _webClient = webClient ?? throw new ArgumentNullException(nameof(webClient));
+        
         if (string.IsNullOrEmpty(resourceName))
         {
             throw new ArgumentException(nameof(resourceName));
@@ -107,7 +116,7 @@ public abstract class DownloadableResourceBase
             try
             {
                 // Downloading piece-by-piece
-                var headersResponse = GetHeaders(uriResult);
+                var headersResponse = _webClient.GetHeadersAsync(uriResult).Result;
                 var downloadSize = headersResponse
                     .Content
                     .Headers
@@ -187,16 +196,6 @@ public abstract class DownloadableResourceBase
         using var webRequest = new HttpRequestMessage(HttpMethod.Get, uri);
         webRequest.Headers.Range = new RangeHeaderValue(start, end);
 
-        return httpClient.Send(webRequest);
-    }
-
-    private HttpResponseMessage GetHeaders(Uri uri)
-    {
-        _ = uri ?? throw new ArgumentNullException(nameof(uri));
-        
-        var httpClient = new HttpClient();
-        using var webRequest = new HttpRequestMessage(HttpMethod.Head, uri);
-        
         return httpClient.Send(webRequest);
     }
     

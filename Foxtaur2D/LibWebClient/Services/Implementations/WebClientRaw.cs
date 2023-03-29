@@ -147,6 +147,22 @@ public class WebClientRaw : IWebClientRaw
         return ReorderResult(result, request.LocationsIds);
     }
 
+    public async Task<HttpResponseMessage> GetHeadersAsync(Uri uri)
+    {
+        _ = uri ?? throw new ArgumentNullException(nameof(uri));
+        
+        using var webRequest = new HttpRequestMessage(HttpMethod.Head, uri);
+        
+        var response = await _httpClient.SendAsync(webRequest);
+        if (!response.IsSuccessStatusCode)
+        {
+            _logger.Error($"GetHeadersAsync failed: { response.StatusCode }");
+            throw new InvalidOperationException();
+        }
+
+        return response;
+    }
+
     /// <summary>
     /// Reorder request result such way, that result items are orderer as request IDs
     /// </summary>

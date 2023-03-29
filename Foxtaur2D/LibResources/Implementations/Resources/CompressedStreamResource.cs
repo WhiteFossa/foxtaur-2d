@@ -1,3 +1,4 @@
+using LibWebClient.Services.Abstract;
 using NLog;
 
 namespace LibResources.Implementations.Resources;
@@ -19,7 +20,7 @@ public class CompressedStreamResource : DownloadableResourceBase
     /// </summary>
     public Stream DecompressedStream = null;
     
-    public CompressedStreamResource(string resourceName, bool isLocal) : base(resourceName, isLocal)
+    public CompressedStreamResource(string resourceName, bool isLocal, IWebClient webClient) : base(resourceName, isLocal, webClient)
     {
     }
 
