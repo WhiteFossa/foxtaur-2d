@@ -1,4 +1,3 @@
-using System.Net.Http.Headers;
 using LibResources.Constants;
 using LibWebClient.Services.Abstract;
 using NLog;
@@ -134,7 +133,7 @@ public abstract class DownloadableResourceBase
                         currentChunkSize = ResourcesConstants.DownloadChunkSize;
                     }
 
-                    var downloadedChunk = DownloadWithRange(uriResult, downloaded, downloaded + currentChunkSize);
+                    var downloadedChunk = _webClient.DownloadWithRangeAsync(uriResult, downloaded, downloaded + currentChunkSize).Result;
                     using (var downloadedChunkStream = downloadedChunk.Content.ReadAsStream())
                     {
                         using (var downloadedChunkMemoryStream = new MemoryStream())
@@ -172,31 +171,6 @@ public abstract class DownloadableResourceBase
         {
             DownloadThreadsLimiter.Release();
         }
-    }
-
-    /// <summary>
-    /// Download content from given URI from given range
-    /// </summary>
-    private HttpResponseMessage DownloadWithRange(Uri uri, long start, long end)
-    {
-        _ = uri ?? throw new ArgumentNullException(nameof(uri));
-
-        if (start < 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(start), "Start must be non-negative.");
-        }
-
-        if (end <= start)
-        {
-            throw new ArgumentOutOfRangeException(nameof(end), "End must be greater than start.");
-        }
-        
-        var httpClient = new HttpClient();
-        httpClient.Timeout = new TimeSpan(0, 0, ResourcesConstants.HttpClientTimeout);
-        using var webRequest = new HttpRequestMessage(HttpMethod.Get, uri);
-        webRequest.Headers.Range = new RangeHeaderValue(start, end);
-
-        return httpClient.Send(webRequest);
     }
     
     protected void LoadFromUrlToFile(string url, OnDownloadProgressDelegate onDownloadProgress = null)

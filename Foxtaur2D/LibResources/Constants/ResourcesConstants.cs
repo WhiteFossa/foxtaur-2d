@@ -14,12 +14,7 @@ public static class ResourcesConstants
     /// Put downloaded resources here (relative to executable)
     /// </summary>
     public const string DownloadedDirectory = "Downloaded/";
-
-    /// <summary>
-    /// HTTP client timeout in seconds
-    /// </summary>
-    public const int HttpClientTimeout = 3600;
-
+    
     /// <summary>
     /// Download files using this download chunk size
     /// </summary>
