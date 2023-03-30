@@ -7,6 +7,7 @@ using Avalonia.Media;
 using Avalonia.Threading;
 using Foxtaur2D.Controls;
 using Foxtaur2D.Models;
+using LibBusinessLogic.Services.Abstract;
 using LibRenderer.Constants;
 using LibRenderer.Enums;
 using LibWebClient.Models;
@@ -79,6 +80,7 @@ public class MainWindowViewModel : ViewModelBase
     #region DI
     
     private readonly IWebClient _webClient = Program.Di.GetService<IWebClient>();
+    private readonly ISortingService _sortingService = Program.Di.GetService<ISortingService>();
 
     #endregion
     
@@ -124,15 +126,24 @@ public class MainWindowViewModel : ViewModelBase
             }
 
             // Updating hunters list
-            Hunters = _mainModel.Distance != null ? _mainModel.Distance.Hunters.ToList() : new List<Hunter>();
+            Hunters = _mainModel.Distance != null
+                ? _sortingService.SortHunters(
+                    _mainModel
+                        .Distance
+                        .Hunters
+                        .ToList())
+                    .ToList()
+                : new List<Hunter>();
             
             // Updating teams list
             Teams = _mainModel.Distance != null
-                ? _mainModel
+                ? _sortingService.SortTeams(_mainModel
                     .Distance
                     .Hunters
                     .Select(h => h.Team)
                     .Distinct()
+                    .Where(t => t != null)
+                    .ToList())
                     .ToList()
                 : new List<Team>();
 
@@ -499,8 +510,8 @@ public class MainWindowViewModel : ViewModelBase
     {
         SelectedDistanceIndex = -1;
         
-        _distances = _webClient.GetDistancesWithoutIncludeAsync()
-            .Result
+        _distances = _sortingService.SortDistances(_webClient.GetDistancesWithoutIncludeAsync()
+            .Result)
             .ToList();
     }
 

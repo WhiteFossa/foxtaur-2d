@@ -6,6 +6,8 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.ReactiveUI;
 using LibAuxiliary.Abstract;
 using LibAuxiliary.Implementations;
+using LibBusinessLogic.Services.Abstract;
+using LibBusinessLogic.Services.Implementations;
 using LibGpsFilter.Abstractions;
 using LibGpsFilter.Implementations;
 using LibRenderer.Abstractions.Drawers;
@@ -73,6 +75,7 @@ public class Program
         services.AddSingleton<ITextDrawer, TextDrawer>();
         services.AddSingleton<IConfigurationService, ConfigurationService>();
         services.AddSingleton<IGpsFilter, GpsFilter>();
+        services.AddSingleton<ISortingService, SortingService>();
         
         // HTTP clients
         services.AddHttpClient<IWebClientRaw, WebClientRaw>();

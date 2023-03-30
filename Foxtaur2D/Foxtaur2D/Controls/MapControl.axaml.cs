@@ -705,6 +705,7 @@ public partial class MapControl : UserControl
                 else
                 {
                     return hunters
+                        .Where(h => h.Team != null)
                         .Where(h => h.Team.Id == _teamToDisplay.Id)
                         .ToList();
                 }
