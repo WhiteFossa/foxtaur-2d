@@ -26,63 +26,71 @@ public class CompressedStreamResource : DownloadableResourceBase
 
     public void Download(OnResourceLoadedDelegate onLoad, OnDownloadProgressDelegate onDownloadProgress = null, OnDecompressionProgressDelegate onDecompressionProgress = null)
     {
-        _downloadLock.WaitOne();
-
         try
         {
-            OnLoad = onLoad ?? throw new ArgumentNullException(nameof(onLoad));
-            
-            if (_isLoading)
-            {
-                // Loading in progress
-                return;
-            }
+            _downloadLock.WaitOne();
 
-            _isLoading = true;
-        }
-        finally
-        {
-            _downloadLock.ReleaseMutex();            
-        }
-
-        try
-        {
-            _logger.Info($"Loading compressed resource { ResourceName }...");
-            
-            if (!IsLocal)
+            try
             {
-                // Do we have already downloaded file?
-                var localPath = GetResourceLocalPath(ResourceName);
-                if (!File.Exists(localPath))
+                OnLoad = onLoad ?? throw new ArgumentNullException(nameof(onLoad));
+                
+                if (_isLoading)
                 {
-                    LoadFromUrlToFile(ResourceName, onDownloadProgress);    
+                    // Loading in progress
+                    return;
                 }
+
+                _isLoading = true;
             }
-
-            // Decompressing
-            _logger.Info($"Decompressing resource { ResourceName }...");
-
-            if (onDecompressionProgress != null)
+            finally
             {
-                onDecompressionProgress(0.0);
-            }
-            
-            DecompressedStream = LoadZstdFile(GetLocalPath());
-            
-            // Done
-            _logger.Info($"Decompression done: { ResourceName }...");
-            
-            if (onDecompressionProgress != null)
-            {
-                onDecompressionProgress(1.0);
+                _downloadLock.ReleaseMutex();            
             }
 
-            OnLoad(this);
+            try
+            {
+                _logger.Info($"Loading compressed resource { ResourceName }...");
+                
+                if (!IsLocal)
+                {
+                    // Do we have already downloaded file?
+                    var localPath = GetResourceLocalPath(ResourceName);
+                    if (!File.Exists(localPath))
+                    {
+                        LoadFromUrlToFile(ResourceName, onDownloadProgress);    
+                    }
+                }
+
+                // Decompressing
+                _logger.Info($"Decompressing resource { ResourceName }...");
+
+                if (onDecompressionProgress != null)
+                {
+                    onDecompressionProgress(0.0);
+                }
+                
+                DecompressedStream = LoadZstdFile(GetLocalPath());
+                
+                // Done
+                _logger.Info($"Decompression done: { ResourceName }...");
+                
+                if (onDecompressionProgress != null)
+                {
+                    onDecompressionProgress(1.0);
+                }
+
+                OnLoad(this);
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e.Message);
+                throw;
+            }
         }
-        catch (Exception e)
+        catch (ThreadInterruptedException)
         {
-            _logger.Error(e.Message);
-            throw;
+            // Download was aborted
+            _logger.Error($"Compressed resource { ResourceName } download was aborted.");
         }
     }
     

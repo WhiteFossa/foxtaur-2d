@@ -560,7 +560,13 @@ public partial class MapControl : UserControl
         _activeDistance = distance;
 
         _layers.Remove(_distanceLayer);
-
+        
+        // Stopping old distance layer activities
+        if (_distanceLayer != null)
+        {
+            _distanceLayer.Cleanup();
+        }
+        
         if (_activeDistance != null)
         {
             AddDistanceLayer();
