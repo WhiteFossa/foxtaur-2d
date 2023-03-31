@@ -1,4 +1,3 @@
-using Avalonia.Media;
 using LibBusinessLogic.Constants;
 using LibBusinessLogic.Services.Abstract;
 using LibWebClient.Models;

@@ -17,7 +17,6 @@ using LibWebClient.Services.Implementations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NLog;
-using NLog.Config;
 using NLog.Extensions.Logging;
 
 namespace Foxtaur2D;

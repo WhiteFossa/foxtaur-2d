@@ -13,7 +13,6 @@ using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using Avalonia.Threading;
 using LibBusinessLogic.Services.Abstract;
-using LibBusinessLogic.Services.Implementations;
 using LibGeo.Abstractions;
 using LibGeo.Implementations;
 using LibGeo.Models;
@@ -29,7 +28,6 @@ using LibWebClient.Models.Requests;
 using LibWebClient.Services.Abstract;
 using Microsoft.Extensions.DependencyInjection;
 using NLog;
-using Exception = System.Exception;
 using Timer = System.Timers.Timer;
 
 namespace Foxtaur2D.Controls;

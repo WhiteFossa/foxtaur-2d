@@ -696,7 +696,7 @@ public class MainWindowViewModel : ViewModelBase
     /// <summary>
     /// Called when window opened
     /// </summary>
-    public void OnWindowOpened(object sender, System.EventArgs e)
+    public void OnWindowOpened(object sender, EventArgs e)
     {
         // Initially we didn't start map processing yet
         SetMapProgressState(MapState.NotRequested, 0.0);
