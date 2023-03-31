@@ -18,28 +18,6 @@ public class TeamsService : ITeamsService
             BusinessLogicConstants.TeamlessTeamColor
         );
     }
-    
-    public IReadOnlyCollection<Team> InjectTeamlessTeam(IReadOnlyCollection<Team> teams)
-    {
-        _ = teams ?? throw new ArgumentNullException(nameof(teams));
-
-        if (teams.Count(t => t == null) > 1)
-        {
-            throw new ArgumentException("Only one team can be null", nameof(teams));
-        }
-
-        return teams
-            .Select(t =>
-            {
-                if (t != null)
-                {
-                    return t;
-                }
-
-                return _teamlessTeam;
-            })
-            .ToList();
-    }
 
     public IReadOnlyCollection<Hunter> ApplyTeamlessTeamToHunters(IReadOnlyCollection<Hunter> hunters)
     {

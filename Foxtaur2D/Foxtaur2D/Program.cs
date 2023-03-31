@@ -77,6 +77,7 @@ public class Program
         services.AddSingleton<IGpsFilter, GpsFilter>();
         services.AddSingleton<ISortingService, SortingService>();
         services.AddSingleton<ITeamsService, TeamsService>();
+        services.AddSingleton<IDistancesService, DistancesService>();
         
         // HTTP clients
         services.AddHttpClient<IWebClientRaw, WebClientRaw>();

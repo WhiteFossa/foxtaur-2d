@@ -82,6 +82,7 @@ public class MainWindowViewModel : ViewModelBase
     private readonly IWebClient _webClient = Program.Di.GetService<IWebClient>();
     private readonly ISortingService _sortingService = Program.Di.GetService<ISortingService>();
     private readonly ITeamsService _teamsService = Program.Di.GetService<ITeamsService>();
+    private readonly IDistancesService _distancesService = Program.Di.GetService<IDistancesService>();
 
     #endregion
     
@@ -126,33 +127,29 @@ public class MainWindowViewModel : ViewModelBase
                 _mainModel.Distance = _webClient.GetDistanceByIdAsync(_distances[value].Id).Result;
             }
 
-            // Updating hunters list
-            var huntersRaw = _mainModel.Distance != null
-                ? _mainModel
+            if (_mainModel.Distance != null)
+            {
+                _mainModel.Distance = _distancesService.ProcessRawDistance(_mainModel.Distance);
+
+                Hunters = _mainModel
                     .Distance
                     .Hunters
-                : new List<Hunter>();
-
-            huntersRaw = _teamsService.ApplyTeamlessTeamToHunters(huntersRaw);
-
-            Hunters = _sortingService.SortHunters(huntersRaw)
-                .ToList();
-            
-            // Updating teams list
-            var teamsRaw = _mainModel.Distance != null
-                ? _mainModel
+                    .ToList();
+                
+                // We are already have teamless team if at least one hunter have it, no need for injection
+                Teams = _sortingService.SortTeams(_mainModel
                     .Distance
                     .Hunters
                     .Select(h => h.Team)
                     .Distinct()
-                    .ToList()
-                : new List<Team>();
-
-            teamsRaw = _teamsService.InjectTeamlessTeam(teamsRaw)
-                .ToList();
-
-            Teams = _sortingService.SortTeams(teamsRaw)
-                .ToList();
+                    .ToList())
+                    .ToList();
+            }
+            else
+            {
+                Teams = new List<Team>();
+                Hunters = new List<Hunter>();
+            }
 
             IsEveryoneModeChecked = true;
             _mainModel.HuntersFilteringMode = HuntersFilteringMode.Everyone;
