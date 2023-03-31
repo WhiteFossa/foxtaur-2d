@@ -81,6 +81,7 @@ public class MainWindowViewModel : ViewModelBase
     
     private readonly IWebClient _webClient = Program.Di.GetService<IWebClient>();
     private readonly ISortingService _sortingService = Program.Di.GetService<ISortingService>();
+    private readonly ITeamsService _teamsService = Program.Di.GetService<ITeamsService>();
 
     #endregion
     
@@ -126,26 +127,32 @@ public class MainWindowViewModel : ViewModelBase
             }
 
             // Updating hunters list
-            Hunters = _mainModel.Distance != null
-                ? _sortingService.SortHunters(
-                    _mainModel
-                        .Distance
-                        .Hunters
-                        .ToList())
-                    .ToList()
+            var huntersRaw = _mainModel.Distance != null
+                ? _mainModel
+                    .Distance
+                    .Hunters
                 : new List<Hunter>();
+
+            huntersRaw = _teamsService.ApplyTeamlessTeamToHunters(huntersRaw);
+
+            Hunters = _sortingService.SortHunters(huntersRaw)
+                .ToList();
             
             // Updating teams list
-            Teams = _mainModel.Distance != null
-                ? _sortingService.SortTeams(_mainModel
+            var teamsRaw = _mainModel.Distance != null
+                ? _mainModel
                     .Distance
                     .Hunters
                     .Select(h => h.Team)
                     .Distinct()
-                    .Where(t => t != null)
-                    .ToList())
                     .ToList()
                 : new List<Team>();
+
+            teamsRaw = _teamsService.InjectTeamlessTeam(teamsRaw)
+                .ToList();
+
+            Teams = _sortingService.SortTeams(teamsRaw)
+                .ToList();
 
             IsEveryoneModeChecked = true;
             _mainModel.HuntersFilteringMode = HuntersFilteringMode.Everyone;
