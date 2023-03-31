@@ -12,6 +12,7 @@ using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using Avalonia.Threading;
+using LibBusinessLogic.Services.Abstract;
 using LibGeo.Abstractions;
 using LibGeo.Implementations;
 using LibGeo.Models;
@@ -27,7 +28,6 @@ using LibWebClient.Models.Requests;
 using LibWebClient.Services.Abstract;
 using Microsoft.Extensions.DependencyInjection;
 using NLog;
-using Exception = System.Exception;
 using Timer = System.Timers.Timer;
 
 namespace Foxtaur2D.Controls;
@@ -178,6 +178,7 @@ public partial class MapControl : UserControl
     private readonly ITextDrawer _textDrawer;
     private readonly IWebClient _webClient;
     private readonly IGpsFilter _gpsFilter;
+    private readonly ITeamsService _teamsService;
 
     #endregion
 
@@ -235,6 +236,7 @@ public partial class MapControl : UserControl
         _textDrawer = Program.Di.GetService<ITextDrawer>();
         _webClient = Program.Di.GetService<IWebClient>();
         _gpsFilter = Program.Di.GetService<IGpsFilter>();
+        _teamsService = Program.Di.GetService<ITeamsService>();
 
         InitializeComponent();
 
@@ -705,6 +707,7 @@ public partial class MapControl : UserControl
                 else
                 {
                     return hunters
+                        .Where(h => h.Team != null)
                         .Where(h => h.Team.Id == _teamToDisplay.Id)
                         .ToList();
                 }
@@ -820,6 +823,13 @@ public partial class MapControl : UserControl
             return;
         }
 
+        // As early as possible applying teamless team to hunters without team
+        if (_teamsService == null)
+        {
+            _logger.Error("OLOLO!");
+        }
+        newHunters = _teamsService.ApplyTeamlessTeamToHunters(newHunters);
+        
         // And locations for all of them (we can't reload locations for only filtered ones, because user can change filtering at any time)
         var huntersIdsToReload = newHunters
             .Select(h => h.Id)

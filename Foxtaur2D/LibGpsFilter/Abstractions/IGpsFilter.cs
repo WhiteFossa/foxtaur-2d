@@ -1,5 +1,3 @@
-using LibWebClient.Models;
-
 namespace LibGpsFilter.Abstractions;
 
 public interface IGpsFilter

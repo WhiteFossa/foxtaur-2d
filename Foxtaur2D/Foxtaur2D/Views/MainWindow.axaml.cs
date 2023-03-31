@@ -1,3 +1,4 @@
+using System;
 using Avalonia.Controls;
 using Foxtaur2D.ViewModels;
 
@@ -24,7 +25,7 @@ public partial class MainWindow : Window
     /// <summary>
     /// Called when window opened
     /// </summary>
-    private void OnWindowOpened(object sender, System.EventArgs e)
+    private void OnWindowOpened(object sender, EventArgs e)
     {
         ((MainWindowViewModel)DataContext).OnWindowOpened(sender, e);
     }

@@ -7,6 +7,7 @@ using Avalonia.Media;
 using Avalonia.Threading;
 using Foxtaur2D.Controls;
 using Foxtaur2D.Models;
+using LibBusinessLogic.Services.Abstract;
 using LibRenderer.Constants;
 using LibRenderer.Enums;
 using LibWebClient.Models;
@@ -79,6 +80,9 @@ public class MainWindowViewModel : ViewModelBase
     #region DI
     
     private readonly IWebClient _webClient = Program.Di.GetService<IWebClient>();
+    private readonly ISortingService _sortingService = Program.Di.GetService<ISortingService>();
+    private readonly ITeamsService _teamsService = Program.Di.GetService<ITeamsService>();
+    private readonly IDistancesService _distancesService = Program.Di.GetService<IDistancesService>();
 
     #endregion
     
@@ -123,18 +127,29 @@ public class MainWindowViewModel : ViewModelBase
                 _mainModel.Distance = _webClient.GetDistanceByIdAsync(_distances[value].Id).Result;
             }
 
-            // Updating hunters list
-            Hunters = _mainModel.Distance != null ? _mainModel.Distance.Hunters.ToList() : new List<Hunter>();
-            
-            // Updating teams list
-            Teams = _mainModel.Distance != null
-                ? _mainModel
+            if (_mainModel.Distance != null)
+            {
+                _mainModel.Distance = _distancesService.ProcessRawDistance(_mainModel.Distance);
+
+                Hunters = _mainModel
+                    .Distance
+                    .Hunters
+                    .ToList();
+                
+                // We are already have teamless team if at least one hunter have it, no need for injection
+                Teams = _sortingService.SortTeams(_mainModel
                     .Distance
                     .Hunters
                     .Select(h => h.Team)
                     .Distinct()
-                    .ToList()
-                : new List<Team>();
+                    .ToList())
+                    .ToList();
+            }
+            else
+            {
+                Teams = new List<Team>();
+                Hunters = new List<Hunter>();
+            }
 
             IsEveryoneModeChecked = true;
             _mainModel.HuntersFilteringMode = HuntersFilteringMode.Everyone;
@@ -499,8 +514,8 @@ public class MainWindowViewModel : ViewModelBase
     {
         SelectedDistanceIndex = -1;
         
-        _distances = _webClient.GetDistancesWithoutIncludeAsync()
-            .Result
+        _distances = _sortingService.SortDistances(_webClient.GetDistancesWithoutIncludeAsync()
+            .Result)
             .ToList();
     }
 
@@ -681,7 +696,7 @@ public class MainWindowViewModel : ViewModelBase
     /// <summary>
     /// Called when window opened
     /// </summary>
-    public void OnWindowOpened(object sender, System.EventArgs e)
+    public void OnWindowOpened(object sender, EventArgs e)
     {
         // Initially we didn't start map processing yet
         SetMapProgressState(MapState.NotRequested, 0.0);

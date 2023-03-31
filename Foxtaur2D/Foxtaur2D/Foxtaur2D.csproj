@@ -45,6 +45,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\LibBusinessLogic\LibBusinessLogic.csproj" />
       <ProjectReference Include="..\LibGpsFilter\LibGpsFilter.csproj" />
       <ProjectReference Include="..\LibRenderer\LibRenderer.csproj" />
       <ProjectReference Include="..\LibWebClient\LibWebClient.csproj" />

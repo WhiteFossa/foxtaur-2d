@@ -2,7 +2,6 @@ using Binateq.GpsTrackFilter;
 using LibGeo.Implementations.Helpers;
 using LibGpsFilter.Abstractions;
 using LibGpsFilter.Constants;
-using LibWebClient.Models;
 
 namespace LibGpsFilter.Implementations;
 
