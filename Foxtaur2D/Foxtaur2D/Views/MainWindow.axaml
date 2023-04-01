@@ -259,6 +259,28 @@
                             
                             <Label>Distance info:</Label>
                             
+                            <!-- First start time -->
+                            <StackPanel
+                                Orientation="Horizontal">
+                                
+                                <Label>First start:</Label>
+                                
+                                <Label
+                                    VerticalAlignment="Center"
+                                    Content="{ Binding FirstStartTimeString }" />
+                            </StackPanel>
+                            
+                            <!-- Close time -->
+                            <StackPanel
+                                Orientation="Horizontal">
+                                
+                                <Label>Close time:</Label>
+                                
+                                <Label
+                                    VerticalAlignment="Center"
+                                    Content="{ Binding CloseTimeString }" />
+                            </StackPanel>
+                            
                             <!-- Map status -->
                             <StackPanel
                                 Orientation="Horizontal">
@@ -267,8 +289,7 @@
                             
                                 <Label
                                     VerticalAlignment="Center"
-                                    Content="{ Binding MapStateText }">
-                                </Label>    
+                                    Content="{ Binding MapStateText }" />
                             </StackPanel>
                             
                             <!-- Map download / processing progress -->

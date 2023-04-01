@@ -7,6 +7,7 @@ using Avalonia.Media;
 using Avalonia.Threading;
 using Foxtaur2D.Controls;
 using Foxtaur2D.Models;
+using LibAuxiliary.Helpers;
 using LibBusinessLogic.Services.Abstract;
 using LibRenderer.Constants;
 using LibRenderer.Enums;
@@ -71,6 +72,9 @@ public class MainWindowViewModel : ViewModelBase
 
     private string _mapStateText;
     private double _mapProgress;
+
+    private string _firstStartTimeString;
+    private string _closeTimeString;
 
     /// <summary>
     /// Timer to move end side of timeline
@@ -155,6 +159,17 @@ public class MainWindowViewModel : ViewModelBase
             _mainModel.HuntersFilteringMode = HuntersFilteringMode.Everyone;
             SelectedHunterIndex = -1;
             SelectedTeamIndex = -1;
+
+            if (_mainModel.Distance != null)
+            {
+                FirstStartTimeString = _mainModel.Distance.FirstHunterStartTime.ToDateTimeString();
+                CloseTimeString = _mainModel.Distance.CloseTime.ToDateTimeString();
+            }
+            else
+            {
+                FirstStartTimeString = "N/A";
+                CloseTimeString = "N/A";
+            }
 
             Dispatcher.UIThread.InvokeAsync(ProcessTimelineTimes);
 
@@ -452,6 +467,26 @@ public class MainWindowViewModel : ViewModelBase
 
         set => this.RaiseAndSetIfChanged(ref _mapProgress, value);
     }
+
+    /// <summary>
+    /// Fist start time as string
+    /// </summary>
+    public string FirstStartTimeString
+    {
+        get => _firstStartTimeString;
+
+        set => this.RaiseAndSetIfChanged(ref _firstStartTimeString, value);
+    }
+
+    /// <summary>
+    /// Distance close time as string
+    /// </summary>
+    public string CloseTimeString
+    {
+        get => _closeTimeString;
+
+        set => this.RaiseAndSetIfChanged(ref _closeTimeString, value);
+    }
     
     /// <summary>
     /// Focus on distance
@@ -485,6 +520,8 @@ public class MainWindowViewModel : ViewModelBase
         SelectedTeamIndex = -1;
         _isRealtimeUpdateMode = true;
         ProcessTimelineTimes();
+        FirstStartTimeString = "N/A";
+        CloseTimeString = "N/A";
         
         // Marking initial data state
         SetHuntersDataState(HuntersDataState.Downloaded);
