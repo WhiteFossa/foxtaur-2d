@@ -179,6 +179,7 @@ public partial class MapControl : UserControl
     private readonly IWebClient _webClient;
     private readonly IGpsFilter _gpsFilter;
     private readonly ITeamsService _teamsService;
+    private readonly ISortingService _sortingService;
 
     #endregion
 
@@ -237,6 +238,7 @@ public partial class MapControl : UserControl
         _webClient = Program.Di.GetService<IWebClient>();
         _gpsFilter = Program.Di.GetService<IGpsFilter>();
         _teamsService = Program.Di.GetService<ITeamsService>();
+        _sortingService = Program.Di.GetService<ISortingService>();
 
         InitializeComponent();
 
@@ -824,11 +826,8 @@ public partial class MapControl : UserControl
         }
 
         // As early as possible applying teamless team to hunters without team
-        if (_teamsService == null)
-        {
-            _logger.Error("OLOLO!");
-        }
         newHunters = _teamsService.ApplyTeamlessTeamToHunters(newHunters);
+        newHunters = _sortingService.SortHunters(newHunters);
         
         // And locations for all of them (we can't reload locations for only filtered ones, because user can change filtering at any time)
         var huntersIdsToReload = newHunters
