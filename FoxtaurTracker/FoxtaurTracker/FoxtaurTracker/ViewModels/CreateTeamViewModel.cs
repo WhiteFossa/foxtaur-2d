@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Windows.Input;
+using FoxtaurTracker.Constants;
 using FoxtaurTracker.Models;
 using LibWebClient.Models.DTOs;
 using LibWebClient.Models.Requests;
@@ -7,10 +8,17 @@ using LibWebClient.Services.Abstract;
 
 namespace FoxtaurTracker.ViewModels;
 
+/// <summary>
+/// Delegate to set team color. Dirty, but we don't see another way to do it (except forking the color control)
+/// </summary>
+public delegate void SetTeamColorDelegate(Color color);
+
 public class CreateTeamViewModel : IQueryAttributable, INotifyPropertyChanged
 {
     private readonly IWebClient _webClient;
     private User _userModel;
+    
+    public SetTeamColorDelegate SetTeamColor;
     
     #region Team fields
         
@@ -46,6 +54,10 @@ public class CreateTeamViewModel : IQueryAttributable, INotifyPropertyChanged
         set
         {
             _color = value;
+            if (SetTeamColor != null)
+            {
+                SetTeamColor(_color);
+            }
             RaisePropertyChanged(nameof(Color));
         }
     }
@@ -86,6 +98,11 @@ public class CreateTeamViewModel : IQueryAttributable, INotifyPropertyChanged
     public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
         _userModel = (User)query["UserModel"];
+    }
+
+    public async Task OnPageLoadedAsync(Object source, EventArgs args)
+    {
+        Color = GlobalConstants.NewTeamDefaultColor;
     }
 
     private async Task CreateTeamAsync()

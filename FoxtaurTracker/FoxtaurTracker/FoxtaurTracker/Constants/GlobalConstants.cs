@@ -58,4 +58,9 @@ public static class GlobalConstants
     public const int StatisticsUpdateInterval = 1;
 
     #endregion
+
+    /// <summary>
+    /// Default color for new team
+    /// </summary>
+    public static readonly Color NewTeamDefaultColor = Colors.White;
 }

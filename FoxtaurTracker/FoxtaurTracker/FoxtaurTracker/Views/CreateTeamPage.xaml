@@ -5,7 +5,8 @@
              xmlns:viewModels="clr-namespace:FoxtaurTracker.ViewModels"
              xmlns:colorPicker="clr-namespace:ColorPicker.Maui;assembly=ColorPicker.Maui"
              x:Class="FoxtaurTracker.Views.CreateTeamPage"
-             Title="Create a team">
+             Title="Create a team"
+             Loaded="CreateTeamPageLoaded">
     
     <!-- Model -->
     <ContentPage.BindingContext>
@@ -62,6 +63,7 @@
                         Style="{ StaticResource RoundedBorders }">
                         
                         <colorPicker:ColorPicker
+                            x:Name="TeamColorPicker"
                             HeightRequest="100"
                             PickedColorChanged="TeamColorChanged"
                             PickedColor="{ Binding Color }" />

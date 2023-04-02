@@ -22,4 +22,21 @@ public partial class CreateTeamPage : ContentPage
     {
         (BindingContext as CreateTeamViewModel).Color = args.NewPickedColorValue;
     }
+    
+    /// <summary>
+    /// Dirty hack to set team color
+    /// </summary>
+    public void SetTeamColor(Color color)
+    {
+        TeamColorPicker.PickedColor = color;
+    }
+    
+    /// <summary>
+    /// Page loaded handler
+    /// </summary>
+    private async void CreateTeamPageLoaded(object sender, EventArgs e)
+    {
+        (BindingContext as CreateTeamViewModel).SetTeamColor += SetTeamColor;
+        await (BindingContext as CreateTeamViewModel).OnPageLoadedAsync(sender, e);
+    }
 }
