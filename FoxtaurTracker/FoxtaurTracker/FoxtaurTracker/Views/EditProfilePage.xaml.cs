@@ -22,12 +22,21 @@ public partial class EditProfilePage : ContentPage
     {
         (BindingContext as EditProfileViewModel).HunterColor = args.NewPickedColorValue;
     }
-    
+
+    /// <summary>
+    /// Dirty hack to set hunter color
+    /// </summary>
+    public void SetHunterColor(Color color)
+    {
+        HunterColorPicker.PickedColor = color;
+    }
+
     /// <summary>
     /// Page loaded handler
     /// </summary>
     private async void EditProfilePageLoaded(object sender, EventArgs e)
     {
+        (BindingContext as EditProfileViewModel).SetHunterColor += SetHunterColor;
         await (BindingContext as EditProfileViewModel).OnPageLoadedAsync(sender, e);
     }
 }

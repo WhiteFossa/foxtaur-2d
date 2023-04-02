@@ -10,6 +10,11 @@ using LibWebClient.Services.Abstract;
 
 namespace FoxtaurTracker.ViewModels;
 
+/// <summary>
+/// Delegate to set hunter color. Dirty, but we don't see another way to do it (except forking the color control)
+/// </summary>
+public delegate void SetHunterColorDelegate(Color color);
+
 public class EditProfileViewModel : IQueryAttributable, INotifyPropertyChanged
 {
     private readonly IWebClient _webClient;
@@ -23,6 +28,8 @@ public class EditProfileViewModel : IQueryAttributable, INotifyPropertyChanged
     private List<BodySexItem> _bodySex = new List<BodySexItem>();
     private List<CategoryItem> _categoryItems = new List<CategoryItem>();
     private List<TeamItem> _teamItems = new List<TeamItem>();
+    
+    public SetHunterColorDelegate SetHunterColor;
 
     #region Commands
 
@@ -137,6 +144,12 @@ public class EditProfileViewModel : IQueryAttributable, INotifyPropertyChanged
         set
         {
             _hunterColor = value;
+            
+            if (SetHunterColor != null)
+            {
+                SetHunterColor(_hunterColor);
+            }
+            
             RaisePropertyChanged(nameof(HunterColor));
         }
     }

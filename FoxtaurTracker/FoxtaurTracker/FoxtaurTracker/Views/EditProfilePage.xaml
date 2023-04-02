@@ -200,6 +200,7 @@
                         Style="{ StaticResource RoundedBorders }">
                         
                         <colorPicker:ColorPicker
+                            x:Name="HunterColorPicker"
                             HeightRequest="100"
                             PickedColorChanged="HunterColorChanged"
                             PickedColor="{ Binding HunterColor }" />
