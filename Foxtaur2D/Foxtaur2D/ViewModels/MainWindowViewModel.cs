@@ -7,6 +7,7 @@ using Avalonia.Media;
 using Avalonia.Threading;
 using Foxtaur2D.Controls;
 using Foxtaur2D.Models;
+using LibAuxiliary.Abstract;
 using LibAuxiliary.Helpers;
 using LibBusinessLogic.Services.Abstract;
 using LibRenderer.Constants;
@@ -85,8 +86,8 @@ public class MainWindowViewModel : ViewModelBase
     
     private readonly IWebClient _webClient = Program.Di.GetService<IWebClient>();
     private readonly ISortingService _sortingService = Program.Di.GetService<ISortingService>();
-    private readonly ITeamsService _teamsService = Program.Di.GetService<ITeamsService>();
     private readonly IDistancesService _distancesService = Program.Di.GetService<IDistancesService>();
+    private readonly ISettingsService _settingsService = Program.Di.GetService<ISettingsService>();
 
     #endregion
     
@@ -357,6 +358,7 @@ public class MainWindowViewModel : ViewModelBase
         {
             this.RaiseAndSetIfChanged(ref _huntersDataReloadInterval, value);
             FormatHuntersDataReloadIntervalText();
+            _settingsService.SetHuntersLocationsRefreshInterval(_huntersDataReloadInterval);
 
             if (Renderer != null)
             {
@@ -527,7 +529,7 @@ public class MainWindowViewModel : ViewModelBase
         SetHuntersDataState(HuntersDataState.Downloaded);
         
         // Initial interval
-        HuntersDataReloadInterval = 1000; // TODO: Save/load it
+        HuntersDataReloadInterval = _settingsService.GetHuntersLocationsRefreshInterval();
         
         // Timeline update timer
         _timelineUpdateTimer = new Timer(TimelineUpdateInterval); // No need to move into constants, magical 1 second

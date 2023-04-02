@@ -77,6 +77,7 @@ public class Program
         services.AddSingleton<ISortingService, SortingService>();
         services.AddSingleton<ITeamsService, TeamsService>();
         services.AddSingleton<IDistancesService, DistancesService>();
+        services.AddSingleton<ISettingsService, SettingsService>();
         
         // HTTP clients
         services.AddHttpClient<IWebClientRaw, WebClientRaw>();
