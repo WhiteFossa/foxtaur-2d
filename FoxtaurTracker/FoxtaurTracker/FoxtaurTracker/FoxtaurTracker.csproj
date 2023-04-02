@@ -31,30 +31,30 @@
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-maccatalyst|AnyCPU'">
 	  <ApplicationTitle>Foxtaur</ApplicationTitle>
-	  <ApplicationDisplayVersion>1.0.11</ApplicationDisplayVersion>
-	  <ApplicationVersion>11</ApplicationVersion>
+	  <ApplicationDisplayVersion>1.0.12</ApplicationDisplayVersion>
+	  <ApplicationVersion>12</ApplicationVersion>
 	  <ApplicationId>me.foxtaur.tracker</ApplicationId>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-maccatalyst|AnyCPU'">
 	  <ApplicationTitle>Foxtaur</ApplicationTitle>
-	  <ApplicationDisplayVersion>1.0.11</ApplicationDisplayVersion>
-	  <ApplicationVersion>11</ApplicationVersion>
+	  <ApplicationDisplayVersion>1.0.12</ApplicationDisplayVersion>
+	  <ApplicationVersion>12</ApplicationVersion>
 	  <ApplicationId>me.foxtaur.tracker</ApplicationId>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-android33.0|AnyCPU'">
 	  <ApplicationTitle>Foxtaur</ApplicationTitle>
-	  <ApplicationDisplayVersion>1.0.11</ApplicationDisplayVersion>
-	  <ApplicationVersion>11</ApplicationVersion>
+	  <ApplicationDisplayVersion>1.0.12</ApplicationDisplayVersion>
+	  <ApplicationVersion>12</ApplicationVersion>
 	  <ApplicationId>me.foxtaur.tracker</ApplicationId>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-android33.0|AnyCPU'">
 	  <ApplicationTitle>Foxtaur</ApplicationTitle>
 	  <AndroidPackageFormat>apk</AndroidPackageFormat>
-	  <ApplicationDisplayVersion>1.0.11</ApplicationDisplayVersion>
-	  <ApplicationVersion>11</ApplicationVersion>
+	  <ApplicationDisplayVersion>1.0.12</ApplicationDisplayVersion>
+	  <ApplicationVersion>12</ApplicationVersion>
 	  <ApplicationId>me.foxtaur.tracker</ApplicationId>
 	</PropertyGroup>
 
