@@ -85,7 +85,8 @@ public abstract class DownloadableResourceBase
     /// <summary>
     /// Load resource as a stream from URL
     /// </summary>
-    protected MemoryStream LoadFromUrl(string url, OnDownloadProgressDelegate onDownloadProgress = null)
+    /// <returns>Downloaded stream and file eTag</returns>
+    private Tuple<MemoryStream, string> LoadFromUrl(string url, OnDownloadProgressDelegate onDownloadProgress = null)
     {
         if (string.IsNullOrWhiteSpace(url))
         {
@@ -155,7 +156,7 @@ public abstract class DownloadableResourceBase
                     }
                 }
 
-                return resultStream;
+                return new Tuple<MemoryStream, string>(resultStream, headersResponse.Headers.ETag.Tag);
             }
             finally
             {
@@ -180,12 +181,13 @@ public abstract class DownloadableResourceBase
             throw new ArgumentException(nameof(url));
         }
 
-        using (var downloadStream = LoadFromUrl(url, onDownloadProgress))
+        var downloadResult = LoadFromUrl(url, onDownloadProgress);
+        using (downloadResult.Item1)
         {
             var localPath = GetResourceLocalPath(url);
             
             _logger.Info($"Saving { url } to { localPath }");
-            SaveStreamAsFile(downloadStream, localPath);
+            SaveDownloadResult(downloadResult, localPath);
         }
     }
 
@@ -207,9 +209,9 @@ public abstract class DownloadableResourceBase
     /// <summary>
     /// Save stream as a file
     /// </summary>
-    protected void SaveStreamAsFile(MemoryStream stream, string path)
+    private void SaveDownloadResult(Tuple<MemoryStream, string> downloadResult, string path)
     {
-        _ = stream ?? throw new ArgumentNullException(nameof(stream));
+        _ = downloadResult ?? throw new ArgumentNullException(nameof(downloadResult));
         if (string.IsNullOrWhiteSpace(path))
         {
             throw new ArgumentException(nameof(path));
@@ -222,13 +224,34 @@ public abstract class DownloadableResourceBase
             Directory.CreateDirectory(targetDirectory);
         }
         
+        // Saving eTag
+        SaveETagFile(path, downloadResult.Item2);
+
         using (var fileStream = File.Create(path))
         {
-            stream.Seek(0, SeekOrigin.Begin);
-            stream.CopyTo(fileStream);
+            downloadResult.Item1.Seek(0, SeekOrigin.Begin);
+            downloadResult.Item1.CopyTo(fileStream);
         }
     }
-    
+
+    /// <summary>
+    /// Generate eTag-file path from local path
+    /// </summary>
+    protected string GenerateEtagPath(string localPath)
+    {
+        return $"{ localPath }_eTag.txt";
+    }
+
+    /// <summary>
+    /// Save eTag for given local resource into file
+    /// </summary>
+    private void SaveETagFile(string localResourcePath, string eTag)
+    {
+        var eTagPath = GenerateEtagPath(localResourcePath);
+        
+        File.WriteAllText(eTagPath, eTag);
+    }
+
     /// <summary>
     /// Load ZSTD file to stream
     /// </summary>
