@@ -63,7 +63,16 @@ public class CompressedStreamResource : DownloadableResourceBase
                     {
                         // File may exist, but be outdated
                         var localETagPath = GenerateEtagPath(localPath);
-                        var localETag = File.ReadAllText(localETagPath);
+                        string localETag;
+
+                        if (File.Exists(localETagPath))
+                        {
+                            localETag = File.ReadAllText(localETagPath);
+                        }
+                        else
+                        {
+                            localETag = string.Empty;
+                        }
                         
                         Uri remoteFileUri;
                         if (!Uri.TryCreate(ResourceName, UriKind.Absolute, out remoteFileUri))
@@ -74,7 +83,8 @@ public class CompressedStreamResource : DownloadableResourceBase
                         var remoteETag = _webClient.GetHeadersAsync(remoteFileUri)
                             .Result
                             .Headers
-                            .ETag;
+                            .ETag
+                            .Tag;
 
                         if (!localETag.Equals(remoteETag))
                         {

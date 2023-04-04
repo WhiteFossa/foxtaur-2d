@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "eF7N0rA0FC4uay8tEEX2laHOkbSBs+lJoeNgGKvXQ68nKMDqvTOyWCwKJ8FNqziFhk3GZO1xSd/Ri88R0G+xnA==",
+  "dgSpecHash": "cDL42Ac3t9O2EZ0eolp74dRMPgmlHWfhmVd8tLOwwv66IH2d/X+wii05buQPoyOSPXkCsnjO8QzNyHKg1L368Q==",
   "success": true,
-  "projectFilePath": "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibGeo/LibGeo.csproj",
+  "projectFilePath": "C:\\Non work\\foxtaur-2d\\Foxtaur2D\\LibGeo\\LibGeo.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }
