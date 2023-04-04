@@ -237,7 +237,7 @@ public abstract class DownloadableResourceBase
     /// <summary>
     /// Generate eTag-file path from local path
     /// </summary>
-    private string GenerateEtagPath(string localPath)
+    protected string GenerateEtagPath(string localPath)
     {
         return $"{ localPath }_eTag.txt";
     }

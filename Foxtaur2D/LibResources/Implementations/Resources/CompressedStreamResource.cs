@@ -59,6 +59,34 @@ public class CompressedStreamResource : DownloadableResourceBase
                     {
                         LoadFromUrlToFile(ResourceName, onDownloadProgress);    
                     }
+                    else
+                    {
+                        // File may exist, but be outdated
+                        var localETagPath = GenerateEtagPath(localPath);
+                        var localETag = File.ReadAllText(localETagPath);
+                        
+                        Uri remoteFileUri;
+                        if (!Uri.TryCreate(ResourceName, UriKind.Absolute, out remoteFileUri))
+                        {
+                            throw new ArgumentException(nameof(ResourceName));
+                        }
+                        
+                        var remoteETag = _webClient.GetHeadersAsync(remoteFileUri)
+                            .Result
+                            .Headers
+                            .ETag;
+
+                        if (!localETag.Equals(remoteETag))
+                        {
+                            _logger.Info($"{ ResourceName } is outdated, reloading it...");
+                            
+                            // Local file is outdated
+                            File.Delete(localETagPath);
+                            File.Delete(localPath);
+                            
+                            LoadFromUrlToFile(ResourceName, onDownloadProgress);
+                        }
+                    }
                 }
 
                 // Decompressing
