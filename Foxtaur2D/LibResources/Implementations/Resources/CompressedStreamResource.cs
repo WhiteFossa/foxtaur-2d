@@ -63,8 +63,8 @@ public class CompressedStreamResource : DownloadableResourceBase
                     {
                         // File may exist, but be outdated
                         var localETagPath = GenerateEtagPath(localPath);
+                        
                         string localETag;
-
                         if (File.Exists(localETagPath))
                         {
                             localETag = File.ReadAllText(localETagPath);
