@@ -67,3 +67,8 @@ Configure reverse proxy in a such way (example for Apache):
 # Notes
 
 How to georeference maps: https://www.qgistutorials.com/en/docs/3/georeferencing_basics.html
+
+# Trackers
+# Chinese GF-21
+
+Set it up to trackers.foxtaur.me:10000
