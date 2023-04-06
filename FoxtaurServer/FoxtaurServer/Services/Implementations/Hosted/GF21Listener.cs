@@ -14,7 +14,7 @@ public class GF21Listener : IHostedService
     
     public async Task StartAsync(CancellationToken cancellationToken)
     {
-        var listenIpAddress = IPAddress.Parse("127.0.0.1"); // TODO: Move to config
+        var listenIpAddress = IPAddress.Any; // TODO: Move to config
         var listenEndPoint = new IPEndPoint(listenIpAddress, 10000); // TODO: Move to config
         
         var listener = new Socket
@@ -27,7 +27,7 @@ public class GF21Listener : IHostedService
         listener.Bind(listenEndPoint);
         listener.Listen(1024); // TODO: Move to config - Amount of listening threads
 
-        var processClientsConnectionsThread = new Thread(async () => await ProcessClientsConnections(listener));
+        var processClientsConnectionsThread = new Thread(async () => await ProcessClientsConnections(listener).ConfigureAwait(false));
         processClientsConnectionsThread.Start();
     }
 
@@ -36,10 +36,13 @@ public class GF21Listener : IHostedService
     /// </summary>
     private async Task ProcessClientsConnections(Socket listener)
     {
-        var clientSocket = await listener.AcceptAsync();
+        while (true)
+        {
+            var clientSocket = await listener.AcceptAsync();
 
-        var clientThread = new Thread(async () => await ProcessClientConnection(clientSocket));
-        clientThread.Start();
+            var clientThread = new Thread(async () => await ProcessClientConnection(clientSocket).ConfigureAwait(false));
+            clientThread.Start();
+        }
     }
 
     /// <summary>
@@ -51,6 +54,14 @@ public class GF21Listener : IHostedService
         {
             var buffer = new byte[1_024];
             var receivedBytes = await clientSocket.ReceiveAsync(buffer, SocketFlags.None);
+
+            if (receivedBytes == 0)
+            {
+                // It seems that client disconnected
+                clientSocket.Close();
+                break;
+            }
+            
             var receivedString = Encoding.UTF8.GetString(buffer, 0, receivedBytes);
             
             _logger.Info($"Received: { receivedString }");
