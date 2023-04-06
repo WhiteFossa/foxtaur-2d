@@ -10,6 +10,7 @@ using FoxtaurServer.Mappers.Implementations;
 using FoxtaurServer.Models.Identity;
 using FoxtaurServer.Services.Abstract;
 using FoxtaurServer.Services.Implementations;
+using FoxtaurServer.Services.Implementations.Hosted;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.ResponseCompression;
@@ -141,6 +142,7 @@ public class Startup
         services.AddSingleton<IDistancesMapper, DistancesMapper>();
 
         // Hosted services
+        services.AddHostedService<GF21Listener>();
         
         // Various settings
         services.AddMvc();

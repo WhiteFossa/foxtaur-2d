@@ -10,6 +10,7 @@ services:
 
     ports:
         - 127.0.0.1:5035:80
+        - 127.0.0.1:10000:10000
 
     volumes:
       - foxtaur_logs:/opt/foxtaur/logs
