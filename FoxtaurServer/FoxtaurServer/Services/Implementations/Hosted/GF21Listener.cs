@@ -1,7 +1,6 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using NLog;
 
 namespace FoxtaurServer.Services.Implementations.Hosted;
 
@@ -10,7 +9,12 @@ namespace FoxtaurServer.Services.Implementations.Hosted;
 /// </summary>
 public class GF21Listener : IHostedService
 {
-    private Logger _logger = LogManager.GetCurrentClassLogger();
+    private readonly ILogger _logger;
+
+    public GF21Listener(ILogger<GF21Listener> logger)
+    {
+        _logger = logger;
+    }
     
     public async Task StartAsync(CancellationToken cancellationToken)
     {
@@ -64,7 +68,7 @@ public class GF21Listener : IHostedService
             
             var receivedString = Encoding.UTF8.GetString(buffer, 0, receivedBytes);
             
-            _logger.Info($"Received: { receivedString }");
+            _logger.LogWarning($"Received: { receivedString }");
             
             // Test
             if (receivedString.Contains("TRVAP"))
@@ -72,7 +76,7 @@ public class GF21Listener : IHostedService
                 var currentTime = DateTime.UtcNow;
                 
                 var response = $"TRVBP00{ currentTime.Year }{currentTime.Month:00}{currentTime.Day:00}{currentTime.Hour:00}{currentTime.Minute:00}{currentTime.Second:00}#";
-                _logger.Info($"Sent: { response }");
+                _logger.LogWarning($"Sent: { response }");
                 
                 var responseBytes = Encoding.UTF8.GetBytes(response);
                 await clientSocket.SendAsync(responseBytes, 0);
