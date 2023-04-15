@@ -15,13 +15,15 @@ public class GF21Listener : IHostedService
     private readonly IList<IGF21Parser> _parsers = new List<IGF21Parser>();
 
     public GF21Listener(ILogger<GF21Listener> logger,
-        ILogger<GF21LoginPacketParser> loginPackageParserLogger,
-        ILogger<GF21LocationPacketParser> locationPackageParserLogger)
+        ILogger<GF21LoginPacketParser> loginPacketParserLogger,
+        ILogger<GF21LocationPacketParser> locationPacketParserLogger,
+        ILogger<GF21ShutdownPacketParser> shutdownPacketParserLogger)
     {
         _logger = logger;
         
-        _parsers.Add(new GF21LoginPacketParser(loginPackageParserLogger));
-        _parsers.Add(new GF21LocationPacketParser(locationPackageParserLogger));
+        _parsers.Add(new GF21LoginPacketParser(loginPacketParserLogger));
+        _parsers.Add(new GF21LocationPacketParser(locationPacketParserLogger));
+        _parsers.Add(new GF21ShutdownPacketParser(shutdownPacketParserLogger));
     }
     
     public async Task StartAsync(CancellationToken cancellationToken)
