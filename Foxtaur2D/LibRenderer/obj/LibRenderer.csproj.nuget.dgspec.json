@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibRenderer/LibRenderer.csproj": {}
+    "/mnt/sshfs/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibRenderer/LibRenderer.csproj": {}
   },
   "projects": {
-    "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibAuxiliary/LibAuxiliary.csproj": {
+    "/mnt/sshfs/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibAuxiliary/LibAuxiliary.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibAuxiliary/LibAuxiliary.csproj",
+        "projectUniqueName": "/mnt/sshfs/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibAuxiliary/LibAuxiliary.csproj",
         "projectName": "LibAuxiliary",
-        "projectPath": "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibAuxiliary/LibAuxiliary.csproj",
+        "projectPath": "/mnt/sshfs/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibAuxiliary/LibAuxiliary.csproj",
         "packagesPath": "/home/fossa/.nuget/packages/",
-        "outputPath": "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibAuxiliary/obj/",
+        "outputPath": "/mnt/sshfs/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibAuxiliary/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/fossa/.nuget/NuGet/NuGet.Config"
@@ -63,14 +63,14 @@
         }
       }
     },
-    "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibGeo/LibGeo.csproj": {
+    "/mnt/sshfs/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibGeo/LibGeo.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibGeo/LibGeo.csproj",
+        "projectUniqueName": "/mnt/sshfs/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibGeo/LibGeo.csproj",
         "projectName": "LibGeo",
-        "projectPath": "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibGeo/LibGeo.csproj",
+        "projectPath": "/mnt/sshfs/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibGeo/LibGeo.csproj",
         "packagesPath": "/home/fossa/.nuget/packages/",
-        "outputPath": "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibGeo/obj/",
+        "outputPath": "/mnt/sshfs/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibGeo/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/fossa/.nuget/NuGet/NuGet.Config"
@@ -116,14 +116,14 @@
         }
       }
     },
-    "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibRenderer/LibRenderer.csproj": {
+    "/mnt/sshfs/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibRenderer/LibRenderer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibRenderer/LibRenderer.csproj",
+        "projectUniqueName": "/mnt/sshfs/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibRenderer/LibRenderer.csproj",
         "projectName": "LibRenderer",
-        "projectPath": "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibRenderer/LibRenderer.csproj",
+        "projectPath": "/mnt/sshfs/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibRenderer/LibRenderer.csproj",
         "packagesPath": "/home/fossa/.nuget/packages/",
-        "outputPath": "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibRenderer/obj/",
+        "outputPath": "/mnt/sshfs/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibRenderer/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/fossa/.nuget/NuGet/NuGet.Config"
@@ -138,17 +138,17 @@
           "net7.0": {
             "targetAlias": "net7.0",
             "projectReferences": {
-              "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibAuxiliary/LibAuxiliary.csproj": {
-                "projectPath": "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibAuxiliary/LibAuxiliary.csproj"
+              "/mnt/sshfs/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibAuxiliary/LibAuxiliary.csproj": {
+                "projectPath": "/mnt/sshfs/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibAuxiliary/LibAuxiliary.csproj"
               },
-              "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibGeo/LibGeo.csproj": {
-                "projectPath": "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibGeo/LibGeo.csproj"
+              "/mnt/sshfs/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibGeo/LibGeo.csproj": {
+                "projectPath": "/mnt/sshfs/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibGeo/LibGeo.csproj"
               },
-              "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibResources/LibResources.csproj": {
-                "projectPath": "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibResources/LibResources.csproj"
+              "/mnt/sshfs/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibResources/LibResources.csproj": {
+                "projectPath": "/mnt/sshfs/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibResources/LibResources.csproj"
               },
-              "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibWebClient/LibWebClient.csproj": {
-                "projectPath": "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibWebClient/LibWebClient.csproj"
+              "/mnt/sshfs/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibWebClient/LibWebClient.csproj": {
+                "projectPath": "/mnt/sshfs/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibWebClient/LibWebClient.csproj"
               }
             }
           }
@@ -192,14 +192,14 @@
         }
       }
     },
-    "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibResources/LibResources.csproj": {
+    "/mnt/sshfs/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibResources/LibResources.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibResources/LibResources.csproj",
+        "projectUniqueName": "/mnt/sshfs/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibResources/LibResources.csproj",
         "projectName": "LibResources",
-        "projectPath": "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibResources/LibResources.csproj",
+        "projectPath": "/mnt/sshfs/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibResources/LibResources.csproj",
         "packagesPath": "/home/fossa/.nuget/packages/",
-        "outputPath": "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibResources/obj/",
+        "outputPath": "/mnt/sshfs/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibResources/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/fossa/.nuget/NuGet/NuGet.Config"
@@ -214,11 +214,11 @@
           "net7.0": {
             "targetAlias": "net7.0",
             "projectReferences": {
-              "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibGeo/LibGeo.csproj": {
-                "projectPath": "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibGeo/LibGeo.csproj"
+              "/mnt/sshfs/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibGeo/LibGeo.csproj": {
+                "projectPath": "/mnt/sshfs/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibGeo/LibGeo.csproj"
               },
-              "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibWebClient/LibWebClient.csproj": {
-                "projectPath": "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibWebClient/LibWebClient.csproj"
+              "/mnt/sshfs/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibWebClient/LibWebClient.csproj": {
+                "projectPath": "/mnt/sshfs/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibWebClient/LibWebClient.csproj"
               }
             }
           }
@@ -274,14 +274,14 @@
         }
       }
     },
-    "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibWebClient/LibWebClient.csproj": {
+    "/mnt/sshfs/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibWebClient/LibWebClient.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibWebClient/LibWebClient.csproj",
+        "projectUniqueName": "/mnt/sshfs/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibWebClient/LibWebClient.csproj",
         "projectName": "LibWebClient",
-        "projectPath": "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibWebClient/LibWebClient.csproj",
+        "projectPath": "/mnt/sshfs/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibWebClient/LibWebClient.csproj",
         "packagesPath": "/home/fossa/.nuget/packages/",
-        "outputPath": "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibWebClient/obj/",
+        "outputPath": "/mnt/sshfs/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibWebClient/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/fossa/.nuget/NuGet/NuGet.Config"
@@ -296,11 +296,11 @@
           "net7.0": {
             "targetAlias": "net7.0",
             "projectReferences": {
-              "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibAuxiliary/LibAuxiliary.csproj": {
-                "projectPath": "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibAuxiliary/LibAuxiliary.csproj"
+              "/mnt/sshfs/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibAuxiliary/LibAuxiliary.csproj": {
+                "projectPath": "/mnt/sshfs/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibAuxiliary/LibAuxiliary.csproj"
               },
-              "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibGeo/LibGeo.csproj": {
-                "projectPath": "/mnt/storage0/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibGeo/LibGeo.csproj"
+              "/mnt/sshfs/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibGeo/LibGeo.csproj": {
+                "projectPath": "/mnt/sshfs/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibGeo/LibGeo.csproj"
               }
             }
           }

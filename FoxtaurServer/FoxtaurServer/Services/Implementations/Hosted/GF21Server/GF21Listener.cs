@@ -1,6 +1,7 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using FoxtaurServer.Services.Implementations.Hosted.Parsers;
 
 namespace FoxtaurServer.Services.Implementations.Hosted;
 
@@ -11,9 +12,14 @@ public class GF21Listener : IHostedService
 {
     private readonly ILogger _logger;
 
-    public GF21Listener(ILogger<GF21Listener> logger)
+    private readonly IList<IGF21Parser> _parsers = new List<IGF21Parser>();
+
+    public GF21Listener(ILogger<GF21Listener> logger,
+        ILogger<GF21LoginPacketParser> loginPackageParserLogger)
     {
         _logger = logger;
+        
+        _parsers.Add(new GF21LoginPacketParser(loginPackageParserLogger));
     }
     
     public async Task StartAsync(CancellationToken cancellationToken)
@@ -56,7 +62,7 @@ public class GF21Listener : IHostedService
     {
         while (true)
         {
-            var buffer = new byte[1_024];
+            var buffer = new byte[65535];
             var receivedBytes = await clientSocket.ReceiveAsync(buffer, SocketFlags.None);
 
             if (receivedBytes == 0)
@@ -66,20 +72,21 @@ public class GF21Listener : IHostedService
                 break;
             }
             
-            var receivedString = Encoding.UTF8.GetString(buffer, 0, receivedBytes);
+            var messageFromTracker = Encoding.UTF8.GetString(buffer, 0, receivedBytes);
             
-            _logger.LogWarning($"Received: { receivedString }");
-            
-            // Test
-            if (receivedString.Contains("TRVAP"))
+            _logger.LogWarning($"Received: { messageFromTracker }");
+
+            foreach (var parser in _parsers)
             {
-                var currentTime = DateTime.UtcNow;
+                var parseResult = parser.Parse(messageFromTracker);
+
+                if (parseResult.IsRecognized)
+                {
+                    _logger.LogWarning($"Sent: { parseResult.Response }");
                 
-                var response = $"TRVBP00{ currentTime.Year }{currentTime.Month:00}{currentTime.Day:00}{currentTime.Hour:00}{currentTime.Minute:00}{currentTime.Second:00}#";
-                _logger.LogWarning($"Sent: { response }");
-                
-                var responseBytes = Encoding.UTF8.GetBytes(response);
-                await clientSocket.SendAsync(responseBytes, 0);
+                    var responseBytes = Encoding.UTF8.GetBytes(parseResult.Response);
+                    await clientSocket.SendAsync(responseBytes, 0);
+                }
             }
         }
     }
