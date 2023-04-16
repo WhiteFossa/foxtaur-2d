@@ -1,7 +1,9 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using FoxtaurServer.Constants;
 using FoxtaurServer.Models.Trackers;
+using FoxtaurServer.Services.Abstract;
 using FoxtaurServer.Services.Implementations.Hosted.Parsers;
 
 namespace FoxtaurServer.Services.Implementations.Hosted;
@@ -11,7 +13,13 @@ namespace FoxtaurServer.Services.Implementations.Hosted;
 /// </summary>
 public class GF21Listener : IHostedService
 {
+    /// <summary>
+    /// Buffer, big enough to fit tracker message
+    /// </summary>
+    private const int ReadBufferSize = 65535;
+    
     private readonly ILogger _logger;
+    private readonly IConfigurationService _configurationService;
 
     private readonly IList<IGF21Parser> _parsers = new List<IGF21Parser>();
 
@@ -19,9 +27,11 @@ public class GF21Listener : IHostedService
         ILogger<GF21LoginPacketParser> loginPacketParserLogger,
         ILogger<GF21LocationPacketParser> locationPacketParserLogger,
         ILogger<GF21ShutdownPacketParser> shutdownPacketParserLogger,
-        ILogger<GF21HeartbeatPacketParser> heartbeatPacketParserLogger)
+        ILogger<GF21HeartbeatPacketParser> heartbeatPacketParserLogger,
+        IConfigurationService configurationService)
     {
         _logger = logger;
+        _configurationService = configurationService;
         
         _parsers.Add(new GF21LoginPacketParser(loginPacketParserLogger));
         _parsers.Add(new GF21LocationPacketParser(locationPacketParserLogger));
@@ -31,8 +41,11 @@ public class GF21Listener : IHostedService
     
     public async Task StartAsync(CancellationToken cancellationToken)
     {
-        var listenIpAddress = IPAddress.Any; // TODO: Move to config
-        var listenEndPoint = new IPEndPoint(listenIpAddress, 10000); // TODO: Move to config
+        var listenIpAddress = IPAddress.Any; // We are in docker, so listening everything
+        var listenPort = int.Parse(await _configurationService.GetConfigurationString(GlobalConstants.GF21PortSettingName));
+        var listeningThreadsCount = int.Parse(await _configurationService.GetConfigurationString(GlobalConstants.GF21ListenerThreadsCountSettingName));
+
+        var listenEndPoint = new IPEndPoint(listenIpAddress, listenPort);
         
         var listener = new Socket
         (
@@ -42,7 +55,7 @@ public class GF21Listener : IHostedService
         );
 
         listener.Bind(listenEndPoint);
-        listener.Listen(1024); // TODO: Move to config - Amount of listening threads
+        listener.Listen(listeningThreadsCount);
 
         var processClientsConnectionsThread = new Thread(async () => await ProcessClientsConnections(listener).ConfigureAwait(false));
         processClientsConnectionsThread.Start();
@@ -70,7 +83,7 @@ public class GF21Listener : IHostedService
     {
         while (true)
         {
-            var buffer = new byte[65535];
+            var buffer = new byte[ReadBufferSize];
             var receivedBytes = await clientSocket.ReceiveAsync(buffer, SocketFlags.None);
 
             if (receivedBytes == 0)
@@ -81,8 +94,6 @@ public class GF21Listener : IHostedService
             }
             
             var messageFromTracker = Encoding.UTF8.GetString(buffer, 0, receivedBytes);
-            
-            _logger.LogWarning($"Received: { messageFromTracker }");
 
             foreach (var parser in _parsers)
             {
@@ -90,8 +101,6 @@ public class GF21Listener : IHostedService
 
                 if (parseResult.IsRecognized)
                 {
-                    _logger.LogWarning($"Sent: { parseResult.Response }");
-                
                     var responseBytes = Encoding.UTF8.GetBytes(parseResult.Response);
                     await clientSocket.SendAsync(responseBytes, 0);
                 }

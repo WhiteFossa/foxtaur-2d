@@ -27,8 +27,6 @@ public class GF21HeartbeatPacketParser : IGF21Parser
             return new GF21ParserResponse(false, "");
         }
 
-        _logger.LogWarning("Heartbeat packet.");
-        
         return new GF21ParserResponse(true, @"TRVZP16#");
     }
 }

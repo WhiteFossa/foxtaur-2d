@@ -27,8 +27,6 @@ public class GF21ShutdownPacketParser : IGF21Parser
             return new GF21ParserResponse(false, "");
         }
 
-        _logger.LogWarning("Shutdown request.");
-        
         return new GF21ParserResponse(true, @"TRVBP89#");
     }
 }
