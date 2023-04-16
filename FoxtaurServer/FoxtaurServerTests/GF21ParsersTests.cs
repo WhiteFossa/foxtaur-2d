@@ -47,4 +47,21 @@ public class GF21ParsersTests
         result = parser.Parse(incorrectMessage, context);
         Assert.IsFalse(result.IsRecognized);
     }
+    
+    [Test]
+    public void ShutdownPacketTest()
+    {
+        var logger = Mock.Of<ILogger<GF21ShutdownPacketParser>>();
+        
+        var parser = new GF21ShutdownPacketParser(logger);
+        
+        var context = new TrackerContext();
+        var correctMessage = @"TRVAP89,000009,0,1#";
+        var result = parser.Parse(correctMessage, context);
+        Assert.IsTrue(result.IsRecognized);
+
+        var incorrectMessage = @"Yiff!Yuff!Yerf!";
+        result = parser.Parse(incorrectMessage, context);
+        Assert.IsFalse(result.IsRecognized);
+    }
 }
