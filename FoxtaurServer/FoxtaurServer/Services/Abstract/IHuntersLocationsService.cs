@@ -18,4 +18,9 @@ public interface IHuntersLocationsService
     /// Mass add locations to given hunter. Returns successfully created (or updated) locations IDs
     /// </summary>
     Task<IReadOnlyCollection<Guid>> MassCreateHuntersLocationsAsync(IReadOnlyCollection<HunterLocationDto> huntersLocations, Guid hunterId);
+
+    /// <summary>
+    /// Add hunter location from hardware GSM-GPS tracker
+    /// </summary>
+    Task CreateHunterLocationFromGsmGpsTracker(string imei, DateTime time, double lat, double lon);
 }

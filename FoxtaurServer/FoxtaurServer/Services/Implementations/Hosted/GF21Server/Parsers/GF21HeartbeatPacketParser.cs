@@ -19,7 +19,7 @@ public class GF21HeartbeatPacketParser : IGF21Parser
         _logger = logger;
     }
     
-    public GF21ParserResponse Parse(string message, TrackerContext context)
+    public async Task<GF21ParserResponse> ParseAsync(string message, TrackerContext context)
     {
         var match = Regex.Match(message, HeartbeatPacketRegexp, RegexOptions.IgnoreCase);
         if (!match.Success)

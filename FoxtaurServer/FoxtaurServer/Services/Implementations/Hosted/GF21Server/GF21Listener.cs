@@ -19,24 +19,32 @@ public class GF21Listener : IHostedService
     private const int ReadBufferSize = 65535;
     
     private readonly ILogger _logger;
+    private readonly IServiceProvider _serviceProvider;
     private readonly IConfigurationService _configurationService;
 
     private readonly IList<IGF21Parser> _parsers = new List<IGF21Parser>();
 
-    public GF21Listener(ILogger<GF21Listener> logger,
+    public GF21Listener(IServiceProvider serviceProvider,
+        ILogger<GF21Listener> logger,
         ILogger<GF21LoginPacketParser> loginPacketParserLogger,
         ILogger<GF21LocationPacketParser> locationPacketParserLogger,
         ILogger<GF21ShutdownPacketParser> shutdownPacketParserLogger,
         ILogger<GF21HeartbeatPacketParser> heartbeatPacketParserLogger,
         IConfigurationService configurationService)
     {
+        _serviceProvider = serviceProvider;
         _logger = logger;
         _configurationService = configurationService;
-        
-        _parsers.Add(new GF21LoginPacketParser(loginPacketParserLogger));
-        _parsers.Add(new GF21LocationPacketParser(locationPacketParserLogger));
-        _parsers.Add(new GF21ShutdownPacketParser(shutdownPacketParserLogger));
-        _parsers.Add(new GF21HeartbeatPacketParser(heartbeatPacketParserLogger));
+
+        using (var scope = _serviceProvider.CreateScope())
+        {
+            var huntersLocationsService = scope.ServiceProvider.GetRequiredService<IHuntersLocationsService>();
+            
+            _parsers.Add(new GF21LoginPacketParser(loginPacketParserLogger));
+            _parsers.Add(new GF21LocationPacketParser(locationPacketParserLogger, huntersLocationsService));
+            _parsers.Add(new GF21ShutdownPacketParser(shutdownPacketParserLogger));
+            _parsers.Add(new GF21HeartbeatPacketParser(heartbeatPacketParserLogger));
+        }
     }
     
     public async Task StartAsync(CancellationToken cancellationToken)
@@ -97,7 +105,7 @@ public class GF21Listener : IHostedService
 
             foreach (var parser in _parsers)
             {
-                var parseResult = parser.Parse(messageFromTracker, trackerContext);
+                var parseResult = await parser.ParseAsync(messageFromTracker, trackerContext).ConfigureAwait(false);
 
                 if (parseResult.IsRecognized)
                 {

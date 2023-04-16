@@ -8,12 +8,16 @@ namespace FoxtaurServer.Services.Implementations;
 
 public class HuntersLocationsService : IHuntersLocationsService
 {
+    private readonly ILogger _logger;
+
     private readonly IHuntersLocationsDao _huntersLocationsDao;
     private readonly IHuntersLocationsMapper _huntersLocationsMapper;
 
-    public HuntersLocationsService(IHuntersLocationsDao huntersLocationsDao,
+    public HuntersLocationsService(ILogger<HuntersLocationsService> logger,
+        IHuntersLocationsDao huntersLocationsDao,
         IHuntersLocationsMapper huntersLocationsMapper)
     {
+        _logger = logger;
         _huntersLocationsDao = huntersLocationsDao;
         _huntersLocationsMapper = huntersLocationsMapper;
     }
@@ -58,5 +62,10 @@ public class HuntersLocationsService : IHuntersLocationsService
 
         // TODO: Maybe it will be good to check if locations are actually saved?
         return incomingHunterLocationsIds;
+    }
+
+    public async Task CreateHunterLocationFromGsmGpsTracker(string imei, DateTime time, double lat, double lon)
+    {
+        _logger.LogWarning($"IMEI: { imei }, Time: { time }, Lat: { lat } Lon: { lon }");
     }
 }

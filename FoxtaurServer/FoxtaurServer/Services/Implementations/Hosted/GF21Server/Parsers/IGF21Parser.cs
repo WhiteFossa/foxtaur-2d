@@ -11,5 +11,5 @@ public interface IGF21Parser
     /// <summary>
     /// Parse message from tracker
     /// </summary>
-    GF21ParserResponse Parse(string message, TrackerContext context);
+    Task<GF21ParserResponse> ParseAsync(string message, TrackerContext context);
 }

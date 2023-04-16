@@ -1,6 +1,9 @@
 using System.Text.RegularExpressions;
+using FoxtaurServer.Dao.Abstract;
+using FoxtaurServer.Helpers;
 using FoxtaurServer.Models.Trackers;
 using FoxtaurServer.Models.Trackers.GF21;
+using FoxtaurServer.Services.Abstract;
 
 namespace FoxtaurServer.Services.Implementations.Hosted.Parsers;
 
@@ -18,13 +21,16 @@ public class GF21LocationPacketParser : IGF21Parser
     private const string Response = @"TRVZP14#";
     
     private readonly ILogger _logger;
+    private readonly IHuntersLocationsService _huntersLocationsService;
 
-    public GF21LocationPacketParser(ILogger<GF21LocationPacketParser> logger)
+    public GF21LocationPacketParser(ILogger<GF21LocationPacketParser> logger,
+        IHuntersLocationsService huntersLocationsService)
     {
         _logger = logger;
+        _huntersLocationsService = huntersLocationsService;
     }
     
-    public GF21ParserResponse Parse(string message, TrackerContext context)
+    public async Task<GF21ParserResponse> ParseAsync(string message, TrackerContext context)
     {
         var match = Regex.Match(message, LocationPacketRegexp, RegexOptions.IgnoreCase);
         if (!match.Success)
@@ -70,6 +76,7 @@ public class GF21LocationPacketParser : IGF21Parser
         {
             lat *= -1;
         }
+        lat = lat.ToRadians();
 
         var lon = (double)int.Parse(lonDegrees);
         lon += double.Parse(lonMinutes) * 100.0 / 6000.0;
@@ -77,9 +84,17 @@ public class GF21LocationPacketParser : IGF21Parser
         {
             lon *= -1;
         }
-        
-        _logger.LogWarning($"IMEI: { context.Imei }, Lat: { lat } Lon: { lon }");
-        
+
+        lon = lon.ToRadians();
+
+        await _huntersLocationsService.CreateHunterLocationFromGsmGpsTracker
+        (
+            context.Imei,
+            locationDateTime,
+            lat,
+            lon
+        ).ConfigureAwait(false);
+
         return new GF21ParserResponse(true, Response);
     }
 }
