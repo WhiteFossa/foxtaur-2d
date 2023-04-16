@@ -59,6 +59,25 @@ public class GF21ParsersTests
         var correctMessage = @"TRVAP89,000009,0,1#";
         var result = parser.Parse(correctMessage, context);
         Assert.IsTrue(result.IsRecognized);
+        Assert.AreEqual(@"TRVBP89#", result.Response);
+
+        var incorrectMessage = @"Yiff!Yuff!Yerf!";
+        result = parser.Parse(incorrectMessage, context);
+        Assert.IsFalse(result.IsRecognized);
+    }
+    
+    [Test]
+    public void HeartbeatPacketTest()
+    {
+        var logger = Mock.Of<ILogger<GF21HeartbeatPacketParser>>();
+        
+        var parser = new GF21HeartbeatPacketParser(logger);
+        
+        var context = new TrackerContext();
+        var correctMessage = @"TRVYP16,10000909500020010000204000099992#";
+        var result = parser.Parse(correctMessage, context);
+        Assert.IsTrue(result.IsRecognized);
+        Assert.AreEqual(@"TRVZP16#", result.Response);
 
         var incorrectMessage = @"Yiff!Yuff!Yerf!";
         result = parser.Parse(incorrectMessage, context);

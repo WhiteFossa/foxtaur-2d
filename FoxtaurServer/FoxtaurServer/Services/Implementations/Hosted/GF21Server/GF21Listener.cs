@@ -18,13 +18,15 @@ public class GF21Listener : IHostedService
     public GF21Listener(ILogger<GF21Listener> logger,
         ILogger<GF21LoginPacketParser> loginPacketParserLogger,
         ILogger<GF21LocationPacketParser> locationPacketParserLogger,
-        ILogger<GF21ShutdownPacketParser> shutdownPacketParserLogger)
+        ILogger<GF21ShutdownPacketParser> shutdownPacketParserLogger,
+        ILogger<GF21HeartbeatPacketParser> heartbeatPacketParserLogger)
     {
         _logger = logger;
         
         _parsers.Add(new GF21LoginPacketParser(loginPacketParserLogger));
         _parsers.Add(new GF21LocationPacketParser(locationPacketParserLogger));
         _parsers.Add(new GF21ShutdownPacketParser(shutdownPacketParserLogger));
+        _parsers.Add(new GF21HeartbeatPacketParser(heartbeatPacketParserLogger));
     }
     
     public async Task StartAsync(CancellationToken cancellationToken)
