@@ -1,3 +1,4 @@
+using FoxtaurServer.Models.Trackers;
 using FoxtaurServer.Services.Implementations.Hosted.Parsers;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -17,13 +18,16 @@ public class GF21ParsersTests
         var logger = Mock.Of<ILogger<GF21LoginPacketParser>>();
         
         var parser = new GF21LoginPacketParser(logger);
+
+        var context = new TrackerContext();
         
         var correctMessage = @"TRVAP00353456789012345#";
-        var result = parser.Parse(correctMessage);
+        var result = parser.Parse(correctMessage, context);
         Assert.IsTrue(result.IsRecognized);
+        Assert.AreEqual("353456789012345", context.Imei);
 
         var incorrectMessage = @"Yiff!Yuff!Yerf!";
-        result = parser.Parse(incorrectMessage);
+        result = parser.Parse(incorrectMessage, context);
         Assert.IsFalse(result.IsRecognized);
     }
 
@@ -34,12 +38,13 @@ public class GF21ParsersTests
         
         var parser = new GF21LocationPacketParser(logger);
         
+        var context = new TrackerContext();
         var correctMessage = @"TRVYP14080524A2232.9806N11404.9355E000.1061830323.870600090800010200011,460,0,9520,3671,Home|74-DE-2B-44-88-8C|97&Home1|74-DE-2B-44-88-8C|97&Home2|74-DE-2B-44-88-8C|97& Home3|74-DE-2B-44-88-8C|97#";
-        var result = parser.Parse(correctMessage);
+        var result = parser.Parse(correctMessage, context);
         Assert.IsTrue(result.IsRecognized);
 
         var incorrectMessage = @"Yiff!Yuff!Yerf!";
-        result = parser.Parse(incorrectMessage);
+        result = parser.Parse(incorrectMessage, context);
         Assert.IsFalse(result.IsRecognized);
     }
 }

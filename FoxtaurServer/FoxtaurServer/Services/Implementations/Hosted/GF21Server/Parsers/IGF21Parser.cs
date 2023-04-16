@@ -1,3 +1,4 @@
+using FoxtaurServer.Models.Trackers;
 using FoxtaurServer.Models.Trackers.GF21;
 
 namespace FoxtaurServer.Services.Implementations.Hosted.Parsers;
@@ -10,5 +11,5 @@ public interface IGF21Parser
     /// <summary>
     /// Parse message from tracker
     /// </summary>
-    GF21ParserResponse Parse(string message);
+    GF21ParserResponse Parse(string message, TrackerContext context);
 }

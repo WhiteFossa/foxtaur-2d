@@ -1,6 +1,7 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using FoxtaurServer.Models.Trackers;
 using FoxtaurServer.Services.Implementations.Hosted.Parsers;
 
 namespace FoxtaurServer.Services.Implementations.Hosted;
@@ -54,7 +55,8 @@ public class GF21Listener : IHostedService
         {
             var clientSocket = await listener.AcceptAsync();
 
-            var clientThread = new Thread(async () => await ProcessClientConnection(clientSocket).ConfigureAwait(false));
+            var trackerContext = new TrackerContext();
+            var clientThread = new Thread(async () => await ProcessClientConnection(clientSocket, trackerContext).ConfigureAwait(false));
             clientThread.Start();
         }
     }
@@ -62,7 +64,7 @@ public class GF21Listener : IHostedService
     /// <summary>
     /// Thread, processing one client connection
     /// </summary>
-    private async Task ProcessClientConnection(Socket clientSocket)
+    private async Task ProcessClientConnection(Socket clientSocket, TrackerContext trackerContext)
     {
         while (true)
         {
@@ -82,7 +84,7 @@ public class GF21Listener : IHostedService
 
             foreach (var parser in _parsers)
             {
-                var parseResult = parser.Parse(messageFromTracker);
+                var parseResult = parser.Parse(messageFromTracker, trackerContext);
 
                 if (parseResult.IsRecognized)
                 {

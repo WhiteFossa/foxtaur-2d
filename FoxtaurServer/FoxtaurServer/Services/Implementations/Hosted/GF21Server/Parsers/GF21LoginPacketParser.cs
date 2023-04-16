@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using FoxtaurServer.Models.Trackers;
 using FoxtaurServer.Models.Trackers.GF21;
 
 namespace FoxtaurServer.Services.Implementations.Hosted.Parsers;
@@ -18,17 +19,16 @@ public class GF21LoginPacketParser : IGF21Parser
         _logger = logger;
     }
     
-    public GF21ParserResponse Parse(string message)
+    public GF21ParserResponse Parse(string message, TrackerContext context)
     {
         var match = Regex.Match(message, LoginPacketRegexp, RegexOptions.IgnoreCase);
         if (!match.Success)
         {
             return new GF21ParserResponse(false, "");
         }
-
-        // TODO: Put IMEI into context
+        
         var imei = match.Groups[1].Value;
-        _logger.LogWarning(@"IMEI: { imei }");
+        context.SetImei(imei);
         
         var currentTime = DateTime.UtcNow;
         var response = $"TRVBP00{ currentTime.Year }{currentTime.Month:00}{currentTime.Day:00}{currentTime.Hour:00}{currentTime.Minute:00}{currentTime.Second:00}#";

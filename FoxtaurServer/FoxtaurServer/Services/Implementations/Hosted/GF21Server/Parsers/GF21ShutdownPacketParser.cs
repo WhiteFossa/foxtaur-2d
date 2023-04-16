@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using FoxtaurServer.Models.Trackers;
 using FoxtaurServer.Models.Trackers.GF21;
 
 namespace FoxtaurServer.Services.Implementations.Hosted.Parsers;
@@ -18,7 +19,7 @@ public class GF21ShutdownPacketParser : IGF21Parser
         _logger = logger;
     }
     
-    public GF21ParserResponse Parse(string message)
+    public GF21ParserResponse Parse(string message, TrackerContext context)
     {
         var match = Regex.Match(message, ShutdownPacketRegexp, RegexOptions.IgnoreCase);
         if (!match.Success)
