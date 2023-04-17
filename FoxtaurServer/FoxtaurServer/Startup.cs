@@ -129,6 +129,7 @@ public class Startup
         services.AddScoped<IHuntersLocationsDao, HuntersLocationsDao>();
         services.AddScoped<IDistancesDao, DistancesDao>();
         services.AddScoped<IDistanceToFoxLocationLinkersDao, DistanceToFoxLocationLinkersDao>();
+        services.AddScoped<IGsmGpsTrackersDao, GsmGpsTrackersDao>();
         
         // Singletons
         services.AddSingleton<IConfigurationService, ConfigurationService>();

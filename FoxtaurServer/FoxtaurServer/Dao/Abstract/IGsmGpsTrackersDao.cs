@@ -25,4 +25,18 @@ public interface IGsmGpsTrackersDao
     Task<GsmGpsTracker> GetByImeiAsync(string imei);
 
     #endregion
+    
+    #region Create / Update
+
+    /// <summary>
+    /// Create new tracker
+    /// </summary>
+    Task CreateAsync(GsmGpsTracker tracker);
+
+    /// <summary>
+    /// Update information about tracker
+    /// </summary>
+    Task UpdateAsync(GsmGpsTracker tracker);
+
+    #endregion
 }
