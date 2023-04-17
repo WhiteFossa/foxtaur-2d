@@ -141,6 +141,7 @@ public class Startup
         services.AddSingleton<ILocationsMapper, LocationsMapper>();
         services.AddSingleton<IHuntersLocationsMapper, HuntersLocationsMapper>();
         services.AddSingleton<IDistancesMapper, DistancesMapper>();
+        services.AddSingleton<IGsmGpsTrackersMapper, GsmGpsTrackersMapper>();
 
         // Hosted services
         services.AddHostedService<GF21Listener>();
