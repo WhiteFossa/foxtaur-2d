@@ -49,6 +49,11 @@ public class MainDbContext : DbContext
     /// </summary>
     public DbSet<DistanceToFoxLocationLinker> DistanceToFoxLocationLinkers { get; set; }
 
+    /// <summary>
+    /// GSM-interfaced hardware trackers
+    /// </summary>
+    public DbSet<GsmGpsTracker> GsmGpsTrackers { get; set; }
+
     public MainDbContext(DbContextOptions<MainDbContext> options) : base(options)
     {
     }
@@ -86,5 +91,10 @@ public class MainDbContext : DbContext
             .Entity<Location>()
             .HasMany(l => l.AsFoxLocationInDistanceToFoxLocationLinkers)
             .WithOne(dtll => dtll.FoxLocation);
+        
+        // GSM-interfaced trackers
+        modelBuilder.Entity<GsmGpsTracker>()
+            .HasIndex(t => t.Imei)
+            .IsUnique();
     }
 }
