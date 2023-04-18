@@ -24,4 +24,15 @@ public class GsmGpsTrackersService : IGsmGpsTrackersService
     {
         return _trackersMapper.Map(await _trackersDao.GetAllTrackersAsync().ConfigureAwait(false));
     }
+
+    public async Task<GsmGpsTrackerDto> CreateNewTrackerAsync(GsmGpsTrackerDto tracker)
+    {
+        _ = tracker ?? throw new ArgumentNullException(nameof(tracker), "Tracker must be specified.");
+
+        var mappedTracker = _trackersMapper.Map(tracker);
+        
+        await _trackersDao.CreateAsync(mappedTracker);
+
+        return new GsmGpsTrackerDto(mappedTracker.Id, tracker.Imei, tracker.UsedBy);
+    }
 }

@@ -12,4 +12,9 @@ public interface IGsmGpsTrackersService
     /// </summary>
     /// <returns></returns>
     Task<IReadOnlyCollection<GsmGpsTrackerDto>> GetAllTrackersAsync();
+
+    /// <summary>
+    /// Create new tracker
+    /// </summary>
+    Task<GsmGpsTrackerDto> CreateNewTrackerAsync(GsmGpsTrackerDto tracker);
 }
