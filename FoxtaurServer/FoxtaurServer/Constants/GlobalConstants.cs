@@ -38,6 +38,24 @@ public class GlobalConstants
     /// Take JWT valid audience from this settings in appsettings.json
     /// </summary>
     public const string JwtValidAudienceSettingName = "JWT:ValidAudience";
+    
+    #region Trackers
+    
+    #region GF21
+    
+    /// <summary>
+    /// Take GF21 server port from this setting
+    /// </summary>
+    public const string GF21PortSettingName = "Trackers:GF21_Port";
+    
+    /// <summary>
+    /// Take GF21 server listener threads count from this setting
+    /// </summary>
+    public const string GF21ListenerThreadsCountSettingName = "Trackers:GF21_ListenerThreads";
+    
+    #endregion
+    
+    #endregion
 
     #endregion
     

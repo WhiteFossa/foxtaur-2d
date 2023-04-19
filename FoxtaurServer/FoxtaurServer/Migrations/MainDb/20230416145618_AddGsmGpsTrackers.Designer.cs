@@ -3,6 +3,7 @@ using System;
 using FoxtaurServer.Dao;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FoxtaurServer.Migrations.MainDb
 {
     [DbContext(typeof(MainDbContext))]
-    partial class MainDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230416145618_AddGsmGpsTrackers")]
+    partial class AddGsmGpsTrackers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -137,9 +140,6 @@ namespace FoxtaurServer.Migrations.MainDb
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Imei")
-                        .IsUnique();
 
                     b.HasIndex("UsedById");
 

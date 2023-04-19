@@ -10,6 +10,7 @@ using FoxtaurServer.Mappers.Implementations;
 using FoxtaurServer.Models.Identity;
 using FoxtaurServer.Services.Abstract;
 using FoxtaurServer.Services.Implementations;
+using FoxtaurServer.Services.Implementations.Hosted;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.ResponseCompression;
@@ -128,6 +129,8 @@ public class Startup
         services.AddScoped<IHuntersLocationsDao, HuntersLocationsDao>();
         services.AddScoped<IDistancesDao, DistancesDao>();
         services.AddScoped<IDistanceToFoxLocationLinkersDao, DistanceToFoxLocationLinkersDao>();
+        services.AddScoped<IGsmGpsTrackersDao, GsmGpsTrackersDao>();
+        services.AddScoped<IGsmGpsTrackersService, GsmGpsTrackersService>();
         
         // Singletons
         services.AddSingleton<IConfigurationService, ConfigurationService>();
@@ -139,8 +142,10 @@ public class Startup
         services.AddSingleton<ILocationsMapper, LocationsMapper>();
         services.AddSingleton<IHuntersLocationsMapper, HuntersLocationsMapper>();
         services.AddSingleton<IDistancesMapper, DistancesMapper>();
+        services.AddSingleton<IGsmGpsTrackersMapper, GsmGpsTrackersMapper>();
 
         // Hosted services
+        services.AddHostedService<GF21Listener>();
         
         // Various settings
         services.AddMvc();

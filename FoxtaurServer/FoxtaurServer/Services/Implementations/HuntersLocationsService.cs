@@ -8,14 +8,21 @@ namespace FoxtaurServer.Services.Implementations;
 
 public class HuntersLocationsService : IHuntersLocationsService
 {
+    private readonly ILogger _logger;
+
     private readonly IHuntersLocationsDao _huntersLocationsDao;
     private readonly IHuntersLocationsMapper _huntersLocationsMapper;
+    private readonly IGsmGpsTrackersDao _gsmGpsTrackersDao;
 
-    public HuntersLocationsService(IHuntersLocationsDao huntersLocationsDao,
-        IHuntersLocationsMapper huntersLocationsMapper)
+    public HuntersLocationsService(ILogger<HuntersLocationsService> logger,
+        IHuntersLocationsDao huntersLocationsDao,
+        IHuntersLocationsMapper huntersLocationsMapper,
+        IGsmGpsTrackersDao gsmGpsTrackersDao)
     {
+        _logger = logger;
         _huntersLocationsDao = huntersLocationsDao;
         _huntersLocationsMapper = huntersLocationsMapper;
+        _gsmGpsTrackersDao = gsmGpsTrackersDao;
     }
     
     public async Task<Dictionary<Guid, IReadOnlyCollection<HunterLocationDto>>> MassGetHuntersLocationsAsync(IReadOnlyCollection<Guid> huntersIds, DateTime fromTime, DateTime toTime)
@@ -58,5 +65,39 @@ public class HuntersLocationsService : IHuntersLocationsService
 
         // TODO: Maybe it will be good to check if locations are actually saved?
         return incomingHunterLocationsIds;
+    }
+
+    public async Task CreateHunterLocationFromGsmGpsTracker(string imei, DateTime time, double lat, double lon)
+    {
+        if (string.IsNullOrWhiteSpace(imei))
+        {
+            throw new ArgumentException("Empty IMEI is not allowed.", nameof(imei));
+        }
+
+        // Do we have a tracker with given IMEI?
+        var tracker = await _gsmGpsTrackersDao.GetByImeiAsync(imei).ConfigureAwait(false);
+        if (tracker == null)
+        {
+            _logger.LogWarning($"Foreign tracker with IMEI = { imei }, ignoring.");
+            return;
+        }
+        
+        // Hunter, using this tracker
+        if (tracker.UsedBy == null)
+        {
+            _logger.LogWarning($"Tracker with IMEI = { imei } is used by no one, ignoring.");
+            return;
+        }
+
+        var location = new HunterLocation()
+        {
+            Hunter = tracker.UsedBy,
+            Timestamp = time,
+            Lat = lat,
+            Lon = lon,
+            Alt = 0
+        };
+
+        await _huntersLocationsDao.MassCreateAsync(new List<HunterLocation>() { location }).ConfigureAwait(false);
     }
 }

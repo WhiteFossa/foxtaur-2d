@@ -12,12 +12,12 @@ public interface IDistancesDao
     /// <summary>
     /// Get all existing distances
     /// </summary>
-    public Task<IReadOnlyCollection<Distance>> GetAllDistancesAsync();
+    Task<IReadOnlyCollection<Distance>> GetAllDistancesAsync();
 
     /// <summary>
     /// Get distance by given ID. Will return null if distance not found
     /// </summary>
-    public Task<Distance> GetDistanceByIdAsync(Guid distanceId);
+    Task<Distance> GetDistanceByIdAsync(Guid distanceId);
     
     /// <summary>
     /// Return distance by name or null if not found
