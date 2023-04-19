@@ -36,15 +36,14 @@ public class GF21Listener : IHostedService
         _logger = logger;
         _configurationService = configurationService;
 
-        using (var scope = _serviceProvider.CreateScope())
-        {
-            var huntersLocationsService = scope.ServiceProvider.GetRequiredService<IHuntersLocationsService>();
-            
-            _parsers.Add(new GF21LoginPacketParser(loginPacketParserLogger));
-            _parsers.Add(new GF21LocationPacketParser(locationPacketParserLogger, huntersLocationsService));
-            _parsers.Add(new GF21ShutdownPacketParser(shutdownPacketParserLogger));
-            _parsers.Add(new GF21HeartbeatPacketParser(heartbeatPacketParserLogger));
-        }
+        var scope = _serviceProvider.CreateScope();
+        
+        var huntersLocationsService = scope.ServiceProvider.GetRequiredService<IHuntersLocationsService>();
+        
+        _parsers.Add(new GF21LoginPacketParser(loginPacketParserLogger));
+        _parsers.Add(new GF21LocationPacketParser(locationPacketParserLogger, huntersLocationsService));
+        _parsers.Add(new GF21ShutdownPacketParser(shutdownPacketParserLogger));
+        _parsers.Add(new GF21HeartbeatPacketParser(heartbeatPacketParserLogger));
     }
     
     public async Task StartAsync(CancellationToken cancellationToken)
