@@ -1,7 +1,9 @@
 using FoxtaurServer.Models.Api;
 using FoxtaurServer.Models.Api.Requests;
+using FoxtaurServer.Models.Identity;
 using FoxtaurServer.Services.Abstract;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FoxtaurServer.Controllers.Api;
@@ -14,10 +16,13 @@ namespace FoxtaurServer.Controllers.Api;
 public class GsmGpsTrackersController : ControllerBase
 {
     private readonly IGsmGpsTrackersService _trackersService;
+    private readonly UserManager<User> _userManager;
 
-    public GsmGpsTrackersController(IGsmGpsTrackersService trackersService)
+    public GsmGpsTrackersController(IGsmGpsTrackersService trackersService,
+        UserManager<User> userManager)
     {
         _trackersService = trackersService;
+        _userManager = userManager;
     }
     
     /// <summary>
@@ -57,5 +62,29 @@ public class GsmGpsTrackersController : ControllerBase
         }
 
         return Ok(newTracker);
+    }
+
+    /// <summary>
+    /// Claim a tracker
+    /// </summary>
+    /// <returns></returns>
+    [Route("api/GsmGpsTrackers/Claim")]
+    [HttpPost]
+    public async Task<ActionResult<GsmGpsTrackerDto>> ClaimTracker([FromBody] ClaimTrackerRequest request)
+    {
+        if (request == null)
+        {
+            return BadRequest();
+        }
+        
+        var currentUser = await _userManager.FindByNameAsync(User.Identity.Name);
+        var associatedTracker = await _trackersService.ClaimTrackerAsync(Guid.Parse(currentUser.Id), request.TrackerId);
+
+        if (associatedTracker == null)
+        {
+            return NotFound("Tracker with given ID is not found.");
+        }
+
+        return Ok(associatedTracker);
     }
 }

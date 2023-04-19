@@ -9,15 +9,18 @@ public class GsmGpsTrackersService : IGsmGpsTrackersService
 {
     private readonly IGsmGpsTrackersDao _trackersDao;
     private readonly IGsmGpsTrackersMapper _trackersMapper;
+    private readonly IProfilesDao _profilesDao;
 
     public GsmGpsTrackersService
     (
         IGsmGpsTrackersDao trackersDao,
-        IGsmGpsTrackersMapper trackersMapper
+        IGsmGpsTrackersMapper trackersMapper,
+        IProfilesDao profilesDao
     )
     {
         _trackersDao = trackersDao;
         _trackersMapper = trackersMapper;
+        _profilesDao = profilesDao;
     }
     
     public async Task<IReadOnlyCollection<GsmGpsTrackerDto>> GetAllTrackersAsync()
@@ -34,5 +37,31 @@ public class GsmGpsTrackersService : IGsmGpsTrackersService
         await _trackersDao.CreateAsync(mappedTracker);
 
         return new GsmGpsTrackerDto(mappedTracker.Id, tracker.Imei, tracker.UsedBy);
+    }
+
+    public async Task<GsmGpsTrackerDto> ClaimTrackerAsync(Guid userId, Guid trackerId)
+    {
+        var user = (await _profilesDao
+                .GetProfilesAsync(new List<string>() { userId.ToString() })
+                .ConfigureAwait(false))
+                .SingleOrDefault();
+
+        if (user == null)
+        {
+            // User not found
+            return null;
+        }
+
+        var tracker = await _trackersDao.GetByIdAsync(trackerId).ConfigureAwait(false);
+        if (tracker == null)
+        {
+            // Tracker not found
+            return null;
+        }
+
+        tracker.UsedBy = user;
+        await _trackersDao.UpdateAsync(tracker).ConfigureAwait(false);
+
+        return _trackersMapper.Map(tracker);
     }
 }

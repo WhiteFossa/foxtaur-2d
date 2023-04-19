@@ -17,4 +17,9 @@ public interface IGsmGpsTrackersService
     /// Create new tracker
     /// </summary>
     Task<GsmGpsTrackerDto> CreateNewTrackerAsync(GsmGpsTrackerDto tracker);
+
+    /// <summary>
+    /// Associate the tracker with the given user. Returns null if user or tracker is not found
+    /// </summary>
+    Task<GsmGpsTrackerDto> ClaimTrackerAsync(Guid userId, Guid trackerId);
 }
