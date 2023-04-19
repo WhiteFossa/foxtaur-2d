@@ -62,6 +62,7 @@ public class GF21LocationPacketParser : IGF21Parser
             int.Parse(hour),
             int.Parse(minute),
             int.Parse(second));
+        locationDateTime = DateTime.SpecifyKind(locationDateTime, DateTimeKind.Utc);
 
         var isLocationValid = validityMarker == "A";
         if (!isLocationValid)
