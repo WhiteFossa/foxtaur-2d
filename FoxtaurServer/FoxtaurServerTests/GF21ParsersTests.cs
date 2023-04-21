@@ -25,6 +25,7 @@ public class GF21ParsersTests
         var correctMessage = @"TRVAP00353456789012345#";
         var result = parser.ParseAsync(correctMessage, context).Result;
         Assert.IsTrue(result.IsRecognized);
+        Assert.IsTrue(result.IsSendResponse);
         Assert.AreEqual("353456789012345", context.Imei);
 
         var incorrectMessage = @"Yiff!Yuff!Yerf!";
@@ -44,6 +45,8 @@ public class GF21ParsersTests
         var correctMessage = @"TRVYP14080524A2232.9806N11404.9355E000.1061830323.870600090800010200011,460,0,9520,3671,Home|74-DE-2B-44-88-8C|97&Home1|74-DE-2B-44-88-8C|97&Home2|74-DE-2B-44-88-8C|97& Home3|74-DE-2B-44-88-8C|97#";
         var result = parser.ParseAsync(correctMessage, context).Result;
         Assert.IsTrue(result.IsRecognized);
+        Assert.IsTrue(result.IsSendResponse);
+        Assert.AreEqual(@"TRVZP14#", result.Response);
 
         var incorrectMessage = @"Yiff!Yuff!Yerf!";
         result = parser.ParseAsync(incorrectMessage, context).Result;
@@ -61,6 +64,7 @@ public class GF21ParsersTests
         var correctMessage = @"TRVAP89,000009,0,1#";
         var result = parser.ParseAsync(correctMessage, context).Result;
         Assert.IsTrue(result.IsRecognized);
+        Assert.IsTrue(result.IsSendResponse);
         Assert.AreEqual(@"TRVBP89#", result.Response);
 
         var incorrectMessage = @"Yiff!Yuff!Yerf!";
@@ -79,6 +83,7 @@ public class GF21ParsersTests
         var correctMessage = @"TRVYP16,10000909500020010000204000099992#";
         var result = parser.ParseAsync(correctMessage, context).Result;
         Assert.IsTrue(result.IsRecognized);
+        Assert.IsTrue(result.IsSendResponse);
         Assert.AreEqual(@"TRVZP16#", result.Response);
 
         var incorrectMessage = @"Yiff!Yuff!Yerf!";
@@ -100,6 +105,25 @@ public class GF21ParsersTests
         Assert.IsTrue(result.IsRecognized);
         Assert.IsFalse(result.IsSendResponse);
         Assert.AreEqual(string.Empty, result.Response);
+
+        var incorrectMessage = @"Yiff!Yuff!Yerf!";
+        result = parser.ParseAsync(incorrectMessage, context).Result;
+        Assert.IsFalse(result.IsRecognized);
+    }
+    
+    [Test]
+    public void ImsiIccidPacketTest()
+    {
+        var logger = Mock.Of<ILogger<GF21ImsiIccidPacketParser>>();
+        
+        var parser = new GF21ImsiIccidPacketParser(logger);
+        
+        var context = new TrackerContext();
+        var correctMessage = @"TRVYP02,297039130876381,89382030000036697753#";
+        var result = parser.ParseAsync(correctMessage, context).Result;
+        Assert.IsTrue(result.IsRecognized);
+        Assert.IsTrue(result.IsSendResponse);
+        Assert.AreEqual(@"TRVZP02#", result.Response);
 
         var incorrectMessage = @"Yiff!Yuff!Yerf!";
         result = parser.ParseAsync(incorrectMessage, context).Result;

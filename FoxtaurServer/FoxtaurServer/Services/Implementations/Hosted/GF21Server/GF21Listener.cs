@@ -34,6 +34,7 @@ public class GF21Listener : IHostedService
         ILogger<GF21ShutdownPacketParser> shutdownPacketParserLogger,
         ILogger<GF21HeartbeatPacketParser> heartbeatPacketParserLogger,
         ILogger<GF21SetStationarySleepPacketParser> setStationarySleepPacketParserLogger,
+        ILogger<GF21ImsiIccidPacketParser> imsiIccidPacketParserLogger,
         IConfigurationService configurationService)
     {
         _serviceProvider = serviceProvider;
@@ -49,6 +50,7 @@ public class GF21Listener : IHostedService
         _parsers.Add(new GF21ShutdownPacketParser(shutdownPacketParserLogger));
         _parsers.Add(new GF21HeartbeatPacketParser(heartbeatPacketParserLogger));
         _parsers.Add(new GF21SetStationarySleepPacketParser(setStationarySleepPacketParserLogger));
+        _parsers.Add(new GF21ImsiIccidPacketParser(imsiIccidPacketParserLogger));
     }
     
     public async Task StartAsync(CancellationToken cancellationToken)
@@ -118,6 +120,8 @@ public class GF21Listener : IHostedService
 
                 if (parseResult.IsRecognized && parseResult.IsSendResponse)
                 {
+                    _logger.LogWarning($"Sending packet response: { parseResult.Response }");
+                    
                     var responseBytes = Encoding.UTF8.GetBytes(parseResult.Response);
                     await clientSocket.SendAsync(responseBytes, 0);
                 }
@@ -130,7 +134,7 @@ public class GF21Listener : IHostedService
 
                 var commandMessage = await commandToSend.SendCommandAsync(trackerContext);
                 
-                _logger.LogWarning($"Sending: { commandMessage }");
+                _logger.LogWarning($"Sending command: { commandMessage }");
                 
                 var commandMessageBytes = Encoding.UTF8.GetBytes(commandMessage);
                 await clientSocket.SendAsync(commandMessageBytes, 0);
