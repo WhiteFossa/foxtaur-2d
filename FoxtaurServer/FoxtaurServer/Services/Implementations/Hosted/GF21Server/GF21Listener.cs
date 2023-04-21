@@ -109,7 +109,7 @@ public class GF21Listener : IHostedService
             
             var messageFromTracker = Encoding.UTF8.GetString(buffer, 0, receivedBytes);
 
-            _logger.LogWarning($"Received: { messageFromTracker }");
+            //_logger.LogWarning($"Received: { messageFromTracker }");
             
             foreach (var parser in _parsers)
             {
@@ -119,7 +119,7 @@ public class GF21Listener : IHostedService
                 {
                     if (parseResult.IsSendResponse)
                     {
-                        _logger.LogWarning($"Sending packet response: { parseResult.Response }");
+                        //_logger.LogWarning($"Sending packet response: { parseResult.Response }");
                     
                         var responseBytes = Encoding.UTF8.GetBytes(parseResult.Response);
                         await clientSocket.SendAsync(responseBytes, 0);
@@ -141,7 +141,7 @@ public class GF21Listener : IHostedService
 
                 var commandMessage = await commandToSend.SendCommandAsync(trackerContext);
                 
-                _logger.LogWarning($"Sending command: { commandMessage }");
+                //_logger.LogWarning($"Sending command: { commandMessage }");
                 
                 var commandMessageBytes = Encoding.UTF8.GetBytes(commandMessage);
                 await clientSocket.SendAsync(commandMessageBytes, 0);
