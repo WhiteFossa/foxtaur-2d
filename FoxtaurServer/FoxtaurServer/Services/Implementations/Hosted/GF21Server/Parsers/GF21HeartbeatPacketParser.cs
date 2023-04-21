@@ -24,9 +24,9 @@ public class GF21HeartbeatPacketParser : IGF21Parser
         var match = Regex.Match(message, HeartbeatPacketRegexp, RegexOptions.IgnoreCase);
         if (!match.Success)
         {
-            return new GF21ParserResponse(false, "");
+            return new GF21ParserResponse(false, false, "");
         }
 
-        return new GF21ParserResponse(true, @"TRVZP16#");
+        return new GF21ParserResponse(true, true, @"TRVZP16#");
     }
 }

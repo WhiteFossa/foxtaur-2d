@@ -4,6 +4,7 @@ using System.Text;
 using FoxtaurServer.Constants;
 using FoxtaurServer.Models.Trackers;
 using FoxtaurServer.Services.Abstract;
+using FoxtaurServer.Services.Implementations.Hosted.Commands;
 using FoxtaurServer.Services.Implementations.Hosted.Parsers;
 
 namespace FoxtaurServer.Services.Implementations.Hosted;
@@ -24,12 +25,15 @@ public class GF21Listener : IHostedService
 
     private readonly IList<IGF21Parser> _parsers = new List<IGF21Parser>();
 
+    private Queue<IGF21Command> _commandsToSend = new Queue<IGF21Command>();
+
     public GF21Listener(IServiceProvider serviceProvider,
         ILogger<GF21Listener> logger,
         ILogger<GF21LoginPacketParser> loginPacketParserLogger,
         ILogger<GF21LocationPacketParser> locationPacketParserLogger,
         ILogger<GF21ShutdownPacketParser> shutdownPacketParserLogger,
         ILogger<GF21HeartbeatPacketParser> heartbeatPacketParserLogger,
+        ILogger<GF21SetStationarySleepPacketParser> setStationarySleepPacketParserLogger,
         IConfigurationService configurationService)
     {
         _serviceProvider = serviceProvider;
@@ -44,6 +48,7 @@ public class GF21Listener : IHostedService
         _parsers.Add(new GF21LocationPacketParser(locationPacketParserLogger, huntersLocationsService));
         _parsers.Add(new GF21ShutdownPacketParser(shutdownPacketParserLogger));
         _parsers.Add(new GF21HeartbeatPacketParser(heartbeatPacketParserLogger));
+        _parsers.Add(new GF21SetStationarySleepPacketParser(setStationarySleepPacketParserLogger));
     }
     
     public async Task StartAsync(CancellationToken cancellationToken)
@@ -88,6 +93,9 @@ public class GF21Listener : IHostedService
     /// </summary>
     private async Task ProcessClientConnection(Socket clientSocket, TrackerContext trackerContext)
     {
+        // First of all we need to disable sleepmode to avoid missing measurements when moving slowly
+        _commandsToSend.Enqueue(new GF21SetStationarySleepCommand(false));
+
         while (true)
         {
             var buffer = new byte[ReadBufferSize];
@@ -106,11 +114,21 @@ public class GF21Listener : IHostedService
             {
                 var parseResult = await parser.ParseAsync(messageFromTracker, trackerContext).ConfigureAwait(false);
 
-                if (parseResult.IsRecognized)
+                if (parseResult.IsRecognized && parseResult.IsSendResponse)
                 {
                     var responseBytes = Encoding.UTF8.GetBytes(parseResult.Response);
                     await clientSocket.SendAsync(responseBytes, 0);
                 }
+            }
+            
+            // Sending one command per loop rotation
+            if (_commandsToSend.Any())
+            {
+                var commandToSend = _commandsToSend.Dequeue();
+
+                var commandMessage = await commandToSend.SendCommandAsync(trackerContext);
+                var commandMessageBytes = Encoding.UTF8.GetBytes(commandMessage);
+                await clientSocket.SendAsync(commandMessageBytes, 0);
             }
         }
     }

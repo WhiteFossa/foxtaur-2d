@@ -11,6 +11,11 @@ public class TrackerContext
     public string Imei { get; private set; }
 
     /// <summary>
+    /// Last command ID (for GF-21 it is 6 digits)
+    /// </summary>
+    public string LastCommandId { get; private set; }
+
+    /// <summary>
     /// Set tracker IMEI
     /// </summary>
     public void SetImei(string imei)
@@ -22,4 +27,13 @@ public class TrackerContext
 
         Imei = imei;
     }
+
+    /// <summary>
+    /// Set last command ID
+    /// </summary>
+    public void SetLastCommandId(string id)
+    {
+        LastCommandId = id;
+    }
+    
 }
