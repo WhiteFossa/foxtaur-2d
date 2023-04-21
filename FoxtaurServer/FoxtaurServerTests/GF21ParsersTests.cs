@@ -85,4 +85,24 @@ public class GF21ParsersTests
         result = parser.ParseAsync(incorrectMessage, context).Result;
         Assert.IsFalse(result.IsRecognized);
     }
+    
+    [Test]
+    public void SetStationarySleepModePacketTest()
+    {
+        var logger = Mock.Of<ILogger<GF21SetStationarySleepPacketParser>>();
+        
+        var parser = new GF21SetStationarySleepPacketParser(logger);
+
+        var context = new TrackerContext();
+        
+        var correctMessage = @"TRVDP21,123456,1#";
+        var result = parser.ParseAsync(correctMessage, context).Result;
+        Assert.IsTrue(result.IsRecognized);
+        Assert.IsFalse(result.IsSendResponse);
+        Assert.AreEqual(string.Empty, result.Response);
+
+        var incorrectMessage = @"Yiff!Yuff!Yerf!";
+        result = parser.ParseAsync(incorrectMessage, context).Result;
+        Assert.IsFalse(result.IsRecognized);
+    }
 }

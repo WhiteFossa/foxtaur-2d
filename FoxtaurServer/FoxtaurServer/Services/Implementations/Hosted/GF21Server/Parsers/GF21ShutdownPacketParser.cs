@@ -24,9 +24,9 @@ public class GF21ShutdownPacketParser : IGF21Parser
         var match = Regex.Match(message, ShutdownPacketRegexp, RegexOptions.IgnoreCase);
         if (!match.Success)
         {
-            return new GF21ParserResponse(false, "");
+            return new GF21ParserResponse(false, false, "");
         }
 
-        return new GF21ParserResponse(true, @"TRVBP89#");
+        return new GF21ParserResponse(true, true, @"TRVBP89#");
     }
 }

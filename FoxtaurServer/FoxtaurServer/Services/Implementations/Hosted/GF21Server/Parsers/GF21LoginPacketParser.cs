@@ -24,7 +24,7 @@ public class GF21LoginPacketParser : IGF21Parser
         var match = Regex.Match(message, LoginPacketRegexp, RegexOptions.IgnoreCase);
         if (!match.Success)
         {
-            return new GF21ParserResponse(false, "");
+            return new GF21ParserResponse(false, false, "");
         }
         
         var imei = match.Groups[1].Value;
@@ -33,6 +33,6 @@ public class GF21LoginPacketParser : IGF21Parser
         var currentTime = DateTime.UtcNow;
         var response = $"TRVBP00{ currentTime.Year }{currentTime.Month:00}{currentTime.Day:00}{currentTime.Hour:00}{currentTime.Minute:00}{currentTime.Second:00}#";
 
-        return new GF21ParserResponse(true, response);
+        return new GF21ParserResponse(true, true, response);
     }
 }

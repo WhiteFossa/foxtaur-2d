@@ -35,7 +35,7 @@ public class GF21LocationPacketParser : IGF21Parser
         var match = Regex.Match(message, LocationPacketRegexp, RegexOptions.IgnoreCase);
         if (!match.Success)
         {
-            return new GF21ParserResponse(false, "");
+            return new GF21ParserResponse(false, false, "");
         }
         
         var year = match.Groups[1].Value;
@@ -68,7 +68,7 @@ public class GF21LocationPacketParser : IGF21Parser
         if (!isLocationValid)
         {
             // Location invalid
-            return new GF21ParserResponse(true, Response);
+            return new GF21ParserResponse(true, true, Response);
         }
 
         var lat = (double)int.Parse(latDegrees);
@@ -96,6 +96,6 @@ public class GF21LocationPacketParser : IGF21Parser
             lon
         ).ConfigureAwait(false);
 
-        return new GF21ParserResponse(true, Response);
+        return new GF21ParserResponse(true, true, Response);
     }
 }
