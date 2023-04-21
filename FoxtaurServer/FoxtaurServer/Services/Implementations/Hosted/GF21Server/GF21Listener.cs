@@ -95,9 +95,6 @@ public class GF21Listener : IHostedService
     /// </summary>
     private async Task ProcessClientConnection(Socket clientSocket, TrackerContext trackerContext)
     {
-        // First of all we need to disable sleepmode to avoid missing measurements when moving slowly
-        _commandsToSend.Enqueue(new GF21SetStationarySleepCommand(false));
-
         while (true)
         {
             var buffer = new byte[ReadBufferSize];
@@ -118,12 +115,22 @@ public class GF21Listener : IHostedService
             {
                 var parseResult = await parser.ParseAsync(messageFromTracker, trackerContext).ConfigureAwait(false);
 
-                if (parseResult.IsRecognized && parseResult.IsSendResponse)
+                if (parseResult.IsRecognized)
                 {
-                    _logger.LogWarning($"Sending packet response: { parseResult.Response }");
+                    if (parseResult.IsSendResponse)
+                    {
+                        _logger.LogWarning($"Sending packet response: { parseResult.Response }");
                     
-                    var responseBytes = Encoding.UTF8.GetBytes(parseResult.Response);
-                    await clientSocket.SendAsync(responseBytes, 0);
+                        var responseBytes = Encoding.UTF8.GetBytes(parseResult.Response);
+                        await clientSocket.SendAsync(responseBytes, 0);
+                    }
+
+                    // Special logic - when IMSI and ICCD packet received we need to start initialization sequence
+                    if (parser.GetType() == typeof(GF21ImsiIccidPacketParser))
+                    {
+                        // First of all we need to disable sleepmode to avoid missing measurements when moving slowly
+                        _commandsToSend.Enqueue(new GF21SetStationarySleepCommand(false));
+                    }
                 }
             }
             
