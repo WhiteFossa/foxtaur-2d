@@ -10,7 +10,7 @@ namespace FoxtaurServer.Services.Implementations.Hosted.Parsers;
 public class GF21SetStationarySleepPacketParser : IGF21Parser
 {
     // Correct heartbeat packet regexp
-    private const string SetStationarySleepModeResponsePacketRegexp = @"^TRVDP21,([0-9]{6}),([0-9])#$";
+    private const string SetStationarySleepModeResponsePacketRegexp = @"^TRVCP21,([0-9]{6}),([0-9])#$";
     
     private readonly ILogger _logger;
 
