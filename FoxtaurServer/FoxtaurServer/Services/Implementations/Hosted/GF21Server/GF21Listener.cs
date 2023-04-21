@@ -127,6 +127,9 @@ public class GF21Listener : IHostedService
                 var commandToSend = _commandsToSend.Dequeue();
 
                 var commandMessage = await commandToSend.SendCommandAsync(trackerContext);
+                
+                _logger.LogWarning($"Sending: { commandMessage }");
+                
                 var commandMessageBytes = Encoding.UTF8.GetBytes(commandMessage);
                 await clientSocket.SendAsync(commandMessageBytes, 0);
             }
