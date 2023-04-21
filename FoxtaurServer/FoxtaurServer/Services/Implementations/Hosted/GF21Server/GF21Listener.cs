@@ -110,6 +110,8 @@ public class GF21Listener : IHostedService
             
             var messageFromTracker = Encoding.UTF8.GetString(buffer, 0, receivedBytes);
 
+            _logger.LogWarning($"Received: { messageFromTracker }");
+            
             foreach (var parser in _parsers)
             {
                 var parseResult = await parser.ParseAsync(messageFromTracker, trackerContext).ConfigureAwait(false);
