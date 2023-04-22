@@ -68,6 +68,18 @@ public class GsmGpsTrackersDao : IGsmGpsTrackersDao
         await _dbContext.SaveChangesAsync();
     }
 
+    public async Task DeleteAsync(Guid trackerId)
+    {
+        var tracker = await GetByIdAsync(trackerId);
+        _ = tracker ?? throw new ArgumentException("Tracker with given ID not found.", nameof(trackerId));
+
+        _dbContext
+            .GsmGpsTrackers
+            .Remove(tracker);
+
+        await _dbContext.SaveChangesAsync();
+    }
+
     private async Task LoadLinkedEntitiesAsync(GsmGpsTracker tracker)
     {
         _ = tracker ?? throw new ArgumentNullException(nameof(tracker));

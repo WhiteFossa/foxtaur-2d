@@ -22,4 +22,9 @@ public interface IGsmGpsTrackersService
     /// Associate the tracker with the given user. Returns null if user or tracker is not found
     /// </summary>
     Task<GsmGpsTrackerDto> ClaimTrackerAsync(Guid userId, Guid trackerId);
+
+    /// <summary>
+    /// Delete tracker by ID.
+    /// </summary>
+    Task DeleteTrackerAsync(Guid trackerId);
 }

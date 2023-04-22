@@ -39,4 +39,13 @@ public interface IGsmGpsTrackersDao
     Task UpdateAsync(GsmGpsTracker tracker);
 
     #endregion
+
+    #region Delete
+
+    /// <summary>
+    /// Delete tracker with given ID
+    /// </summary>
+    Task DeleteAsync(Guid trackerId);
+
+    #endregion
 }

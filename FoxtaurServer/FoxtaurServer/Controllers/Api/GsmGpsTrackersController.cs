@@ -71,7 +71,7 @@ public class GsmGpsTrackersController : ControllerBase
     }
 
     /// <summary>
-    /// Claim a tracker
+    /// Claim tracker
     /// </summary>
     /// <returns></returns>
     [Route("api/GsmGpsTrackers/Claim")]
@@ -92,5 +92,29 @@ public class GsmGpsTrackersController : ControllerBase
         }
 
         return Ok(associatedTracker);
+    }
+
+    /// <summary>
+    /// Delete tracker
+    /// </summary>
+    [Route("api/GsmGpsTrackers/Delete")]
+    [HttpDelete]
+    public async Task<ActionResult> DeleteTracker([FromBody] DeleteTrackerRequest request)
+    {
+        if (request == null)
+        {
+            return BadRequest();
+        }
+
+        try
+        {
+            await _trackersService.DeleteTrackerAsync(request.TrackerId);
+        }
+        catch (ArgumentException)
+        {
+            return BadRequest("Tracker with given ID is not found.");
+        }
+
+        return Ok();
     }
 }

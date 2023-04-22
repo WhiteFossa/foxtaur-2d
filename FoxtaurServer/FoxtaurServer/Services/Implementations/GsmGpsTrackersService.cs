@@ -64,4 +64,9 @@ public class GsmGpsTrackersService : IGsmGpsTrackersService
 
         return _trackersMapper.Map(tracker);
     }
+
+    public async Task DeleteTrackerAsync(Guid trackerId)
+    {
+        await _trackersDao.DeleteAsync(trackerId);
+    }
 }
