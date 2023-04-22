@@ -17,5 +17,6 @@ public partial class AppShell : Shell
         Routing.RegisterRoute("createTeamPage", typeof(CreateTeamPage));
         Routing.RegisterRoute("registerOnDistancePage", typeof(RegisterOnDistancePage));
         Routing.RegisterRoute("runPage", typeof(RunPage));
+        Routing.RegisterRoute("manageTrackersPage", typeof(ManageTrackersPage));
     }
 }

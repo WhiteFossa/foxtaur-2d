@@ -29,6 +29,7 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
@@ -75,10 +76,18 @@
                     Text="Create a team"
                     Command="{ Binding CreateTeamCommand }"/>
                 
-                <!-- Register on a distance -->
+                <!-- Manage trackers -->
                 <Button
                     Grid.Column="0"
                     Grid.Row="3"
+                    Style="{ StaticResource OrdinaryButtons }"
+                    Text="Manage trackers"
+                    Command="{ Binding ManageTrackersCommand }"/>
+                
+                <!-- Register on a distance -->
+                <Button
+                    Grid.Column="0"
+                    Grid.Row="4"
                     Style="{ StaticResource OrdinaryButtons }"
                     Text="Register on a distance"
                     Command="{ Binding RegisterOnDistanceCommand }"/>
@@ -86,7 +95,7 @@
                 <!-- Run -->
                 <Button
                     Grid.Column="0"
-                    Grid.Row="4"
+                    Grid.Row="5"
                     Style="{ StaticResource OrdinaryButtons }"
                     Text="Run!"
                     Command="{ Binding RunCommand }"/>
@@ -94,7 +103,7 @@
                 <!-- Log out -->
                 <Button
                     Grid.Column="0"
-                    Grid.Row="6"
+                    Grid.Row="7"
                     Style="{ StaticResource OrdinaryButtons }"
                     Text="Log out"
                     Command="{ Binding LogOutCommand }"/>

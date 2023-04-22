@@ -50,6 +50,11 @@ public class MainViewModel : IQueryAttributable, INotifyPropertyChanged
     public ICommand CreateTeamCommand { get; private set; }
     
     /// <summary>
+    /// Manage trackers
+    /// </summary>
+    public ICommand ManageTrackersCommand { get; private set; }
+    
+    /// <summary>
     /// Register on distance
     /// </summary>
     public ICommand RegisterOnDistanceCommand { get; private set; }
@@ -75,6 +80,7 @@ public class MainViewModel : IQueryAttributable, INotifyPropertyChanged
 
         EditProfileCommand = new Command(async () => await EditProfileAsync());
         CreateTeamCommand = new Command(async () => await CreateTeamAsync());
+        ManageTrackersCommand = new Command(async () => await ManageTrackersAsync());
         RegisterOnDistanceCommand = new Command(async () => await RegisterOnDistanceAsync());
         RunCommand = new Command(async () => await RunAsync());
         LogOutCommand = new Command(async() => await LogOutAsync());
@@ -137,6 +143,16 @@ public class MainViewModel : IQueryAttributable, INotifyPropertyChanged
         };
 
         await MainThread.InvokeOnMainThreadAsync(async () => await Shell.Current.GoToAsync("createTeamPage", navigationParameter));
+    }
+
+    private async Task ManageTrackersAsync()
+    {
+        var navigationParameter = new Dictionary<string, object>
+        {
+            { "UserModel", _userModel },
+        };
+        
+        await MainThread.InvokeOnMainThreadAsync(async () => await Shell.Current.GoToAsync("manageTrackersPage", navigationParameter));
     }
 
     private async Task RegisterOnDistanceAsync()
