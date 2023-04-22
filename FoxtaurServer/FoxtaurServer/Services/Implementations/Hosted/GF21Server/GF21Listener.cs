@@ -124,13 +124,6 @@ public class GF21Listener : IHostedService
                         var responseBytes = Encoding.UTF8.GetBytes(parseResult.Response);
                         await clientSocket.SendAsync(responseBytes, 0);
                     }
-
-                    /*// Special logic - when IMSI and ICCD packet received we need to start initialization sequence
-                    if (parser.GetType() == typeof(GF21ImsiIccidPacketParser))
-                    {
-                        // First of all we need to disable sleepmode to avoid missing measurements when moving slowly
-                        _commandsToSend.Enqueue(new GF21SetStationarySleepCommand(false));
-                    }*/
                 }
             }
             

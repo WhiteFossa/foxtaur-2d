@@ -14,9 +14,14 @@ public class GsmGpsTracker
     public Guid Id { get; set; }
 
     /// <summary>
-    /// Tracker IMEI (we use as credentials)
+    /// Tracker IMEI (we use it as credentials)
     /// </summary>
     public string Imei { get; set; }
+
+    /// <summary>
+    /// Tracker name (may be non-unique)
+    /// </summary>
+    public string Name { get; set; }
 
     /// <summary>
     /// For now tracker is being used by this user
