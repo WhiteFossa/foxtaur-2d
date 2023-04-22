@@ -8,8 +8,14 @@ namespace FoxtaurServer.Models.Api.Requests;
 public class CreateGsmGpsTrackerRequest
 {
     /// <summary>
-    /// Tracker IMEI (we use as credentials)
+    /// Tracker IMEI (we use it as credentials)
     /// </summary>
     [JsonPropertyName("imei")]
     public string Imei { get; set; }
+
+    /// <summary>
+    /// Tracker name (might be non-unique)
+    /// </summary>
+    [JsonPropertyName("name")]
+    public string Name { get; set; }
 }

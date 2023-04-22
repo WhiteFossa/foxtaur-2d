@@ -48,11 +48,17 @@ public class GsmGpsTrackersController : ControllerBase
         {
             return BadRequest();
         }
+        
+        if (string.IsNullOrWhiteSpace(request.Name))
+        {
+            return BadRequest("Tracker name must be specified.");
+        }
 
         var newTracker = await _trackersService.CreateNewTrackerAsync(new GsmGpsTrackerDto
         (
             Guid.Empty,
             request.Imei,
+            request.Name,
             null
         ));
         

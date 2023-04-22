@@ -36,7 +36,7 @@ public class GsmGpsTrackersService : IGsmGpsTrackersService
         
         await _trackersDao.CreateAsync(mappedTracker);
 
-        return new GsmGpsTrackerDto(mappedTracker.Id, tracker.Imei, tracker.UsedBy);
+        return new GsmGpsTrackerDto(mappedTracker.Id, tracker.Imei, tracker.Name, tracker.UsedBy);
     }
 
     public async Task<GsmGpsTrackerDto> ClaimTrackerAsync(Guid userId, Guid trackerId)

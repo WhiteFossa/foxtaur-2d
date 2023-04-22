@@ -27,6 +27,7 @@ public class GsmGpsTrackersMapper : IGsmGpsTrackersMapper
         (
             tracker.Id,
             tracker.Imei,
+            tracker.Name,
             tracker.UsedBy != null
             ? Guid.Parse(tracker.UsedBy.Id)
             : null
@@ -44,6 +45,7 @@ public class GsmGpsTrackersMapper : IGsmGpsTrackersMapper
         {
             Id = tracker.Id,
             Imei = tracker.Imei,
+            Name = tracker.Name,
             UsedBy = tracker.UsedBy.HasValue ? new Profile() { Id = tracker.UsedBy.Value.ToString() } : null // Load other parts of profile outside
         };
     }

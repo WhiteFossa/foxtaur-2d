@@ -19,6 +19,11 @@ public class GsmGpsTrackerDto
     /// </summary>
     [JsonPropertyName("imei")]
     public string Imei { get; }
+    
+    /// <summary>
+    /// Tracker name (may be non-unique)
+    /// </summary>
+    public string Name { get; set; }
 
     /// <summary>
     /// For now tracker is being used by this user
@@ -30,6 +35,7 @@ public class GsmGpsTrackerDto
     (
         Guid id,
         string imei,
+        string name,
         Guid? usedBy
     )
     {
@@ -37,9 +43,15 @@ public class GsmGpsTrackerDto
         {
             throw new ArgumentException("IMEI must be not empty.", nameof(imei));
         }
-        
+
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            throw new ArgumentException("Name must be not empty.", nameof(name));
+        }
+            
         Id = id;
         Imei = imei;
+        Name = name;
         UsedBy = usedBy;
     }
 }
