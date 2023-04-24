@@ -75,14 +75,18 @@
                                             Grid.Row="0"
                                             Grid.RowSpan="2"
                                             Style="{ StaticResource RightMarginatedButtons }"
-                                            Text="Claim" />
+                                            Text="Claim"
+                                            Command="{ Binding Path = ClaimTrackerCommand, Source={ RelativeSource AncestorType={ x:Type viewModels:ManageTrackersViewModel } } }"
+                                            CommandParameter="{ Binding Tracker.Id }" />
                                         
                                         <Button
                                             Grid.Column="2"
                                             Grid.Row="0"
                                             Grid.RowSpan="2"
                                             Style="{ StaticResource OrdinaryButtons }"
-                                            Text="Delete" />
+                                            Text="Delete"
+                                            Command="{ Binding Path = DeleteTrackerCommand, Source={ RelativeSource AncestorType={ x:Type viewModels:ManageTrackersViewModel } } }"
+                                            CommandParameter="{ Binding Tracker.Id }"/>
                                         
                                     </Grid>
                                 </ViewCell>

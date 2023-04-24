@@ -38,6 +38,16 @@ public class ManageTrackersViewModel : IQueryAttributable, INotifyPropertyChange
     /// Create new tracker
     /// </summary>
     public ICommand CreateNewTrackerCommand { get; private set; }
+    
+    /// <summary>
+    /// Claim the tracker
+    /// </summary>
+    public ICommand ClaimTrackerCommand { get; private set; }
+    
+    /// <summary>
+    /// Delete the tracker
+    /// </summary>
+    public ICommand DeleteTrackerCommand { get; private set; }
 
     #endregion
 
@@ -48,6 +58,8 @@ public class ManageTrackersViewModel : IQueryAttributable, INotifyPropertyChange
         #region Commands binding
 
         CreateNewTrackerCommand = new Command(async () => await CreateNewTrackerAsync());
+        ClaimTrackerCommand = new Command<Guid>(async tId => await ClaimTrackerAsync(tId));
+        DeleteTrackerCommand = new Command<Guid>(async tId => await DeleteTrackerAsync(tId));
 
         #endregion
     }
@@ -79,5 +91,13 @@ public class ManageTrackersViewModel : IQueryAttributable, INotifyPropertyChange
     private async Task CreateNewTrackerAsync()
     {
         
+    }
+    
+    private async Task ClaimTrackerAsync(Guid trackerId)
+    {
+    }
+    
+    private async Task DeleteTrackerAsync(Guid trackerId)
+    {
     }
 }
