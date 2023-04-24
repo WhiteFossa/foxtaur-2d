@@ -76,7 +76,7 @@ public class GsmGpsTrackersController : ControllerBase
     /// <returns></returns>
     [Route("api/GsmGpsTrackers/Claim")]
     [HttpPost]
-    public async Task<ActionResult<GsmGpsTrackerDto>> ClaimTracker([FromBody] ClaimTrackerRequest request)
+    public async Task<ActionResult<GsmGpsTrackerDto>> ClaimTracker([FromBody] ClaimGsmGpsTrackerRequest request)
     {
         if (request == null)
         {

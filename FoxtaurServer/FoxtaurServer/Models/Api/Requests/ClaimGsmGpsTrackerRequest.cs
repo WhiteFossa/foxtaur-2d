@@ -5,7 +5,7 @@ namespace FoxtaurServer.Models.Api.Requests;
 /// <summary>
 /// Claim a tracker as our
 /// </summary>
-public class ClaimTrackerRequest
+public class ClaimGsmGpsTrackerRequest
 {
     /// <summary>
     /// Claim this tracker

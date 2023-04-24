@@ -78,4 +78,9 @@ public interface IWebClient
     /// Get all existing GSM-interfaced GPS-trackers
     /// </summary>
     Task<IReadOnlyCollection<GsmGpsTracker>> GetAllGsmGpsTrackersAsync();
+    
+    /// <summary>
+    /// Claim given GSM-interfaced GPS tracker as our
+    /// </summary>
+    Task<GsmGpsTracker> ClaimGsmGpsTrackerAsync(ClaimGsmGpsTrackerRequest request);
 }

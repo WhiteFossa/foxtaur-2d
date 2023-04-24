@@ -8,4 +8,9 @@ public class PopupsService : IPopupsService
     {
         await MainThread.InvokeOnMainThreadAsync(async () => Application.Current.MainPage.DisplayAlert(title, message, cancel));
     }
+
+    public async Task<bool> ShowQuestionAsync(string title, string message, string yesButton = "Yes", string noButton = "No")
+    {
+        return await MainThread.InvokeOnMainThreadAsync(async () => Application.Current.MainPage.DisplayAlert(title, message, yesButton, noButton)).Result;
+    }
 }

@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel;
 using System.Windows.Input;
 using FoxtaurTracker.Models;
+using FoxtaurTracker.Services.Abstract;
 using LibWebClient.Models;
+using LibWebClient.Models.Requests;
 using LibWebClient.Services.Abstract;
 
 namespace FoxtaurTracker.ViewModels;
@@ -10,6 +12,7 @@ public class ManageTrackersViewModel : IQueryAttributable, INotifyPropertyChange
 {
     private User _userModel;
     private readonly IWebClient _webClient;
+    private readonly IPopupsService _popupsService;
 
     private IReadOnlyCollection<GsmGpsTracker> _trackers;
     private List<GsmGpsTrackerItem> _trackersItems = new List<GsmGpsTrackerItem>();
@@ -54,6 +57,7 @@ public class ManageTrackersViewModel : IQueryAttributable, INotifyPropertyChange
     public ManageTrackersViewModel()
     {
         _webClient = App.ServicesProvider.GetService<IWebClient>();
+        _popupsService = App.ServicesProvider.GetService<IPopupsService>();
         
         #region Commands binding
 
@@ -95,6 +99,13 @@ public class ManageTrackersViewModel : IQueryAttributable, INotifyPropertyChange
     
     private async Task ClaimTrackerAsync(Guid trackerId)
     {
+        if (!await _popupsService.ShowQuestionAsync("Are you sure?", "Do you want to claim this tracker?"))
+        {
+            return;
+        }
+
+        var claimedTracker = await _webClient.ClaimGsmGpsTrackerAsync(new ClaimGsmGpsTrackerRequest(trackerId));
+        await _popupsService.ShowAlertAsync("Success", "Tracker successfully claimed.");
     }
     
     private async Task DeleteTrackerAsync(Guid trackerId)
