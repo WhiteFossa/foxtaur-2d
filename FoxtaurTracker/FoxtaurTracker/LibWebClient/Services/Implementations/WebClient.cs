@@ -240,6 +240,18 @@ public class WebClient : IWebClient
         return await _client.CreateHunterLocationsAsync(request).ConfigureAwait(false);
     }
 
+    public async Task<IReadOnlyCollection<GsmGpsTracker>> GetAllGsmGpsTrackersAsync()
+    {
+        CheckIfConnected();
+        await RenewSessionAsync();
+
+        var trackers = await _client.GetAllGsmGpsTrackersAsync().ConfigureAwait(false);
+
+        return trackers
+            .Select(t => new GsmGpsTracker(t.Id, t.Imei, t.Name, t.UsedBy))
+            .ToList();
+    }
+
     private void CheckIfConnected()
     {
         if (!_isConnected)

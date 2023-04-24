@@ -73,4 +73,9 @@ public interface IWebClient
     /// Create hunter locations. Returns IDs of locations, which were successfully stored
     /// </summary>
     Task<IReadOnlyCollection<Guid>> CreateHunterLocationsAsync(CreateHunterLocationsRequest request);
+    
+    /// <summary>
+    /// Get all existing GSM-interfaced GPS-trackers
+    /// </summary>
+    Task<IReadOnlyCollection<GsmGpsTracker>> GetAllGsmGpsTrackersAsync();
 }

@@ -61,13 +61,13 @@
                                         <Label
                                             Grid.Column="0"
                                             Grid.Row="0"
-                                            Text="{ Binding Name }"
+                                            Text="{ Binding Tracker.Name }"
                                             FontAttributes="Bold" />
                                         
                                         <Label
                                             Grid.Column="0"
                                             Grid.Row="1"
-                                            Text="{ Binding Imei }" />
+                                            Text="{ Binding Tracker.Imei }" />
                                         
                                         <Button
                                             Grid.Column="1"

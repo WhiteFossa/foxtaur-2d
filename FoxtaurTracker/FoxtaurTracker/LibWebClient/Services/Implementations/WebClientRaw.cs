@@ -178,6 +178,17 @@ public class WebClientRaw : IWebClientRaw
         return JsonSerializer.Deserialize<IReadOnlyCollection<Guid>>(await response.Content.ReadAsStringAsync());
     }
 
+    public async Task<IReadOnlyCollection<GsmGpsTrackerDto>> GetAllGsmGpsTrackersAsync()
+    {
+        var response = await _httpClient.GetAsync($"{_baseUrl}/GsmGpsTrackers/Index").ConfigureAwait(false);
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new InvalidOperationException();
+        }
+        
+        return JsonSerializer.Deserialize<IReadOnlyCollection<GsmGpsTrackerDto>>(await response.Content.ReadAsStringAsync());
+    }
+
     /// <summary>
     /// Reorder request result such way, that result items are orderer as request IDs
     /// </summary>

@@ -1,13 +1,17 @@
 ﻿using System.ComponentModel;
 using System.Windows.Input;
 using FoxtaurTracker.Models;
+using LibWebClient.Models;
+using LibWebClient.Services.Abstract;
 
 namespace FoxtaurTracker.ViewModels;
 
 public class ManageTrackersViewModel : IQueryAttributable, INotifyPropertyChanged
 {
     private User _userModel;
-    
+    private readonly IWebClient _webClient;
+
+    private IReadOnlyCollection<GsmGpsTracker> _trackers;
     private List<GsmGpsTrackerItem> _trackersItems = new List<GsmGpsTrackerItem>();
     
     public event PropertyChangedEventHandler PropertyChanged;
@@ -39,6 +43,8 @@ public class ManageTrackersViewModel : IQueryAttributable, INotifyPropertyChange
 
     public ManageTrackersViewModel()
     {
+        _webClient = App.ServicesProvider.GetService<IWebClient>();
+        
         #region Commands binding
 
         CreateNewTrackerCommand = new Command(async () => await CreateNewTrackerAsync());
@@ -58,10 +64,14 @@ public class ManageTrackersViewModel : IQueryAttributable, INotifyPropertyChange
 
     public async Task OnPageLoadedAsync(Object source, EventArgs args)
     {
-        // TODO: Put load from server here
-        TrackersItems.Add(new GsmGpsTrackerItem(0, "Yiffy tracker", "123456789"));
-        TrackersItems.Add(new GsmGpsTrackerItem(1, "Yuffy tracker", "234567890"));
-        TrackersItems.Add(new GsmGpsTrackerItem(2, "Yerfy tracker", "345678901"));
+        _trackers = await _webClient.GetAllGsmGpsTrackersAsync().ConfigureAwait(false);
+        
+        var trackersAsList = _trackers.ToList();
+        TrackersItems = new List<GsmGpsTrackerItem>();
+        for (int index = 0; index < trackersAsList.Count; index++)
+        {
+            TrackersItems.Add(new GsmGpsTrackerItem(trackersAsList[index], index));
+        }
         
         TrackersItems = new List<GsmGpsTrackerItem>(TrackersItems); // Dirty way to force listview to update
     }

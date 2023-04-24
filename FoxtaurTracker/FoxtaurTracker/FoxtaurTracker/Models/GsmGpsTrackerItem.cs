@@ -1,4 +1,6 @@
-﻿namespace FoxtaurTracker.Models;
+﻿using LibWebClient.Models;
+
+namespace FoxtaurTracker.Models;
 
 /// <summary>
 /// GSM-interfaced GPS tracker item
@@ -6,34 +8,18 @@
 public class GsmGpsTrackerItem
 {
     /// <summary>
+    /// Tracker
+    /// </summary>
+    public GsmGpsTracker Tracker { get; }
+
+    /// <summary>
     /// Index in list
     /// </summary>
     public int Index { get; }
-
-    /// <summary>
-    /// Tracker name
-    /// </summary>
-    public string Name { get; }
-
-    /// <summary>
-    /// Tracker IMEI
-    /// </summary>
-    public string Imei { get; }
-
-    public GsmGpsTrackerItem(int index, string name, string imei)
+    
+    public GsmGpsTrackerItem(GsmGpsTracker tracker, int index)
     {
-        if (string.IsNullOrWhiteSpace(name))
-        {
-            throw new ArgumentException("Tracker name can't be empty.", nameof(name));
-        }
-        
-        if (string.IsNullOrWhiteSpace(imei))
-        {
-            throw new ArgumentException("Tracker IMEI can't be empty.", nameof(imei));
-        }
-
+        Tracker = tracker ?? throw new ArgumentNullException(nameof(tracker));
         Index = index;
-        Name = name;
-        Imei = imei;
     }
 }
