@@ -23,6 +23,12 @@
         <Setter Property="TextColor" Value="{AppThemeBinding Light={ StaticResource LightButtonsText }, Dark={ StaticResource DarkButtonsText } }" />
     </Style>
     
+    <!-- Buttons with right margin -->
+    <Style x:Key="RightMarginatedButtons" TargetType="Button">
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={ StaticResource LightButtonsText }, Dark={ StaticResource DarkButtonsText } }" />
+        <Setter Property="Margin" Value="0, 0, 5, 0"/>
+    </Style>
+    
     <!-- Ordinary checkboxes -->
     <Style x:Key="OrdinaryCheckboxes" TargetType="CheckBox">
         <Setter Property="Color" Value="{AppThemeBinding Light={ StaticResource LightCheckboxes }, Dark={ StaticResource DarkCheckboxes } }" />
