@@ -97,22 +97,17 @@ public class GsmGpsTrackersController : ControllerBase
     /// <summary>
     /// Delete tracker
     /// </summary>
-    [Route("api/GsmGpsTrackers/Delete")]
+    [Route("api/GsmGpsTrackers/Delete/{trackerId}")]
     [HttpDelete]
-    public async Task<ActionResult> DeleteTracker([FromBody] DeleteTrackerRequest request)
+    public async Task<ActionResult> DeleteTracker(Guid trackerId)
     {
-        if (request == null)
-        {
-            return BadRequest();
-        }
-
         try
         {
-            await _trackersService.DeleteTrackerAsync(request.TrackerId);
+            await _trackersService.DeleteTrackerAsync(trackerId);
         }
         catch (ArgumentException)
         {
-            return BadRequest("Tracker with given ID is not found.");
+            return BadRequest("Tracker with given ID was not found.");
         }
 
         return Ok();
