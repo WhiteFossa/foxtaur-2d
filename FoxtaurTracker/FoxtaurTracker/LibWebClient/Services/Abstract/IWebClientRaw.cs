@@ -80,7 +80,12 @@ public interface IWebClientRaw
     Task<IReadOnlyCollection<GsmGpsTrackerDto>> GetAllGsmGpsTrackersAsync();
 
     /// <summary>
-    /// Claim given GSM-interfaced GPS-tracker as our
+    /// Claim given GSM-interfaced GPS tracker as our
     /// </summary>
     Task<GsmGpsTrackerDto> ClaimGsmGpsTrackerAsync(ClaimGsmGpsTrackerRequest request);
+
+    /// <summary>
+    /// Delete given GSM-interfaced GPS tracker
+    /// </summary>
+    Task DeleteGsmGpsTrackerAsync(Guid trackerId);
 }

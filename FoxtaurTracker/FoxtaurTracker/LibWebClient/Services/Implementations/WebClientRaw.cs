@@ -202,6 +202,15 @@ public class WebClientRaw : IWebClientRaw
         return JsonSerializer.Deserialize<GsmGpsTrackerDto>(await response.Content.ReadAsStringAsync());
     }
 
+    public async Task DeleteGsmGpsTrackerAsync(Guid trackerId)
+    {
+        var response = await _httpClient.DeleteAsync($"{_baseUrl}/GsmGpsTrackers/Delete/{trackerId}").ConfigureAwait(false);
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new InvalidOperationException();
+        }
+    }
+
     /// <summary>
     /// Reorder request result such way, that result items are orderer as request IDs
     /// </summary>
