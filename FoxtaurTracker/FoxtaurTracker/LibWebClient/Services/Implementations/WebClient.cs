@@ -270,6 +270,16 @@ public class WebClient : IWebClient
         await _client.DeleteGsmGpsTrackerAsync(trackerId).ConfigureAwait(false);
     }
 
+    public async Task<GsmGpsTracker> CreateGsmGpsTrackerAsync(CreateGsmGpsTrackerRequest request)
+    {
+        _ = request ?? throw new ArgumentNullException(nameof(request));
+        CheckIfConnected();
+        await RenewSessionAsync();
+
+        var tracker = await _client.CreateGsmGpsTrackerAsync(request).ConfigureAwait(false);
+        return new GsmGpsTracker(tracker.Id, tracker.Imei, tracker.Name, tracker.UsedBy);
+    }
+
     private void CheckIfConnected()
     {
         if (!_isConnected)

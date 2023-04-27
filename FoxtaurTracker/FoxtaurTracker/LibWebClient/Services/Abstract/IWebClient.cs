@@ -88,4 +88,9 @@ public interface IWebClient
     /// Delete existing GSM-interfaced GPS tracker
     /// </summary>
     Task DeleteGsmGpsTrackerAsync(Guid trackerId);
+    
+    /// <summary>
+    /// Create GSM-interfaced GPS tracker
+    /// </summary>
+    Task<GsmGpsTracker> CreateGsmGpsTrackerAsync(CreateGsmGpsTrackerRequest request);
 }

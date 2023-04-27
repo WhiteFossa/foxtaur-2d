@@ -42,7 +42,7 @@ public class GsmGpsTrackersController : ControllerBase
     /// </summary>
     [Route("api/GsmGpsTrackers/Create")]
     [HttpPost]
-    public async Task<ActionResult<GsmGpsTrackerDto>> CreateMap([FromBody] CreateGsmGpsTrackerRequest request)
+    public async Task<ActionResult<GsmGpsTrackerDto>> CreateTracker([FromBody] CreateGsmGpsTrackerRequest request)
     {
         if (request == null)
         {

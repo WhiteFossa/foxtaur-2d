@@ -211,6 +211,19 @@ public class WebClientRaw : IWebClientRaw
         }
     }
 
+    public async Task<GsmGpsTrackerDto> CreateGsmGpsTrackerAsync(CreateGsmGpsTrackerRequest request)
+    {
+        _ = request ?? throw new ArgumentNullException(nameof(request));
+
+        var response = await _httpClient.PostAsJsonAsync($"{_baseUrl}/GsmGpsTrackers/Create", request).ConfigureAwait(false);
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new InvalidOperationException();
+        }
+
+        return JsonSerializer.Deserialize<GsmGpsTrackerDto>(await response.Content.ReadAsStringAsync());
+    }
+
     /// <summary>
     /// Reorder request result such way, that result items are orderer as request IDs
     /// </summary>
