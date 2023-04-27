@@ -69,6 +69,7 @@ public class ManageTrackersViewModel : IQueryAttributable, INotifyPropertyChange
     
     public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
+        Task.WaitAll(ReloadTrackersListAsync());
     }
     
     public void RaisePropertyChanged(string propertyName)
