@@ -10,7 +10,6 @@ namespace FoxtaurTracker.ViewModels;
 
 public class ManageTrackersViewModel : IQueryAttributable, INotifyPropertyChanged
 {
-    private User _userModel;
     private readonly IWebClient _webClient;
     private readonly IPopupsService _popupsService;
 
@@ -70,7 +69,6 @@ public class ManageTrackersViewModel : IQueryAttributable, INotifyPropertyChange
     
     public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
-        _userModel = (User)query["UserModel"];
     }
     
     public void RaisePropertyChanged(string propertyName)
@@ -79,6 +77,11 @@ public class ManageTrackersViewModel : IQueryAttributable, INotifyPropertyChange
     }
 
     public async Task OnPageLoadedAsync(Object source, EventArgs args)
+    {
+        await ReloadTrackersListAsync();
+    }
+
+    private async Task ReloadTrackersListAsync()
     {
         _trackers = await _webClient.GetAllGsmGpsTrackersAsync().ConfigureAwait(false);
         
@@ -91,10 +94,14 @@ public class ManageTrackersViewModel : IQueryAttributable, INotifyPropertyChange
         
         TrackersItems = new List<GsmGpsTrackerItem>(TrackersItems); // Dirty way to force listview to update
     }
-
+    
     private async Task CreateNewTrackerAsync()
     {
-        
+        var navigationParameter = new Dictionary<string, object>
+        {
+        };
+
+        await MainThread.InvokeOnMainThreadAsync(async () => await Shell.Current.GoToAsync("addTrackerPage", navigationParameter));
     }
     
     private async Task ClaimTrackerAsync(Guid trackerId)
@@ -104,11 +111,40 @@ public class ManageTrackersViewModel : IQueryAttributable, INotifyPropertyChange
             return;
         }
 
-        var claimedTracker = await _webClient.ClaimGsmGpsTrackerAsync(new ClaimGsmGpsTrackerRequest(trackerId));
+        try
+        {
+            await _webClient.ClaimGsmGpsTrackerAsync(new ClaimGsmGpsTrackerRequest(trackerId));
+        }
+        catch (Exception)
+        {
+            await _popupsService.ShowAlertAsync("Failure", "Failed to claim the tracker!");
+            return;
+        }
+        
         await _popupsService.ShowAlertAsync("Success", "Tracker successfully claimed.");
     }
     
     private async Task DeleteTrackerAsync(Guid trackerId)
     {
+        if (!await _popupsService.ShowQuestionAsync("Are you sure?", "Do you want to DELETE this tracker?"))
+        {
+            return;
+        }
+
+        try
+        {
+            await _webClient.DeleteGsmGpsTrackerAsync(trackerId);
+        }
+        catch (Exception)
+        {
+            await _popupsService.ShowAlertAsync("Failure", "Failed to delete the tracker!");
+            return;
+        }
+        finally
+        {
+            await ReloadTrackersListAsync();
+        }
+        
+        await _popupsService.ShowAlertAsync("Success", "Tracker successfully deleted.");
     }
 }

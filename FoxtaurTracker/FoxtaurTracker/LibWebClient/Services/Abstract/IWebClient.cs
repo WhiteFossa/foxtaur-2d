@@ -83,4 +83,9 @@ public interface IWebClient
     /// Claim given GSM-interfaced GPS tracker as our
     /// </summary>
     Task<GsmGpsTracker> ClaimGsmGpsTrackerAsync(ClaimGsmGpsTrackerRequest request);
+
+    /// <summary>
+    /// Delete existing GSM-interfaced GPS tracker
+    /// </summary>
+    Task DeleteGsmGpsTrackerAsync(Guid trackerId);
 }

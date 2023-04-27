@@ -60,7 +60,6 @@
                         <Entry
                             Placeholder="Enter login"
                             Text="{ Binding Login }" />
-
                     </Border>
                 </Grid>
 
