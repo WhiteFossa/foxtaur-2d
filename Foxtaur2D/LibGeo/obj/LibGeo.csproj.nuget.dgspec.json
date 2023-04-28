@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/mnt/sshfs/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibGeo/LibGeo.csproj": {}
+    "/home/fossa/LocalProjects/foxtaur-2d/Foxtaur2D/LibGeo/LibGeo.csproj": {}
   },
   "projects": {
-    "/mnt/sshfs/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibGeo/LibGeo.csproj": {
+    "/home/fossa/LocalProjects/foxtaur-2d/Foxtaur2D/LibGeo/LibGeo.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/mnt/sshfs/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibGeo/LibGeo.csproj",
+        "projectUniqueName": "/home/fossa/LocalProjects/foxtaur-2d/Foxtaur2D/LibGeo/LibGeo.csproj",
         "projectName": "LibGeo",
-        "projectPath": "/mnt/sshfs/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibGeo/LibGeo.csproj",
+        "projectPath": "/home/fossa/LocalProjects/foxtaur-2d/Foxtaur2D/LibGeo/LibGeo.csproj",
         "packagesPath": "/home/fossa/.nuget/packages/",
-        "outputPath": "/mnt/sshfs/fossa/Projects/Programming/foxtaur-2d/Foxtaur2D/LibGeo/obj/",
+        "outputPath": "/home/fossa/LocalProjects/foxtaur-2d/Foxtaur2D/LibGeo/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/fossa/.nuget/NuGet/NuGet.Config"
@@ -53,7 +53,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/lib64/dotnet/sdk/7.0.104/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/lib64/dotnet/sdk/7.0.105/RuntimeIdentifierGraph.json"
         }
       }
     }
