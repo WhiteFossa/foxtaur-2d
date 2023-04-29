@@ -13,7 +13,151 @@
              to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
         <vm:MainWindowViewModel/>
     </Design.DataContext>
+    
+    <Window.Styles>
+        <StyleInclude Source="/Styles/Common.axaml" />
+    </Window.Styles>
 
-    <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+    <!-- Main grid -->
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        
+        <!-- Server -->
+        <Border
+            Grid.Column="0"
+            Grid.Row="0"
+            Classes="VisibleBorders">
+            
+            <StackPanel>
+                <Label>Server</Label>
+                
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="200" />
+                    </Grid.ColumnDefinitions>
+                    
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                   
+                    <!-- Login -->
+                    <Label
+                        Grid.Column="0"
+                        Grid.Row="0"
+                        VerticalAlignment="Center">
+                        Login:
+                    </Label>
+                    
+                    <TextBox
+                        Grid.Column="1"
+                        Grid.Row="0"
+                        Watermark="Login"
+                        VerticalAlignment="Center"
+                        Classes="Marginated">
+                    </TextBox>
+                    
+                    <!-- Password -->
+                    <Label
+                        Grid.Column="0"
+                        Grid.Row="1"
+                        VerticalAlignment="Center">
+                        Password:
+                    </Label>
+                    
+                    <TextBox
+                        Grid.Column="1"
+                        Grid.Row="1"
+                        Watermark="Password"
+                        VerticalAlignment="Center"
+                        PasswordChar="*"
+                        Classes="Marginated">
+                    </TextBox>
+                    
+                    <!-- Login button -->
+                    <Button
+                        Grid.Column="0"
+                        Grid.Row="2"
+                        Grid.ColumnSpan="2"
+                        Content="Log in"
+                        HorizontalAlignment="Right" />
+                    
+                    <!-- Server info -->
+                    <Border
+                        Grid.Column="0"
+                        Grid.Row="3"
+                        Grid.ColumnSpan="2"
+                        Margin="0, 5, 0, 0"
+                        Classes="VisibleBorders">
+                        
+                        <StackPanel>
+                            <Label>Info</Label>
+                            
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                    
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                
+                                <!-- Server URL -->
+                                <Label
+                                    Grid.Column="0"
+                                    Grid.Row="0">
+                                    URL:
+                                </Label>
+                                
+                                <Label
+                                    Grid.Column="1"
+                                    Grid.Row="0">
+                                </Label>
+                                
+                                <!-- Server Name -->
+                                <Label
+                                    Grid.Column="0"
+                                    Grid.Row="1">
+                                    Name:
+                                </Label>
+                                
+                                <Label
+                                    Grid.Column="1"
+                                    Grid.Row="1">
+                                </Label>
+                                
+                                <!-- Server Version -->
+                                <Label
+                                    Grid.Column="0"
+                                    Grid.Row="2">
+                                    Version:
+                                </Label>
+                                
+                                <Label
+                                    Grid.Column="1"
+                                    Grid.Row="2">
+                                </Label>
+                                
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </StackPanel>
+        </Border>
+        
+    </Grid>
 
 </Window>
