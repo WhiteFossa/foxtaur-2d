@@ -26,10 +26,9 @@ public class WebClientRaw : IWebClientRaw
         HttpClient httpClient)
     {
         _configurationService = configurationService;
+        
         _httpClient = httpClient;
         _httpClient.Timeout = new TimeSpan(0, 0, WebClientConstants.HttpClientTimeout);
-        
-        _configurationService = configurationService;
 
         _logger.Info($"Working with { _configurationService.GetConfigurationString(ConfigConstants.ServerUrlSettingName) } server");
         _baseUrl = _configurationService.GetConfigurationString(ConfigConstants.ServerUrlSettingName) + @"/api";

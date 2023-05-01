@@ -2,6 +2,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FoxtaurAdmin", "FoxtaurAdmin\FoxtaurAdmin.csproj", "{70EF96BC-2FF3-4AF1-8576-308D5BA890E2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibWebClient", "LibWebClient\LibWebClient.csproj", "{14739DA4-B43C-44E8-B06E-37A0BC60FA8F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibAuxiliary", "LibAuxiliary\LibAuxiliary.csproj", "{8E6E366B-C8A9-4CFB-9D9D-E4F4B4FFB14B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +16,13 @@ Global
 		{70EF96BC-2FF3-4AF1-8576-308D5BA890E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{70EF96BC-2FF3-4AF1-8576-308D5BA890E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{70EF96BC-2FF3-4AF1-8576-308D5BA890E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14739DA4-B43C-44E8-B06E-37A0BC60FA8F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14739DA4-B43C-44E8-B06E-37A0BC60FA8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14739DA4-B43C-44E8-B06E-37A0BC60FA8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14739DA4-B43C-44E8-B06E-37A0BC60FA8F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E6E366B-C8A9-4CFB-9D9D-E4F4B4FFB14B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E6E366B-C8A9-4CFB-9D9D-E4F4B4FFB14B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E6E366B-C8A9-4CFB-9D9D-E4F4B4FFB14B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E6E366B-C8A9-4CFB-9D9D-E4F4B4FFB14B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

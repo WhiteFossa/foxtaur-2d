@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>disable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Reference Include="NLog">
+        <HintPath>..\..\..\..\..\..\..\..\home\fossa\.nuget\packages\nlog\5.1.4\lib\netstandard2.0\NLog.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\LibAuxiliary\LibAuxiliary.csproj" />
+    </ItemGroup>
+
+</Project>

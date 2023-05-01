@@ -75,7 +75,7 @@
                         Grid.Column="0"
                         Grid.Row="0"
                         HorizontalAlignment="Center"
-                        Content="{ Binding TimelineBeginTimeText}" />
+                        Content="{ Binding TimelineBeginTimeText }" />
                     
                     <!-- Current time -->
                     <Label

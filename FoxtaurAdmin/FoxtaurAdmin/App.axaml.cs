@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using FoxtaurAdmin.Models;
 using FoxtaurAdmin.ViewModels;
 using FoxtaurAdmin.Views;
 
@@ -19,7 +20,7 @@ public partial class App : Application
         {
             desktop.MainWindow = new MainWindow
             {
-                DataContext = new MainWindowViewModel(),
+                DataContext = new MainWindowViewModel(new MainModel()),
             };
         }
 

@@ -11,7 +11,6 @@ public interface IWebClientRaw
     /// <summary>
     /// Get information about the server
     /// </summary>
-    /// <returns></returns>
     Task<ServerInfoDto> GetServerInfoAsync();
     
     /// <summary>
