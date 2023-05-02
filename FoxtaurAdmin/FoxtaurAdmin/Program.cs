@@ -4,6 +4,8 @@ using System;
 using System.IO;
 using LibAuxiliary.Abstract;
 using LibAuxiliary.Implementations;
+using LibFoxtaurAdmin.Services.Abstract;
+using LibFoxtaurAdmin.Services.Implementations;
 using LibWebClient.Services.Abstract;
 using LibWebClient.Services.Implementations;
 using Microsoft.Extensions.Configuration;
@@ -64,6 +66,8 @@ class Program
         
         // Singletons
         services.AddSingleton<IConfigurationService, ConfigurationService>();
+        services.AddSingleton<IWebClient, WebClient>();
+        services.AddSingleton<IUserMessagesService, UserMessagesService>();
 
         // HTTP clients
         services.AddHttpClient<IWebClientRaw, WebClientRaw>();

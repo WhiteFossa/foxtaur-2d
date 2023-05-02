@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>disable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Reference Include="MessageBox.Avalonia">
+        <HintPath>..\..\..\..\..\..\..\..\home\fossa\.nuget\packages\messagebox.avalonia\2.1.0\lib\netstandard2.0\MessageBox.Avalonia.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+</Project>

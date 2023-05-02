@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibWebClient", "LibWebClien
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibAuxiliary", "LibAuxiliary\LibAuxiliary.csproj", "{8E6E366B-C8A9-4CFB-9D9D-E4F4B4FFB14B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibFoxtaurAdmin", "LibFoxtaurAdmin\LibFoxtaurAdmin.csproj", "{31085ED0-4384-42CD-A9A3-10E8DA0816E2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{8E6E366B-C8A9-4CFB-9D9D-E4F4B4FFB14B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8E6E366B-C8A9-4CFB-9D9D-E4F4B4FFB14B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8E6E366B-C8A9-4CFB-9D9D-E4F4B4FFB14B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31085ED0-4384-42CD-A9A3-10E8DA0816E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31085ED0-4384-42CD-A9A3-10E8DA0816E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31085ED0-4384-42CD-A9A3-10E8DA0816E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31085ED0-4384-42CD-A9A3-10E8DA0816E2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
