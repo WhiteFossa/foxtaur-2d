@@ -70,6 +70,12 @@ public class MainWindowViewModel : ViewModelBase
         get => _protocolVersion;
         set => this.RaiseAndSetIfChanged(ref _protocolVersion, value);
     }
+    
+    public bool IsLoggedIn
+    {
+        get => _model.IsLoggedIn;
+        set => this.RaiseAndSetIfChanged(ref _model.IsLoggedIn, value);
+    }
 
     #endregion
     
@@ -79,6 +85,11 @@ public class MainWindowViewModel : ViewModelBase
     /// Login
     /// </summary>
     public ReactiveCommand<Unit, Unit> LoginCommand { get; }
+    
+    /// <summary>
+    /// Logout
+    /// </summary>
+    public ReactiveCommand<Unit, Unit> LogoutCommand { get; }
     
     #endregion
     
@@ -95,15 +106,19 @@ public class MainWindowViewModel : ViewModelBase
             (
                 this.WhenAny(m => m.Login, l => l.Value),
                 this.WhenAny(m => m.Password, p => p.Value),
-                (login, password) => !string.IsNullOrWhiteSpace(login) && !string.IsNullOrWhiteSpace(password)
+                this.WhenAny(m => m.IsLoggedIn, ili => ili.Value),
+                (login, password, isLoggedIn) => !string.IsNullOrWhiteSpace(login) && !string.IsNullOrWhiteSpace(password) && !isLoggedIn
             );
         LoginCommand = ReactiveCommand.CreateFromTask(OnLoginCommandAsync, isCanLogin);
+        
+        var isCanLogout = this.WhenAny(m => m.IsLoggedIn, ili => ili.Value);
+        LogoutCommand = ReactiveCommand.CreateFromTask(OnLogoutCommandAsync, isCanLogout);
 
         #endregion
         
         #region Initial state
 
-        _model.IsLoggedIn = false;
+        IsLoggedIn = false;
 
         #endregion
     }
@@ -115,7 +130,7 @@ public class MainWindowViewModel : ViewModelBase
     /// </summary>
     private async Task OnLoginCommandAsync()
     {
-        _model.IsLoggedIn = false;
+        IsLoggedIn = false;
         
         _model.ServerInfo = await _webClient.GetServerInfoAsync();
         
@@ -136,6 +151,16 @@ public class MainWindowViewModel : ViewModelBase
             return;
         }
 
-        _model.IsLoggedIn = true;
+        IsLoggedIn = true;
+    }
+
+    /// <summary>
+    /// Logging out
+    /// </summary>
+    private async Task OnLogoutCommandAsync()
+    {
+        await _webClient.LogoutAsync();
+
+        IsLoggedIn = false;
     }
 }

@@ -90,10 +90,17 @@
                     <Button
                         Grid.Column="0"
                         Grid.Row="2"
-                        Grid.ColumnSpan="2"
                         Content="Log in"
-                        HorizontalAlignment="Right"
+                        HorizontalAlignment="Left"
                         Command="{ Binding LoginCommand }" />
+                    
+                    <!-- Logout button -->
+                    <Button
+                        Grid.Column="1"
+                        Grid.Row="2"
+                        Content="Log out"
+                        HorizontalAlignment="Right"
+                        Command="{ Binding LogoutCommand }" />
                     
                     <!-- Server info -->
                     <Border
