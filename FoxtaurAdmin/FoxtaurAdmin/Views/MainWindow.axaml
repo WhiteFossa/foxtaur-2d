@@ -171,6 +171,96 @@
             </StackPanel>
         </Border>
         
+        <!-- Map files upload -->
+        <Border
+            Grid.Column="1"
+            Grid.Row="0"
+            Classes="VisibleBorders">
+            
+            <StackPanel>
+                
+                <Label>Map files upload</Label>
+                
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="300" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    
+                    <!-- Map name -->
+                    <Label
+                        Grid.Column="0"
+                        Grid.Row="0"
+                        VerticalAlignment="Center">
+                        Name:
+                    </Label>
+                    
+                    <TextBox
+                        Grid.Column="1"
+                        Grid.Row="0"
+                        Grid.ColumnSpan="2"
+                        Watermark="Map name"
+                        VerticalAlignment="Center"
+                        Classes="Marginated"
+                        Text="{ Binding MapName }">
+                    </TextBox>
+                    
+                    <!-- Map file -->
+                    <Label
+                        Grid.Column="0"
+                        Grid.Row="1"
+                        VerticalAlignment="Center">
+                        File:
+                    </Label>
+                    
+                    <TextBox
+                        Grid.Column="1"
+                        Grid.Row="1"
+                        Watermark="Map file"
+                        VerticalAlignment="Center"
+                        Classes="Marginated"
+                        IsReadOnly="True"
+                        Text="{ Binding MapFilePath }">
+                    </TextBox>
+                    
+                    <Button
+                        Grid.Column="2"
+                        Grid.Row="1"
+                        Margin="5, 0, 0, 0"
+                        Content="Set"
+                        Command="{ Binding SetMapFileCommand }" />
+                    
+                    <!-- Map file upload progress -->
+                    <ProgressBar
+                        Grid.Column="0"
+                        Grid.Row="2"
+                        Grid.ColumnSpan="3"
+                        IsIndeterminate="False"
+                        Minimum="0.0"
+                        Value="{ Binding MapFileUploadProgress }"
+                        Maximum="1.0" />
+                    
+                    <!-- Map file upload -->
+                    <Button
+                        Grid.Column="0"
+                        Grid.Row="3"
+                        Grid.ColumnSpan="3"
+                        HorizontalAlignment="Right"
+                        Content="Upload"
+                        Command="{ Binding UploadMapFileCommand }" />
+                    
+                </Grid>
+            </StackPanel>
+        </Border>
+        
     </Grid>
 
 </Window>

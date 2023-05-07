@@ -54,6 +54,11 @@ public class MainDbContext : DbContext
     /// </summary>
     public DbSet<GsmGpsTracker> GsmGpsTrackers { get; set; }
 
+    /// <summary>
+    /// Map files
+    /// </summary>
+    public DbSet<MapFile> MapFiles { get; set; }
+
     public MainDbContext(DbContextOptions<MainDbContext> options) : base(options)
     {
     }

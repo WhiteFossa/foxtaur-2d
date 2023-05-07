@@ -131,6 +131,7 @@ public class Startup
         services.AddScoped<IDistanceToFoxLocationLinkersDao, DistanceToFoxLocationLinkersDao>();
         services.AddScoped<IGsmGpsTrackersDao, GsmGpsTrackersDao>();
         services.AddScoped<IGsmGpsTrackersService, GsmGpsTrackersService>();
+        services.AddScoped<IMapFilesDao, MapFilesDao>();
         
         // Singletons
         services.AddSingleton<IConfigurationService, ConfigurationService>();

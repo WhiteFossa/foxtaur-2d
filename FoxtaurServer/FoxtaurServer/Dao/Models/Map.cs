@@ -42,4 +42,9 @@ public class Map
     /// Full URL
     /// </summary>
     public string Url { get; set; }
+
+    /// <summary>
+    /// File with this map
+    /// </summary>
+    public MapFile File { get; set; }
 }

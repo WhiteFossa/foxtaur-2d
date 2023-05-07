@@ -77,6 +77,30 @@ public class MainWindowViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref _model.IsLoggedIn, value);
     }
 
+    private string _mapName;
+
+    public string MapName
+    {
+        get => _mapName;
+        set => this.RaiseAndSetIfChanged(ref _mapName, value);
+    }
+
+    private string _mapFilePath;
+
+    public string MapFilePath
+    {
+        get => _mapFilePath;
+        set => this.RaiseAndSetIfChanged(ref _mapFilePath, value);
+    }
+
+    private double _mapFileUploadProgress;
+
+    public double MapFileUploadProgress
+    {
+        get => _mapFileUploadProgress;
+        set => this.RaiseAndSetIfChanged(ref _mapFileUploadProgress, value);
+    }
+    
     #endregion
     
     #region Commands
@@ -91,6 +115,16 @@ public class MainWindowViewModel : ViewModelBase
     /// </summary>
     public ReactiveCommand<Unit, Unit> LogoutCommand { get; }
     
+    /// <summary>
+    /// Set map file to upload (not upload, just set a path)
+    /// </summary>
+    public ReactiveCommand<Unit, Unit> SetMapFileCommand { get; }
+    
+    /// <summary>
+    /// Upload selected map file to server
+    /// </summary>
+    public ReactiveCommand<Unit, Unit> UploadMapFileCommand { get; }
+
     #endregion
     
     #region Constructor
@@ -113,6 +147,9 @@ public class MainWindowViewModel : ViewModelBase
         
         var isCanLogout = this.WhenAny(m => m.IsLoggedIn, ili => ili.Value);
         LogoutCommand = ReactiveCommand.CreateFromTask(OnLogoutCommandAsync, isCanLogout);
+
+        SetMapFileCommand = ReactiveCommand.CreateFromTask(OnSetMapFileCommandAsync); // TODO: Add enable/disable button logic
+        UploadMapFileCommand = ReactiveCommand.CreateFromTask(OnUploadMapFileCommand); // TODO: Add enable/disable button logic
 
         #endregion
         
@@ -162,5 +199,21 @@ public class MainWindowViewModel : ViewModelBase
         await _webClient.LogoutAsync();
 
         IsLoggedIn = false;
+    }
+    
+    /// <summary>
+    /// Setting map file to upload path
+    /// </summary>
+    private async Task OnSetMapFileCommandAsync()
+    {
+        
+    }
+    
+    /// <summary>
+    /// Perform map file upload
+    /// </summary>
+    private async Task OnUploadMapFileCommand()
+    {
+        
     }
 }

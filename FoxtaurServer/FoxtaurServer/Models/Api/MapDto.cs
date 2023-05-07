@@ -49,13 +49,20 @@ public class MapDto
     [JsonPropertyName("url")]
     public string Url { get; }
 
+    /// <summary>
+    /// Map file ID
+    /// </summary>
+    [JsonPropertyName("fileId")]
+    public Guid FileId { get; }
+
     public MapDto(Guid id,
         string name,
         double northLat,
         double southLat,
         double eastLon,
         double westLon,
-        string url
+        string url,
+        Guid fileId
     )
     {
         if (string.IsNullOrWhiteSpace(name))
@@ -75,5 +82,6 @@ public class MapDto
         EastLon = eastLon;
         WestLon = westLon;
         Url = url;
+        FileId = fileId;
     }
 }

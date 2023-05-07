@@ -1,5 +1,6 @@
 using FoxtaurServer.Dao.Abstract;
 using FoxtaurServer.Dao.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace FoxtaurServer.Dao.Implementations;
 
@@ -18,6 +19,7 @@ public class MapsDao : IMapsDao
         
         return _dbContext
             .Maps
+            .Include(m => m.File)
             .Where(t => mapsIds.Contains(t.Id))
             .ToList();
     }
@@ -26,6 +28,7 @@ public class MapsDao : IMapsDao
     {
         return _dbContext
             .Maps
+            .Include(m => m.File)
             .SingleOrDefault(m => m.Name.ToLower().Equals(name.ToLower()));
     }
 
@@ -33,6 +36,7 @@ public class MapsDao : IMapsDao
     {
         return _dbContext
             .Maps
+            .Include(m => m.File)
             .ToList();
     }
 

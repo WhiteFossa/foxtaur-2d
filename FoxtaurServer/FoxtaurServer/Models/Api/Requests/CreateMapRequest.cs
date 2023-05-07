@@ -42,4 +42,10 @@ public class CreateMapRequest
     /// </summary>
     [JsonPropertyName("url")]
     public string Url { get; set; }
+    
+    /// <summary>
+    /// Map file ID
+    /// </summary>
+    [JsonPropertyName("fileId")]
+    public Guid FileId { get; }
 }
