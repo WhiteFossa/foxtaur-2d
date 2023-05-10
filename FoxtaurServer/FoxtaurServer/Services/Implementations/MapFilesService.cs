@@ -35,12 +35,9 @@ public class MapFilesService : IMapFilesService
         {
             throw new ArgumentOutOfRangeException(nameof(size), "Size must be positive.");
         }
-
-        var mapFileId = Guid.NewGuid();
         
         // Inserting to DB
         var dbMapFile = _mapFilesMapper.Map(mapFile);
-        dbMapFile.Id = Guid.NewGuid();
         await _mapFilesDao.CreateAsync(dbMapFile);
 
         // Creating a file

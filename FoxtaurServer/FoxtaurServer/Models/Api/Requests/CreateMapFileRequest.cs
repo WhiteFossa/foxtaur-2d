@@ -7,7 +7,6 @@ namespace FoxtaurServer.Models.Api.Requests;
 /// </summary>
 public class CreateMapFileRequest
 {
-    
     /// <summary>
     /// User-friendly file name
     /// </summary>
