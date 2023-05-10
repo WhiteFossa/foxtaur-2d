@@ -132,6 +132,7 @@ public class Startup
         services.AddScoped<IGsmGpsTrackersDao, GsmGpsTrackersDao>();
         services.AddScoped<IGsmGpsTrackersService, GsmGpsTrackersService>();
         services.AddScoped<IMapFilesDao, MapFilesDao>();
+        services.AddScoped<IMapFilesService, MapFilesService>();
         
         // Singletons
         services.AddSingleton<IConfigurationService, ConfigurationService>();
@@ -144,6 +145,7 @@ public class Startup
         services.AddSingleton<IHuntersLocationsMapper, HuntersLocationsMapper>();
         services.AddSingleton<IDistancesMapper, DistancesMapper>();
         services.AddSingleton<IGsmGpsTrackersMapper, GsmGpsTrackersMapper>();
+        services.AddSingleton<IMapFilesMapper, MapFilesMapper>();
 
         // Hosted services
         services.AddHostedService<GF21Listener>();

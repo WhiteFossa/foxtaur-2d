@@ -126,4 +126,18 @@ public class GlobalConstants
     public const byte NewProfileColorA = 255;
 
     #endregion
+    
+    #region Map files
+
+    /// <summary>
+    /// Put map files here. TODO: Move to appsettings.json
+    /// </summary>
+    public const string MapFilesRootPath = "/opt/foxtaur/mapfiles";
+
+    /// <summary>
+    /// We split file name (actually GUID) into this size chunks and use chunks as directory names. It's for better search performance
+    /// </summary>
+    public const int MapFilesDirectoriesNameLength = 2;
+    
+    #endregion
 }

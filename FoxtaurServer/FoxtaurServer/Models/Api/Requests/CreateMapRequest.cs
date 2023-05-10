@@ -47,5 +47,5 @@ public class CreateMapRequest
     /// Map file ID
     /// </summary>
     [JsonPropertyName("fileId")]
-    public Guid FileId { get; }
+    public Guid FileId { get; set; }
 }
