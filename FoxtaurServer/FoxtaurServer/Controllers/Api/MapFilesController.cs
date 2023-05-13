@@ -78,4 +78,16 @@ public class MapFilesController : ControllerBase
         
         return Ok();
     }
+    
+    /// <summary>
+    /// Get all map files
+    /// </summary>
+    [Route("api/MapFiles/GetAll")]
+    [HttpGet]
+    public async Task<ActionResult<IReadOnlyCollection<MapFileDto>>> GetAllMaps()
+    {
+        var result = await _mapFilesService.GetAllMapFilesAsync();
+
+        return Ok(result);
+    }
 }
