@@ -14,6 +14,7 @@ services:
 
     volumes:
       - foxtaur_logs:/opt/foxtaur/logs
+      - foxtaur_mapfiles:/opt/foxtaur/mapfiles
 
     networks:
       - foxtaur-infrastructure_foxtaur-net
@@ -22,6 +23,9 @@ volumes:
 
   # Logs
   foxtaur_logs:
+
+  # Mapfiles storage
+  foxtaur_mapfiles:
 
 networks:
   foxtaur-infrastructure_foxtaur-net:
