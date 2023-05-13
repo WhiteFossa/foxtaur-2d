@@ -49,4 +49,33 @@ public class MapFilesController : ControllerBase
 
         return Ok(newMapFile);
     }
+
+    /// <summary>
+    /// Upload part of map file
+    /// </summary>
+    [Route("api/MapFiles/UploadPart")]
+    [HttpPost]
+    public async Task<ActionResult> UploadPart([FromBody]UploadMapFilePartRequest request)
+    {
+        if (request == null)
+        {
+            return BadRequest();
+        }
+
+        if (request.StartPosition < 0)
+        {
+            return BadRequest("Start position mustn't be negative.");
+        }
+        
+        if (string.IsNullOrWhiteSpace(request.Data))
+        {
+            return BadRequest("Data must not be empty.");
+        }
+
+        var data = Convert.FromBase64String(request.Data);
+
+        await _mapFilesService.UploadMapFilePart(request.Id, request.StartPosition, data);
+        
+        return Ok();
+    }
 }

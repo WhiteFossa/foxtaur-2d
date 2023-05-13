@@ -18,4 +18,13 @@ public interface IMapFilesService
     /// <param name="mapFile">Map file. ID is IGNORED.</param>
     /// <param name="size">Expected size of map file.</param>
     Task<MapFileDto> CreateNewMapFileAsync(MapFileDto mapFile, int size);
+
+    /// <summary>
+    /// Upload part of map file
+    /// </summary>
+    /// <param name="id">Upload into this map file.</param>
+    /// <param name="startPosition">Upload data starting from this position.</param>
+    /// <param name="data">Data to upload.</param>
+    /// <returns></returns>
+    Task UploadMapFilePart(Guid id, int startPosition, byte[] data);
 }
