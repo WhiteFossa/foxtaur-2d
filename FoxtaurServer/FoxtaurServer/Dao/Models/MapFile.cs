@@ -17,9 +17,4 @@ public class MapFile
     /// User-friendly file name
     /// </summary>
     public string Name { get; set; }
-
-    /// <summary>
-    /// File local path (absolute)
-    /// </summary>
-    public string LocalPath { get; set; }
 }

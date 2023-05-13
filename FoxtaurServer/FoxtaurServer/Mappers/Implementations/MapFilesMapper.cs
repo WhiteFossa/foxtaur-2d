@@ -40,8 +40,7 @@ public class MapFilesMapper : IMapFilesMapper
         return new MapFile()
         {
             Id = mapFile.Id,
-            Name = mapFile.Name,
-            LocalPath = string.Empty
+            Name = mapFile.Name
         };
     }
 
