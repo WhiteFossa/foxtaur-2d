@@ -78,4 +78,15 @@ public class WebClientRaw : IWebClientRaw
 
         return JsonSerializer.Deserialize<MapFileDto>(await response.Content.ReadAsStringAsync());
     }
+
+    public async Task UploadMapFilePartAsync(UploadMapFilePartRequest request)
+    {
+        _ = request ?? throw new ArgumentNullException(nameof(request));
+
+        var response = await _httpClient.PostAsJsonAsync($"{_baseUrl}/MapFiles/UploadPart", request).ConfigureAwait(false);
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new InvalidOperationException();
+        }
+    }
 }

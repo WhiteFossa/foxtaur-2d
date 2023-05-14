@@ -27,4 +27,9 @@ public interface IWebClientRaw
     /// Create map file (empty)
     /// </summary>
     Task<MapFileDto> CreateMapFileAsync(CreateMapFileRequest request);
+
+    /// <summary>
+    /// Upload part of map file
+    /// </summary>
+    Task UploadMapFilePartAsync(UploadMapFilePartRequest request);
 }

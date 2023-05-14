@@ -81,7 +81,15 @@ public class WebClient : IWebClient
             createdMapFile.Name
         );
     }
-    
+
+    public async Task UploadMapFilePartAsync(UploadMapFilePartRequest request)
+    {
+        _ = request ?? throw new ArgumentNullException(nameof(request));
+        await RenewSessionAsync();
+
+        await _client.UploadMapFilePartAsync(request).ConfigureAwait(false);
+    }
+
     private async Task RenewSessionAsync()
     {
         if (string.IsNullOrWhiteSpace(_token))

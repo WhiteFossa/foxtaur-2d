@@ -27,4 +27,9 @@ public interface IWebClient
     /// Create new, empty, map file
     /// </summary>
     Task<MapFile> CreateMapFileAsync(CreateMapFileRequest request);
+    
+    /// <summary>
+    /// Upload part of map file
+    /// </summary>
+    Task UploadMapFilePartAsync(UploadMapFilePartRequest request);
 }

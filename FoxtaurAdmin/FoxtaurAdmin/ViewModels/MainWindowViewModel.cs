@@ -5,6 +5,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
+using FoxtaurAdmin.Constants;
 using FoxtaurAdmin.Models;
 using LibAuxiliary.Abstract;
 using LibAuxiliary.Constants;
@@ -12,7 +13,6 @@ using LibFoxtaurAdmin.Services.Abstract;
 using LibWebClient.Constants;
 using LibWebClient.Models.Requests;
 using LibWebClient.Services.Abstract;
-using LibWebClient.Services.Implementations;
 using MessageBox.Avalonia.Enums;
 using ReactiveUI;
 using Microsoft.Extensions.DependencyInjection;
@@ -199,7 +199,7 @@ public class MainWindowViewModel : ViewModelBase
     /// </summary>
     private async Task OnLogoutCommandAsync()
     {
-        await _webClient.LogoutAsync();
+        await _webClient.LogoutAsync().ConfigureAwait(false);
 
         IsLoggedIn = false;
     }
@@ -229,9 +229,42 @@ public class MainWindowViewModel : ViewModelBase
     {
         // Creating empty map file first
         var mapFileInfo = new FileInfo(MapFilePath);
-        var mapfile = await _webClient.CreateMapFileAsync
+        var mapFile = await _webClient.CreateMapFileAsync
         (
             new CreateMapFileRequest(MapFileName, (int)mapFileInfo.Length)
         );
+        
+        // Uploading chunks
+        using (var mapFileReader = new BinaryReader(new FileStream(MapFilePath, FileMode.Open)))
+        {
+            var uploaded = 0;
+            MapFileUploadProgress = 0;
+            while (uploaded < mapFileInfo.Length)
+            {
+                var remaining = (int)mapFileInfo.Length - uploaded;
+                var toUploadSize = Math.Min(GlobalConstants.MapFileUploadChunkSize, remaining);
+
+                // Reading chunk from file
+                var data = new byte[toUploadSize];
+                mapFileReader.BaseStream.Seek(uploaded, SeekOrigin.Begin);
+                mapFileReader.Read(data, 0, toUploadSize);
+
+                var uploadRequest = new UploadMapFilePartRequest
+                (
+                    mapFile.Id,
+                    uploaded,
+                    Convert.ToBase64String(data)
+                );
+
+                await _webClient.UploadMapFilePartAsync(uploadRequest);
+
+                uploaded += toUploadSize;
+                MapFileUploadProgress = uploaded / (double)mapFileInfo.Length;
+            }
+        }
+
+        MapFileName = string.Empty;
+        MapFilePath = string.Empty;
+        MapFileUploadProgress = 0;
     }
 }
