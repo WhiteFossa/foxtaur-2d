@@ -1,7 +1,10 @@
 ﻿using System;
+using System.IO;
+using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using Avalonia.Controls;
 using FoxtaurAdmin.Models;
 using LibAuxiliary.Abstract;
 using LibAuxiliary.Constants;
@@ -77,12 +80,12 @@ public class MainWindowViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref _model.IsLoggedIn, value);
     }
 
-    private string _mapName;
+    private string _mapFileName;
 
-    public string MapName
+    public string MapFileName
     {
-        get => _mapName;
-        set => this.RaiseAndSetIfChanged(ref _mapName, value);
+        get => _mapFileName;
+        set => this.RaiseAndSetIfChanged(ref _mapFileName, value);
     }
 
     private string _mapFilePath;
@@ -206,7 +209,17 @@ public class MainWindowViewModel : ViewModelBase
     /// </summary>
     private async Task OnSetMapFileCommandAsync()
     {
+        var dialog = new OpenFileDialog();
+        dialog.Filters.Add(new FileDialogFilter() { Name = "GeoTIFF", Extensions = { "tiff", "TIFF" } });
+        dialog.AllowMultiple = false;
         
+        var dialogResult = await dialog.ShowAsync(Program.GetMainWindow());
+        if (dialogResult == null)
+        {
+            return;
+        }
+            
+        MapFilePath = dialogResult.FirstOrDefault();
     }
     
     /// <summary>
@@ -214,6 +227,11 @@ public class MainWindowViewModel : ViewModelBase
     /// </summary>
     private async Task OnUploadMapFileCommand()
     {
-        
+        // Creating empty map file first
+        var mapFileInfo = new FileInfo(MapFilePath);
+        var mapfile = await _webClient.CreateMapFileAsync
+        (
+            new CreateMapFileRequest(MapFileName, (int)mapFileInfo.Length)
+        );
     }
 }

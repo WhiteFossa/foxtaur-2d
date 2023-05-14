@@ -2,6 +2,8 @@
 using Avalonia.ReactiveUI;
 using System;
 using System.IO;
+using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 using LibAuxiliary.Abstract;
 using LibAuxiliary.Implementations;
 using LibFoxtaurAdmin.Services.Abstract;
@@ -73,5 +75,15 @@ class Program
         services.AddHttpClient<IWebClientRaw, WebClientRaw>();
         
         return services;
+    }
+    
+    // Getting main window
+    public static Window GetMainWindow()
+    {
+        if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopLifetime)
+        {
+            return desktopLifetime.MainWindow;
+        }
+        return null;
     }
 }

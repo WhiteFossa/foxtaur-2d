@@ -22,4 +22,9 @@ public interface IWebClientRaw
     /// Log in
     /// </summary>
     Task<LoginResultDto> LogInAsync(LoginRequest request);
+
+    /// <summary>
+    /// Create map file (empty)
+    /// </summary>
+    Task<MapFileDto> CreateMapFileAsync(CreateMapFileRequest request);
 }

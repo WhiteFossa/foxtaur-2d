@@ -65,4 +65,17 @@ public class WebClientRaw : IWebClientRaw
 
         return JsonSerializer.Deserialize<LoginResultDto>(await response.Content.ReadAsStringAsync());
     }
+
+    public async Task<MapFileDto> CreateMapFileAsync(CreateMapFileRequest request)
+    {
+        _ = request ?? throw new ArgumentNullException(nameof(request));
+
+        var response = await _httpClient.PostAsJsonAsync($"{_baseUrl}/MapFiles/Create", request).ConfigureAwait(false);
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new InvalidOperationException();
+        }
+
+        return JsonSerializer.Deserialize<MapFileDto>(await response.Content.ReadAsStringAsync());
+    }
 }

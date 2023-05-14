@@ -1,3 +1,5 @@
+using System.Drawing;
+using LibWebClient.Constants;
 using LibWebClient.Models;
 using LibWebClient.Models.DTOs;
 using LibWebClient.Models.Requests;
@@ -64,5 +66,36 @@ public class WebClient : IWebClient
         _token = string.Empty;
         _tokenExpiration = DateTime.MinValue;
         await _client.SetAuthentificationTokenAsync(_token).ConfigureAwait(false);
+    }
+
+    public async Task<MapFile> CreateMapFileAsync(CreateMapFileRequest request)
+    {
+        _ = request ?? throw new ArgumentNullException(nameof(request));
+        await RenewSessionAsync();
+
+        var createdMapFile = await _client.CreateMapFileAsync(request).ConfigureAwait(false);
+
+        return new MapFile
+        (
+            createdMapFile.Id,
+            createdMapFile.Name
+        );
+    }
+    
+    private async Task RenewSessionAsync()
+    {
+        if (string.IsNullOrWhiteSpace(_token))
+        {
+            // We aren't logged in
+            return;
+        }
+
+        var remaining = _tokenExpiration - DateTime.UtcNow;
+        if (remaining > WebClientConstants.ReauthentificateBefore)
+        {
+            return;
+        }
+
+        await LoginAsync(new LoginRequest(_login, _password));
     }
 }

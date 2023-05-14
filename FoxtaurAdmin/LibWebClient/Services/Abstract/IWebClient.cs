@@ -22,4 +22,9 @@ public interface IWebClient
     /// Destroy the session and forget login and password
     /// </summary>
     Task LogoutAsync();
+
+    /// <summary>
+    /// Create new, empty, map file
+    /// </summary>
+    Task<MapFile> CreateMapFileAsync(CreateMapFileRequest request);
 }

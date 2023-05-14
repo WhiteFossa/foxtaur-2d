@@ -1,22 +1,21 @@
-using System.Text.Json.Serialization;
+namespace LibWebClient.Models;
 
-namespace FoxtaurServer.Models.Api;
-
-public class MapFileDto
+/// <summary>
+/// Map file model
+/// </summary>
+public class MapFile
 {
     /// <summary>
     /// Map file Id
     /// </summary>
-    [JsonPropertyName("id")]
     public Guid Id { get; }
 
     /// <summary>
     /// User-friendly file name
     /// </summary>
-    [JsonPropertyName("name")]
     public string Name { get; }
 
-    public MapFileDto
+    public MapFile
     (
         Guid id,
         string name
