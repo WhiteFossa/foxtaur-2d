@@ -70,6 +70,7 @@ class Program
         services.AddSingleton<IConfigurationService, ConfigurationService>();
         services.AddSingleton<IWebClient, WebClient>();
         services.AddSingleton<IUserMessagesService, UserMessagesService>();
+        services.AddSingleton<ICompressionService, CompressionService>();
 
         // HTTP clients
         services.AddHttpClient<IWebClientRaw, WebClientRaw>();

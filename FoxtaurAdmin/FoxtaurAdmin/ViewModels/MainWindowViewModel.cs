@@ -16,6 +16,7 @@ using LibWebClient.Services.Abstract;
 using MessageBox.Avalonia.Enums;
 using ReactiveUI;
 using Microsoft.Extensions.DependencyInjection;
+using ZstdSharp;
 
 namespace FoxtaurAdmin.ViewModels;
 
@@ -28,6 +29,7 @@ public class MainWindowViewModel : ViewModelBase
     private readonly IWebClient _webClient = Program.Di.GetService<IWebClient>();
     private readonly IConfigurationService _configurationService = Program.Di.GetService<IConfigurationService>();
     private readonly IUserMessagesService _userMessagesService = Program.Di.GetService<IUserMessagesService>();
+    private readonly ICompressionService _compressionService = Program.Di.GetService<ICompressionService>();
     
     #endregion
     
@@ -227,21 +229,25 @@ public class MainWindowViewModel : ViewModelBase
     /// </summary>
     private async Task OnUploadMapFileCommand()
     {
+        // Compressing map file
+        using var mapFileStream = File.OpenRead(MapFilePath);
+        using var compressedStream = new MemoryStream();
+        _compressionService.Compress(mapFileStream, compressedStream);
+
         // Creating empty map file first
-        var mapFileInfo = new FileInfo(MapFilePath);
         var mapFile = await _webClient.CreateMapFileAsync
         (
-            new CreateMapFileRequest(MapFileName, (int)mapFileInfo.Length)
+            new CreateMapFileRequest(MapFileName, (int)compressedStream.Length)
         );
         
         // Uploading chunks
-        using (var mapFileReader = new BinaryReader(new FileStream(MapFilePath, FileMode.Open)))
+        using (var mapFileReader = new BinaryReader(compressedStream))
         {
             var uploaded = 0;
             MapFileUploadProgress = 0;
-            while (uploaded < mapFileInfo.Length)
+            while (uploaded < compressedStream.Length)
             {
-                var remaining = (int)mapFileInfo.Length - uploaded;
+                var remaining = (int)compressedStream.Length - uploaded;
                 var toUploadSize = Math.Min(GlobalConstants.MapFileUploadChunkSize, remaining);
 
                 // Reading chunk from file
@@ -259,7 +265,7 @@ public class MainWindowViewModel : ViewModelBase
                 await _webClient.UploadMapFilePartAsync(uploadRequest);
 
                 uploaded += toUploadSize;
-                MapFileUploadProgress = uploaded / (double)mapFileInfo.Length;
+                MapFileUploadProgress = uploaded / (double)compressedStream.Length;
             }
         }
 

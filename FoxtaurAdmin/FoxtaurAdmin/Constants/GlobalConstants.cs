@@ -8,5 +8,5 @@ public static class GlobalConstants
     /// <summary>
     /// Map file upload chunk size
     /// </summary>
-    public static int MapFileUploadChunkSize = 100000;
+    public static int MapFileUploadChunkSize = 1000000;
 }
