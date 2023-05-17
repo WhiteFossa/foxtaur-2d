@@ -27,6 +27,11 @@ public interface IMapFilesDao
     /// Create new map file. ID will be written into mapFile.Id
     /// </summary>
     Task CreateAsync(MapFile mapFile);
-    
+
+    /// <summary>
+    /// Call this to mark map file as ready for use
+    /// </summary>
+    Task MarkAsReadyAsync(Guid id);
+
     #endregion
 }

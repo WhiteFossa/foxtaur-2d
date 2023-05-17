@@ -24,7 +24,9 @@ public class MapFilesService : IMapFilesService
     
     public async Task<IReadOnlyCollection<MapFileDto>> GetAllMapFilesAsync()
     {
-        return _mapFilesMapper.Map(await _mapFilesDao.GetAllAsync());
+        return _mapFilesMapper.Map(
+            (await _mapFilesDao.GetAllAsync())
+            .Where(mf => mf.IsReady));
     }
 
     public async Task<MapFileDto> CreateNewMapFileAsync(MapFileDto mapFile, int size)
@@ -57,10 +59,10 @@ public class MapFilesService : IMapFilesService
             }
         }
         
-        return new MapFileDto(dbMapFile.Id, mapFile.Name);
+        return new MapFileDto(dbMapFile.Id, mapFile.Name, dbMapFile.IsReady); // Taking IsReady flag from DB (actually we can hardcode it to false here)
     }
 
-    public async Task UploadMapFilePart(Guid id, int startPosition, byte[] data)
+    public async Task UploadMapFilePartAsync(Guid id, int startPosition, byte[] data)
     {
         if (startPosition < 0)
         {
@@ -94,6 +96,22 @@ public class MapFilesService : IMapFilesService
             fileStream.Write(data, 0, data.Length);
             fileStream.Flush();
         }
+    }
+
+    public async Task MarkMapFileAsReadyAsync(Guid id)
+    {
+        var dbFile = await _mapFilesDao.GetByIdAsync(id);
+        if (dbFile == null)
+        {
+            throw new ArgumentException("File with given ID doesn't exist.", nameof(id));
+        }
+
+        if (dbFile.IsReady)
+        {
+            throw new InvalidOperationException("This file already marked as ready.");
+        }
+
+        await _mapFilesDao.MarkAsReadyAsync(id);
     }
 
     private string GenerateMapFilePath(Guid mapFileId)

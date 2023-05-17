@@ -25,6 +25,10 @@ public interface IMapFilesService
     /// <param name="id">Upload into this map file.</param>
     /// <param name="startPosition">Upload data starting from this position.</param>
     /// <param name="data">Data to upload.</param>
-    /// <returns></returns>
-    Task UploadMapFilePart(Guid id, int startPosition, byte[] data);
+    Task UploadMapFilePartAsync(Guid id, int startPosition, byte[] data);
+
+    /// <summary>
+    /// Mark map file as ready. Call this after last chunk upload.
+    /// </summary>
+    Task MarkMapFileAsReadyAsync(Guid id);
 }

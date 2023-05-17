@@ -26,7 +26,8 @@ public class MapFilesMapper : IMapFilesMapper
         return new MapFileDto
             (
                 mapFile.Id,
-                mapFile.Name
+                mapFile.Name,
+                mapFile.IsReady
             );
     }
 
@@ -40,7 +41,8 @@ public class MapFilesMapper : IMapFilesMapper
         return new MapFile()
         {
             Id = mapFile.Id,
-            Name = mapFile.Name
+            Name = mapFile.Name,
+            IsReady = false // This field is not mappable to DB direction
         };
     }
 

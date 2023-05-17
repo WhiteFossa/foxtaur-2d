@@ -17,4 +17,9 @@ public class MapFile
     /// User-friendly file name
     /// </summary>
     public string Name { get; set; }
+
+    /// <summary>
+    /// Is map file ready to use?
+    /// </summary>
+    public bool IsReady { get; set; }
 }

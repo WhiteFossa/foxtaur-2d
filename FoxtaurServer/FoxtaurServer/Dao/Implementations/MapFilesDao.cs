@@ -38,4 +38,17 @@ public class MapFilesDao : IMapFilesDao
             throw new InvalidOperationException($"Expected to insert 1 row, actually inserted { affected } rows!");
         }
     }
+
+    public async Task MarkAsReadyAsync(Guid id)
+    {
+        var mapFile = await GetByIdAsync(id);
+        if (mapFile.IsReady)
+        {
+            throw new InvalidOperationException($"Map file with ID={id} is already marked as ready.");
+        }
+
+        mapFile.IsReady = true;
+        
+        await _dbContext.SaveChangesAsync();
+    }
 }

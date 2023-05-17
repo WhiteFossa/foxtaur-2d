@@ -15,11 +15,18 @@ public class MapFileDto
     /// </summary>
     [JsonPropertyName("name")]
     public string Name { get; }
+    
+    /// <summary>
+    /// Is map file ready to use?
+    /// </summary>
+    [JsonPropertyName("isReady")]
+    public bool IsReady { get; }
 
     public MapFileDto
     (
         Guid id,
-        string name
+        string name,
+        bool isReady
     )
     {
         if (string.IsNullOrWhiteSpace(name))
@@ -29,5 +36,6 @@ public class MapFileDto
 
         Id = id;
         Name = name;
+        IsReady = isReady;
     }
 }

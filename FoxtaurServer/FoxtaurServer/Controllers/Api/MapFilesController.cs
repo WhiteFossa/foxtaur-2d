@@ -19,13 +19,13 @@ public class MapFilesController : ControllerBase
     {
         _mapFilesService = mapFilesService;
     }
-    
+
     /// <summary>
     /// Create new map file
     /// </summary>
     [Route("api/MapFiles/Create")]
     [HttpPost]
-    public async Task<ActionResult<MapFileDto>> CreateMapFile([FromBody]CreateMapFileRequest request)
+    public async Task<ActionResult<MapFileDto>> CreateMapFile([FromBody] CreateMapFileRequest request)
     {
         if (request == null)
         {
@@ -38,8 +38,9 @@ public class MapFilesController : ControllerBase
         }
 
         var newMapFile = await _mapFilesService.CreateNewMapFileAsync(new MapFileDto(
-            Guid.Empty,
-            request.Name),
+                Guid.Empty,
+                request.Name,
+                false),
             request.Size);
 
         if (newMapFile == null)
@@ -55,7 +56,7 @@ public class MapFilesController : ControllerBase
     /// </summary>
     [Route("api/MapFiles/UploadPart")]
     [HttpPost]
-    public async Task<ActionResult> UploadPart([FromBody]UploadMapFilePartRequest request)
+    public async Task<ActionResult> UploadPart([FromBody] UploadMapFilePartRequest request)
     {
         if (request == null)
         {
@@ -66,7 +67,7 @@ public class MapFilesController : ControllerBase
         {
             return BadRequest("Start position mustn't be negative.");
         }
-        
+
         if (string.IsNullOrWhiteSpace(request.Data))
         {
             return BadRequest("Data must not be empty.");
@@ -74,11 +75,11 @@ public class MapFilesController : ControllerBase
 
         var data = Convert.FromBase64String(request.Data);
 
-        await _mapFilesService.UploadMapFilePart(request.Id, request.StartPosition, data);
-        
+        await _mapFilesService.UploadMapFilePartAsync(request.Id, request.StartPosition, data);
+
         return Ok();
     }
-    
+
     /// <summary>
     /// Get all map files
     /// </summary>
@@ -89,5 +90,29 @@ public class MapFilesController : ControllerBase
         var result = await _mapFilesService.GetAllMapFilesAsync();
 
         return Ok(result);
+    }
+
+    /// <summary>
+    /// Mark map file as ready
+    /// </summary>
+    [Route("api/MapFiles/MarkAsReady")]
+    [HttpPost]
+    public async Task<ActionResult> MarkAsReady([FromBody] MarkMapFileAsReadyRequest request)
+    {
+        if (request == null)
+        {
+            return BadRequest();
+        }
+
+        try
+        {
+            await _mapFilesService.MarkMapFileAsReadyAsync(request.Id);
+        }
+        catch (Exception)
+        {
+            return BadRequest();
+        }
+
+        return Ok();
     }
 }
