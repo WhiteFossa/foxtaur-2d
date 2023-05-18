@@ -90,6 +90,14 @@ public class WebClient : IWebClient
         await _client.UploadMapFilePartAsync(request).ConfigureAwait(false);
     }
 
+    public async Task MarkMapFileAsReady(MarkMapFileAsReadyRequest request)
+    {
+        _ = request ?? throw new ArgumentNullException(nameof(request));
+        await RenewSessionAsync();
+
+        await _client.MarkMapFileAsReady(request).ConfigureAwait(false);
+    }
+
     private async Task RenewSessionAsync()
     {
         if (string.IsNullOrWhiteSpace(_token))

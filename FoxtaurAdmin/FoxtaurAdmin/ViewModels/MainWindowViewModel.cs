@@ -269,6 +269,8 @@ public class MainWindowViewModel : ViewModelBase
             }
         }
 
+        await _webClient.MarkMapFileAsReady(new MarkMapFileAsReadyRequest(mapFile.Id));
+        
         MapFileName = string.Empty;
         MapFilePath = string.Empty;
         MapFileUploadProgress = 0;

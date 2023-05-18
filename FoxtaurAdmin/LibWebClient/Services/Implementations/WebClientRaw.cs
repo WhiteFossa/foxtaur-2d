@@ -89,4 +89,15 @@ public class WebClientRaw : IWebClientRaw
             throw new InvalidOperationException();
         }
     }
+
+    public async Task MarkMapFileAsReady(MarkMapFileAsReadyRequest request)
+    {
+        _ = request ?? throw new ArgumentNullException(nameof(request));
+
+        var response = await _httpClient.PostAsJsonAsync($"{_baseUrl}/MapFiles/MarkAsReady", request).ConfigureAwait(false);
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new InvalidOperationException();
+        }
+    }
 }

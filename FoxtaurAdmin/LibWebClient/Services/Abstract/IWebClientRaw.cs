@@ -32,4 +32,9 @@ public interface IWebClientRaw
     /// Upload part of map file
     /// </summary>
     Task UploadMapFilePartAsync(UploadMapFilePartRequest request);
+
+    /// <summary>
+    /// Mark uploaded map file as ready
+    /// </summary>
+    Task MarkMapFileAsReady(MarkMapFileAsReadyRequest request);
 }
