@@ -31,4 +31,9 @@ public interface IMapFilesService
     /// Mark map file as ready. Call this after last chunk upload.
     /// </summary>
     Task MarkMapFileAsReadyAsync(Guid id);
+
+    /// <summary>
+    /// Get map file storage path by map file ID
+    /// </summary>
+    Task<string> GetMapFilePathByIdAsync(Guid id);
 }

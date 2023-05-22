@@ -133,6 +133,7 @@ public class Startup
         services.AddScoped<IGsmGpsTrackersService, GsmGpsTrackersService>();
         services.AddScoped<IMapFilesDao, MapFilesDao>();
         services.AddScoped<IMapFilesService, MapFilesService>();
+        services.AddScoped<IFilesService, FilesService>();
         
         // Singletons
         services.AddSingleton<IConfigurationService, ConfigurationService>();

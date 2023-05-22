@@ -43,7 +43,7 @@ public class MapFilesService : IMapFilesService
         await _mapFilesDao.CreateAsync(dbMapFile);
 
         // Creating a file
-        var fullPath = GenerateMapFilePath(dbMapFile.Id);
+        var fullPath = await GetMapFilePathByIdAsync(dbMapFile.Id);
         
         var directoryPath = Path.GetDirectoryName(fullPath);
         Directory.CreateDirectory(directoryPath);
@@ -81,7 +81,7 @@ public class MapFilesService : IMapFilesService
             throw new ArgumentException("File with given ID doesn't exist.", nameof(id));
         }
 
-        var diskFilePath = GenerateMapFilePath(id);
+        var diskFilePath = await GetMapFilePathByIdAsync(id);
 
         var fileInfo = new FileInfo(diskFilePath);
         if (fileInfo.Length < startPosition + data.Length)
@@ -114,15 +114,15 @@ public class MapFilesService : IMapFilesService
         await _mapFilesDao.MarkAsReadyAsync(id);
     }
 
-    private string GenerateMapFilePath(Guid mapFileId)
+    public async Task<string> GetMapFilePathByIdAsync(Guid id)
     {
-        var pathParts = mapFileId
+        var pathParts = id
             .ToString()
             .ToLower()
             .Split('-')
             .Select(p => p.Substring(0, GlobalConstants.MapFilesDirectoriesNameLength))
             .ToArray();
 
-        return Path.Combine(GlobalConstants.MapFilesRootPath, Path.Combine(Path.Combine(pathParts), mapFileId.ToString().ToLower()));
+        return Path.Combine(GlobalConstants.MapFilesRootPath, Path.Combine(Path.Combine(pathParts), id.ToString().ToLower()));
     }
 }
