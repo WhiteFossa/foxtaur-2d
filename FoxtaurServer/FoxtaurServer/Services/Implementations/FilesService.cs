@@ -44,6 +44,6 @@ public class FilesService : IFilesService
         var mapFilePath = await _mapFilesService.GetMapFilePathByIdAsync(mapFile.Id);
         var content = await File.ReadAllBytesAsync(mapFilePath);
         
-        return new FileToDownload(true, content, DateTime.UtcNow, "yiffyuff");
+        return new FileToDownload(true, content, mapFile.CreationTime, mapFile.Hash);
     }
 }
