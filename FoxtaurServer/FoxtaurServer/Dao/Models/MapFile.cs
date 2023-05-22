@@ -22,4 +22,14 @@ public class MapFile
     /// Is map file ready to use?
     /// </summary>
     public bool IsReady { get; set; }
+
+    /// <summary>
+    /// File contents hash (to use as ETag)
+    /// </summary>
+    public string Hash { get; set; }
+
+    /// <summary>
+    /// File creation time
+    /// </summary>
+    public DateTime CreationTime { get; set; }
 }
