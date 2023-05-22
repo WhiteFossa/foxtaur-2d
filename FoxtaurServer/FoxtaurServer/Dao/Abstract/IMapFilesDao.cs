@@ -33,5 +33,10 @@ public interface IMapFilesDao
     /// </summary>
     Task MarkAsReadyAsync(Guid id);
 
+    /// <summary>
+    /// Updates map file
+    /// </summary>
+    Task UpdateAsync(MapFile newData);
+
     #endregion
 }

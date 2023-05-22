@@ -30,6 +30,8 @@ public class MapFilesDao : IMapFilesDao
     {
         _ = mapFile ?? throw new ArgumentNullException(nameof(mapFile));
 
+        mapFile.CreationTime = DateTime.UtcNow;
+        
         await _dbContext.MapFiles.AddAsync(mapFile);
         
         var affected = await _dbContext.SaveChangesAsync();
@@ -50,5 +52,25 @@ public class MapFilesDao : IMapFilesDao
         mapFile.IsReady = true;
         
         await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task UpdateAsync(MapFile newData)
+    {
+        _ = newData ?? throw new ArgumentNullException(nameof(newData));
+
+        var mapFile = await GetByIdAsync(newData.Id);
+        if (mapFile == null)
+        {
+            throw new ArgumentException($"Map file with Id = {newData.Id} not found!", nameof(newData.Id));
+        }
+
+        mapFile.Name = newData.Name;
+        mapFile.Hash = newData.Hash;
+
+        var affected = await _dbContext.SaveChangesAsync();
+        if (affected != 1)
+        {
+            throw new InvalidOperationException($"Expected to update 1 row, actually updated { affected } rows!");
+        }
     }
 }

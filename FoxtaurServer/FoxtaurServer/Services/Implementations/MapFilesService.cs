@@ -1,6 +1,7 @@
 using FoxtaurServer.Constants;
 using FoxtaurServer.Dao.Abstract;
 using FoxtaurServer.Dao.Models;
+using FoxtaurServer.Helpers;
 using FoxtaurServer.Mappers.Abstract;
 using FoxtaurServer.Models.Api;
 using FoxtaurServer.Services.Abstract;
@@ -110,7 +111,16 @@ public class MapFilesService : IMapFilesService
         {
             throw new InvalidOperationException("This file already marked as ready.");
         }
+        
+        // Generating hash
+        var mapFilePath = await GetMapFilePathByIdAsync(id);
+        var content = await File.ReadAllBytesAsync(mapFilePath);
+        var hash = FilesHelper.CalculateSHA512(content);
 
+        dbFile.Hash = hash;
+        await _mapFilesDao.UpdateAsync(dbFile);
+        
+        // Marking as ready
         await _mapFilesDao.MarkAsReadyAsync(id);
     }
 
