@@ -1,6 +1,7 @@
 using FoxtaurServer.Dao.Models;
 using FoxtaurServer.Mappers.Abstract;
 using FoxtaurServer.Models.Api;
+using FoxtaurServer.Services.Abstract;
 
 namespace FoxtaurServer.Mappers.Implementations;
 

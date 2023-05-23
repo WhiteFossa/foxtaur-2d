@@ -1,5 +1,4 @@
 using System.Text.Json.Serialization;
-using FoxtaurServer.Models.Api.Enums;
 
 namespace FoxtaurServer.Models.Api;
 
@@ -43,19 +42,7 @@ public class MapDto
     /// </summary>
     [JsonPropertyName("westLon")]
     public double WestLon { get; }
-
-    /// <summary>
-    /// Full URL
-    /// </summary>
-    [JsonPropertyName("url")]
-    public string Url
-    {
-        get
-        {
-            return $"http://localhost:5035/api/Files/Download?fileId={ FileId }&type={ DownloadFileType.MapFile }";
-        }
-    }
-
+    
     /// <summary>
     /// Map file ID
     /// </summary>
