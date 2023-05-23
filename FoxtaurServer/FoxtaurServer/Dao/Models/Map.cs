@@ -37,12 +37,7 @@ public class Map
     /// Bounds - west longitude
     /// </summary>
     public double WestLon { get; set; }
-
-    /// <summary>
-    /// Full URL
-    /// </summary>
-    public string Url { get; set; }
-
+    
     /// <summary>
     /// File with this map
     /// </summary>

@@ -75,7 +75,6 @@ public class MapsController : ControllerBase
             request.SouthLat,
             request.EastLon,
             request.WestLon,
-            request.Url,
             request.FileId));
         
         if (newMap == null)

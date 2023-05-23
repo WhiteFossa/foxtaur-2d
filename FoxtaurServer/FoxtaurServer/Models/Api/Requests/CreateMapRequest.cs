@@ -38,12 +38,6 @@ public class CreateMapRequest
     public double WestLon { get; set; }
 
     /// <summary>
-    /// Full URL
-    /// </summary>
-    [JsonPropertyName("url")]
-    public string Url { get; set; }
-    
-    /// <summary>
     /// Map file ID
     /// </summary>
     [JsonPropertyName("fileId")]

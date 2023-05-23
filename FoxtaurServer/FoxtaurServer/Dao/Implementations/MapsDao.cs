@@ -44,6 +44,17 @@ public class MapsDao : IMapsDao
     {
         _ = map ?? throw new ArgumentNullException(nameof(map));
 
+        var mapFile = _dbContext
+            .MapFiles
+            .SingleOrDefault(mf => mf.Id == map.File.Id);
+
+        if (mapFile == null)
+        {
+            throw new ArgumentException("Map file with given ID is not found.", nameof(map.File.Id));
+        }
+
+        map.File = mapFile;
+        
         await _dbContext.Maps.AddAsync(map);
         
         var affected = await _dbContext.SaveChangesAsync();

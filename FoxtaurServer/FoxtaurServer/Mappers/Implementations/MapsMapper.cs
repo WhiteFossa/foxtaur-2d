@@ -29,7 +29,6 @@ public class MapsMapper : IMapsMapper
             map.SouthLat,
             map.EastLon,
             map.WestLon,
-            map.Url,
             map.File.Id);
     }
 
@@ -48,7 +47,6 @@ public class MapsMapper : IMapsMapper
             SouthLat = map.SouthLat,
             EastLon = map.EastLon,
             WestLon = map.WestLon,
-            Url = map.Url,
             File = new MapFile() { Id = map.FileId} // DAO must load all other fields by itself
         };
     }

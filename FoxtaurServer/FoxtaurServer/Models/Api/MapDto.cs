@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using FoxtaurServer.Models.Api.Enums;
 
 namespace FoxtaurServer.Models.Api;
 
@@ -47,7 +48,13 @@ public class MapDto
     /// Full URL
     /// </summary>
     [JsonPropertyName("url")]
-    public string Url { get; }
+    public string Url
+    {
+        get
+        {
+            return $"http://localhost:5035/api/Files/Download?fileId={ FileId }&type={ DownloadFileType.MapFile }";
+        }
+    }
 
     /// <summary>
     /// Map file ID
@@ -61,7 +68,6 @@ public class MapDto
         double southLat,
         double eastLon,
         double westLon,
-        string url,
         Guid fileId
     )
     {
@@ -70,18 +76,12 @@ public class MapDto
             throw new ArgumentException(nameof(name));
         }
 
-        if (string.IsNullOrWhiteSpace(url))
-        {
-            throw new ArgumentException(nameof(url));
-        }
-
         Id = id;
         Name = name;
         NorthLat = northLat;
         SouthLat = southLat;
         EastLon = eastLon;
         WestLon = westLon;
-        Url = url;
         FileId = fileId;
     }
 }

@@ -44,6 +44,6 @@ public class MapsService : IMapsService
         
         await _mapsDao.CreateAsync(mappedMap);
 
-        return new MapDto(mappedMap.Id, map.Name, map.NorthLat, map.SouthLat, map.EastLon, map.WestLon, map.Url, map.FileId);
+        return new MapDto(mappedMap.Id, map.Name, map.NorthLat, map.SouthLat, map.EastLon, map.WestLon, map.FileId);
     }
 }
