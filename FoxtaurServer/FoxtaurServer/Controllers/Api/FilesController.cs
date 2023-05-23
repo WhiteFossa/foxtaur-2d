@@ -23,9 +23,11 @@ public class FilesController : ControllerBase
     
     /// <summary>
     /// Download given file
+    /// TODO: It is dirty to load file for HEAD request. Move into separate method
     /// </summary>
     [Route("api/Files/Download")]
     [HttpGet]
+    [HttpHead]
     [AllowAnonymous]
     public async Task<ActionResult> DownloadAsync(Guid fileId, DownloadFileType type)
     {

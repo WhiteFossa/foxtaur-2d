@@ -62,4 +62,9 @@ public interface IWebClient
     /// Downloads part of file using GET with Range
     /// </summary>
     Task<HttpResponseMessage> DownloadWithRangeAsync(Uri uri, long start, long end);
+
+    /// <summary>
+    /// Returns full URL of given map file
+    /// </summary>
+    string GetMapFileFullUrl(Guid mapFileId);
 }

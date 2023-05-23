@@ -45,8 +45,8 @@ public class MapDto : IIdedDto
     public double WestLon { get; set; }
 
     /// <summary>
-    /// Full URL
+    /// Map file ID
     /// </summary>
-    [JsonPropertyName("url")]
-    public string Url { get; set; }
+    [JsonPropertyName("fileId")]
+    public Guid FileId { get; set; }
 }

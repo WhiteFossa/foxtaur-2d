@@ -1,4 +1,6 @@
 using Avalonia.Media;
+using LibAuxiliary.Abstract;
+using LibAuxiliary.Constants;
 using LibWebClient.Constants;
 using LibWebClient.Enums;
 using LibWebClient.Models;
@@ -13,10 +15,17 @@ public class WebClient : IWebClient
     private readonly Logger _logger = LogManager.GetCurrentClassLogger();
     
     private readonly IWebClientRaw _client;
+    private readonly IConfigurationService _configurationService;
 
-    public WebClient(IWebClientRaw webClient)
+    private readonly string _serverAddress;
+
+    public WebClient(IWebClientRaw webClient,
+        IConfigurationService configurationService)
     {
         _client = webClient;
+        _configurationService = configurationService;
+
+        _serverAddress = _configurationService.GetConfigurationString(ConfigConstants.ServerUrlSettingName);
         
         // Querying information about the server
         var serverInfo = _client.GetServerInfoAsync().Result;
@@ -51,7 +60,7 @@ public class WebClient : IWebClient
                 return new Distance(
                     d.Id,
                     d.Name,
-                    new Map(mapDto.Id, mapDto.Name, mapDto.NorthLat, mapDto.SouthLat, mapDto.EastLon, mapDto.WestLon, mapDto.Url),
+                    new Map(mapDto.Id, mapDto.Name, mapDto.NorthLat, mapDto.SouthLat, mapDto.EastLon, mapDto.WestLon, mapDto.FileId),
                     d.IsActive,
                     new Location(Guid.NewGuid(), "Invalid start location", LocationType.Start, 0, 0, null),
                     new Location(Guid.NewGuid(), "Invalid finish corridor entrance location", LocationType.FinishCorridorEntrance, 0, 0, null),
@@ -152,7 +161,7 @@ public class WebClient : IWebClient
         var maps = await _client.MassGetMapsAsync(request).ConfigureAwait(false);
 
         return maps
-            .Select(m => new Map(m.Id, m.Name, m.NorthLat, m.SouthLat, m.EastLon, m.WestLon, m.Url))
+            .Select(m => new Map(m.Id, m.Name, m.NorthLat, m.SouthLat, m.EastLon, m.WestLon, m.FileId))
             .ToList();
     }
 
@@ -252,5 +261,10 @@ public class WebClient : IWebClient
     public async Task<HttpResponseMessage> DownloadWithRangeAsync(Uri uri, long start, long end)
     {
         return await _client.DownloadWithRangeAsync(uri, start, end).ConfigureAwait(false);
+    }
+
+    public string GetMapFileFullUrl(Guid mapFileId)
+    {
+        return $"{ _serverAddress }/api/Files/Download?fileId={ mapFileId }&type={ DownloadFileType.MapFile }";
     }
 }

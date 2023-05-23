@@ -36,9 +36,9 @@ public class Map
     public double WestLon { get; }
 
     /// <summary>
-    /// Full URL
+    /// Map file ID
     /// </summary>
-    public string Url { get; }
+    public Guid FileId { get; }
     
     public Map(Guid id,
         string name,
@@ -46,17 +46,12 @@ public class Map
         double southLat,
         double eastLon,
         double westLon,
-        string url
+        Guid fileId
     )
     {
         if (string.IsNullOrWhiteSpace(name))
         {
             throw new ArgumentException(nameof(name));
-        }
-
-        if (string.IsNullOrWhiteSpace(url))
-        {
-            throw new ArgumentException(nameof(url));
         }
 
         Id = id;
@@ -65,6 +60,6 @@ public class Map
         SouthLat = southLat;
         EastLon = eastLon;
         WestLon = westLon;
-        Url = url;
+        FileId = fileId;
     }
 }

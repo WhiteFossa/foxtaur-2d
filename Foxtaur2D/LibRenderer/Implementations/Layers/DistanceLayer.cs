@@ -66,7 +66,7 @@ public class DistanceLayer : IVectorLayer, IRasterLayer
         // Starting to download a map
         _isMapLoaded = false;
         _setMapProgressState(MapState.Downloading, 0.0);
-        _mapImage = new CompressedStreamResource(_distance.Map.Url, false, webClient);
+        _mapImage = new CompressedStreamResource(webClient.GetMapFileFullUrl(_distance.Map.FileId), false, webClient);
         
         _downloadThread = new Thread(() => _mapImage.Download(OnMapImageLoaded, OnMapDownloadProgress, OnMapDecompressionProgress));
         _downloadThread.Start();
