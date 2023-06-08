@@ -23,6 +23,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
         
         <Grid.RowDefinitions>
@@ -207,7 +208,7 @@
                         Grid.Column="1"
                         Grid.Row="0"
                         Grid.ColumnSpan="2"
-                        Watermark="Map name"
+                        Watermark="Map file name"
                         VerticalAlignment="Center"
                         Classes="Marginated"
                         Text="{ Binding MapFileName }">
@@ -258,6 +259,126 @@
                         Command="{ Binding UploadMapFileCommand }" />
                     
                 </Grid>
+            </StackPanel>
+        </Border>
+        
+        <!-- Maps creation -->
+        <Border
+            Grid.Column="2"
+            Grid.Row="0"
+            Classes="VisibleBorders">
+            
+            <StackPanel>
+                <Label>Maps creation</Label>
+                
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    
+                    <!-- Map name -->
+                    <Label
+                        Grid.Column="0"
+                        Grid.Row="0"
+                        VerticalAlignment="Center">
+                        Name:
+                    </Label>
+                    
+                    <TextBox
+                        Grid.Column="1"
+                        Grid.Row="0"
+                        Grid.ColumnSpan="3"
+                        Watermark="Map name"
+                        VerticalAlignment="Center"
+                        Classes="Marginated"
+                        Text="{ Binding MapName }">
+                    </TextBox>
+                    
+                    <!-- North -->
+                    <TextBox
+                        Grid.Column="2"
+                        Grid.Row="1"
+                        Watermark="N"
+                        VerticalAlignment="Center"
+                        Classes="Marginated"
+                        Text="{ Binding MapNorthLat }">
+                    </TextBox>
+                    
+                    <!-- West -->
+                    <TextBox
+                        Grid.Column="1"
+                        Grid.Row="2"
+                        Watermark="W"
+                        VerticalAlignment="Center"
+                        Classes="Marginated"
+                        Text="{ Binding MapWestLon }">
+                    </TextBox>
+                    
+                    <!-- East -->
+                    <TextBox
+                        Grid.Column="3"
+                        Grid.Row="2"
+                        Watermark="E"
+                        VerticalAlignment="Center"
+                        Classes="Marginated"
+                        Text="{ Binding MapEastLon }">
+                    </TextBox>
+                    
+                    <!-- South -->
+                    <TextBox
+                        Grid.Column="2"
+                        Grid.Row="3"
+                        Watermark="S"
+                        VerticalAlignment="Center"
+                        Classes="Marginated"
+                        Text="{ Binding MapSouthLat }">
+                    </TextBox>
+                    
+                    <!-- Map file -->
+                    <Label
+                        Grid.Column="0"
+                        Grid.Row="4"
+                        VerticalAlignment="Center">
+                        Map file:
+                    </Label>
+                    
+                    <ComboBox
+                        Grid.Column="1"
+                        Grid.Row="4"
+                        Grid.ColumnSpan="3"
+                        HorizontalAlignment="Stretch"
+                        SelectedIndex="{ Binding SelectedMapFileIndex }"
+                        Items="{ Binding MapFiles }"
+                        GotFocus="MapFiles_OnGotFocus">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <Label Content="{ Binding Name }" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    
+                    <Button
+                        Grid.Column="0"
+                        Grid.ColumnSpan="4"
+                        Grid.Row="5"
+                        HorizontalAlignment="Right"
+                        Content="Create"
+                        Command="{ Binding CreateNewMapCommand }" />
+                    
+                </Grid>
+                
             </StackPanel>
         </Border>
         

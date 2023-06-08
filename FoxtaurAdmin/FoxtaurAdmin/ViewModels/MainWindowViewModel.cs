@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reactive;
@@ -11,6 +12,7 @@ using LibAuxiliary.Abstract;
 using LibAuxiliary.Constants;
 using LibFoxtaurAdmin.Services.Abstract;
 using LibWebClient.Constants;
+using LibWebClient.Models;
 using LibWebClient.Models.Requests;
 using LibWebClient.Services.Abstract;
 using MessageBox.Avalonia.Enums;
@@ -105,6 +107,66 @@ public class MainWindowViewModel : ViewModelBase
         get => _mapFileUploadProgress;
         set => this.RaiseAndSetIfChanged(ref _mapFileUploadProgress, value);
     }
+
+    private string _mapName;
+
+    public string MapName
+    {
+        get => _mapName;
+        set => this.RaiseAndSetIfChanged(ref _mapName, value);
+    }
+
+    private string _mapNorthLat;
+
+    public string MapNorthLat
+    {
+        get => _mapNorthLat;
+        set => this.RaiseAndSetIfChanged(ref _mapNorthLat, value);
+    }
+    
+    private string _mapSouthLat;
+
+    public string MapSouthLat
+    {
+        get => _mapSouthLat;
+        set => this.RaiseAndSetIfChanged(ref _mapSouthLat, value);
+    }
+    
+    private string _mapWestLon;
+    
+    public string MapWestLon
+    {
+        get => _mapWestLon;
+        set => this.RaiseAndSetIfChanged(ref _mapWestLon, value);
+    }
+    
+    private string _mapEastLon;
+    
+    public string MapEastLon
+    {
+        get => _mapEastLon;
+        set => this.RaiseAndSetIfChanged(ref _mapEastLon, value);
+    }
+    
+
+    private int _selectedMapFIleIndex = -1;
+
+    public int SelectedMapFileIndex
+    {
+        get => _selectedMapFIleIndex;
+        set { this.RaiseAndSetIfChanged(ref _selectedMapFIleIndex, value); }
+    }
+
+    private IList<MapFile> _mapFiles = new List<MapFile>();
+    
+    public IList<MapFile> MapFiles
+    {
+        get => _mapFiles;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref _mapFiles, value);
+        }
+    }
     
     #endregion
     
@@ -129,6 +191,11 @@ public class MainWindowViewModel : ViewModelBase
     /// Upload selected map file to server
     /// </summary>
     public ReactiveCommand<Unit, Unit> UploadMapFileCommand { get; }
+    
+    /// <summary>
+    /// Create new map on server
+    /// </summary>
+    public ReactiveCommand<Unit, Unit> CreateNewMapCommand { get; }
 
     #endregion
     
@@ -154,7 +221,33 @@ public class MainWindowViewModel : ViewModelBase
         LogoutCommand = ReactiveCommand.CreateFromTask(OnLogoutCommandAsync, isCanLogout);
 
         SetMapFileCommand = ReactiveCommand.CreateFromTask(OnSetMapFileCommandAsync); // TODO: Add enable/disable button logic
-        UploadMapFileCommand = ReactiveCommand.CreateFromTask(OnUploadMapFileCommand); // TODO: Add enable/disable button logic
+        UploadMapFileCommand = ReactiveCommand.CreateFromTask(OnUploadMapFileCommandAsync); // TODO: Add enable/disable button logic
+
+        var isCanCreateMap =
+            Observable.CombineLatest
+            (
+                this.WhenAny(m => m.MapName, mn => mn.Value),
+                this.WhenAny(m => m.MapNorthLat, mnl => mnl.Value),
+                this.WhenAny(m => m.MapSouthLat, msl => msl.Value),
+                this.WhenAny(m => m.MapWestLon, mwl => mwl.Value),
+                this.WhenAny(m => m.MapEastLon, mel => mel.Value),
+                this.WhenAny(m => m.SelectedMapFileIndex, smfi => smfi.Value),
+                (mapName, mapNorthLat, mapSouthLat, mapWestLon, mapEastLon, selectedMapFileIndex) =>
+                {
+                    return !string.IsNullOrWhiteSpace(mapName)
+                           &&
+                           !string.IsNullOrWhiteSpace(mapNorthLat)
+                           &&
+                           !string.IsNullOrWhiteSpace(mapSouthLat)
+                           &&
+                           !string.IsNullOrWhiteSpace(mapWestLon)
+                           &&
+                           !string.IsNullOrWhiteSpace(mapEastLon)
+                           &&
+                           selectedMapFileIndex != -1;
+                }
+            );
+        CreateNewMapCommand = ReactiveCommand.CreateFromTask(OnCreateNewMapCommandAsync, isCanCreateMap);
 
         #endregion
         
@@ -227,7 +320,7 @@ public class MainWindowViewModel : ViewModelBase
     /// <summary>
     /// Perform map file upload
     /// </summary>
-    private async Task OnUploadMapFileCommand()
+    private async Task OnUploadMapFileCommandAsync()
     {
         // Compressing map file
         using var mapFileStream = File.OpenRead(MapFilePath);
@@ -274,5 +367,21 @@ public class MainWindowViewModel : ViewModelBase
         MapFileName = string.Empty;
         MapFilePath = string.Empty;
         MapFileUploadProgress = 0;
+    }
+
+    /// <summary>
+    /// Reload map files in create new map section
+    /// </summary>
+    public async Task OnReloadMapFilesAsync()
+    {
+        
+    }
+
+    /// <summary>
+    /// Create new map on server
+    /// </summary>
+    private async Task OnCreateNewMapCommandAsync()
+    {
+        
     }
 }
