@@ -154,6 +154,10 @@ public class Startup
         // Various settings
         services.AddMvc();
         services.AddHttpContextAccessor();
+        
+        // Swagger
+        services.AddEndpointsApiExplorer();
+        services.AddSwaggerGen();
     }
     
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -178,5 +182,9 @@ public class Startup
         
         // Fancy error messages
         app.UseStatusCodePages();
+        
+        // Swagger
+        app.UseSwagger();
+        app.UseSwaggerUI();
     }
 }
