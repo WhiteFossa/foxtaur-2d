@@ -36,5 +36,10 @@ public interface IWebClientRaw
     /// <summary>
     /// Mark uploaded map file as ready
     /// </summary>
-    Task MarkMapFileAsReady(MarkMapFileAsReadyRequest request);
+    Task MarkMapFileAsReadyAsync(MarkMapFileAsReadyRequest request);
+
+    /// <summary>
+    /// Get all existing map files
+    /// </summary>
+    Task<IReadOnlyCollection<MapFileDto>> GetAllMapFilesAsync();
 }

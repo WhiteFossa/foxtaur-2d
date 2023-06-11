@@ -18,9 +18,5 @@ public partial class MainWindow : Window
         
         DataContext = dataContext;
     }
-
-    private void MapFiles_OnGotFocus(object sender, GotFocusEventArgs e)
-    {
-        Task.WaitAll(((MainWindowViewModel)DataContext).OnReloadMapFilesAsync());
-    }
+    
 }

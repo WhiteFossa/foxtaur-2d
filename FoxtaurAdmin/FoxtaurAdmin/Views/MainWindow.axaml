@@ -360,8 +360,7 @@
                         Grid.ColumnSpan="3"
                         HorizontalAlignment="Stretch"
                         SelectedIndex="{ Binding SelectedMapFileIndex }"
-                        Items="{ Binding MapFiles }"
-                        GotFocus="MapFiles_OnGotFocus">
+                        Items="{ Binding MapFiles }">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <Label Content="{ Binding Name }" />

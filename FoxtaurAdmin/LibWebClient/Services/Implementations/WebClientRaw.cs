@@ -90,7 +90,7 @@ public class WebClientRaw : IWebClientRaw
         }
     }
 
-    public async Task MarkMapFileAsReady(MarkMapFileAsReadyRequest request)
+    public async Task MarkMapFileAsReadyAsync(MarkMapFileAsReadyRequest request)
     {
         _ = request ?? throw new ArgumentNullException(nameof(request));
 
@@ -99,5 +99,17 @@ public class WebClientRaw : IWebClientRaw
         {
             throw new InvalidOperationException();
         }
+    }
+
+    public async Task<IReadOnlyCollection<MapFileDto>> GetAllMapFilesAsync()
+    {
+        var response = await _httpClient.GetAsync($"{_baseUrl}/MapFiles/GetAll").ConfigureAwait(false);
+        if (!response.IsSuccessStatusCode)
+        {
+            _logger.Error($"GetAllMapFilesAsync failed: { response.StatusCode }");
+            throw new InvalidOperationException();
+        }
+        
+        return JsonSerializer.Deserialize<IReadOnlyCollection<MapFileDto>>(await response.Content.ReadAsStringAsync());
     }
 }

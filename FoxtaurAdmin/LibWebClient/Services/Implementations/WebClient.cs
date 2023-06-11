@@ -90,12 +90,23 @@ public class WebClient : IWebClient
         await _client.UploadMapFilePartAsync(request).ConfigureAwait(false);
     }
 
-    public async Task MarkMapFileAsReady(MarkMapFileAsReadyRequest request)
+    public async Task MarkMapFileAsReadyAsync(MarkMapFileAsReadyRequest request)
     {
         _ = request ?? throw new ArgumentNullException(nameof(request));
         await RenewSessionAsync();
 
-        await _client.MarkMapFileAsReady(request).ConfigureAwait(false);
+        await _client.MarkMapFileAsReadyAsync(request).ConfigureAwait(false);
+    }
+
+    public async Task<IReadOnlyCollection<MapFile>> GetAllMapFilesAsync()
+    {
+        await RenewSessionAsync();
+
+        var mapFiles = await _client.GetAllMapFilesAsync().ConfigureAwait(false);
+
+        return mapFiles
+            .Select(mf => new MapFile(mf.Id, mf.Name))
+            .ToList();
     }
 
     private async Task RenewSessionAsync()

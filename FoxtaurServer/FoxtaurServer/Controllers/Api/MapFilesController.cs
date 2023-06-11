@@ -85,7 +85,7 @@ public class MapFilesController : ControllerBase
     /// </summary>
     [Route("api/MapFiles/GetAll")]
     [HttpGet]
-    public async Task<ActionResult<IReadOnlyCollection<MapFileDto>>> GetAllMaps()
+    public async Task<ActionResult<IReadOnlyCollection<MapFileDto>>> GetAllMapFilesAsync()
     {
         var result = await _mapFilesService.GetAllMapFilesAsync();
 

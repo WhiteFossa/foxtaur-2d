@@ -286,6 +286,12 @@ public class MainWindowViewModel : ViewModelBase
             return;
         }
 
+        #region After login business-logic
+
+        await ReloadMapFilesAsync();
+        
+        #endregion
+        
         IsLoggedIn = true;
     }
 
@@ -362,19 +368,21 @@ public class MainWindowViewModel : ViewModelBase
             }
         }
 
-        await _webClient.MarkMapFileAsReady(new MarkMapFileAsReadyRequest(mapFile.Id));
+        await _webClient.MarkMapFileAsReadyAsync(new MarkMapFileAsReadyRequest(mapFile.Id));
         
         MapFileName = string.Empty;
         MapFilePath = string.Empty;
         MapFileUploadProgress = 0;
+        
+        await ReloadMapFilesAsync();
     }
 
     /// <summary>
     /// Reload map files in create new map section
     /// </summary>
-    public async Task OnReloadMapFilesAsync()
+    public async Task ReloadMapFilesAsync()
     {
-        
+        MapFiles = (await _webClient.GetAllMapFilesAsync().ConfigureAwait(false)).ToList();
     }
 
     /// <summary>

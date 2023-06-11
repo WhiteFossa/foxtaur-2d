@@ -36,5 +36,10 @@ public interface IWebClient
     /// <summary>
     /// Mark uploaded map file as ready
     /// </summary>
-    Task MarkMapFileAsReady(MarkMapFileAsReadyRequest request);
+    Task MarkMapFileAsReadyAsync(MarkMapFileAsReadyRequest request);
+
+    /// <summary>
+    /// Get all map files
+    /// </summary>
+    Task<IReadOnlyCollection<MapFile>> GetAllMapFilesAsync();
 }
