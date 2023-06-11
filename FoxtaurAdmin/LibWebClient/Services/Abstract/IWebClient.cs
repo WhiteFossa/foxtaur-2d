@@ -42,4 +42,9 @@ public interface IWebClient
     /// Get all map files
     /// </summary>
     Task<IReadOnlyCollection<MapFile>> GetAllMapFilesAsync();
+    
+    /// <summary>
+    /// Create a map
+    /// </summary>
+    Task<Map> CreateMapAsync(CreateMapRequest request);
 }

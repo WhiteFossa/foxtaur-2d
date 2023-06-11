@@ -109,6 +109,25 @@ public class WebClient : IWebClient
             .ToList();
     }
 
+    public async Task<Map> CreateMapAsync(CreateMapRequest request)
+    {
+        _ = request ?? throw new ArgumentNullException(nameof(request));
+        await RenewSessionAsync();
+
+        var createdMap = await _client.CreateMapAsync(request).ConfigureAwait(false);
+
+        return new Map
+        (
+            createdMap.Id,
+            createdMap.Name,
+            createdMap.NorthLat,
+            createdMap.SouthLat,
+            createdMap.EastLon,
+            createdMap.WestLon,
+            createdMap.FileId
+        );
+    }
+
     private async Task RenewSessionAsync()
     {
         if (string.IsNullOrWhiteSpace(_token))

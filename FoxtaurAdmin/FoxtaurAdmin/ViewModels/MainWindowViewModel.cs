@@ -10,6 +10,7 @@ using FoxtaurAdmin.Constants;
 using FoxtaurAdmin.Models;
 using LibAuxiliary.Abstract;
 using LibAuxiliary.Constants;
+using LibAuxiliary.Helpers;
 using LibFoxtaurAdmin.Services.Abstract;
 using LibWebClient.Constants;
 using LibWebClient.Models;
@@ -18,7 +19,6 @@ using LibWebClient.Services.Abstract;
 using MessageBox.Avalonia.Enums;
 using ReactiveUI;
 using Microsoft.Extensions.DependencyInjection;
-using ZstdSharp;
 
 namespace FoxtaurAdmin.ViewModels;
 
@@ -390,6 +390,14 @@ public class MainWindowViewModel : ViewModelBase
     /// </summary>
     private async Task OnCreateNewMapCommandAsync()
     {
+        var northLat = DegreesRadiansHelper.ToRadians(double.Parse(MapNorthLat));
+        var southLat = DegreesRadiansHelper.ToRadians(double.Parse(MapSouthLat));
+        var westLon = DegreesRadiansHelper.ToRadians(double.Parse(MapWestLon));
+        var eastLon = DegreesRadiansHelper.ToRadians(double.Parse(MapEastLon));
         
+        await _webClient.CreateMapAsync
+        (
+            new CreateMapRequest(MapName, northLat, southLat, eastLon, westLon, MapFiles[SelectedMapFileIndex].Id)
+        ).ConfigureAwait(false);
     }
 }
